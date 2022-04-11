@@ -1,0 +1,80 @@
+body {
+    padding: 0;
+    margin: 0;
+  }
+.header {
+    padding: 20px; 
+    margin: 0;  
+}
+
+.footer {
+    background-color: black;
+    height: 50px;
+    color: white;
+    padding: 50px; 
+}
+
+
+.content{
+    background-color: rgb(255, 255, 255);
+    width:100%;
+
+
+    color: rgb(0, 0, 0);
+    display: flex;
+}
+
+.content.center{
+    background-color: white;
+}
+
+.documentText {
+    margin-right : 30px;
+    width : 50%;
+    height : 800px;
+    padding: 10px;
+    overflow: auto;
+    background-color: rgb(247, 247, 247);
+  }
+
+.documentTextParent {
+    display: flex;
+    color: black;
+    margin: 100px;
+    
+}
+
+.filenames{
+
+    padding-right: 30px;
+}
+
+.filename{
+    padding : 10px;
+}
+
+.filename:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.filenameHeader{
+    padding : 10px;
+    border-style: solid;
+    border-width: 0px 0px 3px 0px;
+}
+
+.resultLabel{
+    padding : 5px;
+
+}
+
+.dot{
+    height: 25px;
+    width: 25px;
+    margin-top: 20px;
+    background-color: #00FF00;
+    border-radius: 50%;
+    display: inline-block;
+}
+

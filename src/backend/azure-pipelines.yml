@@ -1,0 +1,142 @@
+# Node.js Function App to Linux on Azure
+# Build a Node.js function app and deploy it to Azure as a Linux function app.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+variables:
+
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: ''
+  projectName: ''
+  resourceGroupName: ''
+  location: 'eastus'
+  repositoryUrl: 'https://github.com/<>/bpa-engine-frontend'
+  repositoryToken: ''
+
+  functionAppName: '$(projectName)'
+  environmentName: '$(projectName)'
+  vmImageName: 'ubuntu-latest'
+  azureServiceConnection: $(azureSubscription)
+  templateFile: 'templates/main.bicep'
+
+
+stages:
+
+- stage: Infra
+  displayName: Infra stage
+  jobs:
+  - job: Infra
+    displayName: Infra
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - checkout: self
+      submodules: 'true'
+
+    - bash: az bicep build --file $(templateFile)
+      displayName: 'Compile Bicep to ARM'
+
+    - task: AzureCLI@2
+      displayName: Azure CLI
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az --version
+          resourceGroupId=$(az group show --name $(resourceGroupName) --query id --output tsv)
+          echo "starting"
+          formrecout=`az deployment group create --resource-group $(resourceGroupName) --template-file templates/formrec.json --parameters name=$(projectName) resourceGroupId=$resourceGroupId`
+          echo "ended"
+          echo "##vso[task.setvariable variable=formrecendpoint]$(echo $formrecout | jq -r '.properties.outputs.formrecendpoint.value')"
+          echo "##vso[task.setvariable variable=formrecapikey]$(echo $formrecout | jq -r '.properties.outputs.formreckey.value')"
+
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: DeployStaticWebAppInfra
+      displayName: Deploy Static Web App infra
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(azureSubscription)
+        action: Create Or Update Resource Group
+        location: $(resourceGroupName)
+        resourceGroupName: $(resourceGroupName)
+        templateLocation: Linked artifact
+        overrideParameters: >-
+          -location $(location)
+          -projectName $(projectName)
+          -repositoryUrl $(repositoryUrl)
+          -repositoryToken $(repositoryToken)
+          -formrecApiKey $(formrecapikey)
+          -formrecEndpoint $(formrecendpoint)
+        csmFile: 'templates/main.json' # created by bash script
+        deploymentMode: Incremental
+    
+
+
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        if [ -f extensions.csproj ]
+        then
+            dotnet build extensions.csproj --runtime ubuntu.16.04-x64 --output ./bin
+        fi
+      displayName: 'Build extensions'
+    - script: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+      displayName: 'Prepare binaries'
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(environmentName)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureFunctionApp@1
+            displayName: 'Azure Functions App Deploy: $(projectName)'
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appType: functionAppLinux
+              appName: $(functionAppName)
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+
+
+
+
+

@@ -32,15 +32,15 @@
 - [References](#references)  
 ---
 
-![](https://github.com/jameshoff-msft/bpa-backend/blob/master/images/web_app_ui3.png)
+![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/web_app_ui3.png)
 
 
 ## Architecture
-Once you've created a high-level Resource Group, you'll create a high-level Azure DevOps pipeline and import/clone this repo, automatically importing helper libraries and taking advantage of Azure functions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
+(James to udpate) Once you've created a high-level Resource Group, you'll create a high-level Azure DevOps pipeline and import/clone this repo, automatically importing helper libraries and taking advantage of Azure functions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
 ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/sample_architecture3.jpg)
 
-## Currently Included Algorithms
+## Currently Inluded Algorithms
 The initial release includes two top NLP use cases, text classification, and custom named entity recognition. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
 #### Text Classification
 Text classification is a supervised learning method of learning and predicting the category or the class of a document given its text content. The state-of-the-art methods are based on neural networks of different architectures as well as pre-trained language models or word embeddings.
@@ -131,13 +131,13 @@ Select Next.
 ####     8. Clone UI repo
 This repo is used for the POC front end.    
 Fork the below repository to the same Github that was used previously
-https://github.com/jameshoff-msft/bpa-engine-frontend
+https://github.com/jameshoff-msft/staticwebappstarter
 
 1. Ensure you are still logged into your github repo
 2. Navigate to the above repo
 3. Select Fork in upper right menu
 4. Select your github account  
-We will use the link (github.com/<my account name>/bpa-engine-frontend) to this newly forked repo in the next steps
+We will use the link (github.com/<my account name>/staticwebappstarter) to this newly forked repo in the next steps
 
 ####     9. Review your Pipeline YAML
 We'll only need to update lines 12-17, with the following instructions instructions
@@ -145,7 +145,7 @@ We'll only need to update lines 12-17, with the following instructions instructi
 2. Fill in Project name - must be unique (this name is used across most of the services created during this accelerator)
 3. Fill in resource group name
 4. Select your desired location
-5. Select your previously cloned repo's bpa-engine-frontend URI.
+5. Select your previously cloned repo's staticwebappstarter URI.
 6. Find your repository token
   i.   On your github repo page, click your profile  
   ii.  Select Settings  
@@ -179,12 +179,16 @@ Insert any commit message. You should see the pipeline stages workflow updating.
  ## 6. Load Documents!
 Use the Select PDF File to load your documents  
   **Note**: *your documents should be in pdf/image format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
+ 
+ ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/web_app_blank2.png)
+ 
+ ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/web_app_file_upload_successful.png)
 
 Check for you newly found custom entities!
  
   ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/web_app_ui2.png)  
   
-You can further customize your UI via the front end repo https://github.com/<your github account>/bpa-engine-frontend. Simple instructions on how to quickly do so are coming soon
+You can further customize your UI via the front end repo https://github.com/<your github account>/staticwebappstarter. Simple instructions on how to quickly do so are coming soon
 
 ## Contacts
  Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
