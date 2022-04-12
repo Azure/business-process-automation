@@ -1,14 +1,10 @@
 import React, {useState} from 'react'
-import { Dialog, DialogFooter, Button, Input } from '@fluentui/react-northstar';
+import { Dialog, Input } from '@fluentui/react-northstar';
 
 
 export default function FormRecCustomDialog(props) {
 
     const [modelId, setModelId] = useState(null)
-
-    const toggleHideDialog = () => {
-        props.setHideDialog(!props.hideDialog)
-    }
 
     const dialogContentProps = {
         title: 'Model ID',
@@ -33,22 +29,28 @@ export default function FormRecCustomDialog(props) {
     }
 
     const onDialogChange = (event, newValue) => {
-        setModelId(newValue)
+        setModelId(newValue.value)
     }
 
 
     return (
         <Dialog
-            hidden={props.hideDialog}
-            onDismiss={toggleHideDialog}
-            dialogContentProps={dialogContentProps}
-            modalProps={modalProps}
-        >
-            <Input value={modelId} onChange={onDialogChange}/>
-            <DialogFooter>
-                <Button onClick={onDialogSave} text="Save" />
-                <Button onClick={onDialogCancel} text="Cancel" />
-            </DialogFooter>
-        </Dialog>
+            content={{
+                children: () => {
+                    return (
+                        <div style={{}}>
+                            <Label>Model ID</Label>
+                            <Input value={modelId} onChange={onDialogChange} />
+                        </div>
+                    )
+                },
+            }}
+            open={!props.hideDialog}
+            cancelButton="Cancel"
+            confirmButton="Submit"
+            onConfirm={onDialogSave}
+            onCancel={onDialogCancel}
+            style={{ height: "200px" }}
+        />
     )
 } 

@@ -20,11 +20,11 @@ export default function LanguageMultiClassifyDialog(props) {
     }
 
     const onProjectNameDialogChange = (event, newValue) => {
-        setProjectName(newValue)
+        setProjectName(newValue.value)
     }
 
     const onDeploymentNameDialogChange = (event, newValue) => {
-        setDeploymentName(newValue)
+        setDeploymentName(newValue.value)
     }
 
 
