@@ -34,7 +34,7 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
     catch (err) {
         context.log(err)
         db.view({
-            data : JSON.stringify(err),
+            data : err.message,
             type : "error",
             label : "error",
             projectName : "error",

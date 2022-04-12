@@ -1,4 +1,5 @@
 import { BpaConfiguration, BpaStage, BpaServiceObject } from "./types"
+const _ = require('lodash')
 
 export class BpaEngine {
 
@@ -11,7 +12,7 @@ export class BpaEngine {
         let currentInput: BpaServiceObject = {
             label: "first",
             type: this._getFileType(fileName),
-            projectName: "project",
+            projectName: fileName,
             data: fileBuffer,
             bpaId: "1"
         }
@@ -20,14 +21,19 @@ export class BpaEngine {
 
         for (const stage of config.stages) {
             console.log(`stage : ${stage.service.name}`)
+            console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
             console.log('validating...')
             if (this._validateInput(currentInput.type, stage)) {
-                console.log('validation passed!!')
+                console.log('validation passed!! 2')
                 console.log('processing....')
                 currentInput.serviceSpecificConfig = stage.service.serviceSpecificConfig
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput)
                 console.log('exiting stage')
-                currentInput = currentOutput
+                currentInput = _.cloneDeep(currentOutput)
+                for(let i=0;i<25;i++){
+                    console.log(`type ${currentInput.type}`)
+                }
+                
             }
             else {
                 throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)

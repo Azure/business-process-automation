@@ -490,8 +490,8 @@
       "location": "[parameters('primaryRegion')]",
       "kind": "linux",
       "sku": {
-        "name": "B1",
-        "tier": "Basic"
+        "name": "P2v2",
+        "tier": "PremiumV2"
       },
       "properties": {
         "reserved": true
@@ -622,13 +622,13 @@
               "name": "OCR_APIKEY",
               "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
             },
-            {
-              "name": "LANGUAGE_STUDIO_APIKEY",
-              "value": "139f689301d8486d980c6ab17b773368"
+             {
+              "name": "LANGUAGE_STUDIO_PREBUILT_ENDPOINT",
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))).endpoint]"
             },
             {
-              "name": "LANGUAGE_STUDIO_PROJECT",
-              "value": "airangerscner4"
+              "name": "LANGUAGE_STUDIO_PREBUILT_APIKEY",
+              "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName')), '2021-10-01').key1]"
             },
             {
               "name": "FORMREC_APIKEY",
