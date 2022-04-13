@@ -13,10 +13,13 @@ The following guide will present a high-level overview of the deployment archite
 
 - [Overview](#overview)  
 - [Architecture](#architecture)  
-- [Currently Inluded Algorithms](#currently-inluded-algorithms)  
+- [Currently Inluded Algorithms](#currently-included-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
-  - [Navigate to and open for editing, easyButton/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
+  - [Create a Resource Group](#create-a-resource-group-in-your-azure-portal)
+  - [Fork the Repo](#fork-the-repo)
+  - [Create AND save personal access token](#create-and-save-personal-access-token)
+  - [Navigate to and open for editing, business-process-automation/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
   - [Clone your repo locally](#5-clone-your-repo-locally)
   - [Run initial deployment configuration](#run-initial-deployment-configuration)
   - [Create action to deploy](7-create-action-to-deploy)
@@ -27,13 +30,13 @@ The following guide will present a high-level overview of the deployment archite
 - [References](#references)  
 ---
 
-![](images/select_stage2.png)
+![](images/overview.png)
 
 
 ## Architecture
-Once you've created a high-level Resource Group, you'll fork this repository and create a Github Actions Pipeline, automatically importing helper libraries and taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
+Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
-![](images/sample_architecture3.png)
+![](images/Architecture.png)
 
 ## Currently Included Algorithms
 The initial release includes Cognitive Services provided by Azure Language Service and Form Recognizer, such as text classification and custom named entity recognition, as well as standardized interface for deploying State-of-the-Art Hugging Face models. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
@@ -83,19 +86,19 @@ https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overv
 #### Hugging Face Implementation
 Many of the pretrained models from the huggingface library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
 
-![](images/hugging_face_models.png)
+![](images/hugging_face_models.png)  
 
 ## Prerequisities
 1. Github account
 2. Ensure your subscription has Microsoft.DocumentDB enabled  
 To check:  
-    a. Go to your subscription within portal.azure.com  
-    b. Select Resource Providers at bottom of left navigation pane  
-    c. Within the Filter by name menu, search for Microsoft.DocumentDB  
-    d. Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
-    **Note**:*This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-3. Ensure that you have accepted terms and conditions for Responsible AI
- "You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
+      - Go to your subscription within portal.azure.com  
+      - Select Resource Providers at bottom of left navigation pane  
+      - Within the Filter by name menu, search for Microsoft.DocumentDB  
+      - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
+      **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
+3. Ensure that you have accepted terms and conditions for Responsible AI  
+"You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
 
 ## Installation Steps
 
@@ -115,75 +118,118 @@ Fork https://github.com/Azure/business-process-automation to your github account
 
 ## 3. Create AND save personal access token
 1.  On your github repo page, click your profile  
-2.  Select Settings (under your profile icon in the top right)
+2.  Select Settings (under your profile icon in the top right)  
+![](images/settings_upper_right.png)  
 3. Select Developer settings at bottom of left navigation pane  
+![](images/settings_upper_right_v2.png)    
 4.  Select Personal access tokens  
-  ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-personal-access-tokens.jpg)  
-5.   Select Generate personal access token  
-  ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-new-token.png)  
-6..  Under Select scopes, select the checkbox for "workflow"  
+5.  Select Generate new token  
+6.  Under Select scopes, select the checkbox for "workflow"  
   ![](images/personal_access_tokens_configuration.png)  
-7.. Add your own description  
-8. Select Generate token  
-9..  Copy your newly generated token  
-  **Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
+7. Add your own note  
+8. Select Generate token (at bottom of page)  
+9.  Copy your newly generated token  
+**Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
 ## 4. Navigate to and open for editing, templates/parameters.json in your local directory
-1. Open a command window  
-2. Clone the forked repo locally   - `git clone https://github.com/<your-account>/business-process-automation`
-3. Navigate to  
+1. Open a local command window  
+2. Clone the forked repo locally  
+ ```git clone https://github.com/<your-account>/business-process-automation```  
+3. Navigate to  your templates/parameters.json within your local repo  
+```cd business-process-automation/templates```
+4. Open parameters.json.example
+**Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
+```C:\Users\<UserName>\business-process-automation\templates\code .```  
 Update the three "value" fields below:  
 
-![](images/edit_parameters1.png)  
-
-4. projectName = must be a unique project name, keep to lowercase, alphanumeric characters only  
-5. repository token: copy the personal access token you recently created  
-6. repository url: paste the link of your forked repository  - should be something like https://github.com/<your-account>/business-process-automation
-  
 ![](images/edit_parameters3.png)  
 
+  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
+  2. repository token: Copy the personal access token you recently created  
+  3. repository url: Paste the link of your forked repository - i.e., https://github.com/<your-account>/business-process-automation  
+  
+  Save updates
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
-2. Run `az deployment group create --name ExampleDeployment --resource-group easybutton --template-file main.json --parameters parameters.json`  
+2. Run  
+```az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json```  
   **Note**: *This may take several minutes to run*  
-3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
+3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
+`azure.portal.com`   
   
-## 6. Collect the Publish Profiles for your Function Apps
-1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE.
-2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
-3.  Add Repository Secret
-4.  Copy the publish profile contents in "value" and the name will be AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
+## 6. Collect the Published Profiles from your newly created Azure Function Apps  
+  In this sequence of steps you will retrieve credentials from your two newly created Azure Function Apps, and add them as Secrets in your GitHub repo.  
+1.  You will have two new function apps deployed within your Resource Group.  Navigate to your Resource Group at your Azure Portal.  
+One will start with the name "huggingface".  
   
-5.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
+![](images/newly_created_function_apps.png)  
+  
+Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "[YourProjectName].PublishSettings.txt"  
+   
+  ![](images/get_publish_profile.png)  
+2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
+3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
+  ![](images/secrets_actions.png)  
+4. Select 'New Repository Secret'  
+  - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
+  - Paste the contents of your recently downloaded "[YourProjectName].PublishSettings.txt" file into the "Value" field
+5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
+  **Note**: *For step 4 above, this second secret will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
 
 ## 6. Create Github Action to build the code and deploy it to your Function Apps
-1. Navigate to actions tab  
-2. Select create new workflow  
-3. Select set up workflow yourself  
-  ![](images/set up workflow.png)
-4. Copy the contents of templates/deploy.yml to create a custom workflow
-5. Run the workflow and select commit new file
-  **Note**:*Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.
-6. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete.
+1. Navigate to "actions" tab  
+2. Select set up workflow yourself
+  ![](images/set_up_workflow_v3.png)
+3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
+4. Run the workflow and select commit new file  
+  **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
+    - Select "Start Commit"
+    - Select "Commit New File"
+5. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete. 
+  You can also view real-time logs from your Azure Function Apps:
+    - Navigate to your Azure Portal, and select your Function APP, named after your project name  
+    - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
+    - Switch the stream from "File System Logs" to "App Insights Logs" via the drop down menu, directly above your log window
  
-## 7. Launch App  
-1. Navigate to your Resource Group within your Azure Portal <insert static web app screenshot here>  
+## 7. Go to your React App!  
+1. Navigate to your Resource Group within your Azure Portal
 2. Select your static webapp  
-3. Within the default Overview pane, Select your URL to navigate to the WebApp, this take you to the newly launched WebApp!  
+3. Within the default Overview pane, Click on your URL, which will take you to your newly launced WebApp!  
  
  ![](images/find_static_web_app2.png)
  
 ## 8. Load Documents!
-Use the Select PDF File to load your documents  
-  **Note**: *your documents should be in pdf/image format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
+1. Select Configure a New Pipeline  
+![](images/app_landing_page.png)  
+2. If you have a .pdf file, select "PDF Document". You can also upload WAV files for transcription, and subsequent language processing  
+3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
+    - Depending on your selection, new analytical services will appear. For example, for .pdf files, your first selection can extracting raw tables via the Form Recognizer's General Document Model.  
+![](images/pdf_2views.png)  
+Alternatively, you can first OCR the raw image to text, by selecting Form Recognizer's OCR Service, after which your app will show new options that are available to you for processing converted text
+![](images/text_options.png)  
+4. To complete your pipeline, select the tile "Export Last Stage to DB"  
+5. Navigate to "Home"  
+![](images/home.png)  
+6. Select "Ingest Documents"
+7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
+**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
-Navigate to your cosmosDB in your Azure Resource Portal for your new output
+  ## 9. View Your Results
+  Your results will be stored in a Cosmos database within your Azure Resource Group.  
+  - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
+  - Navigtate to your Data Explorer  
+  - You should see a container, named after your project name. Select that container  
+  - You will see a SQL query, named after your project name. Select that query  
+  - Within that query, Select Items. Here you should see multiple items  
+    - The first item will be your pipeline metadata  
+    - The second will be contain the output from your first document  
+    - An additional item will be created for each uploaded document  
   
-You can further customize your UI via the front end repo https://github.com/<your github account>/bpa-engine-frontend. Simple instructions on how to quickly do so are coming soon
+You can further customize your UI via the repo - Simple instructions on how to quickly do so are coming soon
 
 ## Contacts
  Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
@@ -191,9 +237,7 @@ You can further customize your UI via the front end repo https://github.com/<you
 ## Roadmap
 | Priority | Item |
 | ------- | ------------- |
-| Impending | Adding instructions on basic UI customizations (e.g. Adding header graphics, changing title, etc..) |
-| Impending | Add standard NER capability from Language Service [What is Named Entity Recognition (NER) in Azure Cognitive Service for Language](https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/named-entity-recognition/overview#:~:text=Named%20Entity%20Recognition%20(NER)%20is,categorize%20entities%20in%20unstructured%20text.)  |
-| TBD | Add text summarization |
+| Impending | Adding instructions on basic UI customizations (e.g. adding header graphics, changing title, etc..) |
 | TBD | ... |
  
 
@@ -203,3 +247,4 @@ You can further customize your UI via the front end repo https://github.com/<you
 | React source template | This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) |
 | Custom NER |  https://github.com/microsoft/nlp-recipes/tree/master/examples/named_entity_recognition |
 | Text Classification | https://github.com/microsoft/nlp-recipes/tree/master/examples/text_classification |
+| Additional Model Documentation | |
