@@ -151,7 +151,7 @@ Update the three "value" fields below:
   **Note**: *This may take several minutes to run*  
 3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
   
-## 6. Collect the Publish Profiles for your Function Apps
+## 6. Collect the Published Profiles for your Function Apps
 1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE.
 2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
 3.  Add Repository Secret
@@ -164,7 +164,7 @@ Update the three "value" fields below:
 1. Navigate to actions tab  
 2. Select create new workflow  
 3. Select set up workflow yourself  
-  ![](images/set up workflow.png)
+  ![](images/set_up_workflow_v2.png)
 4. Copy the contents of templates/deploy.yml to create a custom workflow
 5. Run the workflow and select commit new file
   **Note**:*Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.
