@@ -118,8 +118,10 @@ Fork https://github.com/Azure/business-process-automation to your github account
 
 ## 3. Create AND save personal access token
 1.  On your github repo page, click your profile  
-2.  Select Settings (under your profile icon in the top right)
+2.  Select Settings (under your profile icon in the top right)  
+![](images/settings_upper_right.png)  
 3. Select Developer settings at bottom of left navigation pane  
+![](images/settings_upper_right_v2.png)    
 4.  Select Personal access tokens  
   ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-personal-access-tokens.jpg)  
 5.   Select Generate personal access token  
