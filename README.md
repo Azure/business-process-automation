@@ -141,7 +141,7 @@ Fork https://github.com/Azure/business-process-automation to your github account
 '''cd business-process-automation/templates
 5. Open parameters.json.example
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
-```base:C:\Users\<UserName>\business-process-automation\templates\code .```
+```C:\Users\<UserName>\business-process-automation\templates\code .```
 Update the three "value" fields below:  
 
 ![](images/edit_parameters3.png)  
@@ -175,20 +175,25 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
   - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
-  - Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field  
+  - Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
   **Note**: *For step 4 above, this second secrete will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
 
 ## 6. Create Github Action to build the code and deploy it to your Function Apps
-1. Navigate to actions tab  
-2. Select create new workflow  
-3. Select set up workflow yourself  
-  ![](images/set_up_workflow_v2.png)
-4. Copy the contents of templates/deploy.yml to create a custom workflow
-5. Run the workflow and select commit new file
-  **Note**:*Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.
-6. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete.
+1. Navigate to "actions" tab  
+2. Select set up workflow yourself.
+  ![](images/set_up_workflow_v3.png)
+3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\<UserName>\business-process-automation\templates\main.json) into the body.  
+4. Run the workflow and select commit new file  
+  **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
+  - Select "Start Commit"
+  - Select "Commit New File"
+5. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete. 
+  You can also view real-time logs from your Azure Function Apps:
+    - Navigate to your Azure Portal, and select your Function APP, named after your project name  
+    - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
+    - Switch the stream from "File System Logs" to "App Insights Logs" via the drop down menu, directly above your log window
  
 ## 7. Launch App  
 1. Navigate to your Resource Group within your Azure Portal <insert static web app screenshot here>  
