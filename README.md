@@ -138,7 +138,7 @@ Fork https://github.com/Azure/business-process-automation to your github account
 2. Clone the forked repo locally  
 3. ```git clone https://github.com/<your-account>/business-process-automation```  
 4. Navigate to  your templates/parameters.json within your local repo  
-'''cd business-process-automation/templates
+'''cd business-process-automation/templates```
 5. Open parameters.json.example
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```C:\Users\<UserName>\business-process-automation\templates\code .```  
