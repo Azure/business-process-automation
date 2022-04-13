@@ -138,7 +138,7 @@ Fork https://github.com/Azure/business-process-automation to your github account
 2. Clone the forked repo locally  
  ```git clone https://github.com/<your-account>/business-process-automation```  
 3. Navigate to  your templates/parameters.json within your local repo  
-'''cd business-process-automation/templates```
+```cd business-process-automation/templates```
 4. Open parameters.json.example
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```C:\Users\<UserName>\business-process-automation\templates\code .```  
@@ -167,7 +167,7 @@ One will start with the name "huggingface".
   
 ![](images/newly_created_function_apps.png)  
   
-Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "<YourProjectName>.PublishSettings.txt"  
+Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "[YourProjectName].PublishSettings.txt"  
    
   ![](images/get_publish_profile.png)  
 2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
