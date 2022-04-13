@@ -16,7 +16,7 @@ The following guide will present a high-level overview of the deployment archite
 - [Currently Inluded Algorithms](#currently-inluded-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
-  - [Navigate to and open for editing, easyButton/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
+  - [Navigate to and open for editing, business-process-automation/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
   - [Clone your repo locally](#5-clone-your-repo-locally)
   - [Run initial deployment configuration](#run-initial-deployment-configuration)
   - [Create action to deploy](7-create-action-to-deploy)
@@ -27,11 +27,11 @@ The following guide will present a high-level overview of the deployment archite
 - [References](#references)  
 ---
 
-![](images/select_stage2.png)
+![](images/overview.png)
 
 
 ## Architecture
-Once you've created a high-level Resource Group, you'll fork this repository and create a Github Actions Pipeline, automatically importing helper libraries and taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
+Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
 ![](images/sample_architecture3.png)
 
@@ -147,7 +147,7 @@ Update the three "value" fields below:
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
-2. Run `az deployment group create --name ExampleDeployment --resource-group easybutton --template-file main.json --parameters parameters.json`  
+2. Run `az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json`  
   **Note**: *This may take several minutes to run*  
 3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
   
