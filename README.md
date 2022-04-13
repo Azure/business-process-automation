@@ -175,7 +175,7 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
   - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
-  - Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field
+  - Paste the contents of your recently downloaded "[YourProjectName].PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
   **Note**: *For step 4 above, this second secret will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
@@ -184,7 +184,7 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 1. Navigate to "actions" tab  
 2. Select set up workflow yourself
   ![](images/set_up_workflow_v3.png)
-3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\<UserName>\business-process-automation\templates\main.json) into the body.  
+3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
 4. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
     - Select "Start Commit"
@@ -229,7 +229,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
     - The second will be contain the output from your first document  
     - An additional item will be created for each uploaded document  
   
-You can further customize your UI via the front end repo https://github.com/<your github account>/bpa-engine-frontend. Simple instructions on how to quickly do so are coming soon
+You can further customize your UI via the repo - Simple instructions on how to quickly do so are coming soon
 
 ## Contacts
  Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
@@ -237,7 +237,7 @@ You can further customize your UI via the front end repo https://github.com/<you
 ## Roadmap
 | Priority | Item |
 | ------- | ------------- |
-| Impending | Adding instructions on basic UI customizations (e.g. Adding header graphics, changing title, etc..) |
+| Impending | Adding instructions on basic UI customizations (e.g. adding header graphics, changing title, etc..) |
 | TBD | ... |
  
 
