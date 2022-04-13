@@ -187,23 +187,39 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\<UserName>\business-process-automation\templates\main.json) into the body.  
 4. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
-  - Select "Start Commit"
-  - Select "Commit New File"
+    - Select "Start Commit"
+    - Select "Commit New File"
 5. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete. 
   You can also view real-time logs from your Azure Function Apps:
     - Navigate to your Azure Portal, and select your Function APP, named after your project name  
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
     - Switch the stream from "File System Logs" to "App Insights Logs" via the drop down menu, directly above your log window
  
-## 7. Launch App  
-1. Navigate to your Resource Group within your Azure Portal <insert static web app screenshot here>  
+## 7. Go to your React App!  
+1. Navigate to your Resource Group within your Azure Portal
 2. Select your static webapp  
-3. Within the default Overview pane, Select your URL to navigate to the WebApp, this take you to the newly launched WebApp!  
+3. Within the default Overview pane, Click on your URL, which will take you to your newly launced WebApp!  
  
  ![](images/find_static_web_app2.png)
  
 ## 8. Load Documents!
-Use the Select PDF File to load your documents  
+1. Select Configure a New Pipeline  
+![](images/app_landing_page.png)  
+2. If you have a .pdf file, select "PDF Document". You can also upload WAV files for transcription, and subsequent language processing  
+3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
+    - Depending on your selection, new analytical services will appear. For example, for .pdf files, your first selection can extracting raw tables via the Form Recognizer's General Document Model.  
+![](images/pdf_2views.png)  
+Alternatively, you can first OCR the raw image to text, by selecting Form Recognizer's OCR Service, after which your app will show new options that are available to you for processing converted text
+![](images/text_options.png)  
+4. To complete your pipeline, select the tile "Export Last Stage to DB"  
+5. Navigate to "Home"  
+![](images/home.png)  
+6. Select "Ingest Documents"
+7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.
+
+  
+  
+  
   **Note**: *your documents should be in pdf/image format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
 Navigate to your cosmosDB in your Azure Resource Portal for your new output
