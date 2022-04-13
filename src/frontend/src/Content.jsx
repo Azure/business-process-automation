@@ -5,6 +5,7 @@ import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
 import { Breadcrumb, BreadcrumbDivider } from '@fluentui/react-northstar';
+import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 
 
 export default function Content(props) {
@@ -64,7 +65,7 @@ export default function Content(props) {
             case 'HOME':
                 return (
                     <Breadcrumb >
-                        <Breadcrumb.Item>
+                        <Breadcrumb.Item style={{paddingLeft: "0px"}}>
                             Home
                         </Breadcrumb.Item>
                     </Breadcrumb>)
@@ -72,11 +73,13 @@ export default function Content(props) {
                 return (
                     <>
                         <Breadcrumb >
-                            <Breadcrumb.Item>
-                                <Breadcrumb.Link onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                            <Breadcrumb.Item style={{paddingLeft: "0px"}}>
+                                <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <BreadcrumbDivider />
+                        <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                        </Breadcrumb.Divider>
                         <Breadcrumb.Item>
                             Create Pipeline
                         </Breadcrumb.Item>
@@ -85,11 +88,13 @@ export default function Content(props) {
                 return (
                     <>
                         <Breadcrumb >
-                            <Breadcrumb.Item>
-                                <Breadcrumb.Link onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                            <Breadcrumb.Item style={{paddingLeft: "0px"}}>
+                                <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <BreadcrumbDivider />
+                        <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                        </Breadcrumb.Divider>
                         <Breadcrumb.Item>
                             View Pipeline
                         </Breadcrumb.Item>
@@ -97,11 +102,13 @@ export default function Content(props) {
             case 'UPLOAD_DOCUMENTS':
                 return (<>
                     <Breadcrumb >
-                        <Breadcrumb.Item>
-                            <Breadcrumb.Link onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        <Breadcrumb.Item style={{paddingLeft: "0px"}}>
+                            <Breadcrumb.Link  href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
                         </Breadcrumb.Item>
                     </Breadcrumb>
-                    <BreadcrumbDivider />
+                    <Breadcrumb.Divider>
+                    <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
                     <Breadcrumb.Item>
                         Ingest Documents
                     </Breadcrumb.Item>

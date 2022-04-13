@@ -12,7 +12,7 @@ import LanguageSingleClassifyDialog from './LanguageSingleClassifyDialog'
 import HuggingFaceDialog from './HuggingFaceDialog'
 
 import { sc } from './serviceCatalog'
-import { Button, Label } from '@fluentui/react-northstar'
+import { Button, Text } from '@fluentui/react-northstar'
 
 
 export default function Stages(props) {
@@ -127,7 +127,7 @@ export default function Stages(props) {
     const renderOptions = () => {
         if (options) {
             return (
-                <div style={{ display: "flex", flexWrap: "wrap", padding: "30px", overflow: "auto" }} >
+                <div style={{ display: "flex", flexWrap: "wrap", padding: "30px", overflow: "auto", justifyContent: "center" }} >
                     {options.map((option) => {
                         return (<OptionCard option={option} onClickHandler={onItemClick} />)
                     })}
@@ -140,9 +140,9 @@ export default function Stages(props) {
         console.log(stages)
         let header
         if (!stages || stages.length === 0) {
-            header = <Label style={{ color: "black" }}>Select a document type to get started</Label>
+            header = <Text weight="semibold" align="center" content="Select a document type to get started" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }}/>
         } else {
-            header = <Label style={{ color: "black" }}>Select a stage to add it to your pipeline configuration</Label>
+            header = <Text weight="semibold" align="center" content="Select a stage to add it to your pipeline configuration" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }}/>
         }
         
         return (
@@ -165,7 +165,7 @@ export default function Stages(props) {
         if (stages && stages.length > 0) {
             return (
                 <>
-                    <Label style={{ color: "black" }}>Pipeline Preview</Label>
+                    <Text weight="semibold" align="center" content="Pipeline Preview" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }}/>
                     <PipelinePreview stages={stages} />
                     <div style={{
                         marginLeft: "700px",
