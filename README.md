@@ -135,7 +135,7 @@ Fork https://github.com/Azure/business-process-automation to your github account
 
 ## 4. Navigate to and open for editing, templates/parameters.json in your local directory
 1. Open a command window  
-2. Clone the forked repo locally   - `git clone https://github.com/<your-account>/business-process-automation`
+2. Clone the forked repo locally   - ```git clone https://github.com/<your-account>/business-process-automation```
 3. Navigate to  your templates/parameters.json within your local repo
 Update the three "value" fields below:  
 
@@ -147,15 +147,15 @@ Update the three "value" fields below:
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
-2. Run `az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json`  
+2. Run ```az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json```  
   **Note**: *This may take several minutes to run*  
 3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
   
 ## 6. Collect the Published Profiles for your Function Apps
-1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE.
+1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
 2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
 3.  Add Repository Secret
-4.  Copy the publish profile contents in "value" and the name will be AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
+4.  Copy the publish profile contents in "value" and the name will be `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`
   
 5.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
 
