@@ -4,7 +4,7 @@ import { Card, Text, Image } from '@fluentui/react-northstar'
 export default function OptionCard(props) {
 
     return (
-        <Card elevated style={{ margin: "20px", minWidth:"100px", maxWidth:"150px", padding: "0px", backgroundColor: "white" }} onClick={() => props.onClickHandler(props.option)}>
+        <Card elevated style={{ margin: "20px", minWidth:"100px", maxWidth:"150px", height: "220px", padding: "0px", backgroundColor: "white" }} onClick={() => props.onClickHandler(props.option)}>
             
             <Card.Preview fitted>
                 <Image
