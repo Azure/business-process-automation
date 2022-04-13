@@ -166,13 +166,17 @@ One will start with the name "huggingface".
   
 ![](images/newly_created_function_apps)  
   
-Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
+Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "<YourProjectName>.PublishSettings.txt" This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
+   
+  ![](images/get_publish_profile.png)  
+2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
 
-2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
-3.  Add Repository Secret
-4.  Copy the publish profile contents in "value" and the name will be `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`
+3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
+  ![](images/secrets_actions.png)  
+4. Add Repository Secret
+5. Copy the publish profile contents in "value" and the name will be `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`
   
-5.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
+6.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
 
 
 ## 6. Create Github Action to build the code and deploy it to your Function Apps
