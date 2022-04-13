@@ -16,15 +16,16 @@ The following guide will present a high-level overview of the deployment archite
 - [Currently Inluded Algorithms](#currently-included-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
-  - [Create a Resource Group](#create-a-resource-group-in-your-azure-portal)
-  - [Fork the Repo](#fork-the-repo)
-  - [Create AND save personal access token](#create-and-save-personal-access-token)
-  - [Navigate to and open for editing, business-process-automation/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
-  - [Clone your repo locally](#5-clone-your-repo-locally)
-  - [Run initial deployment configuration](#run-initial-deployment-configuration)
-  - [Create action to deploy](7-create-action-to-deploy)
-  - [Launch App](#8-launch-app)
-  - [Load Documents!](#load-documents)
+  - [Create a Resource Group](#1-create-a-resource-group-in-your-azure-portal)
+  - [Fork the Repo](#2-fork-the-repo)
+  - [Create AND save personal access token](#3-create-and-save-personal-access-token)
+  - [Clone local repo for deployment](#4-navigate-to-and-open-for-editing-templatesparametersjsonexample-in-your-local-directory)
+  - [Run initial deployment configuration](#5-run-initial-deployment-configuration)
+  - [Create action to deploy](#6-collect-the-published-profiles-from-your-newly-created-azure-function-apps)
+  - [Create Github Action to build the code and deploy it to your Function Apps](#6-create-github-action-to-build-the-code-and-deploy-it-to-your-function-apps)
+- [Go to your React App](#go-to-your-react-app)
+- [Load Documents!](#load-documents)
+- [View Your Results](#view-your-results)
 - [Contacts](#contacts)  
 - [Roadmap](#roadmap)
 - [References](#references)  
@@ -75,10 +76,9 @@ https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/conce
 |Text Analytics for health|	This pre-configured feature extracts information from unstructured medical texts, such as clinical notes and doctor's notes.|
 |Custom NER|	Build an AI model to extract custom entity categories, using unstructured text that you provide.|
 |Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
-|Language detection	|This pre-configured feature evaluates text, and determines the language it was written in. It returns a language identifier and a score that indicates the strength of the analysis.|
 |Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
 |Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
-|Question answering|	This pre-configured feature provides answers to questions extracted from text input, using semi-structured content such as: FAQs, manuals, and documents.|
+
 
 https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview
 
@@ -133,13 +133,15 @@ Fork https://github.com/Azure/business-process-automation to your github account
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
-## 4. Navigate to and open for editing, templates/parameters.json in your local directory
+## 4. Navigate to and open for editing, templates/parameters.json.example in your local directory
 1. Open a local command window  
 2. Clone the forked repo locally  
  ```git clone https://github.com/<your-account>/business-process-automation```  
-3. Navigate to  your templates/parameters.json within your local repo  
+3. Navigate to  your templates/parameters.json.example within your local repo  
 ```cd business-process-automation/templates```
-4. Open parameters.json.example
+4. Rename the file to "parameters.json"  
+**Note**: *This is an important step to ensure successful deployment*. The file can be renamed via the command line, a local File Explorer browser, or after opening via Visual Studio Code (see the below note)  
+4. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```C:\Users\<UserName>\business-process-automation\templates\code .```  
 Update the three "value" fields below:  
@@ -195,17 +197,18 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
     - Switch the stream from "File System Logs" to "App Insights Logs" via the drop down menu, directly above your log window
  
-## 7. Go to your React App!  
+## Go to your React App!  
 1. Navigate to your Resource Group within your Azure Portal
 2. Select your static webapp  
 3. Within the default Overview pane, Click on your URL, which will take you to your newly launced WebApp!  
  
  ![](images/find_static_web_app2.png)
  
-## 8. Load Documents!
+## Load Documents!
 1. Select Configure a New Pipeline  
 ![](images/app_landing_page.png)  
 2. If you have a .pdf file, select "PDF Document". You can also upload WAV files for transcription, and subsequent language processing  
+**Note**: *The .pdf input tile can accomodate several image input file format types (including, JPEG, PNG, BMP, TIFF)* More information at https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/faq  
 3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
     - Depending on your selection, new analytical services will appear. For example, for .pdf files, your first selection can extracting raw tables via the Form Recognizer's General Document Model.  
 ![](images/pdf_2views.png)  
@@ -218,7 +221,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
 **Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
-  ## 9. View Your Results
+  ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
   - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
   - Navigtate to your Data Explorer  
@@ -245,6 +248,7 @@ You can further customize your UI via the repo - Simple instructions on how to q
 | Subject | Source (Link) |
 | ------- | ------------- |
 | React source template | This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) |
-| Custom NER |  https://github.com/microsoft/nlp-recipes/tree/master/examples/named_entity_recognition |
-| Text Classification | https://github.com/microsoft/nlp-recipes/tree/master/examples/text_classification |
+| Azure Form Recognizer |  https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview |
+| Azure Language Service | https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview |
+| HuggingFace | https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads |
 | Additional Model Documentation | |
