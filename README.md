@@ -19,12 +19,13 @@ The following guide will present a high-level overview of the deployment archite
   - [Create a Resource Group](#1-create-a-resource-group-in-your-azure-portal)
   - [Fork the Repo](#2-fork-the-repo)
   - [Create AND save personal access token](#3-create-and-save-personal-access-token)
-  - [Navigate to and open for editing, business-process-automation/templates/templates.json in your local directory](#4-navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
-  - [Clone your repo locally](#5-clone-your-repo-locally)
-  - [Run initial deployment configuration](#6-run-initial-deployment-configuration)
-- [Create action to deploy](#7-create-action-to-deploy)
-- [Launch App](#8-launch-app)
+  - [Clone local repo for deployment](#4-navigate-to-and-open-for-editing-templatesparametersjsonexample-in-your-local-directory)
+  - [Run initial deployment configuration](#5-run-initial-deployment-configuration)
+  - [Create action to deploy](#6-collect-the-published-profiles-from-your-newly-created-azure-function-apps)
+  - [Create Github Action to build the code and deploy it to your Function Apps](#6-create-github-action-to-build-the-code-and-deploy-it-to-your-function-apps)
+- [Go to your React App](#go-to-your-react-app)
 - [Load Documents!](#load-documents)
+- [View Your Results](#view-your-results)
 - [Contacts](#contacts)  
 - [Roadmap](#roadmap)
 - [References](#references)  
@@ -196,14 +197,14 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
     - Switch the stream from "File System Logs" to "App Insights Logs" via the drop down menu, directly above your log window
  
-## 7. Go to your React App!  
+## Go to your React App!  
 1. Navigate to your Resource Group within your Azure Portal
 2. Select your static webapp  
 3. Within the default Overview pane, Click on your URL, which will take you to your newly launced WebApp!  
  
  ![](images/find_static_web_app2.png)
  
-## 8. Load Documents!
+## Load Documents!
 1. Select Configure a New Pipeline  
 ![](images/app_landing_page.png)  
 2. If you have a .pdf file, select "PDF Document". You can also upload WAV files for transcription, and subsequent language processing  
@@ -220,7 +221,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
 **Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
-  ## 9. View Your Results
+  ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
   - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
   - Navigtate to your Data Explorer  
