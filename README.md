@@ -141,7 +141,7 @@ Fork https://github.com/Azure/business-process-automation to your github account
 '''cd business-process-automation/templates
 5. Open parameters.json.example
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
-```C:\Users\<UserName>\business-process-automation\templates\code .```
+```C:\Users\<UserName>\business-process-automation\templates\code .```  
 Update the three "value" fields below:  
 
 ![](images/edit_parameters3.png)  
@@ -165,7 +165,7 @@ Update the three "value" fields below:
 1.  You will have two new function apps deployed within your Resource Group.  Navigate to your Resource Group at your Azure Portal.  
 One will start with the name "huggingface".  
   
-![](images/newly_created_function_apps)  
+![](images/newly_created_function_apps.png)  
   
 Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "<YourProjectName>.PublishSettings.txt" This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
    
