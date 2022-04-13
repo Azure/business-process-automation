@@ -195,8 +195,6 @@ You can further customize your UI via the front end repo https://github.com/<you
 | Priority | Item |
 | ------- | ------------- |
 | Impending | Adding instructions on basic UI customizations (e.g. Adding header graphics, changing title, etc..) |
-| Impending | Add standard NER capability from Language Service [What is Named Entity Recognition (NER) in Azure Cognitive Service for Language](https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/named-entity-recognition/overview#:~:text=Named%20Entity%20Recognition%20(NER)%20is,categorize%20entities%20in%20unstructured%20text.)  |
-| TBD | Add text summarization |
 | TBD | ... |
  
 
