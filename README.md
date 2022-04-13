@@ -154,12 +154,20 @@ Update the three "value" fields below:
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
-2. Run ```az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json```  
+2. Run  
+```az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json```  
   **Note**: *This may take several minutes to run*  
-3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
+3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
+`azure.portal.com`   
   
-## 6. Collect the Published Profiles for your Function Apps
-1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
+## 6. Collect the Published Profiles from your newly created Azure Function Apps
+1.  You will have two new function apps deployed within your Resource Group.  Navigate to your Resource Group at your Azure Portal.  
+One will start with the name "huggingface".  
+  
+![](images/newly_created_function_apps)  
+  
+Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
+
 2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
 3.  Add Repository Secret
 4.  Copy the publish profile contents in "value" and the name will be `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`
