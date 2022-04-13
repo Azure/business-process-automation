@@ -247,3 +247,4 @@ You can further customize your UI via the front end repo https://github.com/<you
 | React source template | This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) |
 | Custom NER |  https://github.com/microsoft/nlp-recipes/tree/master/examples/named_entity_recognition |
 | Text Classification | https://github.com/microsoft/nlp-recipes/tree/master/examples/text_classification |
+| Additional Model Documentation | |
