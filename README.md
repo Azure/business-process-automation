@@ -221,7 +221,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
   ## 9. View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
     - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
-    - Navigtate to your Data Explorer 
+    - Navigtate to your Data Explorer  
     - You should see a container, named after your project name. Select that container  
     - You will see a SQL query, named after your project name. Select that query  
     - Within that query, Select Items. Here you should see multiple items  
