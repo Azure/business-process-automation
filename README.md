@@ -171,12 +171,11 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
    
   ![](images/get_publish_profile.png)  
 2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
-
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
-- Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
-- Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field  
+  - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
+  - Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field  
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
   **Note**: *For step 4 above, this second secrete will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
