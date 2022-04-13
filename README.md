@@ -86,19 +86,19 @@ https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overv
 #### Hugging Face Implementation
 Many of the pretrained models from the huggingface library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
 
-![](images/hugging_face_models.png)
+![](images/hugging_face_models.png)  
 
 ## Prerequisities
 1. Github account
 2. Ensure your subscription has Microsoft.DocumentDB enabled  
 To check:  
-      a. Go to your subscription within portal.azure.com  
-      b. Select Resource Providers at bottom of left navigation pane  
-      c. Within the Filter by name menu, search for Microsoft.DocumentDB  
-      d. Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
-      **Note**:*This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-3. Ensure that you have accepted terms and conditions for Responsible AI
- "You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
+      - Go to your subscription within portal.azure.com  
+      - Select Resource Providers at bottom of left navigation pane  
+      - Within the Filter by name menu, search for Microsoft.DocumentDB  
+      - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
+      **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
+3. Ensure that you have accepted terms and conditions for Responsible AI  
+"You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
 
 ## Installation Steps
 
