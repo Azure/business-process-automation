@@ -124,11 +124,11 @@ Fork https://github.com/Azure/business-process-automation to your github account
   ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-personal-access-tokens.jpg)  
 5.   Select Generate personal access token  
   ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-new-token.png)  
-6..  Under Select scopes, select the checkbox for "workflow"  
+6.  Under Select scopes, select the checkbox for "workflow"  
   ![](images/personal_access_tokens_configuration.png)  
-7.. Add your own description  
+7. Add your own description  
 8. Select Generate token  
-9..  Copy your newly generated token  
+9.  Copy your newly generated token  
   **Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
