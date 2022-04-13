@@ -31,7 +31,7 @@ The following guide will present a high-level overview of the deployment archite
 
 
 ## Architecture
-Once you've created a high-level Resource Group, you'll create a high-level Azure DevOps pipeline and import/clone this repo, automatically importing helper libraries and taking advantage of Azure functions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
+Once you've created a high-level Resource Group, you'll fork this repository and create a Github Actions Pipeline, automatically importing helper libraries and taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
 ![](images/sample_architecture3.png)
 
@@ -110,12 +110,12 @@ It will take a few seconds for your Resource Group to be created.
 For more help, refer to https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
 
 ## 2. Fork the repo
-Fork https://github.com/jameshoff-msft/easyButton to your github account. For basic instructions please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
+Fork https://github.com/Azure/business-process-automation to your github account. For basic instructions please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
 **Note**: *a Microsoft organization github account is **not** required*  
 
 ## 3. Create AND save personal access token
 1.  On your github repo page, click your profile  
-2.  Select Settings  
+2.  Select Settings (under your profile icon in the top right)
 3. Select Developer settings at bottom of left navigation pane  
 4.  Select Personal access tokens  
   ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-personal-access-tokens.jpg)  
@@ -130,9 +130,9 @@ Fork https://github.com/jameshoff-msft/easyButton to your github account. For ba
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
-## 4. Navigate to and open for editing, easyButton/templates/templates.json in your local directory
+## 4. Navigate to and open for editing, templates/parameters.json in your local directory
 1. Open a command window  
-2. Clone your repo locally  
+2. Clone the forked repo locally   - `git clone https://github.com/<your-account>/business-process-automation`
 3. Navigate to  
 Update the three "value" fields below:  
 
@@ -140,25 +140,35 @@ Update the three "value" fields below:
 
 4. projectName = must be a unique project name, keep to lowercase, alphanumeric characters only  
 5. repository token: copy the personal access token you recently created  
-6. repository url: paste the link of your forked repository  
+6. repository url: paste the link of your forked repository  - should be something like https://github.com/<your-account>/business-process-automation
   
 ![](images/edit_parameters3.png)  
 
-7. Commit your updates  
-  **Note**: This may take several minutes  
   
 ## 5. Run initial deployment configuration  
-1. In your local repository, navigtate to <your local repository>/src/templates  
-2. Run az deployment group create --name ExampleDeployment --resource-group easybutton --template-file main.json --parameters parameters.json  
-  **Note**: *This may take several seconds to run*    
+1. In your local repository, navigate to the 'templates' directory  
+2. Run `az deployment group create --name ExampleDeployment --resource-group easybutton --template-file main.json --parameters parameters.json`  
+  **Note**: *This may take several minutes to run*  
+3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
+  
+## 6. Collect the Publish Profiles for your Function Apps
+1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE.
+2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
+3.  Add Repository Secret
+4.  Copy the publish profile contents in "value" and the name will be AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
+  
+5.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
 
-## 6. Create action to deploy  
+
+## 6. Create Github Action to build the code and deploy it to your Function Apps
 1. Navigate to actions tab  
 2. Select create new workflow  
 3. Select set up workflow yourself  
   ![](images/set up workflow.png)
-4. Run the workflow and select commit new file
+4. Copy the contents of templates/deploy.yml to create a custom workflow
+5. Run the workflow and select commit new file
   **Note**:*Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.
+6. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete.
  
 ## 7. Launch App  
 1. Navigate to your Resource Group within your Azure Portal <insert static web app screenshot here>  
