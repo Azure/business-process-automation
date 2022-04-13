@@ -9,8 +9,6 @@ const theme = {
     // 💡 `colorScheme` is the object containing all color tokens
     Header: ({ colorScheme }) => ({
       // `brand` contains all design tokens for the `brand` color
-      color: colorScheme.default.foreground3,
-      backgroundColor: "rgb(0, 120, 212)",
       // `foreground3` and `background3` are theme-dependent tokens that should
       // be used as value in styles, you can define own tokens 💪
     }),
@@ -26,7 +24,7 @@ const theme = {
     Breadcrumb : ({ colorScheme }) => ({
       // `brand` contains all design tokens for the `brand` color
       backgroundColor: colorScheme.default.background,
-      fontSize: "18px"
+      // fontSize: "18px"
       // `foreground3` and `background3` are theme-dependent tokens that should
       // be used as value in styles, you can define own tokens 💪
     }),
