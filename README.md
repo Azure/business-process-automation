@@ -123,29 +123,34 @@ Fork https://github.com/Azure/business-process-automation to your github account
 3. Select Developer settings at bottom of left navigation pane  
 ![](images/settings_upper_right_v2.png)    
 4.  Select Personal access tokens  
-  ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-personal-access-tokens.jpg)  
-5.   Select Generate personal access token  
-  ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-new-token.png)  
+5.  Select Generate new token  
 6.  Under Select scopes, select the checkbox for "workflow"  
   ![](images/personal_access_tokens_configuration.png)  
-7. Add your own description  
-8. Select Generate token  
+7. Add your own note  
+8. Select Generate token (at bottom of page)  
 9.  Copy your newly generated token  
-  **Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
+**Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
 ## 4. Navigate to and open for editing, templates/parameters.json in your local directory
-1. Open a command window  
-2. Clone the forked repo locally   - ```git clone https://github.com/<your-account>/business-process-automation```
-3. Navigate to  your templates/parameters.json within your local repo
+1. Open a local command window  
+2. Clone the forked repo locally  
+3. ```git clone https://github.com/<your-account>/business-process-automation```  
+4. Navigate to  your templates/parameters.json within your local repo  
+'''cd business-process-automation/templates
+5. Open parameters.json.example
+**Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
+```base:C:\Users\<UserName>\business-process-automation\templates\code .```
 Update the three "value" fields below:  
 
 ![](images/edit_parameters3.png)  
 
-4. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
-5. repository token: Copy the personal access token you recently created  
-6. repository url: Paste the link of your forked repository - i.e., https://github.com/<your-account>/business-process-automation
+  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
+  2. repository token: Copy the personal access token you recently created  
+  3. repository url: Paste the link of your forked repository - i.e., https://github.com/<your-account>/business-process-automation  
+  
+  Save updates
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
