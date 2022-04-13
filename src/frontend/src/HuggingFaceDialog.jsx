@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dialog, Input, Label } from '@fluentui/react-northstar';
+import { Dialog, Input } from '@fluentui/react-northstar';
 
 
 export default function LanguageDialog(props) {
@@ -24,17 +24,11 @@ export default function LanguageDialog(props) {
 
     return (
         <Dialog
-
-            content={{
-                children: () => {
-                    return (
-                        <div>
-                            <Label>Model ID</Label>
-                            <Input value={modelId} onChange={onChange} />
-                        </div>
-                    )
-                },
-            }}
+            
+            header="Hugging Face Model"
+            content={<>
+                    <Input label="Model ID" labelPosition="inline" value={modelId} onChange={onChange}/>
+                        </>}
             open={!props.hideDialog}
             cancelButton="Cancel"
             confirmButton="Submit"

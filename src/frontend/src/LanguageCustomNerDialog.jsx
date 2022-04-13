@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dialog } from '@fluentui/react-northstar';
-import { Input, Label } from '@fluentui/react-northstar';
+import { Input } from '@fluentui/react-northstar';
 
 
 export default function LanguageCustomNerDialog(props) {
@@ -31,25 +31,11 @@ export default function LanguageCustomNerDialog(props) {
 
     return (
         <Dialog
-
-            content={{
-                children: () => {
-                    return (
-                        <div style={{  }}>
-                            <div>
-                                <Label>Project Name</Label>
-                                <Input value={projectName} onChange={onProjectNameDialogChange} />
-                            </div>
-
-                            <div>
-                                <Label>Deployment Name</Label>
-                                <Input value={deploymentName} onChange={onDeploymentNameDialogChange} />
-                            </div>
-
-                        </div>
-                    )
-                },
-            }}
+            header="Language Custom NER"
+            content={<>
+                    <Input label="Project name" labelPosition="inline" value={projectName} onChange={onProjectNameDialogChange} style={{marginBottom: "10px"}}/>
+                    <Input label="Deployment name" labelPosition="inline" value={deploymentName} onChange={onDeploymentNameDialogChange} />
+                        </>}
             open={!props.hideDialog}
             cancelButton="Cancel"
             confirmButton="Submit"

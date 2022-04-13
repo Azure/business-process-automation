@@ -1,9 +1,13 @@
-# Document Processing Accelerator
+# Business Process Accelerator
 
 
 ## Overview
 
-[Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC UI for document processing. This guide will present a high-level overview of the deployment architecture, with a step-by-step instructional guide for immediate deployment, without any coding.
+[Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing. 
+
+This repo will create, and manage, a set of cognitive services and app resources, and most of the individual resource crendentials in your newly created Resource Group. And provide a React UI for uploading documents, creating language and audio pipelines using a variety of user-specified Azure Cogntive Services, and exporting the results. 
+
+The following guide will present a high-level overview of the deployment architecture, with step-by-step instructions for immediate deployment, with several simple command-line steps.
 
 
 
@@ -12,49 +16,74 @@
 - [Currently Inluded Algorithms](#currently-inluded-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
-  - [Clone starter backend repo](#1-clone-the-starter-backend-repo)  
-  - [Set Up Resource Group](#2-create-a-resource-group-in-your-azure-portal)  
-  - [Set up Azure DevOps Pipeline](#3-setting-up-azure-devops-pipeline)  
-    - [Navigate to Azure](#1-navigate-to-azure-devops-wwwdevazurecom)
-    - [Create a New Project](#2-create-a-new-project)
-    - [Select Repo](#3-select-repos-in-left-navigation-pane)  
-    - [Import Repository](#4-select-import-a-repository)  
-    - [Navigate to Project Settings](#5-navigate-to-project-settings)
-    - [Create Service Connection](#6-create-service-connection)  
-    - [Define Pipeline](#7-define-pipeline)  
-    - [Clone UI Repo](#clone-ui-repo)
-    - [Review your Pipeline YAML](#8--review-your-pipeline-yaml)  
-- [Save and Run!](#save-and-run!)  
-- [Launch App](#load-app)  
-- [Load Documents!](#load-documents!)  
+  - [Navigate to and open for editing, easyButton/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
+  - [Clone your repo locally](#5-clone-your-repo-locally)
+  - [Run initial deployment configuration](#run-initial-deployment-configuration)
+  - [Create action to deploy](7-create-action-to-deploy)
+  - [Launch App](#8-launch-app)
+  - [Load Documents!](#load-documents)
 - [Contacts](#contacts)  
 - [Roadmap](#roadmap)
 - [References](#references)  
 ---
 
-![](https://github.com/jameshoff-msft/bpa-backend/blob/master/images/web_app_ui3.png)
+![](images/select_stage2.png)
 
 
 ## Architecture
-Once you've created a high-level Resource Group, you'll create a high-level Azure DevOps pipeline and import/clone this repo, automatically importing helper libraries and taking advantage of Azure functions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
+Once you've created a high-level Resource Group, you'll fork this repository and create a Github Actions Pipeline, automatically importing helper libraries and taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
-![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/sample_architecture3.jpg)
+![](images/sample_architecture3.png)
 
 ## Currently Included Algorithms
-The initial release includes two top NLP use cases, text classification, and custom named entity recognition. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
-#### Text Classification
-Text classification is a supervised learning method of learning and predicting the category or the class of a document given its text content. The state-of-the-art methods are based on neural networks of different architectures as well as pre-trained language models or word embeddings.
-#### Custom Named Entity Recognition
-Named Entity Recognition (NER) is the task of detecting and classifying real-world objects mentioned in text. Common named entities include person names, locations, organizations, etc. The state-of-the art NER methods include combining Long Short-Term Memory neural network with Conditional Random Field (LSTM-CRF) and pretrained language models like BERT.
+The initial release includes Cognitive Services provided by Azure Language Service and Form Recognizer, such as text classification and custom named entity recognition, as well as standardized interface for deploying State-of-the-Art Hugging Face models. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
+#### Form Recognizer Models  
 
-NER usually involves assigning an entity label to each word in a sentence, such as the entities shown below:
+| Model | Description |
+| ----- | ----------- |
+|Read (preview)	| Extract printed and handwritten text lines, words, locations, and detected languages. |
+| General document (preview) |	Extract text, tables, structure, key-value pairs, and named entities.|
+| Layout |	Extract text and layout information from documents.|  
 
-O: Not an entity (i.e. All other words)  
-I-LOC: Location  
-I-ORG: Organization  
-I-PER: Person  
+ Prebuilt  
+| Model | Description |
+| ----- | ----------- |
+| W-2 (preview) |	Extract employee, employer, wage information, etc. from US W-2 forms.|
+|Invoice	| Extract key information from English and Spanish invoices.|
+|Receipt	| Extract key information from English receipts.|
+|ID document	| Extract key information from US driver licenses and international passports.|
+|Business card	| Extract key information from English business cards.|  
 
-There are a few standard labeling schemes and you can find the details [here](http://cs229.stanford.edu/proj2005/KrishnanGanapathy-NamedEntityRecognition.pdf). The data can also be labeled with custom entities as required by the use case.
+Custom
+| Model | Description |
+| ----- | ----------- |
+| Custom |	Extract data from forms and documents specific to your business. Custom models are trained for your distinct data and use cases. |
+| Composed |	Compose a collection of custom models and assign them to a single model built from your form types.|  
+
+https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview
+#### Language Service Models
+
+| Model | Description |
+| ----- | ----------- |
+|Named Entity Recognition (NER)|	This pre-configured feature identifies entities in text across several pre-defined categories.|
+|Personally Identifiable Information (PII) detection	|This pre-configured feature identifies entities in text across several pre-defined categories of sensitive |information, such as account information.|
+|Key phrase extraction|	This pre-configured feature evaluates unstructured text, and for each input document, returns a list of key phrases and main points in the text.|
+|Entity linking	|This pre-configured feature disambiguates the identity of an entity found in text and provides links to the entity on Wikipedia.|
+|Text Analytics for health|	This pre-configured feature extracts information from unstructured medical texts, such as clinical notes and doctor's notes.|
+|Custom NER|	Build an AI model to extract custom entity categories, using unstructured text that you provide.|
+|Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
+|Language detection	|This pre-configured feature evaluates text, and determines the language it was written in. It returns a language identifier and a score that indicates the strength of the analysis.|
+|Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
+|Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
+|Question answering|	This pre-configured feature provides answers to questions extracted from text input, using semi-structured content such as: FAQs, manuals, and documents.|
+
+https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview
+
+
+#### Hugging Face Implementation
+Many of the pretrained models from the huggingface library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
+
+![](images/hugging_face_models.png)
 
 ## Prerequisities
 1. Github account
@@ -69,120 +98,90 @@ To check:
  "You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
 
 ## Installation Steps
-### 1. Clone the starter backend repo
-Clone https://github.com/jameshoff-msft/bpa-backend to your github account  
-**Note**: *a Microsoft organization github account is **not** required*
-### 2. Create a Resource Group in your Azure Portal
+
+## 1. Create a Resource Group in your Azure Portal
+Create your Resource group.
 Select your preferred Region
-### 3. Setting up Azure DevOps Pipeline
-**Note**: You'll use Azure DevOps for running the multi-stage pipeline with build. If you don't already have an Azure DevOps organization, create one by following the instructions at [Quickstart: Create an organization or project collection](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/create-organization?view=azure-devops).)
+![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)  
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
+
+It will take a few seconds for your Resource Group to be created.
+![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-create-group.png)  
+For more help, refer to https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
+
+## 2. Fork the repo
+Fork https://github.com/Azure/business-process-automation to your github account. For basic instructions please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
+**Note**: *a Microsoft organization github account is **not** required*  
+
+## 3. Create AND save personal access token
+1.  On your github repo page, click your profile  
+2.  Select Settings (under your profile icon in the top right)
+3. Select Developer settings at bottom of left navigation pane  
+4.  Select Personal access tokens  
+  ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-personal-access-tokens.jpg)  
+5.   Select Generate personal access token  
+  ![](https://docs.microsoft.com/en-us/azure/devops/repos/git/media/select-new-token.png)  
+6..  Under Select scopes, select the checkbox for "workflow"  
+  ![](images/personal_access_tokens_configuration.png)  
+7.. Add your own description  
+8. Select Generate token  
+9..  Copy your newly generated token  
+  **Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
+  
+  For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
+
+## 4. Navigate to and open for editing, templates/parameters.json in your local directory
+1. Open a command window  
+2. Clone the forked repo locally   - `git clone https://github.com/<your-account>/business-process-automation`
+3. Navigate to  
+Update the three "value" fields below:  
+
+![](images/edit_parameters1.png)  
+
+4. projectName = must be a unique project name, keep to lowercase, alphanumeric characters only  
+5. repository token: copy the personal access token you recently created  
+6. repository url: paste the link of your forked repository  - should be something like https://github.com/<your-account>/business-process-automation
+  
+![](images/edit_parameters3.png)  
+
+  
+## 5. Run initial deployment configuration  
+1. In your local repository, navigate to the 'templates' directory  
+2. Run `az deployment group create --name ExampleDeployment --resource-group easybutton --template-file main.json --parameters parameters.json`  
+  **Note**: *This may take several minutes to run*  
+3. When this has completed you should have the application infrastructure deployed to your resource group.  View the resource group in your portal to confirm.
+  
+## 6. Collect the Publish Profiles for your Function Apps
+1.  You will have two function apps deployed.  One will start with the name "huggingface".  Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center.  When you press the button it will download a file.  This is your AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE.
+2.  From your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions
+3.  Add Repository Secret
+4.  Copy the publish profile contents in "value" and the name will be AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
+  
+5.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
 
 
-####    1. Navigate to Azure DevOps www.dev.azure.com
-####    2. Create a new Project
-Type in your Project name. And Select a Visibility setting (currently tested with Private)
-
-![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/create_project2.png)
-
-####     3. Select Repos in left Navigation pane
-####     4. Select Import a Repository 
-Select Git for Repository type. Paste the quick start repo https://github.com/jameshoff-msft/bpa-backend into the CLone URL* field. This repo is used for the POC backend, e.g. creating backend Cognitive Service, Azure functions, and managing credentials
-
-**Note**: *You may leave Requires Authentication unchecked*  
- Cloning may take several minutes. 
+## 6. Create Github Action to build the code and deploy it to your Function Apps
+1. Navigate to actions tab  
+2. Select create new workflow  
+3. Select set up workflow yourself  
+  ![](images/set up workflow.png)
+4. Copy the contents of templates/deploy.yml to create a custom workflow
+5. Run the workflow and select commit new file
+  **Note**:*Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.
+6. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete.
  
- ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/clone_repository_status.png)
+## 7. Launch App  
+1. Navigate to your Resource Group within your Azure Portal <insert static web app screenshot here>  
+2. Select your static webapp  
+3. Within the default Overview pane, Select your URL to navigate to the WebApp, this take you to the newly launched WebApp!  
  
- Your cloned repository should mirror the below directory:
+ ![](images/find_static_web_app2.png)
  
- ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/cloned_repository.png)
- 
-####    5. Navigate to Project Settings
-
- ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/project_settings2.png)  
- 
- 
-####     6. Create Service Connection
-This Service Connection will allow Azure DevOps to manage resources within your newly created Resource Group
-1. Click Service Connections in left navigation pane
-2. Select Create service connection - This authorizes Azure DevOps to manage your Azure resources on your behalf.  
-Select Next.
-3. Select Azure Resource Manager 
-    **Note**: *Service principal option is recommended*
-4. Select your subscription level 
-    a. Subscription level scope is recommended.  
-    b. Select your Subscription.  
-    c. Define Service Connection name (save the Service Connection name for reuse in the subsequent steps    
-    **Note** :*Recommended all lower case alphanumeric only*  
-    d. check the box for Grant access permission to all pipelines  
-    
-    ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/access_permission.png)  
-    
-5. Input the same Resource group and Service connection name 
-6. Select the checkbox for "Grant access permission to all pipelines  
-       **Note** *alphanumeric lower case only as multiple azure services and resources are being used with different naming convention restrictions*
-       
-####     7. Define Pipeline
-1. Navigate back to Pipelines in your left Navigation Pane
-2. Select Create Pipeline
-3. Select Azure Repos Git
-4. Select your previously cloned repo
-
-####     8. Clone UI repo
-This repo is used for the POC front end.    
-Fork the below repository to the same Github that was used previously
-https://github.com/jameshoff-msft/bpa-engine-frontend
-
-1. Ensure you are still logged into your github repo
-2. Navigate to the above repo
-3. Select Fork in upper right menu
-4. Select your github account  
-We will use the link (github.com/<my account name>/bpa-engine-frontend) to this newly forked repo in the next steps
-
-####     9. Review your Pipeline YAML
-We'll only need to update lines 12-17, with the following instructions instructions
-1. Azure subscription = service connection previously created
-2. Fill in Project name - must be unique (this name is used across most of the services created during this accelerator)
-3. Fill in resource group name
-4. Select your desired location
-5. Select your previously cloned repo's bpa-engine-frontend URI.
-6. Find your repository token
-  i.   On your github repo page, click your profile  
-  ii.  Select Settings  
-  iii. Select Developer settings at bottom of left navigation pane  
-  iv.  Select Personal access tokens  
-  v.   Select Generate personal access token  
-  vi.  Under Select scopes, select the checkbox for workflow  
-  vii. Add your own description  
-  viii. Select Generate token  
-  ix.  Copy your newly generated token  
-  **Note**: *be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
-  v.   Paste your newly generated token in the repositoryToken field  
-  vi.  Under Select scopes, select the checkbox for workflow  
-
-## 4. Save and Run!
-Insert any commit message. You should see the pipeline stages workflow updating. Pipeline deployment will generally take several minutes. Monitor the status of your runs: 
-
- ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/model_pipeline_run_part1.png)
- 
- You can drill into each stage for a more detailed log.
- 
- ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/model_pipeline_run_part1_detailed_log.png)
- 
- ## 5. Launch App
-1. Navigate to your Resource Group within your Azure Portal <insert static web app screenshot here>
-2. Select your static webapp
-3. Within the default Overview pane, Select your URL to navigate to the WebApp, this take you to the newly launched WebApp!
- 
- ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/find_static_web_app2.png)
- 
- ## 6. Load Documents!
+## 8. Load Documents!
 Use the Select PDF File to load your documents  
   **Note**: *your documents should be in pdf/image format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
-Check for you newly found custom entities!
- 
-  ![](https://github.com/brandoncwn/staticwebappstarter/blob/main/images/web_app_ui2.png)  
+Navigate to your cosmosDB in your Azure Resource Portal for your new output
   
 You can further customize your UI via the front end repo https://github.com/<your github account>/bpa-engine-frontend. Simple instructions on how to quickly do so are coming soon
 
