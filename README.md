@@ -216,13 +216,18 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 ![](images/home.png)  
 6. Select "Ingest Documents"
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.
+**Note**: *your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
-  
-  
-  
-  **Note**: *your documents should be in pdf/image format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
-
-Navigate to your cosmosDB in your Azure Resource Portal for your new output
+  ## 9. View Your Results
+  Your results will be stored in a Cosmos database within your Azure Resource Group. 
+    - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
+    - Navigtate to your Data Explorer
+    - You should see a container, named after your project name. Select that container.
+    - You will see a SQL query, named after your project name. Select that query.
+    - Within that query, Select Items. Here you should see multiple items. 
+      - The first item will be your pipeline metadata. 
+      - The second will be contain the output from your first document
+      - An additional item will be created for each uploaded document
   
 You can further customize your UI via the front end repo https://github.com/<your github account>/bpa-engine-frontend. Simple instructions on how to quickly do so are coming soon
 
