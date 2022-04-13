@@ -245,6 +245,7 @@ You can further customize your UI via the repo - Simple instructions on how to q
 | Subject | Source (Link) |
 | ------- | ------------- |
 | React source template | This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) |
-| Custom NER |  https://github.com/microsoft/nlp-recipes/tree/master/examples/named_entity_recognition |
-| Text Classification | https://github.com/microsoft/nlp-recipes/tree/master/examples/text_classification |
+| Azure Form Recognizer |  https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview |
+| Azure Language Service | https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview |
+| HuggingFace | https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads |
 | Additional Model Documentation | |
