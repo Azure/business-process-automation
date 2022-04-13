@@ -1,13 +1,13 @@
 import OptionCard from "./OptionCard"
 
-import { Label } from '@fluentui/react-northstar';
+import { Text } from '@fluentui/react-northstar';
 import { ArrowRightIcon } from '@fluentui/react-icons-northstar'
 
 
 export default function PipelinePreview(props) {
     if (props.stages && props.stages.length > 0) {
         return (
-            <div style={{ display: "flex", padding: "30px", flexWrap:"wrap"}} >
+            <div style={{ display: "flex", padding: "30px", flexWrap: "wrap", justifyContent: "center"}} >
                 {props.stages.map((option, index) => {
                     console.log(`index : ${index}`)
                     if (index === props.stages.length - 1) {
@@ -28,7 +28,8 @@ export default function PipelinePreview(props) {
     } else {
         return (<>
             <div style={{ paddingTop: "20px", paddingLeft: "0px" }}>
-                <Label>No Configuration Found</Label></div> 
+                <Text content="No configuration found" style={{ display: "block", width: "100%", marginBottom: "20px" }} />
+                </div>
         </>)
     }
 }
