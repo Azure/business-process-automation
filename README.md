@@ -132,13 +132,15 @@ Fork https://github.com/Azure/business-process-automation to your github account
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
-## 4. Navigate to and open for editing, templates/parameters.json in your local directory
+## 4. Navigate to and open for editing, templates/parameters.json.example in your local directory
 1. Open a local command window  
 2. Clone the forked repo locally  
  ```git clone https://github.com/<your-account>/business-process-automation```  
-3. Navigate to  your templates/parameters.json within your local repo  
+3. Navigate to  your templates/parameters.json.example within your local repo  
 ```cd business-process-automation/templates```
-4. Open parameters.json.example
+4. Rename the file to "parameters.json"  
+**Note**: *This is an important step to ensure successful deployment*. The file can be renamed via the command line, a local File Explorer browser, or after opening via Visual Studio Code (see the below note)  
+4. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```C:\Users\<UserName>\business-process-automation\templates\code .```  
 Update the three "value" fields below:  
