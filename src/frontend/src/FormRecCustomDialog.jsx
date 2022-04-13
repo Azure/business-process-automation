@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Dialog, Input } from '@fluentui/react-northstar';
+import { Dialog, Input, Text } from '@fluentui/react-northstar';
 
 
 export default function FormRecCustomDialog(props) {
@@ -9,11 +9,6 @@ export default function FormRecCustomDialog(props) {
     const dialogContentProps = {
         title: 'Model ID',
         subText: 'Enter the Form Recognizer Custom Model ID',
-    };
-
-    const modalProps = {
-        isBlocking: false,
-        styles: { main: { maxWidth: 450 } },
     };
 
     const onDialogSave = (event) => {
@@ -35,22 +30,20 @@ export default function FormRecCustomDialog(props) {
 
     return (
         <Dialog
-            content={{
-                children: () => {
-                    return (
-                        <div style={{}}>
-                            <Label>Model ID</Label>
-                            <Input value={modelId} onChange={onDialogChange} />
-                        </div>
-                    )
-                },
-            }}
+            header={dialogContentProps.title}
+            content={
+            <>
+                <Text content={dialogContentProps.subText} style={{
+                display: 'block', marginBottom: "20px"
+                }}/>
+                <Input label="Model ID" labelPosition="inline" value={modelId} onChange={onDialogChange} />
+            </>
+            }
             open={!props.hideDialog}
             cancelButton="Cancel"
             confirmButton="Submit"
             onConfirm={onDialogSave}
             onCancel={onDialogCancel}
-            style={{ height: "200px" }}
         />
     )
 } 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dialog, Dropdown } from '@fluentui/react-northstar';
+import { Dialog, Dropdown, Text } from '@fluentui/react-northstar';
 
 
 export default function LanguageDialog(props) {
@@ -39,26 +39,26 @@ export default function LanguageDialog(props) {
 
     return (
         <Dialog
-            content={{
-                children: () => {
-                    return (
-                        <div style={{}}>
-                            <Dropdown
-                                placeholder="Select an option"
-                                label="Languages"
-                                items={languagesToStrings()}
-                                onChange={onTranslateDialogChange}
+            header="Language Translation"
+            content={
+                <>
+                    <Text content="Select the language for your translation" style={{
+                display: 'block', marginBottom: "20px"
+                }}/>
+                    <Dropdown
+                        search
+                        placeholder="Select an option"
+                        label="Languages"
+                        items={languagesToStrings()}
+                        onChange={onTranslateDialogChange}
                             />
-                        </div>
-                    )
-                },
-            }}
+                        </>}
             open={!props.hideDialog}
             cancelButton="Cancel"
             confirmButton="Submit"
             onConfirm={onDialogSave}
             onCancel={onDialogCancel}
-            style={{height:"200px"}}
+            style={{overflow: "visible"}}
         />
     )
 } 
