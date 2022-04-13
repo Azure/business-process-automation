@@ -167,7 +167,7 @@ One will start with the name "huggingface".
   
 ![](images/newly_created_function_apps.png)  
   
-Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "<YourProjectName>.PublishSettings.txt" This is your `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`.
+Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "<YourProjectName>.PublishSettings.txt"  
    
   ![](images/get_publish_profile.png)  
 2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
@@ -177,12 +177,12 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
   - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
   - Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
-  **Note**: *For step 4 above, this second secrete will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+  **Note**: *For step 4 above, this second secret will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
 
 ## 6. Create Github Action to build the code and deploy it to your Function Apps
 1. Navigate to "actions" tab  
-2. Select set up workflow yourself.
+2. Select set up workflow yourself
   ![](images/set_up_workflow_v3.png)
 3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\<UserName>\business-process-automation\templates\main.json) into the body.  
 4. Run the workflow and select commit new file  
@@ -215,11 +215,11 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 5. Navigate to "Home"  
 ![](images/home.png)  
 6. Select "Ingest Documents"
-7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.
-**Note**: *your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
+7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
+**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
 
   ## 9. View Your Results
-  Your results will be stored in a Cosmos database within your Azure Resource Group. 
+  Your results will be stored in a Cosmos database within your Azure Resource Group.  
     - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
     - Navigtate to your Data Explorer
     - You should see a container, named after your project name. Select that container.
