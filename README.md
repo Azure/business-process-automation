@@ -16,7 +16,7 @@ The following guide will present a high-level overview of the deployment archite
 - [Currently Inluded Algorithms](#currently-included-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
-  - [Create a Resource Gropu](#create-a-resource-group-in-your-azure-portal)
+  - [Create a Resource Group](#create-a-resource-group-in-your-azure-portal)
   - [Fork the Repo](#fork-the-repo)
   - [Create AND save personal access token](#create-and-save-personal-access-token)
   - [Navigate to and open for editing, business-process-automation/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
