@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dialog, Input, Label } from '@fluentui/react-northstar';
+import { Dialog, Input } from '@fluentui/react-northstar';
 
 
 export default function LanguageDialog(props) {
