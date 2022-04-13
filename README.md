@@ -75,10 +75,9 @@ https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/conce
 |Text Analytics for health|	This pre-configured feature extracts information from unstructured medical texts, such as clinical notes and doctor's notes.|
 |Custom NER|	Build an AI model to extract custom entity categories, using unstructured text that you provide.|
 |Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
-|Language detection	|This pre-configured feature evaluates text, and determines the language it was written in. It returns a language identifier and a score that indicates the strength of the analysis.|
 |Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
 |Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
-|Question answering|	This pre-configured feature provides answers to questions extracted from text input, using semi-structured content such as: FAQs, manuals, and documents.|
+
 
 https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview
 
@@ -206,6 +205,7 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 1. Select Configure a New Pipeline  
 ![](images/app_landing_page.png)  
 2. If you have a .pdf file, select "PDF Document". You can also upload WAV files for transcription, and subsequent language processing  
+**Note**: *The .pdf input tile can accomodate several image input file format types (including, JPEG, PNG, BMP, TIFF)* More information at https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/faq  
 3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
     - Depending on your selection, new analytical services will appear. For example, for .pdf files, your first selection can extracting raw tables via the Form Recognizer's General Document Model.  
 ![](images/pdf_2views.png)  
