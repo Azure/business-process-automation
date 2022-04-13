@@ -12,7 +12,7 @@ export default function OptionCard(props) {
                     src={props.option.image }
                 />
             </Card.Preview>
-            <Card.Header style={{paddingLeft: "10px", paddingRight: "10px", paddingTop: "10px"}}><Text content={props.option.label} weight="bold" /></Card.Header>
+            <Card.Header style={{paddingLeft: "10px", paddingRight: "10px", paddingTop: "10px"}}><Text content={props.option.label} weight="semibold" /></Card.Header>
             <Card.Body style={{paddingLeft: "10px", paddingRight: "10px"}}>
                 
                 <Text content="These are some details that will be given about the service." size="small" />

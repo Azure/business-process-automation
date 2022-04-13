@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import PipelinePreview from './PipelinePreview'
-import { Label } from '@fluentui/react-northstar';
+import { Text } from '@fluentui/react-northstar';
 
 
 export default function Stages(props) {
@@ -19,8 +19,8 @@ export default function Stages(props) {
 
 
     return (
-        <div style={{ paddingLeft: "0px", paddingTop: "50px" }}>
-            <Label>Current Pipeline</Label>
+        <div style={{paddingTop: "50px" }}>
+            <Text weight="semibold" content="Current Pipeline" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }}/>
             <PipelinePreview theme={props.theme} stages={stages} />
         </div>
     )
