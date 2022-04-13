@@ -160,7 +160,8 @@ Update the three "value" fields below:
 3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
   
-## 6. Collect the Published Profiles from your newly created Azure Function Apps
+## 6. Collect the Published Profiles from your newly created Azure Function Apps  
+  In this sequence of steps you will retrieve credentials from your two newly created Azure Function Apps, and add them as Secrets in your GitHub repo.  
 1.  You will have two new function apps deployed within your Resource Group.  Navigate to your Resource Group at your Azure Portal.  
 One will start with the name "huggingface".  
   
@@ -173,10 +174,11 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
   ![](images/secrets_actions.png)  
-4. Add Repository Secret
-5. Copy the publish profile contents in "value" and the name will be `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE`
-  
-6.  Do the same process for the function application that starts with your unique application name.  Get the publish profile.  This is AZURE_FUNCTIONAPP_PUBLISH_PROFILE under Secrets->Actions.
+4. Select 'New Repository Secret'  
+- Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
+- Paste the contents of your recently downloaded "<YourProjectName>.PublishSettings.txt" file into the "Value" field  
+5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
+  **Note**: *For step 4 above, this second secrete will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
 
 ## 6. Create Github Action to build the code and deploy it to your Function Apps
