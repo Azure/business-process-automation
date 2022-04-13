@@ -137,9 +137,18 @@ export default function Stages(props) {
     }
 
     const renderStageTop = () => {
+        console.log(stages)
+        let header
+        if (!stages || stages.length === 0) {
+            header = <Label style={{ color: "black" }}>Select a document type to get started</Label>
+        } else {
+            header = <Label style={{ color: "black" }}>Select a stage to add it to your pipeline configuration</Label>
+        }
+        
         return (
             <>
-                <Label style={{ color: "black" }}>Select a stage to add it to your pipeline configuration</Label>
+                
+                { header }
                 <LanguageSingleClassifyDialog hideDialog={hideCustomSingleDialog} setHideDialog={setHideCustomSingleDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <LanguageMultiClassifyDialog hideDialog={hideCustomMultiDialog} setHideDialog={setHideCustomMultiDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <LanguageCustomNerDialog hideDialog={hideCustomNerDialog} setHideDialog={setHideCustomNerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
