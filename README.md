@@ -139,14 +139,11 @@ Fork https://github.com/Azure/business-process-automation to your github account
 3. Navigate to  your templates/parameters.json within your local repo
 Update the three "value" fields below:  
 
-![](images/edit_parameters1.png)  
+![](images/edit_parameters3.png)  
 
 4. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
 5. repository token: Copy the personal access token you recently created  
 6. repository url: Paste the link of your forked repository - i.e., https://github.com/<your-account>/business-process-automation
-  
-![](images/edit_parameters3.png)  
-
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
