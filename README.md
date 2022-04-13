@@ -13,7 +13,7 @@ The following guide will present a high-level overview of the deployment archite
 
 - [Overview](#overview)  
 - [Architecture](#architecture)  
-- [Currently Inluded Algorithms](#currently-inluded-algorithms)  
+- [Currently Inluded Algorithms](#currently-included-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
   - [Navigate to and open for editing, business-process-automation/templates/templates.json in your local directory](#navigate-to-and-open-for-editing,-easybutton/templates/templates.json-in-your-local-directory)
