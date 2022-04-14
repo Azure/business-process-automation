@@ -157,9 +157,9 @@ Update the three "value" fields below:
 
 ![](images/update3valueFields.png)  
 
-  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
+  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
   2. repository token: Copy the personal access token you recently created  
-  3. repository url: Paste the link of your forked repository - i.e., https://github.com/<your-account>/business-process-automation  
+  3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
   
   Save updates
   
@@ -167,8 +167,9 @@ Update the three "value" fields below:
 1. In your local repository, navigate to the 'templates' directory  
 2. Run  
 ```
-  az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json
+  az deployment group create --name [yourProjectName] --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json
 ```  
+  **Note**: *Be sure to maintain spaces while updating the project name and resource group*
   **Note**: *This may take several minutes to run*  
 3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
