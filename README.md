@@ -189,11 +189,10 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
-  - Paste 
+  - Paste the below name into the "Name" field
   ```
   AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
   ```  
-  into the "Name" field  
   - Paste the contents of your recently downloaded "[YourProjectName].PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
   **Note**: *For step 4 above, this second secret will be named* 
@@ -202,16 +201,17 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
   ```  
 
 
-## 6. Create Github Action to build the code and deploy it to your Function Apps
+## 6. Create Github Action to your Function Apps, deploying your front and back end resources
 1. Navigate to "actions" tab  
-2. Select set up workflow yourself
+2. Select "new workflow"
+3. Select set up workflow yourself
   ![](images/set_up_workflow_v3.png)
 3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
 4. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
     - Select "Start Commit"
     - Select "Commit New File"
-5. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete. 
+5. View the progress of your actions under the "Actions" tab.  This process will take several minutes to complete. 
   You can also view real-time logs from your Azure Function Apps:
     - Navigate to your Azure Portal, and select your Function APP, named after your project name  
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
