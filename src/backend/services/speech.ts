@@ -19,13 +19,13 @@ export class Speech {
             
                 let out = ""
                 speechRecognizer.recognizing = (s, e) => {
-                    //console.log(`RECOGNIZING: Text=${e.result.text}`);
+                    console.log(`RECOGNIZING: Text=${e.result.text}`);
                     out += e.result.text + " "
                 };
                 
                 speechRecognizer.recognized = (s, e) => {
                     if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
-                        //console.log(`RECOGNIZED: Text=${e.result.text}`);
+                        console.log(`RECOGNIZED: Text=${e.result.text}`);
                         out += e.result.text + " "
                     }
                     else if (e.result.reason == sdk.ResultReason.NoMatch) {
@@ -40,15 +40,15 @@ export class Speech {
                         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
+                        reject( {
+                            data : e.errorDetails,
+                            label : input.label,
+                            bpaId : input.bpaId,
+                            type : 'text',
+                            projectName : input.projectName
+                        })
                     }
-                    reject( {
-                        data : e.errorDetails,
-                        label : input.label,
-                        bpaId : input.bpaId,
-                        type : 'text',
-                        projectName : input.projectName
-                    })
-                
+                    
                     speechRecognizer.stopContinuousRecognitionAsync();
                 };
                 
