@@ -37,7 +37,7 @@ The following guide will present a high-level overview of the deployment archite
 ## Architecture
 Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
-![](images/architecture_original_plus_huggingface.png)
+![](images/architecture_original_plus_huggingface_v2.png)
 
 ## Currently Included Algorithms
 The initial release includes Cognitive Services provided by Azure Language Service and Form Recognizer, such as text classification and custom named entity recognition, as well as standardized interface for deploying State-of-the-Art Hugging Face models. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
