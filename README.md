@@ -136,12 +136,18 @@ Fork https://github.com/Azure/business-process-automation to your github account
 ## 4. Navigate to and open for editing, templates/parameters.json.example in your local directory
 1. Open a local command window  
 2. Clone the forked repo locally  
- ```git clone https://github.com/<your-account>/business-process-automation```  
+```
+git clone https://github.com/<your-account>/business-process-automation`
+```  
 3. Navigate to  your templates/parameters.json.example within your local repo  
-```cd business-process-automation/templates```
+```
+cd business-process-automation/templates
+```  
 4. Rename the file to "parameters.json"  
 **Note**: *This is an important step to ensure successful deployment*. The file can be renamed via the command line, a local File Explorer browser, or after opening via Visual Studio Code (see the below note)  
-```ren parameters.json.example parameters.json```  
+```
+ren parameters.json.example parameters.json
+```  
 4. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```
@@ -181,10 +187,13 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
-  - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
+  - Paste ```AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE``` into the "Name" field  
   - Paste the contents of your recently downloaded "[YourProjectName].PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
-  **Note**: *For step 4 above, this second secret will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+  **Note**: *For step 4 above, this second secret will be named* 
+  ```
+  AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+  ```  
 
 
 ## 6. Create Github Action to build the code and deploy it to your Function Apps
