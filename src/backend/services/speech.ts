@@ -41,6 +41,13 @@ export class Speech {
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
                     }
+                    reject( {
+                        data : e.errorDetails,
+                        label : input.label,
+                        bpaId : input.bpaId,
+                        type : 'text',
+                        projectName : input.projectName
+                    })
                 
                     speechRecognizer.stopContinuousRecognitionAsync();
                 };
@@ -48,6 +55,13 @@ export class Speech {
                 speechRecognizer.sessionStopped = (s, e) => {
                     console.log("\n    Session stopped event.");
                     speechRecognizer.stopContinuousRecognitionAsync();
+                    resolve( {
+                        data : out,
+                        label : input.label,
+                        bpaId : input.bpaId,
+                        type : 'text',
+                        projectName : input.projectName
+                    })
                 };
 
                 speechRecognizer.startContinuousRecognitionAsync();
@@ -65,13 +79,7 @@ export class Speech {
                 //             break;
                 //     }    
                 //     speechRecognizer.close();
-                //     resolve( {
-                //         data : out,
-                //         label : input.label,
-                //         bpaId : input.bpaId,
-                //         type : 'text',
-                //         projectName : input.projectName
-                //     })
+                
                 //}
                 //);
             } catch(err){
