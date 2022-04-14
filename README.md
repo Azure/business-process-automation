@@ -141,6 +141,7 @@ Fork https://github.com/Azure/business-process-automation to your github account
 ```cd business-process-automation/templates```
 4. Rename the file to "parameters.json"  
 **Note**: *This is an important step to ensure successful deployment*. The file can be renamed via the command line, a local File Explorer browser, or after opening via Visual Studio Code (see the below note)  
+```ren parameters.json.example parameters.json```  
 4. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```C:\Users\<UserName>\business-process-automation\templates\code .```  
