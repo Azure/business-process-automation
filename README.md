@@ -171,7 +171,7 @@ Update the three "value" fields below:
 ```  
   **Note**: *Be sure to maintain spaces while updating the project name and resource group*
   **Note**: *This may take several minutes to run*  
-3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
+3. When this has completed you should have the application infrastructure deployed to your resource group. You will see confirmation of numerous created Azure resources in your command window. Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
   
 ## 6. Collect the Published Profiles from your newly created Azure Function Apps  
@@ -182,18 +182,23 @@ One will start with the name "huggingface".
 ![](images/newly_created_function_apps.png)  
   
 Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "[YourProjectName].PublishSettings.txt"  
+**Note**: *It may take several seconds for the button to appear*  
    
   ![](images/get_publish_profile.png)  
 2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
-  - Paste ```AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE``` into the "Name" field  
+  - Paste 
+  ```
+  AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
+  ```  
+  into the "Name" field  
   - Paste the contents of your recently downloaded "[YourProjectName].PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
   **Note**: *For step 4 above, this second secret will be named* 
   ```
-  AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+  AZURE_FUNCTIONAPP_PUBLISH_PROFILE
   ```  
 
 
