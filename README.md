@@ -144,10 +144,12 @@ Fork https://github.com/Azure/business-process-automation to your github account
 ```ren parameters.json.example parameters.json```  
 4. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
-```C:\Users\<UserName>\business-process-automation\templates\code .```  
+```
+C:\Users\<UserName>\business-process-automation\templates\code .
+```  
 Update the three "value" fields below:  
 
-![](images/edit_parameters3.png)  
+![](images/update3valueFields.png.png)  
 
   1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
   2. repository token: Copy the personal access token you recently created  
