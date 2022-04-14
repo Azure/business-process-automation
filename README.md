@@ -206,12 +206,13 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 2. Select "new workflow"
 3. Select set up workflow yourself
   ![](images/set_up_workflow_v3.png)
-3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
-4. Run the workflow and select commit new file  
+4. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file  
+(C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
+5. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
     - Select "Start Commit"
     - Select "Commit New File"
-5. View the progress of your actions under the "Actions" tab.  This process will take several minutes to complete. 
+6. View the progress of your actions under the "Actions" tab.  This process will take several minutes to complete. 
   You can also view real-time logs from your Azure Function Apps:
     - Navigate to your Azure Portal, and select your Function APP, named after your project name  
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
@@ -244,7 +245,8 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
   ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
   - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
-  - Navigtate to your Data Explorer  
+  ![](images/navigate_to_cosmos_db.png)  
+  - Navigtate to your Data Explorer  [Work with data using Azure Cosmos DB Explorer](https://docs.microsoft.com/en-us/azure/cosmos-db/data-explorer)
   - You should see a container, named after your project name. Select that container  
   - You will see a SQL query, named after your project name. Select that query  
   - Within that query, Select Items. Here you should see multiple items  
