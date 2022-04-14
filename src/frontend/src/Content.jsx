@@ -4,7 +4,7 @@ import Stages from './Stages'
 import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
-import { Breadcrumb, BreadcrumbDivider } from '@fluentui/react-northstar';
+import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 
 
