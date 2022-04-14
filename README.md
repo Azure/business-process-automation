@@ -136,30 +136,42 @@ Fork https://github.com/Azure/business-process-automation to your github account
 ## 4. Navigate to and open for editing, templates/parameters.json.example in your local directory
 1. Open a local command window  
 2. Clone the forked repo locally  
- ```git clone https://github.com/<your-account>/business-process-automation```  
+```
+git clone https://github.com/<your-account>/business-process-automation`
+```  
 3. Navigate to  your templates/parameters.json.example within your local repo  
-```cd business-process-automation/templates```
+```
+cd business-process-automation/templates
+```  
 4. Rename the file to "parameters.json"  
 **Note**: *This is an important step to ensure successful deployment*. The file can be renamed via the command line, a local File Explorer browser, or after opening via Visual Studio Code (see the below note)  
+```
+ren parameters.json.example parameters.json
+```  
 4. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
-```C:\Users\<UserName>\business-process-automation\templates\code .```  
+```
+C:\Users\<UserName>\business-process-automation\templates\code .
+```  
 Update the three "value" fields below:  
 
-![](images/edit_parameters3.png)  
+![](images/update3valueFields.png)  
 
-  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
+  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
   2. repository token: Copy the personal access token you recently created  
-  3. repository url: Paste the link of your forked repository - i.e., https://github.com/<your-account>/business-process-automation  
+  3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
   
   Save updates
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
 2. Run  
-```az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json```  
+```
+  az deployment group create --name [yourProjectName] --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json
+```  
+  **Note**: *Be sure to maintain spaces while updating the project name and resource group*
   **Note**: *This may take several minutes to run*  
-3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
+3. When this has completed you should have the application infrastructure deployed to your resource group. You will see confirmation of numerous created Azure resources in your command window. Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
   
 ## 6. Collect the Published Profiles from your newly created Azure Function Apps  
@@ -170,28 +182,37 @@ One will start with the name "huggingface".
 ![](images/newly_created_function_apps.png)  
   
 Open the "huggingface" function app and in the "overview" tab there will be a button "Get publish profile" in the top center, which will then download a file. This will download as "[YourProjectName].PublishSettings.txt"  
+**Note**: *It may take several seconds for the button to appear*  
    
   ![](images/get_publish_profile.png)  
 2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
-  - Paste `AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE` into the "Name" field  
+  - Paste the below name into the "Name" field
+  ```
+  AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE
+  ```  
   - Paste the contents of your recently downloaded "[YourProjectName].PublishSettings.txt" file into the "Value" field
 5. Repeat Steps 1-4 above the same process for the second newly created Azure Function App within your Resource Group, with the same name as your project name.  
-  **Note**: *For step 4 above, this second secret will be named* `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+  **Note**: *For step 4 above, this second secret will be named* 
+  ```
+  AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+  ```  
 
 
-## 6. Create Github Action to build the code and deploy it to your Function Apps
+## 6. Create Github Action to your Function Apps, deploying your front and back end resources
 1. Navigate to "actions" tab  
-2. Select set up workflow yourself
+2. Select "new workflow"
+3. Select set up workflow yourself
   ![](images/set_up_workflow_v3.png)
-3. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file (C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
-4. Run the workflow and select commit new file  
+4. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file  
+(C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
+5. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
     - Select "Start Commit"
     - Select "Commit New File"
-5. View the progress of your actions under the "Actions" tab.  This can take over 10 minutes to complete. 
+6. View the progress of your actions under the "Actions" tab.  This process will take several minutes to complete. 
   You can also view real-time logs from your Azure Function Apps:
     - Navigate to your Azure Portal, and select your Function APP, named after your project name  
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
@@ -224,13 +245,15 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
   ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
   - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
-  - Navigtate to your Data Explorer  
+  ![](images/navigate_to_cosmos_db.png)  
+  - Navigtate to your Data Explorer  [Work with data using Azure Cosmos DB Explorer](https://docs.microsoft.com/en-us/azure/cosmos-db/data-explorer)
   - You should see a container, named after your project name. Select that container  
   - You will see a SQL query, named after your project name. Select that query  
   - Within that query, Select Items. Here you should see multiple items  
     - The first item will be your pipeline metadata  
     - The second will be contain the output from your first document  
     - An additional item will be created for each uploaded document  
+    ![](images/navigating_cosmos_db_explorer.png)  
   
 You can further customize your UI via the repo - Simple instructions on how to quickly do so are coming soon
 
