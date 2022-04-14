@@ -22,7 +22,7 @@ The following guide will present a high-level overview of the deployment archite
   - [Clone local repo for deployment](#4-navigate-to-and-open-for-editing-templatesparametersjsonexample-in-your-local-directory)
   - [Run initial deployment configuration](#5-run-initial-deployment-configuration)
   - [Create action to deploy](#6-collect-the-published-profiles-from-your-newly-created-azure-function-apps)
-  - [Create Github Action to build the code and deploy it to your Function Apps](#6-create-github-action-to-build-the-code-and-deploy-it-to-your-function-apps)
+  - [Create Github Action to build the code and deploy it to your Function Apps](#6-create-github-action-to-your-function-apps-deploying-your-front-and-back-end-resources)
 - [Go to your React App](#go-to-your-react-app)
 - [Load Documents!](#load-documents)
 - [View Your Results](#view-your-results)
@@ -100,28 +100,33 @@ To check:
 3. Ensure that you have accepted terms and conditions for Responsible AI  
 "You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
 
-## Installation Steps
+## Installation Steps  
 
 ## 1. Create a Resource Group in your Azure Portal
 Create your Resource group.
-Select your preferred Region
-![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)  
+Select your preferred Region  
+![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)    
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
 
-It will take a few seconds for your Resource Group to be created.
-![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-create-group.png)  
+It will take a few seconds for your Resource Group to be created.  
+![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-create-group.png)    
 For more help, refer to https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
 
 ## 2. Fork the repo
-Fork https://github.com/Azure/business-process-automation to your github account. For basic instructions please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
+Fork https://github.com/Azure/business-process-automation to your github account.  
+For basic instructions please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
 **Note**: *a Microsoft organization github account is **not** required*  
 
 ## 3. Create AND save personal access token
 1.  On your github repo page, click your profile  
 2.  Select Settings (under your profile icon in the top right)  
+  
 ![](images/settings_upper_right.png)  
+  
 3. Select Developer settings at bottom of left navigation pane  
-![](images/settings_upper_right_v2.png)    
+  
+![](images/settings_upper_right_v2.png)  
+  
 4.  Select Personal access tokens  
 5.  Select Generate new token  
 6.  Under Select scopes, select the checkbox for "workflow"  
@@ -165,7 +170,7 @@ Update the three "value" fields below:
   
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
-2. Run  
+2. Run the below deployment code in your cmd window, after updating with your own project name and Resource Group  
 ```
   az deployment group create --name [yourProjectName] --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json
 ```  
@@ -187,6 +192,7 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
   ![](images/get_publish_profile.png)  
 2. Open the downloaded file, and copy the contents (to be pasted in upcoming steps)  
 3. Navigate back to your forked repo, go to Settings (local settings in the middle center) -> Secrets -> Actions  
+  
   ![](images/secrets_actions.png)  
 4. Select 'New Repository Secret'  
   - Paste the below name into the "Name" field
@@ -232,11 +238,14 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 **Note**: *The .pdf input tile can accomodate several image input file format types (including, JPEG, PNG, BMP, TIFF)* More information at https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/faq  
 3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
     - Depending on your selection, new analytical services will appear. For example, for .pdf files, your first selection can extracting raw tables via the Form Recognizer's General Document Model.  
+  
 ![](images/pdf_2views.png)  
-Alternatively, you can first OCR the raw image to text, by selecting Form Recognizer's OCR Service, after which your app will show new options that are available to you for processing converted text
+Alternatively, you can first OCR the raw image to text, by selecting Form Recognizer's OCR Service, after which your app will show new options that are available to you for processing converted text  
+  
 ![](images/text_options.png)  
 4. To complete your pipeline, select the tile "Export Last Stage to DB"  
 5. Navigate to "Home"  
+  
 ![](images/home.png)  
 6. Select "Ingest Documents"
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
