@@ -253,6 +253,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
     - The first item will be your pipeline metadata  
     - The second will be contain the output from your first document  
     - An additional item will be created for each uploaded document  
+    ![](images/navigating_cosmos_db_explorer.png)  
   
 You can further customize your UI via the repo - Simple instructions on how to quickly do so are coming soon
 
