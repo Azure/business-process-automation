@@ -149,7 +149,7 @@ C:\Users\<UserName>\business-process-automation\templates\code .
 ```  
 Update the three "value" fields below:  
 
-![](images/update3valueFields.png.png)  
+![](images/update3valueFields.png)  
 
   1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only  
   2. repository token: Copy the personal access token you recently created  
@@ -160,7 +160,9 @@ Update the three "value" fields below:
 ## 5. Run initial deployment configuration  
 1. In your local repository, navigate to the 'templates' directory  
 2. Run  
-```az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json```  
+```
+  az deployment group create --name ExampleDeploymentName --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json
+```  
   **Note**: *This may take several minutes to run*  
 3. When this has completed you should have the application infrastructure deployed to your resource group.  Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
