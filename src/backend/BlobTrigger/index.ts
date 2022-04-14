@@ -29,7 +29,7 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         }
 
         const engine = new BpaEngine()
-        await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
+        engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
     }
     catch (err) {
         context.log(err)
