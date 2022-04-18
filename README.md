@@ -103,7 +103,8 @@ To check:
 ## Installation Steps  
 
 ## 1. Create a Resource Group in your Azure Portal
-Create your Resource group.
+Create your Resource Group.  
+**Note**:*When naming your Resource Group, please use lower case, alphanumeric characters only, as multiple Azure Services will be created later on, in the background, using your Resource Group name*  
 Select your preferred Region  
 ![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)    
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
@@ -138,11 +139,14 @@ For basic instructions please refer to https://docs.microsoft.com/en-us/azure/de
   
   For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
-## 4. Navigate to and open for editing, templates/parameters.json.example in your local directory
+## 4. Update depoloyment template files within local repo  
+In step 4, you'll clone your repo locally, and make small updates to two deployment template files, which will automate deployment of multiple Azure resources within your Resource group.  
+  
+Navigate to and open for editing, templates/parameters.json.example in your local directory
 1. Open a local command window  
 2. Clone the forked repo locally  
 ```
-git clone https://github.com/<your-account>/business-process-automation`
+git clone https://github.com/<your-account>/business-process-automation
 ```  
 3. Navigate to  your templates/parameters.json.example within your local repo  
 ```
@@ -162,9 +166,18 @@ Update the three "value" fields below:
 
 ![](images/update3valueFields.png)  
 
-  1. projectName: Must be a unique project name, keep to lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
+  1. projectName: Must be a unique project name, only include lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
   2. repository token: Copy the personal access token you recently created  
   3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
+  
+  Save updates  
+  
+5. Similarly, update your local deploy.yml file within the same directory
+  1. Open the file C:\Users\<UserName>\business-process-automation\templates\deploy.yml
+  2. Update the field AZURE_FUNCTIONAPP_NAME with the name of your ResourceGroup  
+  **Note**:*You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components
+  ![](images/updateDeploy_yml.png)  
+
   
   Save updates
   
@@ -174,7 +187,7 @@ Update the three "value" fields below:
 ```
   az deployment group create --name [yourProjectName] --resource-group <YourResourceGroup> --template-file main.json --parameters parameters.json
 ```  
-  **Note**: *Be sure to maintain spaces while updating the project name and resource group*
+  **Note**: *Be sure to maintain spaces while updating the project name and resource group*  
   **Note**: *This may take several minutes to run*  
 3. When this has completed you should have the application infrastructure deployed to your resource group. You will see confirmation of numerous created Azure resources in your command window. Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
@@ -212,8 +225,11 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 2. Select "new workflow"
 3. Select set up workflow yourself
   ![](images/set_up_workflow_v3.png)
-4. This will take you to the editor for the main.yml file. Update the file within the editor by copying the contents of your **local** main.yml file  
+4. This will take you to the editor for the main.yml file. 
+Delete all of the contents within the main.yml file. Copy all of the contents from your deploy.yml file from your **local** directory.  
 (C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
+![](images/deploy_yml.png)
+Finally, paste that selection into the editor window.
 5. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
     - Select "Start Commit"
