@@ -16,7 +16,10 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             const database = client.database(process.env.COSMOS_DB_DB);
             const container = database.container(process.env.COSMOS_DB_CONTAINER);
             const item = await container.item("1")
+<<<<<<< HEAD
 >>>>>>> 0087382 (update)
+=======
+>>>>>>> 0ffb125601316f76a1b9c9387ed6f0d5a55a82d5
             //await item.delete()
             const out = await create(context, req)
             context.res = {
