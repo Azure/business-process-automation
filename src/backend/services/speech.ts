@@ -20,7 +20,6 @@ export class Speech {
                 let out = ""
                 speechRecognizer.recognizing = (s, e) => {
                     console.log(`RECOGNIZING: Text=${e.result.text}`);
-                    //out += e.result.text + " "
                 };
                 
                 speechRecognizer.recognized = (s, e) => {

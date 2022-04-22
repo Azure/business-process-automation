@@ -22,20 +22,6 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
-    "split": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf"
-        ],
-        "outputTypes": [
-            "blobUploadErrorCode"
-        ],
-        "image": pdf,
-        "label": "Split PDF",
-        "name": "split",
-        "serviceSpecificConfig": { },
-        "serviceSpecificConfigDefaults": {}
-    },
     "test": {
         "bpaServiceId": "abc123",
         "inputTypes": [
