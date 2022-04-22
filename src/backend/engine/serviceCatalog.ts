@@ -7,8 +7,9 @@ import { FormRec } from "../services/formrec"
 import { Translate } from "../services/translate"
 import { HuggingFace } from "../services/huggingface"
 import { Test } from "../services/test"
+import { Blob } from "../services/blob"
 
-const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
+const ocr = new Ocr(process.env.OCR_ENDPOINT, process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
 const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION)
@@ -16,6 +17,21 @@ const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_AP
 const translate = new Translate(process.env.TRANSLATE_ENDPOINT, process.env.TRANSLATE_APIKEY, process.env.TRANSLATE_REGION)
 const huggingface = new HuggingFace(process.env.HUGGINGFACE_ENDPOINT)
 const test = new Test()
+const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_SPLIT_CONTAINER)
+
+const splitService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf"],
+    outputTypes: ["blobUploadErrorCode"],
+    name: "split",
+    process: blob.split,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const translateService : BpaService = {
     bpaServiceId : "abc123",
@@ -362,6 +378,7 @@ export const serviceCatalog = {
     "recognizePiiEntities" : recognizePiiEntities,
     "singleCategoryClassify" : singleCategoryClassify,
     "huggingFaceNER" : huggingFaceNER,
-    "testService" : testService
+    "testService" : testService,
+    "splitService" : splitService
 }
 
