@@ -4,7 +4,7 @@
       "name": "myBlob",
       "type": "blobTrigger",
       "direction": "in",
-      "path": "%process.env.BLOB_STORAGE_SPLIT_CONTAINER%",
+      "path": "%BLOB_STORAGE_SPLIT_CONTAINER%",
       "connection": "AzureWebJobsStorage"
     }
   ],
