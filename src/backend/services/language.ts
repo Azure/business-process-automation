@@ -107,7 +107,7 @@ export class LanguageStudio {
             type : "text",
             projectName : input.projectName,
             bpaId : input.bpaId,
-            label : input.label
+            label : "extractSummary"
         }
     }
 
