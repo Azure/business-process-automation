@@ -93,7 +93,9 @@ export class LanguageStudio {
         };
 
         let out = ""
+        console.log("going in....")
         const summaryResults =  await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults")
+        console.log("going out...")
         for(const result of summaryResults.data.extractSummaryResults[0].results){
             for(const sentence of result.sentences){
                 out += " " + sentence.text
