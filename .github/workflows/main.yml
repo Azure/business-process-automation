@@ -1,0 +1,64 @@
+on: [push]
+
+env:
+  AZURE_FUNCTIONAPP_NAME: <yourfunctionappname>    # set this to your application's name
+  AZURE_FUNCTIONAPP_NAME_PYTHON: 'huggingface${{ secrets.BPA_PROJECTNAME }}'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/backend'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '14.x'                     # set this to the node version to use (supports 8.x, 10.x, 12.x)
+  AZURE_FUNCTIONAPP_PYTHON_PACKAGE_PATH: './src/backend/huggingface'
+  PYTHON_VERSION: '3.9'     
+
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v2
+
+    - name: Setup Node ${{ env.NODE_VERSION }} Environment
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Npm'
+      shell: bash
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+        popd
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+  build-and-deploy-python:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v2
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Pip'
+      shell: bash
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PYTHON_PACKAGE_PATH }}'
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+        popd
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME_PYTHON }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PYTHON_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE }}
