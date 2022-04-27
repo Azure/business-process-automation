@@ -16,10 +16,12 @@
     "@azure/cosmos": "^3.15.1",
     "@azure/identity": "^2.0.4",
     "@azure/ms-rest-azure-js": "^2.1.0",
+    "@azure/storage-blob": "^12.9.0",
     "@types/lodash": "^4.14.181",
     "axios": "^0.25.0",
     "lodash": "^4.17.21",
     "microsoft-cognitiveservices-speech-sdk": "^1.20.0",
+    "pdf-lib": "^1.17.1",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

@@ -18,6 +18,14 @@
     "repositoryUrl": {
       "type": "string"
     },
+    "blobContainerName": {
+      "type": "string",
+      "defaultValue": "documents"
+    },
+    "blobSplitContainerName": {
+      "type": "string",
+      "defaultValue": "split"
+    },
     "formrecName": {
       "type": "string",
       "defaultValue": "[parameters('projectName')]"
@@ -389,7 +397,16 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', 'test')]",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
@@ -579,6 +596,14 @@
           "alwaysOn": true,
           "appSettings": [
             {
+              "name": "AzureFunctionsJobHost__extensions__queues__batchSize",
+              "value": "1"
+            },
+            {
+              "name": "AzureFunctionsJobHost__extensions__queues__newBatchThreshold",
+              "value": "20"
+            },
+            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
             },
@@ -600,7 +625,11 @@
             },
             {
               "name": "BLOB_STORAGE_CONTAINER",
-              "value": "test"
+              "value": "[parameters('blobContainerName')]"
+            },
+                        {
+              "name": "BLOB_STORAGE_SPLIT_CONTAINER",
+              "value": "[parameters('blobSplitContainerName')]"
             },
             {
               "name": "COSMOSDB_CONNECTION_STRING",
@@ -668,7 +697,6 @@
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
         "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', 'test')]",
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
@@ -705,11 +733,13 @@
         "COSMOS_DB_DB": "[parameters('cosmosDbName')]",
         "COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
         "BLOB_STORAGE_CONNECTION_STRING": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]",
-        "BLOB_STORAGE_CONTAINER": "test"
+        "BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
+        "BLOB_STORAGE_SPLIT_CONTAINER" : "[parameters('blobSplitContainerName')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', 'test')]",
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
         "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
