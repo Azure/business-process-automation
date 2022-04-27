@@ -596,6 +596,14 @@
           "alwaysOn": true,
           "appSettings": [
             {
+              "name": "AzureFunctionsJobHost__extensions__queues__batchSize",
+              "value": "1"
+            },
+            {
+              "name": "AzureFunctionsJobHost__extensions__queues__newBatchThreshold",
+              "value": "20"
+            },
+            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
             },
