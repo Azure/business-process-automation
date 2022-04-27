@@ -30,10 +30,6 @@ export class BpaEngine {
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput)
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
-                for(let i=0;i<25;i++){
-                    console.log(`type ${currentInput.type}`)
-                }
-                
             }
             else {
                 throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)

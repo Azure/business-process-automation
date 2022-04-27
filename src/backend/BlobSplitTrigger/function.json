@@ -4,9 +4,9 @@
       "name": "myBlob",
       "type": "blobTrigger",
       "direction": "in",
-      "path": "%BLOB_STORAGE_CONTAINER%",
+      "path": "%BLOB_STORAGE_SPLIT_CONTAINER%",
       "connection": "AzureWebJobsStorage"
     }
   ],
-  "scriptFile": "../dist/BlobTrigger/index.js"
+  "scriptFile": "../dist/BlobSplitTrigger/index.js"
 }

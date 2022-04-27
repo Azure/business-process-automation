@@ -54,7 +54,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         context.bindings.storage = parts[0]?.data;
 
         // returned to requestor
-        context.res.body = `test/${parts[0]?.filename}`;
+        context.res.body = `${process.env.BLOB_STORAGE_CONTAINER}/${parts[0]?.filename}`;
     } catch (err) {
         context.log.error(err.message);
         {

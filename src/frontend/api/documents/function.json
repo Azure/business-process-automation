@@ -18,7 +18,7 @@
       "name": "storage",
       "type": "blob",
       "direction": "out",
-      "path": "test/{filename}",
+      "path": "%BLOB_STORAGE_CONTAINER%/{filename}",
       "connection": "BLOB_STORAGE_CONNECTION_STRING"
   }
   ],

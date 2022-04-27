@@ -92,7 +92,23 @@ export class LanguageStudio {
             extractSummaryActions: [{ modelVersion: "latest" }]
         };
 
-        return await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults")
+        let out = ""
+        const summaryResults =  await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults")
+        for(const page of summaryResults.data){
+            for(const result of page.extractSummaryResults[0].results){
+                for(const sentence of result.sentences){
+                    out += " " + sentence.text
+                }
+            }
+        }
+
+        return {
+            data : out,
+            type : "text",
+            projectName : input.projectName,
+            bpaId : input.bpaId,
+            label : "extractSummary"
+        }
     }
 
     public recognizeCustomEntities = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
