@@ -375,5 +375,19 @@ export const sc = {
         "name": "huggingFaceNER",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
+    },
+    "preprocess": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "preprocess"
+        ],
+        "image": customNER,
+        "label": "Preprocess Text (lowercase, remove punctuation, tokenization, stopword filtering, stemming, POS tags)",
+        "name": "preprocess",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
     }
 }
