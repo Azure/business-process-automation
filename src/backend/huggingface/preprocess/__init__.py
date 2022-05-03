@@ -8,7 +8,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         req_body = req.get_json()
         text = req_body.get('text')
-        # preprocess = Preprocess()
+        preprocess = Preprocess()
         # words, filtered_words, stemmed, pos = preprocess.preprocess(text)
         # out = {
         #     words : words,
