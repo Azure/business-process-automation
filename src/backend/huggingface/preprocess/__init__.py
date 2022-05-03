@@ -1,6 +1,5 @@
-import logging
 import azure.functions as func
-from preprocess import Preprocess
+#from preprocess import Preprocess
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:

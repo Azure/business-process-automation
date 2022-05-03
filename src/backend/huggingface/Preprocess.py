@@ -1,11 +1,9 @@
-from asyncio.log import logger
 import nltk
 import string
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from nltk import pos_tag
-import logging
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -14,7 +12,7 @@ nltk.download('averaged_perceptron_tagger')
 class Preprocess:
 
     def __init__(self) -> None:
-        logging.info('Preprocess init')
+        print('Preprocess init')
 
 
     def analyze(self, text):
