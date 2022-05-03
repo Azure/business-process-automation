@@ -10,7 +10,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json()
         text = req_body.get('text')
         preprocess = Preprocess()
-        words, filtered_words, stemmed, pos = preprocess.preprocess(text)
+        words = preprocess.preprocess(text)
         out = {
             "words" : words
             # "filtered_words" : filtered_words,
@@ -18,10 +18,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             # "pos" : pos
         }
 
+        return out
+
     except ValueError:
         print(ValueError)
 
-    return json.dumps(out)
+    return out
 
 
 
