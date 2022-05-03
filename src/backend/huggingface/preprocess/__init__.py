@@ -10,12 +10,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json()
         text = req_body.get('text')
         preprocess = Preprocess()
-        words = preprocess.preprocess(text)
+        words, filtered_words = preprocess.preprocess(text)
         out = {
-            "words" : words
-            # "filtered_words" : filtered_words,
-            # "stemmed" : stemmed,
-            # "pos" : pos
+            "words" : words,
+            "filteredWords" : filtered_words
         }
 
         return json.dumps(out)
