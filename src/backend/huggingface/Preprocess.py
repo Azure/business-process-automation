@@ -30,6 +30,6 @@ class Preprocess:
         
         # pos = pos_tag(filtered_words)
 
-        return words
+        return words#, filtered_words, stemmed, pos
 
         
