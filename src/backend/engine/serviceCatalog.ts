@@ -327,6 +327,20 @@ const singleCategoryClassify : BpaService = {
     }
 }
 
+const healthCareService : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["healthCareResults"],
+    name: "healthCare",
+    bpaServiceId: "abc123",
+    process: language.healthCare,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const preprocessService : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["preprocess"],
@@ -378,7 +392,8 @@ export const serviceCatalog = {
     "recognizePiiEntities" : recognizePiiEntities,
     "singleCategoryClassify" : singleCategoryClassify,
     "huggingFaceNER" : huggingFaceNER,
-    "preprocess" : preprocess,
-    "testService" : testService
+    "preprocess" : preprocessService,
+    "testService" : testService,
+    "healthCare" : healthCareService
 }
 

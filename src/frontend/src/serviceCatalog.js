@@ -389,5 +389,19 @@ export const sc = {
         "name": "preprocess",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
+    },
+    "healthCare": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "healthCareResults"
+        ],
+        "image": customClassification,
+        "label": "Health Care API",
+        "name": "healthCare",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
     }
 }
