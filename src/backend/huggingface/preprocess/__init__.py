@@ -9,13 +9,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json()
         text = req_body.get('text')
         preprocess = Preprocess()
-        preprocess.preprocess(text)
-        # out = {
-        #     words : words,
+        words = preprocess.preprocess(text)
+        out = {
+            "words" : words
         #     filtered_words : filtered_words,
         #     stemmed : stemmed,
         #     pos : pos
-        # }
+        }
         #return('hello')
    
     except ValueError:
