@@ -1,5 +1,6 @@
 import azure.functions as func
 from Preprocess import Preprocess
+import json
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -11,19 +12,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         preprocess = Preprocess()
         words, filtered_words, stemmed, pos = preprocess.preprocess(text)
         out = {
-            "words" : words,
-            "filtered_words" : filtered_words,
-            "stemmed" : stemmed,
-            "pos" : pos
+            "words" : words
+            # "filtered_words" : filtered_words,
+            # "stemmed" : stemmed,
+            # "pos" : pos
         }
-        #return('hello')
-   
+
     except ValueError:
         print(ValueError)
 
-    return f'{out}'
-    
+    return json.dumps(out)
 
-    
-        
+
+
+
 
