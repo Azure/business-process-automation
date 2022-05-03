@@ -11,8 +11,7 @@ export class Preprocess {
 
     public process = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         const body = {
-            text : input.data,
-            modelId : input.serviceSpecificConfig.modelId
+            text : input.data
         }
         console.log(JSON.stringify(body))
         const result = await axios.post(`${this._endpoint}/api/preprocess`, body)

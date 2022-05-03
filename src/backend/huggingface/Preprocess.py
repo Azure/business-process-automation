@@ -7,6 +7,10 @@ from nltk.stem.porter import PorterStemmer
 from nltk import pos_tag
 import logging
 
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+
 class Preprocess:
 
     def __init__(self) -> None:

@@ -14,7 +14,9 @@ export class LanguageStudio {
     }
 
     private _healthCare = async (client : TextAnalyticsClient, documents) : Promise<AnalyzeHealthcareEntitiesPollerLike> => {
-        return await client.beginAnalyzeHealthcareEntities([documents], this._language);
+        return await client.beginAnalyzeHealthcareEntities(documents, this._language, {
+            includeStatistics: true
+        });
     }
 
     private _analyze = async (client : TextAnalyticsClient, documents, actions) : Promise<AnalyzeActionsPollerLike> => {
@@ -153,7 +155,7 @@ export class LanguageStudio {
             multiCategoryClassifyActions: [{ projectName: input.serviceSpecificConfig.projectName, deploymentName: input.serviceSpecificConfig.deploymentName }]
         };
 
-        return await this._recognize(input, actions, 'healthCare', 'healthCare', "healthCareResults", true)
+        return await this._recognize(input, actions, 'healthCare', 'healthCare', "healthCareResults", false)
     }
 
 }
