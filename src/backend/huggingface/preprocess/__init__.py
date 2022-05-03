@@ -6,8 +6,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     print('Python HTTP trigger function processed a request.')
     out = {}
     try:
-        # req_body = req.get_json()
-        # text = req_body.get('text')
+        req_body = req.get_json()
+        text = req_body.get('text')
         # preprocess = Preprocess()
         # words, filtered_words, stemmed, pos = preprocess.preprocess(text)
         # out = {
@@ -16,7 +16,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         #     stemmed : stemmed,
         #     pos : pos
         # }
-        return('hello')
+        #return('hello')
    
     except ValueError:
         print(ValueError)
