@@ -18,7 +18,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             # "pos" : pos
         }
 
-        return out
+        return json.dumps(out)
 
     except ValueError:
         print(ValueError)
