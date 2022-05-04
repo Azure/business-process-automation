@@ -166,16 +166,16 @@ Update the three "value" fields below:
 
 ![](images/update3valueFields.png)  
 
-  1. projectName: Must be a unique project name, only include lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
-  2. repository token: Copy the personal access token you recently created  
-  3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
+    1. projectName: Must be a unique project name, only include lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
+    2. repository token: Copy the personal access token you recently created  
+    3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
   
   Save updates  
   
 6. Similarly, update your local deploy.yml file within the same directory
   1. Open the file C:\Users\<UserName>\business-process-automation\templates\deploy.yml
   2. Update the field AZURE_FUNCTIONAPP_NAME with the name of your ResourceGroup  
-  **Note**:*You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components*
+  **Note**: *You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components*
   ![](images/updateDeploy_yml.png)  
 
   
@@ -247,6 +247,7 @@ Finally, paste that selection into the editor window.
  
  ![](images/find_static_web_app2.png)
  
+ 
 ## Load Documents!
 1. Select Configure a New Pipeline  
 ![](images/app_landing_page.png)  
@@ -265,7 +266,18 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 ![](images/home.png)  
 6. Select "Ingest Documents"
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
-**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
+**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*  
+
+### Using HuggingFace library
+When using a custom HuggingFace, you'll be prompted select your desired model by specifiying the model name. To do so, you'll need to navigate to https://huggingface.co/models, filter on "Token Classification" (task), "PyTorch" (libraries), and "transformers" (libraries). Select your model from the filtered model list, and copy the modelID. See Images below for further guidance - if you're not using a HuggingFace model, skip to the next step.  
+
+![](images/HuggingFace_input_name.png)  
+
+![](images/hugging_face_selections.png)  
+
+![](images/huggingFace_model_name.png)  
+
+
 
   ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
