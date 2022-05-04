@@ -90,7 +90,7 @@ Many of the pretrained models from the huggingface library can be used, dependin
 
 ## Prerequisities
 1. Github account
-2. Azure Command Line interface installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources.  
+2. Azure Command Line interface installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources. This accelerator uses Azure CLI to deploy a set of services provided by the templates within your cloned repo, in just a few lines of code.  
 (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)  
 3. Ensure your subscription has Microsoft.DocumentDB enabled  
 To check:  
