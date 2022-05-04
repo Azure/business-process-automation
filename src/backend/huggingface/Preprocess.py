@@ -25,11 +25,11 @@ class Preprocess:
         stop_words = stopwords.words('english')
         filtered_words = [word for word in words if word not in stop_words]
         
-        # porter = PorterStemmer()
-        # stemmed = [porter.stem(word) for word in filtered_words]
+        porter = PorterStemmer()
+        stemmed = [porter.stem(word) for word in filtered_words]
         
-        # pos = pos_tag(filtered_words)
+        #pos = pos_tag(filtered_words)
 
-        return words, filtered_words #, stemmed, pos
+        return words, filtered_words, stemmed#, pos
 
         
