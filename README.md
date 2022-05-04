@@ -157,7 +157,7 @@ cd business-process-automation/templates
 ```
 ren parameters.json.example parameters.json
 ```  
-4. Open parameters.json
+5. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```
 C:\Users\<UserName>\business-process-automation\templates\code .
@@ -172,10 +172,10 @@ Update the three "value" fields below:
   
   Save updates  
   
-5. Similarly, update your local deploy.yml file within the same directory
+6. Similarly, update your local deploy.yml file within the same directory
   1. Open the file C:\Users\<UserName>\business-process-automation\templates\deploy.yml
   2. Update the field AZURE_FUNCTIONAPP_NAME with the name of your ResourceGroup  
-  **Note**:*You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components
+  **Note**:*You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components*
   ![](images/updateDeploy_yml.png)  
 
   
