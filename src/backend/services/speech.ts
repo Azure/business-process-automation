@@ -19,12 +19,12 @@ export class Speech {
             
                 let out = ""
                 speechRecognizer.recognizing = (s, e) => {
-                    console.log(`RECOGNIZING: Text=${e.result.text}`);
+                    //console.log(`RECOGNIZING: Text=${e.result.text}`);
                 };
                 
                 speechRecognizer.recognized = (s, e) => {
                     if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
-                        console.log(`RECOGNIZED: Text=${e.result.text}`);
+                        //console.log(`RECOGNIZED: Text=${e.result.text}`);
                         out += e.result.text + " "
                     }
                     else if (e.result.reason == sdk.ResultReason.NoMatch) {
@@ -39,16 +39,12 @@ export class Speech {
                         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
-                        reject( {
-                            data : e.errorDetails,
-                            label : input.label,
-                            bpaId : input.bpaId,
-                            type : 'text',
-                            projectName : input.projectName
-                        })
+
                     }
+
+                    reject(new Error(e.message))
                     
-                    speechRecognizer.stopContinuousRecognitionAsync();
+                    //speechRecognizer.stopContinuousRecognitionAsync();
                 };
                 
                 speechRecognizer.sessionStopped = (s, e) => {
@@ -64,26 +60,9 @@ export class Speech {
                 };
 
                 speechRecognizer.startContinuousRecognitionAsync();
-                // speechRecognizer.recognizeOnceAsync(result => {
-                //     switch (result.reason) {
-                //         case sdk.ResultReason.RecognizedSpeech:
-                //             console.log(`RECOGNIZED: Text=${result.text}`);
-                //             out += result.text + " "
-                //             break;
-                //         case sdk.ResultReason.NoMatch:
-                //             console.log("NOMATCH: Speech could not be recognized.");
-                //             break;
-                //         case sdk.ResultReason.Canceled:
-                //             console.log('cancelled')
-                //             break;
-                //     }    
-                //     speechRecognizer.close();
-                
-                //}
-                //);
             } catch(err){
                 console.log(err)
-                reject(err)
+                reject(new Error(err.message))
             }
         })
     }

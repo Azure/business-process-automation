@@ -385,7 +385,7 @@ export const sc = {
             "preprocess"
         ],
         "image": customNER,
-        "label": "Preprocess Text (lowercase, remove punctuation, tokenization, stopword filtering, stemming, POS tags)",
+        "label": "Preprocess Text",
         "name": "preprocess",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
