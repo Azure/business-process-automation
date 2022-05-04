@@ -90,14 +90,16 @@ Many of the pretrained models from the huggingface library can be used, dependin
 
 ## Prerequisities
 1. Github account
-2. Ensure your subscription has Microsoft.DocumentDB enabled  
+2. Azure Command Line interface installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources.  
+(https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)  
+3. Ensure your subscription has Microsoft.DocumentDB enabled  
 To check:  
       - Go to your subscription within portal.azure.com  
       - Select Resource Providers at bottom of left navigation pane  
       - Within the Filter by name menu, search for Microsoft.DocumentDB  
       - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
       **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-3. Ensure that you have accepted terms and conditions for Responsible AI  
+4. Ensure that you have accepted terms and conditions for Responsible AI  
 "You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
 
 ## Installation Steps  
@@ -270,6 +272,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 
 ### Using HuggingFace library
 When using a custom HuggingFace, you'll be prompted select your desired model by specifiying the model name. To do so, you'll need to navigate to https://huggingface.co/models, filter on "Token Classification" (task), "PyTorch" (libraries), and "transformers" (libraries). Select your model from the filtered model list, and copy the modelID. See Images below for further guidance - if you're not using a HuggingFace model, skip to the next step.  
+**Note**: *When pasting the model ID, be sure to paste without quotes - see below image*  
 
 ![](images/HuggingFace_input_name.png)  
 
