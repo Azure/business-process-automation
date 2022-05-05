@@ -20,7 +20,7 @@ export class LanguageStudio {
     }
 
     private _analyze = async (client : TextAnalyticsClient, documents, actions) : Promise<AnalyzeActionsPollerLike> => {
-        return await client.beginAnalyzeActions([documents], actions, this._language);
+        return await client.beginAnalyzeActions(documents, actions, this._language);
     }
 
     private _recognize = async (input: BpaServiceObject, actions: TextAnalyticsActions, type: string, label: string, resultType: string, analyzeType : boolean): Promise<BpaServiceObject> => {
