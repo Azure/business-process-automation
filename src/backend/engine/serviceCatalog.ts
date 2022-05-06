@@ -8,6 +8,7 @@ import { Translate } from "../services/translate"
 import { HuggingFace } from "../services/huggingface"
 import { Test } from "../services/test"
 import { Preprocess } from "../services/preprocess"
+import { DocumentTranslation } from "../services/documentTranslation"
 
 const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
@@ -17,6 +18,7 @@ const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_AP
 const translate = new Translate(process.env.TRANSLATE_ENDPOINT, process.env.TRANSLATE_APIKEY, process.env.TRANSLATE_REGION)
 const huggingface = new HuggingFace(process.env.HUGGINGFACE_ENDPOINT)
 const preprocess = new Preprocess(process.env.HUGGINGFACE_ENDPOINT)
+const documentTranslation = new DocumentTranslation(process.env.BLOB_STORAGE_ACCOUNT_NAME, process.env.BLOB_STORAGE_ACCOUNT_KEY, process.env.DOCUMENT_TRANSLATION_ENDPOINT, process.env.DOCUMENT_TRANSLATION_KEY)
 const test = new Test()
 
 const translateService : BpaService = {
@@ -369,6 +371,20 @@ const huggingFaceNER : BpaService = {
     }
 }
 
+const documentTranslationService : BpaService = {
+    inputTypes: ["pdf"],
+    outputTypes: ["pdf"],
+    name: "documentTranslation",
+    bpaServiceId: "abc123",
+    process: documentTranslation.process,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 export const serviceCatalog = {
     "ocrService" : ocrService, 
     "viewService" : viewService,
@@ -394,6 +410,7 @@ export const serviceCatalog = {
     "huggingFaceNER" : huggingFaceNER,
     "preprocess" : preprocessService,
     "testService" : testService,
-    "healthCare" : healthCareService
+    "healthCare" : healthCareService,
+    "documentTranslation" : documentTranslationService
 }
 

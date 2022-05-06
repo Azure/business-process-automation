@@ -403,5 +403,21 @@ export const sc = {
         "name": "healthCare",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
+    },
+    "documentTranslation": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf"
+        ],
+        "outputTypes": [
+            "pdf"
+        ],
+        "image": customClassification,
+        "label": "Document Translation",
+        "name": "documentTranslation",
+        "serviceSpecificConfig": { 
+            targetLanguage : "es"
+        },
+        "serviceSpecificConfigDefaults": {}
     }
 }
