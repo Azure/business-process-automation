@@ -18,7 +18,7 @@ export class DocumentTranslation {
 
     public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
 
-        const filename = input.projectName.replace("/documents","")
+        const filename = input.projectName.replace("documents/","")
         const targetLanguage = input.serviceSpecificConfig.targetLanguage
 
         const translationResult = this.translate(filename, targetLanguage)
@@ -83,7 +83,6 @@ export class DocumentTranslation {
     private _getSasUrl = async (accountName: string, containerName: string, accountSharedSecret: string) => {
 
         //  Creates a client to the BlobService using the connection string.
-        //const blobServiceClient = new BlobServiceClient("DefaultEndpointsProtocol=https;AccountName=bpatestjph5;AccountKey=D3mDakbt4DZ1Nj6nMKlAbzjOFbaos0GE97q2TMAEGJuck0pZLDHr7KJR+FGWj73jr4AhTQ/hWHZ8+AStaylZLQ==;EndpointSuffix=core.windows.net");
         const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, new StorageSharedKeyCredential(accountName, accountSharedSecret))
         //  Gets a reference to the container.
         const blobContainerClient = blobServiceClient.getContainerClient(containerName);
