@@ -6,3 +6,4 @@ azure-functions
 -f https://download.pytorch.org/whl/torch_stable.html
 torch==1.11.0+cpu
 transformers
+nltk

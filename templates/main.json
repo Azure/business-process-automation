@@ -26,9 +26,17 @@
       "type": "string",
       "defaultValue": "split"
     },
+    "blobTranslatedContainerName": {
+      "type": "string",
+      "defaultValue": "translated-documents"
+    },
     "formrecName": {
       "type": "string",
       "defaultValue": "[parameters('projectName')]"
+    },
+    "docTranslatorAccountName": {
+      "type": "string",
+      "defaultValue": "[format('doctranslator{0}', parameters('projectName'))]"
     },
     "branch": {
       "type": "string",
@@ -206,6 +214,23 @@
     ]
   },
   "resources": [
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('docTranslatorAccountName')]",
+      "location": "[parameters('primaryRegion')]",
+      "sku": {
+        "name": "S1"
+      },
+      "kind": "TextTranslation",
+      "identity": {
+        "type": "None"
+      },
+      "properties": {
+        "customSubDomainName": "[parameters('docTranslatorAccountName')]",
+        "publicNetworkAccess": "Enabled"
+      }
+    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
@@ -413,6 +438,15 @@
       ]
     },
     {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobTranslatedContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2021-01-15",
       "name": "[variables('accountName_var')]",
@@ -601,7 +635,7 @@
             },
             {
               "name": "AzureFunctionsJobHost__extensions__queues__newBatchThreshold",
-              "value": "20"
+              "value": "5"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -624,12 +658,28 @@
               "value": "node"
             },
             {
+              "name": "BLOB_STORAGE_ACCOUNT_NAME",
+              "value": "[parameters('projectName')]"
+            },
+            {
+              "name": "BLOB_STORAGE_ACCOUNT_KEY",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+            },
+            {
               "name": "BLOB_STORAGE_CONTAINER",
               "value": "[parameters('blobContainerName')]"
             },
-                        {
+            {
               "name": "BLOB_STORAGE_SPLIT_CONTAINER",
               "value": "[parameters('blobSplitContainerName')]"
+            },
+            {
+              "name": "DOCUMENT_TRANSLATION_ENDPOINT",
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))).endpoints.DocumentTranslation]"
+            },
+            {
+              "name": "DOCUMENT_TRANSLATION_KEY",
+              "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName')), '2021-10-01').key1]"
             },
             {
               "name": "COSMOSDB_CONNECTION_STRING",
@@ -651,7 +701,7 @@
               "name": "OCR_APIKEY",
               "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
             },
-             {
+            {
               "name": "LANGUAGE_STUDIO_PREBUILT_ENDPOINT",
               "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))).endpoint]"
             },
@@ -734,7 +784,7 @@
         "COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
         "BLOB_STORAGE_CONNECTION_STRING": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]",
         "BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
-        "BLOB_STORAGE_SPLIT_CONTAINER" : "[parameters('blobSplitContainerName')]"
+        "BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
