@@ -1,4 +1,4 @@
-import { TextAnalyticsActions, TextAnalyticsClient, AzureKeyCredential, PagedAnalyzeActionsResult } from "@azure/ai-text-analytics";
+import { TextAnalyticsActions, TextAnalyticsClient, AzureKeyCredential, PagedAnalyzeActionsResult, AnalyzeActionsPollerLike, AnalyzeHealthcareEntitiesPollerLike } from "@azure/ai-text-analytics";
 import { BpaServiceObject } from "../engine/types";
 
 export class LanguageStudio {
@@ -13,9 +13,24 @@ export class LanguageStudio {
         this._language = "en"
     }
 
-    private _recognize = async (input: BpaServiceObject, actions: TextAnalyticsActions, type: string, label: string, resultType: string): Promise<BpaServiceObject> => {
+    private _healthCare = async (client : TextAnalyticsClient, documents) : Promise<AnalyzeHealthcareEntitiesPollerLike> => {
+        return await client.beginAnalyzeHealthcareEntities(documents, this._language, {
+            includeStatistics: true
+        });
+    }
+
+    private _analyze = async (client : TextAnalyticsClient, documents, actions) : Promise<AnalyzeActionsPollerLike> => {
+        return await client.beginAnalyzeActions(documents, actions, this._language);
+    }
+
+    private _recognize = async (input: BpaServiceObject, actions: TextAnalyticsActions, type: string, label: string, resultType: string, analyzeType : boolean): Promise<BpaServiceObject> => {
         const client = new TextAnalyticsClient(this._endpoint, new AzureKeyCredential(this._apikey));
-        const poller = await client.beginAnalyzeActions([input.data], actions, this._language);
+        let poller
+        if(analyzeType){
+            poller = await this._analyze(client, [input.data], actions);
+        } else {
+            poller = await this._healthCare(client, [input.data])
+        }
 
         poller.onProgress(() => {
             console.log(
@@ -52,7 +67,7 @@ export class LanguageStudio {
             recognizeEntitiesActions: [{ modelVersion: "latest" }]
         };
 
-        return await this._recognize(input, actions, 'recognizeEntities', 'recognizeEntities', "recognizeEntitiesResults")
+        return await this._recognize(input, actions, 'recognizeEntities', 'recognizeEntities', "recognizeEntitiesResults", true)
     }
 
     public recognizePiiEntities = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -60,7 +75,7 @@ export class LanguageStudio {
             recognizePiiEntitiesActions: [{ modelVersion: "latest" }]
         };
 
-        return await this._recognize(input, actions, 'recognizePiiEntities', 'recognizePiiEntities', "recognizePiiEntitiesResults")
+        return await this._recognize(input, actions, 'recognizePiiEntities', 'recognizePiiEntities', "recognizePiiEntitiesResults", true)
     }
 
     public extractKeyPhrases = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -68,7 +83,7 @@ export class LanguageStudio {
             extractKeyPhrasesActions: [{ modelVersion: "latest" }]
         };
 
-        return await this._recognize(input, actions, 'extractKeyPhrases', 'extractKeyPhrases', "extractKeyPhrasesResults")
+        return await this._recognize(input, actions, 'extractKeyPhrases', 'extractKeyPhrases', "extractKeyPhrasesResults", true)
     }
 
     public recognizeLinkedEntities = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -76,7 +91,7 @@ export class LanguageStudio {
             recognizeLinkedEntitiesActions: [{ modelVersion: "latest" }]
         };
 
-        return await this._recognize(input, actions, 'recognizeLinkedEntities', 'recognizeLinkedEntities', "recognizeLinkedEntitiesResults")
+        return await this._recognize(input, actions, 'recognizeLinkedEntities', 'recognizeLinkedEntities', "recognizeLinkedEntitiesResults", true)
     }
 
     public analyzeSentiment = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -84,7 +99,7 @@ export class LanguageStudio {
             analyzeSentimentActions: [{ modelVersion: "latest" }]
         };
 
-        return await this._recognize(input, actions, 'analyzeSentiment', 'analyzeSentiment', "analyzeSentimentResults")
+        return await this._recognize(input, actions, 'analyzeSentiment', 'analyzeSentiment', "analyzeSentimentResults", true)
     }
 
     public extractSummary = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -93,7 +108,7 @@ export class LanguageStudio {
         };
 
         let out = ""
-        const summaryResults =  await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults")
+        const summaryResults =  await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults", true)
         for(const page of summaryResults.data){
             for(const result of page.extractSummaryResults[0].results){
                 for(const sentence of result.sentences){
@@ -116,7 +131,7 @@ export class LanguageStudio {
             recognizeCustomEntitiesActions: [{ projectName: input.serviceSpecificConfig.projectName, deploymentName: input.serviceSpecificConfig.deploymentName }]
         };
 
-        return await this._recognize(input, actions, 'recognizeCustomEntities', 'recognizeCustomEntities', "recognizeCustomEntitiesResults")
+        return await this._recognize(input, actions, 'recognizeCustomEntities', 'recognizeCustomEntities', "recognizeCustomEntitiesResults", true)
     }
 
     public singleCategoryClassify = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -124,7 +139,7 @@ export class LanguageStudio {
             singleCategoryClassifyActions: [{ projectName: input.serviceSpecificConfig.projectName, deploymentName: input.serviceSpecificConfig.deploymentName }]
         };
 
-        return await this._recognize(input, actions, 'singleCategoryClassify', 'singleCategoryClassify', "singleCategoryClassifyResults")
+        return await this._recognize(input, actions, 'singleCategoryClassify', 'singleCategoryClassify', "singleCategoryClassifyResults", true)
     }
 
     public multiCategoryClassify = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -132,7 +147,15 @@ export class LanguageStudio {
             multiCategoryClassifyActions: [{ projectName: input.serviceSpecificConfig.projectName, deploymentName: input.serviceSpecificConfig.deploymentName }]
         };
 
-        return await this._recognize(input, actions, 'multiCategoryClassify', 'multiCategoryClassify', "multiCategoryClassifyResults")
+        return await this._recognize(input, actions, 'multiCategoryClassify', 'multiCategoryClassify', "multiCategoryClassifyResults", true)
+    }
+
+    public healthCare = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+        const actions: TextAnalyticsActions = {
+            multiCategoryClassifyActions: [{ projectName: input.serviceSpecificConfig.projectName, deploymentName: input.serviceSpecificConfig.deploymentName }]
+        };
+
+        return await this._recognize(input, actions, 'healthCare', 'healthCare', "healthCareResults", false)
     }
 
 }

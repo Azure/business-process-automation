@@ -375,5 +375,49 @@ export const sc = {
         "name": "huggingFaceNER",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
+    },
+    "preprocess": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "preprocess"
+        ],
+        "image": customNER,
+        "label": "Preprocess Text",
+        "name": "preprocess",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
+    "healthCare": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "healthCareResults"
+        ],
+        "image": customClassification,
+        "label": "Health Care API",
+        "name": "healthCare",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
+    "documentTranslation": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf"
+        ],
+        "outputTypes": [
+            "pdf"
+        ],
+        "image": customClassification,
+        "label": "Document Translation",
+        "name": "documentTranslation",
+        "serviceSpecificConfig": { 
+            targetLanguage : "es"
+        },
+        "serviceSpecificConfigDefaults": {}
     }
 }
