@@ -675,7 +675,7 @@
             },
             {
               "name": "DOCUMENT_TRANSLATION_ENDPOINT",
-              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))).endpoint]"
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))).endpoints.DocumentTranslation]"
             },
             {
               "name": "DOCUMENT_TRANSLATION_KEY",
