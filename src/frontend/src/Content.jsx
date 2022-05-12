@@ -55,6 +55,7 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
                 breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
                 setBreadCrumbItems(breadCrumbItems)
+                break
             default:
                 break;
         }
