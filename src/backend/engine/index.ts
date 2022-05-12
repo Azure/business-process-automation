@@ -14,7 +14,8 @@ export class BpaEngine {
             type: this._getFileType(fileName),
             projectName: fileName,
             data: fileBuffer,
-            bpaId: "1"
+            bpaId: "1",
+            aggregatedResults : {}
         }
 
         console.log(this._getFileType(fileName))
@@ -24,7 +25,7 @@ export class BpaEngine {
             console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
             console.log('validating...')
             if (this._validateInput(currentInput.type, stage)) {
-                console.log('validation passed!! 2')
+                console.log('validation passed!!')
                 console.log('processing....')
                 currentInput.serviceSpecificConfig = stage.service.serviceSpecificConfig
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput)

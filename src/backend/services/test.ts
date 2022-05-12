@@ -75,7 +75,8 @@ export class Test {
             label : input.label,
             bpaId : input.bpaId,
             type : input.type,
-            projectName : input.projectName
+            projectName : input.projectName,
+            aggregatedResults : input.aggregatedResults
         }
     }
 }

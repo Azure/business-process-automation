@@ -17,7 +17,6 @@ export default function Content(props) {
     const [documents, setDocuments] = useState(null)
 
     useEffect(()=>{
-        console.log("in useeffect")
         axios.get('/api/ner').then(response => {
             console.log(JSON.stringify(response.data))
             setDocuments(response.data)

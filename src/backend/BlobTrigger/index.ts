@@ -38,7 +38,8 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
             type : "error",
             label : "error",
             projectName : "error",
-            bpaId : "error"
+            bpaId : "error",
+            aggregatedResults : {}
         })
     }
 };

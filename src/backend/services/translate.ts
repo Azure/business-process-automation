@@ -32,12 +32,15 @@ export class Translate {
             console.log(url)
 
             const out = await axios.post(url, [{ 'text': input.data }], config)
+            const results = input.aggregatedResults
+            results["translation"] = out
             return {
                 data: out.data[0].translations[0].text,
                 type: "text",
-                label: "translated text",
+                label: "translation",
                 projectName: input.projectName,
-                bpaId: input.bpaId
+                bpaId: input.bpaId,
+                aggregatedResults : results
             }
 
         } catch (err) {

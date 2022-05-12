@@ -50,12 +50,15 @@ export class Speech {
                 speechRecognizer.sessionStopped = (s, e) => {
                     console.log("\n    Session stopped event.");
                     speechRecognizer.stopContinuousRecognitionAsync();
+                    const results = input.aggregatedResults
+                    results["speechToText"] = out
                     resolve( {
                         data : out,
-                        label : input.label,
+                        label : "speechToText",
                         bpaId : input.bpaId,
                         type : 'text',
-                        projectName : input.projectName
+                        projectName : input.projectName,
+                        aggregatedResults : results
                     })
                 };
 

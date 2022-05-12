@@ -15,12 +15,15 @@ export class FormRec {
     public layout = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         const poller : AnalysisPoller<LayoutResult> = await this._client.beginExtractLayout(input.data)
         const layoutResult : LayoutResult = await poller.pollUntilDone()
+        const results = input.aggregatedResults
+        results["layout"] = layoutResult
         return {
             data : layoutResult,
             type : "layout",
             projectName : input.projectName,
             bpaId : input.bpaId,
-            label : input.label
+            label : input.label,
+            aggregatedResults : results
         }
     }
 
@@ -28,12 +31,15 @@ export class FormRec {
     public generalDocument = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         const poller : AnalysisPoller<GeneralDocumentResult> = await this._client.beginExtractGeneralDocument(input.data)
         const result : GeneralDocumentResult = await poller.pollUntilDone()
+        const results = input.aggregatedResults
+        results["generalDocument"] = result
         return {
             data : result,
             type : "generalDocument",
             projectName : input.projectName,
             bpaId : input.bpaId,
-            label : input.label
+            label : input.label,
+            aggregatedResults : results
         }
     }
 
@@ -64,12 +70,15 @@ export class FormRec {
     private _analyzeDocument = async (input : BpaServiceObject, modelId : any, label : string) : Promise<BpaServiceObject> => {
         const poller : AnalysisPoller<AnalyzeResult<AnalyzedDocument>> = await this._client.beginAnalyzeDocument(modelId, input.data)
         const result : AnalyzeResult<AnalyzedDocument> = await poller.pollUntilDone()
+        const results = input.aggregatedResults
+        results[label] = result
         return {
             data : result,
             type : label,
             projectName : input.projectName,
             bpaId : input.bpaId,
-            label : input.label
+            label : label,
+            aggregatedResults : results
         }
     }
 }

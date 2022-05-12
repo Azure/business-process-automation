@@ -18,12 +18,15 @@ export class Ocr {
     public process = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         const readResult : ComputerVisionModels.ReadResult[] = await this.execute(input.data)
         const textOut : string = this.toText(readResult)
+        const results = input.aggregatedResults
+        results["ocr"] = textOut
         const result : BpaServiceObject = {
             data : textOut,
             type : 'text',
             label : 'ocr',
             bpaId : input.bpaId,
-            projectName : input.projectName
+            projectName : input.projectName,
+            aggregatedResults : results
         }
         return result
     }

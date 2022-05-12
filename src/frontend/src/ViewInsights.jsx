@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 
 function ViewInsights(props) {
     const [document, setDocument] = useState(null)
-    //const [documents, setDocuments] = useState(props.documents ? props.documents : null )
 
     const colors = ["#007BEB", "#20B883", "#A0F09A", "#E0056C", "#000FF0", "#60C6F7"]
 
@@ -61,18 +60,18 @@ function ViewInsights(props) {
     }
   
     const parseData = (documents) => {
-      console.log(`parseData : ${JSON.stringify(documents)}`)
-      const filteredDocs = documents.filter(item => {
-          if(item.ner){
-              return true
-          }
-          return false
-      })
-      if (filteredDocs) {
+
+    //   const filteredDocs = documents.data.filter(item => {
+    //       if(item.ner){
+    //           return true
+    //       }
+    //       return false
+    //   })
+      if (documents) {
         return (
           <>
             <div className="filenameHeader">Processed Files (select one)</div>
-            {filteredDocs.map(document => (<div className="filename" onClick={() => { documentSelected(document) }}>{document.filename}</div>))}
+            {documents.map(document => (<div className="filename" onClick={() => { documentSelected(document) }}>{document.projectName}</div>))}
           </>
         )
       }
