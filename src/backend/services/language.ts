@@ -118,12 +118,16 @@ export class LanguageStudio {
             }
         }
 
+        const results = input.aggregatedResults
+        results["extractSummary"] = out
+
         return {
             data : out,
             type : "text",
             projectName : input.projectName,
             bpaId : input.bpaId,
-            label : "extractSummary"
+            label : "extractSummary",
+            aggregatedResults : results
         }
     }
 
