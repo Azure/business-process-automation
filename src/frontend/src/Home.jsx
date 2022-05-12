@@ -17,7 +17,7 @@ export default function Home(props){
                 |
                 <Button id="UPLOAD_DOCUMENTS" onClick={(e)=>props.onClick(e)} text style={{color: "rgb(0, 120, 212)"}} content="Ingest Documents"/>
                 |
-                <Button id="insights" onClick={(e)=>props.onClick(e)} text style={{color: "rgb(0, 120, 212)"}} content="View Insights"/>
+                <Button id="VIEW_INSIGHTS" onClick={(e)=>props.onClick(e)} text style={{color: "rgb(0, 120, 212)"}} content="View Insights"/>
             {/* </div> */}
         </div>
         
