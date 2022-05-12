@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 function ViewInsights(props) {
     const [document, setDocument] = useState(null)
-    const [documents, setDocuments] = useState(props.documents ? props.documents : null )
+    //const [documents, setDocuments] = useState(props.documents ? props.documents : null )
 
     const colors = ["#007BEB", "#20B883", "#A0F09A", "#E0056C", "#000FF0", "#60C6F7"]
 
