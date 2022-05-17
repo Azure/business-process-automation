@@ -9,33 +9,35 @@ function ViewInsights(props) {
 
     const highlightText = (text, offset, textLength, color) => {
       const result = text.substring(0, offset - 1) + ` <span style="background-color:${color}">` + text.substring(offset, offset + textLength) + `</span> ` +
-        text.substring(offset + textLength + 1, document.ocr.length);
+        text.substring(offset + textLength + 1, document.aggregatedResults.ocr.length);
       return result
     }
 
 
   
     const getText = () => {
-      if (document) {
-        let currentText = document.ocr
+      
+      if (document?.aggregatedResults) {
+        const nerResults = document.aggregatedResults.recognizeEntities[0].recognizeEntitiesResults[0].results[0].entities
+        let currentText = document.aggregatedResults.ocr
         let colorIndex = 0
         let categories = {}
-        console.log(`ner : ${JSON.stringify(document.ner)}`)
+        console.log(`ner : ${JSON.stringify(nerResults)}`)
         let lastOffset = currentText.length*2
-        for (let i = document.ner.length - 1; i >= 0; i--) {
-          console.log(`ner category ${document.ner[i].category}`)
+        for (let i = nerResults.length - 1; i >= 0; i--) {
+          console.log(`ner category ${nerResults[i].category}`)
           let color = null
-          if (categories[document.ner[i].category]) {
-            color = categories[document.ner[i].category]
+          if (categories[nerResults[i].category]) {
+            color = categories[nerResults[i].category]
           } else {
-            categories[document.ner[i].category] = colors[colorIndex % colors.length]
+            categories[nerResults[i].category] = colors[colorIndex % colors.length]
             color = colors[colorIndex % colors.length]
             colorIndex++
           }
-          if((document.ner[i].offset + document.ner[i].length) < lastOffset){
+          if((nerResults[i].offset + nerResults[i].length) < lastOffset){
             console.log(lastOffset)
-            lastOffset = document.ner[i].offset
-            currentText = highlightText(currentText, document.ner[i].offset, document.ner[i].length, color)
+            lastOffset = nerResults[i].offset
+            currentText = highlightText(currentText, nerResults[i].offset, nerResults[i].length, color)
           }
          
         }
@@ -80,21 +82,22 @@ function ViewInsights(props) {
   
     const showLegend = () => {
       if (document) {
-        let currentText = document.ocr
+        let currentText = document.aggregatedResults.ocr
         let colorIndex = 0
         let categories = {}
-        console.log(`ner : ${JSON.stringify(document.ner)}`)
-        for (let i = document.ner.length - 1; i >= 0; i--) {
-          console.log(`ner category ${document.ner[i].category}`)
+        const nerResults = document.aggregatedResults.recognizeEntities[0].recognizeEntitiesResults[0].results[0].entities
+        console.log(`ner : ${JSON.stringify(nerResults)}`)
+        for (let i = nerResults.length - 1; i >= 0; i--) {
+          console.log(`ner category ${nerResults[i].category}`)
           let color = null
-          if (categories[document.ner[i].category]) {
-            color = categories[document.ner[i].category]
+          if (categories[nerResults[i].category]) {
+            color = categories[nerResults[i].category]
           } else {
-            categories[document.ner[i].category] = colors[colorIndex % colors.length]
+            categories[nerResults[i].category] = colors[colorIndex % colors.length]
             color = colors[colorIndex % colors.length]
             colorIndex++
           }
-          currentText = highlightText(currentText, document.ner[i].offset, document.ner[i].length, color)
+          currentText = highlightText(currentText, nerResults[i].offset, nerResults[i].length, color)
         }
         const keys = Object.keys(categories)
         const values = []
