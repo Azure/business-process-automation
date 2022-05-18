@@ -37,7 +37,7 @@ const processSkill = async(context, value) : Promise<any> => {
     
         const engine = new BpaEngine()
         const output = await engine.processFile(fileBuffer, filename, bpaConfig)
-        return {"recordId" : recordId, "data" : { "data" : output}}
+        return {"recordId" : recordId, "data" : output}
     } catch(err){
         console.log(err)
     }
