@@ -26,7 +26,6 @@ export class BpaEngine {
             console.log('validating...')
             if (this._validateInput(currentInput.type, stage)) {
                 console.log('validation passed!!')
-                console.log('processing....')
                 currentInput.serviceSpecificConfig = stage.service.serviceSpecificConfig
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput)
                 console.log('exiting stage')
@@ -36,6 +35,7 @@ export class BpaEngine {
                 throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)
             }
         }
+        return currentInput.aggregatedResults
     }
 
     private _validateInput = (input: string, stage: BpaStage): boolean => {
