@@ -58,7 +58,10 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     }
 
     context.res = {
-        body: {values : results}
+        body: {values : results},
+        headers: {
+            'Content-Type': 'application/json'
+        }
     };
 
 };
