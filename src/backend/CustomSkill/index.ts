@@ -58,7 +58,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     }
 
     context.res = {
-        body: results
+        body: {values : results}
     };
 
 };
