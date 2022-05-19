@@ -53,7 +53,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const results = []
     if(req.body){
         for(const value of req.body.values){
-            results.push(await processSkill(context, value))
+            const out = await processSkill(context, value)
+            results.push({"aggregatedResults" : out})
         }
     }
 
