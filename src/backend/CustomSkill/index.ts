@@ -37,7 +37,7 @@ const processSkill = async(context, value) : Promise<any> => {
     
         const engine = new BpaEngine()
         const output = await engine.processFile(fileBuffer, filename, bpaConfig)
-        return {"recordId" : recordId, "data" : output}
+        return {"recordId" : recordId, "data" : {"aggregatedResults" : output}}
     } catch(err){
         console.log(err)
     }
@@ -53,8 +53,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const results = []
     if(req.body){
         for(const value of req.body.values){
-            const out = await processSkill(context, value)
-            results.push({"aggregatedResults" : out})
+            results.push(await processSkill(context, value))
         }
     }
 
