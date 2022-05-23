@@ -35,7 +35,7 @@ export class Speech {
                 speechRecognizer.canceled = (s, e) => {
                     console.log(`CANCELED: Reason=${e.reason}`);
                 
-                    if (e.reason > 0) {
+                    if (e.reason === 1 || e.reason === 3) {
                         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
