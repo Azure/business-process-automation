@@ -35,14 +35,14 @@ export class Speech {
                 speechRecognizer.canceled = (s, e) => {
                     console.log(`CANCELED: Reason=${e.reason}`);
                 
-                    if (e.reason == sdk.CancellationReason.Error) {
+                    if (e.reason > 0) {
                         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
-
+                        reject(new Error(`reason ${e.errorCode} : ${e.errorDetails}`))
                     }
 
-                    reject(new Error(e.message))
+                    
                     
                     //speechRecognizer.stopContinuousRecognitionAsync();
                 };
