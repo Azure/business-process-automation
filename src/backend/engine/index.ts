@@ -7,7 +7,7 @@ export class BpaEngine {
 
     }
 
-    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration) => {
+    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration) : Promise<BpaServiceObject> => {
 
         let currentInput: BpaServiceObject = {
             label: "first",
@@ -35,7 +35,7 @@ export class BpaEngine {
                 throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)
             }
         }
-        return currentInput.aggregatedResults
+        return currentInput
     }
 
     private _validateInput = (input: string, stage: BpaStage): boolean => {

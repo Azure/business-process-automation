@@ -1,7 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions"
 import { BpaEngine } from "../engine"
 import { serviceCatalog } from "../engine/serviceCatalog"
-import { BpaConfiguration } from "../engine/types"
+import { BpaConfiguration, BpaServiceObject } from "../engine/types"
 import { CosmosDB } from "../services/cosmosdb"
 const _ = require('lodash')
 
@@ -33,7 +33,7 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         await db.view(out)
         context.res = {
             status : 200,
-            body : out
+            body : out.aggregatedResults
         }
     }
     catch (err) {
