@@ -29,11 +29,16 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         }
 
         const engine = new BpaEngine()
-        await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
+        const out = await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
+        await db.view(out)
+        context.res = {
+            status : 200,
+            body : out
+        }
     }
     catch (err) {
         context.log(err)
-        db.view({
+        await db.view({
             data : err.message,
             type : "error",
             label : "error",
@@ -41,6 +46,10 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
             bpaId : "error",
             aggregatedResults : {}
         })
+        context.res = {
+            status : 500,
+            body : err.message
+        }
     }
 };
 
