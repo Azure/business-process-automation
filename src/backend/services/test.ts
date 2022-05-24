@@ -6,6 +6,8 @@ import { BpaServiceObject } from "../engine/types"
 import { FormRec } from "../services/formrec"
 import { Translate } from "../services/translate"
 import { HuggingFace } from "../services/huggingface"
+const _ = require('lodash')
+
 
 const ocr = new Ocr(process.env.OCR_ENDPOINT, process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
@@ -47,36 +49,33 @@ export class Test {
     }
 
     public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
-        const output = []
+        //const output = []
+        let requestObject : BpaServiceObject = _.cloneDeep(input)
         for (const testService of this._services) {
             let result = "success"
             try{
-                const out : BpaServiceObject = await testService(input)
+                const out : BpaServiceObject = await testService(requestObject)
+                requestObject.aggregatedResults = _.cloneDeep(out.aggregatedResults)
             } catch (err){
                 result = JSON.stringify(err)
             }
-            output.push(result)
+            //output.push(result)
         }
 
-        const ocrResult = await ocr.process(input)
-        
+        const ocrResult : BpaServiceObject = await ocr.process(input)
+        requestObject.data = ocrResult.data
         for (const testService of this._textServices) {
             let result = "success"
             try{
-                const out : BpaServiceObject = await testService(ocrResult)
+                const out : BpaServiceObject = await testService(requestObject)
+                requestObject = _.cloneDeep(out)
+                requestObject = ocrResult.data
             } catch (err){
                 result = JSON.stringify(err)
             }
-            output.push(result)
+            //output.push(result)
         }
 
-        return {
-            data : output,
-            label : input.label,
-            bpaId : input.bpaId,
-            type : input.type,
-            projectName : input.projectName,
-            aggregatedResults : input.aggregatedResults
-        }
+        return requestObject
     }
 }
