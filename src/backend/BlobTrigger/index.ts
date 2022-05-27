@@ -9,7 +9,7 @@ const _ = require('lodash')
 const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buffer): Promise<void> {
 
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
-    const cogSearch = new CogSearch(process.env.COGSEARCH_URL, process.env.COGSEARCH_API_KEY, `${process.env.BLOB_STORAGE_ACCOUNT_NAME}`)
+    const cogSearch = new CogSearch(process.env.COGSEARCH_URL, process.env.COGSEARCH_APIKEY, `${process.env.BLOB_STORAGE_ACCOUNT_NAME}`)
     try {
         context.log(`Name of source doc : ${context.bindingData.blobTrigger}`)
         
