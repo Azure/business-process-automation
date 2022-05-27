@@ -68,8 +68,8 @@ export class Test {
             let result = "success"
             try{
                 const out : BpaServiceObject = await testService(requestObject)
-                requestObject = _.cloneDeep(out)
-                requestObject = ocrResult.data
+                requestObject.aggregatedResults = _.cloneDeep(out.aggregatedResults)
+                requestObject.data = ocrResult.data
             } catch (err){
                 result = JSON.stringify(err)
             }
