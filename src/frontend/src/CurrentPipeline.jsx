@@ -10,7 +10,7 @@ export default function Stages(props) {
 
     useEffect(() => {
         try {
-            axios.get('/api/config').then(value => setStages(value.data.stages))
+            axios.get('/api/config?id=1').then(value => setStages(value.data.stages))
         } catch (err) {
             console.log(err)
         }
