@@ -30,6 +30,14 @@
       "type": "string",
       "defaultValue": "translated-documents"
     },
+    "cogSearchName": {
+      "type": "string",
+      "defaultValue": "[parameters('projectName')]"
+    },
+    "cogSearchUrl": {
+      "type": "string",
+      "defaultValue": "[format('https://{0}.search.windows.net', parameters('projectName'))]"
+    },
     "formrecName": {
       "type": "string",
       "defaultValue": "[parameters('projectName')]"
@@ -561,6 +569,22 @@
       }
     },
     {
+        "apiVersion": "2021-04-01-Preview",
+        "name": "[parameters('cogSearchName')]",
+        "location": "eastus",
+        "type": "Microsoft.Search/searchServices",
+        "sku": {
+            "name": "standard"
+        },
+        "properties": {
+            "replicaCount": 1,
+            "partitionCount": 1,
+            "hostingMode": "Default"
+        },
+        "tags": {},
+        "dependsOn": []
+    },
+    {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
       "name": "[parameters('functionAppNamePython')]",
@@ -658,6 +682,14 @@
               "value": "node"
             },
             {
+              "name": "COGSEARCH_URL",
+              "value": "[parameters('cogSearchUrl')]"
+            },
+            {
+              "name": "COGSEARCH_APIKEY",
+              "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+            },
+            {
               "name": "BLOB_STORAGE_ACCOUNT_NAME",
               "value": "[parameters('projectName')]"
             },
@@ -750,7 +782,8 @@
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]"
       ]
     },
     {
