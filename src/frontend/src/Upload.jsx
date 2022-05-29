@@ -10,6 +10,8 @@ function Upload(props) {
     const [show, setShow] = useState(false);
     const [showFail, setShowFail] = useState(false);
     const [isCogSearch, setIsCogSearch] = useState(false)
+    const [rerender, setRerender] = useState(0)
+
 
     useEffect( ()=>{       
         try {
@@ -23,20 +25,16 @@ function Upload(props) {
         } catch (err) {
             console.log(err)
         }
-    },[])
+    },[rerender])
 
-    useEffect( ()=>{
-        console.log(`isCogSearch ${isCogSearch}`)
-       
+    const onCogSearchClick = async (event) => {
+        //setIsCogSearch(!isCogSearch)
         try {
-            axios.post('/api/config', { createSkill: isCogSearch , id : "2" })
+            await axios.post('/api/config', { createSkill: !isCogSearch , id : "2" })
         } catch (err) {
             console.log(err)
         }
-    },[isCogSearch])
-
-    const onCogSearchClick = async (event) => {
-        setIsCogSearch(!isCogSearch)
+        setRerender(rerender + 1)
     }
 
     const handleChange = async (file) => {

@@ -26,6 +26,10 @@
       "type": "string",
       "defaultValue": "split"
     },
+    "blobCogSearchContainerName": {
+      "type": "string",
+      "defaultValue": "cogsearch"
+    },
     "blobTranslatedContainerName": {
       "type": "string",
       "defaultValue": "translated-documents"
@@ -704,6 +708,10 @@
             {
               "name": "BLOB_STORAGE_SPLIT_CONTAINER",
               "value": "[parameters('blobSplitContainerName')]"
+            },
+            {
+              "name": "BLOB_STORAGE_COGSEARCH_CONTAINER",
+              "value": "[parameters('blobCogSearchContainerName')]"
             },
             {
               "name": "DOCUMENT_TRANSLATION_ENDPOINT",
