@@ -37,16 +37,13 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
             status : 200,
             body : out.aggregatedResults
         }
+     
+        const isCreateSkill = await db.getDocSearchCustomSkillConfig()
+        if(isCreateSkill?.createSkill){
+            const customSkillUrl = `https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/CustomSkill`
+            await cogSearch.generateCustomSearchSkill({aggregatedResults : out, id : "something"}, customSkillUrl)
+        }
 
-        try{
-            const isCreateSkill = await db.getDocSearchCustomSkillConfig()
-            if(isCreateSkill?.createSkill){
-                const customSkillUrl = `https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/CustomSkill`
-                await cogSearch.generateCustomSearchSkill({aggregatedResults : out, id : "something"}, customSkillUrl)
-            }
-        } catch(err){
-            console.log("failed to create Cognitive Search Index", err.message)
-        }  
     }
     catch (err) {
         context.log(err)
