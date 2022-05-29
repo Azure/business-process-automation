@@ -459,6 +459,15 @@
       ]
     },
     {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobCogSearchContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2021-01-15",
       "name": "[variables('accountName_var')]",
