@@ -1,13 +1,15 @@
-const sdk = require("microsoft-cognitiveservices-speech-sdk");
+import * as sdk from "microsoft-cognitiveservices-speech-sdk";
+import { SpeechConfig } from "microsoft-cognitiveservices-speech-sdk";
 import { BpaServiceObject } from '../engine/types'
 
 
 export class Speech {
 
-    private _client
+    private _client : sdk.SpeechConfig
 
     constructor(subscriptionKey : string, region : string){
-        this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
+        this._client  = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
+        this._client.setProfanity(sdk.ProfanityOption.Raw)
     }
 
     public process = (input : BpaServiceObject) : Promise<BpaServiceObject> => {
@@ -41,6 +43,7 @@ export class Speech {
                         console.log("CANCELED: Did you set the speech resource key and region values?");
                         reject(new Error(e.message))
                     }
+
 
                     //speechRecognizer.stopContinuousRecognitionAsync();
                 };
