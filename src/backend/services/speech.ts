@@ -41,7 +41,7 @@ export class Speech {
                         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
-                        reject(new Error(e.message))
+                        reject(new Error(e.errorDetails))
                     }
 
 
