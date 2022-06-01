@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileUploader } from "react-drag-drop-files";
-import { Text, Checkbox } from '@fluentui/react-northstar';
+import { Text } from '@fluentui/react-northstar';
 import axios from 'axios'
 
 function Upload(props) {
