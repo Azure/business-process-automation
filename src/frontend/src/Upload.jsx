@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FileUploader } from "react-drag-drop-files";
 import { Text } from '@fluentui/react-northstar';
-import axios from 'axios'
+//import axios from 'axios'
 
 function Upload(props) {
     const fileTypes = ["PNG", "JPG", "PDF", "WAV"];
