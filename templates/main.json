@@ -581,22 +581,22 @@
         "publicNetworkAccessForQuery": "Enabled"
       }
     },
-    {
-        "apiVersion": "2021-04-01-Preview",
-        "name": "[parameters('cogSearchName')]",
-        "location": "eastus",
-        "type": "Microsoft.Search/searchServices",
-        "sku": {
-            "name": "standard"
-        },
-        "properties": {
-            "replicaCount": 1,
-            "partitionCount": 1,
-            "hostingMode": "Default"
-        },
-        "tags": {},
-        "dependsOn": []
-    },
+    // {
+    //     "apiVersion": "2021-04-01-Preview",
+    //     "name": "[parameters('cogSearchName')]",
+    //     "location": "[parameters('primaryRegion')]",
+    //     "type": "Microsoft.Search/searchServices",
+    //     "sku": {
+    //         "name": "standard"
+    //     },
+    //     "properties": {
+    //         "replicaCount": 1,
+    //         "partitionCount": 1,
+    //         "hostingMode": "Default"
+    //     },
+    //     "tags": {},
+    //     "dependsOn": []
+    // },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
@@ -694,14 +694,14 @@
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "node"
             },
-            {
-              "name": "COGSEARCH_URL",
-              "value": "[parameters('cogSearchUrl')]"
-            },
-            {
-              "name": "COGSEARCH_APIKEY",
-              "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
-            },
+            // {
+            //   "name": "COGSEARCH_URL",
+            //   "value": "[parameters('cogSearchUrl')]"
+            // },
+            // {
+            //   "name": "COGSEARCH_APIKEY",
+            //   "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+            // },
             {
               "name": "BLOB_STORAGE_ACCOUNT_NAME",
               "value": "[parameters('projectName')]"

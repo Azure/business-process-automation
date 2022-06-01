@@ -68,7 +68,7 @@ function Upload(props) {
             <Text weight="semibold" content="Upload a document to Blob Storage" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }}/>
             <p style={{marginBottom: "20px"}} >Before any insights can be viewed by a pattern, one or more documents must be uploaded.  The documents will be copied to Blob Storage which will trigger a Function App to process them.  The processing can take some time and the insights will not appear immediately.</p>
                 <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
-                <Checkbox onClick={onCogSearchClick} checked={isCogSearch} style={{paddingTop: "20px"}} label="Create a Cognitive Search Index with the output of this document." />
+                {/* <Checkbox onClick={onCogSearchClick} checked={isCogSearch} style={{paddingTop: "20px"}} label="Create a Cognitive Search Index with the output of this document." /> */}
         </div>
     )
 }
