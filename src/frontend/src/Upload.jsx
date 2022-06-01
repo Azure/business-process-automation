@@ -27,15 +27,15 @@ function Upload(props) {
         }
     },[rerender])
 
-    const onCogSearchClick = async (event) => {
-        //setIsCogSearch(!isCogSearch)
-        try {
-            await axios.post('/api/config', { createSkill: !isCogSearch , id : "2" })
-        } catch (err) {
-            console.log(err)
-        }
-        setRerender(rerender + 1)
-    }
+    // const onCogSearchClick = async (event) => {
+    //     //setIsCogSearch(!isCogSearch)
+    //     try {
+    //         await axios.post('/api/config', { createSkill: !isCogSearch , id : "2" })
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    //     setRerender(rerender + 1)
+    // }
 
     const handleChange = async (file) => {
         try {
