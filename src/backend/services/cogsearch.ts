@@ -13,10 +13,10 @@ export class CogSearch {
     }
 
     public generateCustomSearchSkill = async (inputObject: any, targetSkillUrl: string): Promise<void> => {
-        const skillset = await this._generateSkillSet(this._projectName, targetSkillUrl)
+        //const skillset = await this._generateSkillSet(this._projectName, targetSkillUrl)
         const dataSource = await this._generateDataSource(this._projectName)
         const index = await this._generateIndex(this._projectName, inputObject)
-        await this._generateIndexer(this._projectName, dataSource.name, index.name, skillset.name)
+        await this._generateIndexer(this._projectName, dataSource.name, index.name, null)
     }
 
     private _generateSkillSet = async (name: string, targetSkillUrl: string) => {
@@ -68,10 +68,10 @@ export class CogSearch {
         const dataSourceConnection: SearchIndexerDataSourceConnection = {
             name: name,
             description: "BPA Accelerator Datasource Connection",
-            type: "azureblob",
-            connectionString: process.env.AzureWebJobsStorage,
+            type: "cosmosdb",
+            connectionString: process.env.COSMOSDB_CONNECTION_STRING,
             container: {
-                "name": process.env.BLOB_STORAGE_COGSEARCH_CONTAINER
+                "name": process.env.COSMOSDB_CONTAINER_NAME
             }
         }
 
@@ -111,10 +111,10 @@ export class CogSearch {
             targetIndexName: targetIndexName,
             skillsetName: skillsetName,
             outputFieldMappings: [
-                {
-                    sourceFieldName: "/document/aggregatedResults",
-                    targetFieldName: "aggregatedResults"
-                }
+                // {
+                //     sourceFieldName: "/document/aggregatedResults",
+                //     targetFieldName: "aggregatedResults"
+                // }
             ]
         }
         const indexer = await indexerClient.createIndexer(indexerObject)
