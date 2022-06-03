@@ -7,14 +7,15 @@ export class BpaEngine {
 
     }
 
-    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration) => {
+    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration) : Promise<BpaServiceObject> => {
 
         let currentInput: BpaServiceObject = {
             label: "first",
             type: this._getFileType(fileName),
             projectName: fileName,
             data: fileBuffer,
-            bpaId: "1"
+            bpaId: "1",
+            aggregatedResults : {}
         }
 
         console.log(this._getFileType(fileName))
@@ -24,8 +25,7 @@ export class BpaEngine {
             console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
             console.log('validating...')
             if (this._validateInput(currentInput.type, stage)) {
-                console.log('validation passed!! 2')
-                console.log('processing....')
+                console.log('validation passed!!')
                 currentInput.serviceSpecificConfig = stage.service.serviceSpecificConfig
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput)
                 console.log('exiting stage')
@@ -35,6 +35,7 @@ export class BpaEngine {
                 throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)
             }
         }
+        return currentInput
     }
 
     private _validateInput = (input: string, stage: BpaStage): boolean => {

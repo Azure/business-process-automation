@@ -28,7 +28,8 @@ export class DocumentTranslation {
             data : input.data,
             label : input.label,
             projectName : input.projectName,
-            type : input.type
+            type : input.type,
+            aggregatedResults : input.aggregatedResults
         }
     }
 

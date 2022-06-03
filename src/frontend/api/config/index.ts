@@ -5,12 +5,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     if (req.method === "POST") {
         try {
             context.log('HTTP trigger function processed a request.');
-            //const client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
-            //context.log(`body : ${JSON.stringify(req.body)}`)
-            //const database = client.database(process.env.COSMOS_DB_DB);
-            //const container = database.container(process.env.COSMOS_DB_CONTAINER);
-            //const item = await container.item("1")
-            //await item.delete()
             const out = await create(context, req)
             context.res = {
                 body: out
@@ -33,7 +27,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             const client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
             const database = client.database(process.env.COSMOS_DB_DB);
             const container = database.container(process.env.COSMOS_DB_CONTAINER);
-            const result = await getConfig(container)
+            const result = await getConfig(container, req.query.id)
             context.res = {
                 body : result
             }
@@ -47,9 +41,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     }
 };
 
-const getConfig = async (container) : Promise<any> => {
+const getConfig = async (container, id) : Promise<any> => {
     try{
-        const item = await container.item("1").read()
+        const item = await container.item(id).read()
         return item.resource
     } catch(err){
         console.log(err)
