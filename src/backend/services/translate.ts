@@ -1,5 +1,5 @@
 import { BpaServiceObject } from "../engine/types";
-import {  v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid"
 import axios, { AxiosRequestConfig } from "axios"
 
 export class Translate {
@@ -16,34 +16,32 @@ export class Translate {
 
     public translate = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
 
-        try {
-            const headers = {
-                'Ocp-Apim-Subscription-Key': this._apikey,
-                'Ocp-Apim-Subscription-Region': this._region,
-                'Content-type': 'application/json',
-                'X-ClientTraceId': uuidv4().toString()
-            }
 
-            const config: AxiosRequestConfig = {
-                headers: headers
-            }
-
-            const url = `${this._endpoint}translate?api-version=3.0&to=${input.serviceSpecificConfig.to}`
-            console.log(url)
-
-            const out = await axios.post(url, [{ 'text': input.data }], config)
-            return {
-                data: out.data[0].translations[0].text,
-                type: "text",
-                label: "translated text",
-                projectName: input.projectName,
-                bpaId: input.bpaId
-            }
-
-        } catch (err) {
-            console.log(err)
+        const headers = {
+            'Ocp-Apim-Subscription-Key': this._apikey,
+            'Ocp-Apim-Subscription-Region': this._region,
+            'Content-type': 'application/json',
+            'X-ClientTraceId': uuidv4().toString()
         }
 
+        const config: AxiosRequestConfig = {
+            headers: headers
+        }
+
+        const url = `${this._endpoint}translate?api-version=3.0&to=${input.serviceSpecificConfig.to}`
+        console.log(url)
+
+        const out = await axios.post(url, [{ 'text': input.data }], config)
+        const results = input.aggregatedResults
+        results["translation"] = out.data
+        return {
+            data: out.data[0].translations[0].text,
+            type: "text",
+            label: "translation",
+            projectName: input.projectName,
+            bpaId: input.bpaId,
+            aggregatedResults: results
+        }
 
     }
 }

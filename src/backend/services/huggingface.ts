@@ -16,12 +16,15 @@ export class HuggingFace {
         }
         console.log(JSON.stringify(body))
         const result = await axios.post(`${this._endpoint}/api/analyze`, body)
+        const results = input.aggregatedResults
+        results["huggingFaceNer"] = result
         return {
             data : result.data,
             label : "huggingFaceNer",
             bpaId : input.bpaId,
             projectName : input.projectName,
-            type : "huggingFaceNer"
+            type : "huggingFaceNer",
+            aggregatedResults : results
         }
     }
 

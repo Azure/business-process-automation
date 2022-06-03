@@ -45,4 +45,17 @@ export class CosmosDB {
         }
         return null
     }
+
+    public getDocSearchCustomSkillConfig = async () : Promise<any> => {
+        try{
+            const client = new CosmosClient(this._connectionString);
+            const database = client.database(this._dbName);
+            const container = database.container(this._containerName);
+            const item = await container.item("2").read()
+            return item.resource
+        } catch(err){
+            console.log(err)
+        }
+        return null
+    }
 }

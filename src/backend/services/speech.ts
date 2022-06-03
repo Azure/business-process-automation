@@ -1,13 +1,15 @@
-const sdk = require("microsoft-cognitiveservices-speech-sdk");
+import * as sdk from "microsoft-cognitiveservices-speech-sdk";
+import { SpeechConfig } from "microsoft-cognitiveservices-speech-sdk";
 import { BpaServiceObject } from '../engine/types'
 
 
 export class Speech {
 
-    private _client
+    private _client : sdk.SpeechConfig
 
     constructor(subscriptionKey : string, region : string){
-        this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
+        this._client  = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
+        this._client.setProfanity(sdk.ProfanityOption.Raw)
     }
 
     public process = (input : BpaServiceObject) : Promise<BpaServiceObject> => {
@@ -35,27 +37,29 @@ export class Speech {
                 speechRecognizer.canceled = (s, e) => {
                     console.log(`CANCELED: Reason=${e.reason}`);
                 
-                    if (e.reason == sdk.CancellationReason.Error) {
+                    if (e.reason === sdk.CancellationReason.Error) {
                         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
                         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
                         console.log("CANCELED: Did you set the speech resource key and region values?");
-
+                        reject(new Error(e.errorDetails))
                     }
 
-                    reject(new Error(e.message))
-                    
+
                     //speechRecognizer.stopContinuousRecognitionAsync();
                 };
                 
                 speechRecognizer.sessionStopped = (s, e) => {
                     console.log("\n    Session stopped event.");
                     speechRecognizer.stopContinuousRecognitionAsync();
+                    const results = input.aggregatedResults
+                    results["speechToText"] = out
                     resolve( {
                         data : out,
-                        label : input.label,
+                        label : "speechToText",
                         bpaId : input.bpaId,
                         type : 'text',
-                        projectName : input.projectName
+                        projectName : input.projectName,
+                        aggregatedResults : results
                     })
                 };
 

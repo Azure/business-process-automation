@@ -48,16 +48,17 @@ export class LanguageStudio {
 
         let out = []
         for await (const page of resultPages) {
-            //for (const result of page[resultType]) {
-                out.push(page)
-            //}
+            out.push(page)
         }
+        const results = input.aggregatedResults
+        results[type] = out
         const result: BpaServiceObject = {
             data: out,
             type: type,
             label: label,
             bpaId: input.bpaId,
-            projectName: input.projectName
+            projectName: input.projectName,
+            aggregatedResults : results
         }
         return result
     }
@@ -117,12 +118,16 @@ export class LanguageStudio {
             }
         }
 
+        const results = input.aggregatedResults
+        results["extractSummary"] = out
+
         return {
             data : out,
             type : "text",
             projectName : input.projectName,
             bpaId : input.bpaId,
-            label : "extractSummary"
+            label : "extractSummary",
+            aggregatedResults : results
         }
     }
 

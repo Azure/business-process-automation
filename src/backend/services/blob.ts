@@ -1,5 +1,5 @@
 //import { BpaServiceObject } from "../engine/types"
-import { BlobServiceClient, ContainerClient, BlockBlobClient, BlockBlobUploadResponse } from "@azure/storage-blob"
+import { BlobServiceClient, ContainerClient, BlockBlobClient, BlockBlobUploadResponse, BlobClient } from "@azure/storage-blob"
 const PDFDocument = require('pdf-lib').PDFDocument;
 
 export class Blob {
@@ -10,6 +10,11 @@ export class Blob {
     constructor(connectionString : string, containerName : string) {
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
+    }
+
+    public getBuffer = async (filename : string) : Promise<Buffer> => {
+        const blobClient : BlobClient = this._blobContainerClient.getBlobClient(filename)
+        return await blobClient.downloadToBuffer()
     }
 
     public split = async (myBlob : Buffer, filename : string) : Promise<void> => {

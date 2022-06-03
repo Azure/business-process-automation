@@ -23,5 +23,6 @@ export interface BpaServiceObject {
     label : string,
     projectName : string,
     bpaId : string
+    aggregatedResults : any
     serviceSpecificConfig ?: any
 }

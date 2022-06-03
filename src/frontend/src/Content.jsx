@@ -1,17 +1,27 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Stages from './Stages'
 import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
+import ViewInsights from './ViewInsights';
+import axios from 'axios';
 
 
 export default function Content(props) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState("HOME");
     const [breadCrumbItems, setBreadCrumbItems] = useState([])
+    const [documents, setDocuments] = useState(null)
+
+    useEffect(()=>{
+        axios.get('/api/ner').then(response => {
+            console.log(JSON.stringify(response.data))
+            setDocuments(response.data)
+        })
+    },[])
 
     const onBreadcrumbHome = () => {
         setSelectedMenuItem("HOME")
@@ -39,6 +49,12 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'Upload Documents', key: 'UPLOAD_DOCUMENTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
+            case 'VIEW_INSIGHTS':
+                setSelectedMenuItem('VIEW_INSIGHTS')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
+                setBreadCrumbItems(breadCrumbItems)
+                break
             default:
                 break;
         }
@@ -54,6 +70,8 @@ export default function Content(props) {
                 return (<Stages theme={props.theme} onSelectContent={onSelectContent} />)
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
+            case 'VIEW_INSIGHTS':
+                return (<ViewInsights theme={props.theme} documents={documents} onSelectContent={onSelectContent} />)
 
             default:
                 return (<Home />)
@@ -65,7 +83,7 @@ export default function Content(props) {
             case 'HOME':
                 return (
                     <Breadcrumb >
-                        <Breadcrumb.Item style={{paddingLeft: "0px"}}>
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
                             Home
                         </Breadcrumb.Item>
                     </Breadcrumb>)
@@ -73,12 +91,12 @@ export default function Content(props) {
                 return (
                     <>
                         <Breadcrumb >
-                            <Breadcrumb.Item style={{paddingLeft: "0px"}}>
+                            <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
                                 <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         <Breadcrumb.Divider>
-                        <ChevronEndMediumIcon />
+                            <ChevronEndMediumIcon />
                         </Breadcrumb.Divider>
                         <Breadcrumb.Item>
                             Create Pipeline
@@ -88,12 +106,12 @@ export default function Content(props) {
                 return (
                     <>
                         <Breadcrumb >
-                            <Breadcrumb.Item style={{paddingLeft: "0px"}}>
+                            <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
                                 <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         <Breadcrumb.Divider>
-                        <ChevronEndMediumIcon />
+                            <ChevronEndMediumIcon />
                         </Breadcrumb.Divider>
                         <Breadcrumb.Item>
                             View Pipeline
@@ -102,15 +120,30 @@ export default function Content(props) {
             case 'UPLOAD_DOCUMENTS':
                 return (<>
                     <Breadcrumb >
-                        <Breadcrumb.Item style={{paddingLeft: "0px"}}>
-                            <Breadcrumb.Link  href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
                         </Breadcrumb.Item>
                     </Breadcrumb>
                     <Breadcrumb.Divider>
-                    <ChevronEndMediumIcon />
+                        <ChevronEndMediumIcon />
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
                         Ingest Documents
+                    </Breadcrumb.Item>
+                </>)
+
+            case 'VIEW_INSIGHTS':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        View Insights
                     </Breadcrumb.Item>
                 </>)
 

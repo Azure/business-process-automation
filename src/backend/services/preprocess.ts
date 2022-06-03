@@ -15,12 +15,15 @@ export class Preprocess {
         }
         console.log(JSON.stringify(body))
         const result = await axios.post(`${this._endpoint}/api/preprocess`, body)
+        const results = input.aggregatedResults
+        results["preprocess"] = result
         return {
             data : result.data,
             label : "preprocess",
             bpaId : input.bpaId,
             projectName : input.projectName,
-            type : "preprocess"
+            type : "preprocess",
+            aggregatedResults : results
         }
     }
 

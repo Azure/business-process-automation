@@ -26,9 +26,21 @@
       "type": "string",
       "defaultValue": "split"
     },
+    "blobCogSearchContainerName": {
+      "type": "string",
+      "defaultValue": "cogsearch"
+    },
     "blobTranslatedContainerName": {
       "type": "string",
       "defaultValue": "translated-documents"
+    },
+    "cogSearchName": {
+      "type": "string",
+      "defaultValue": "[parameters('projectName')]"
+    },
+    "cogSearchUrl": {
+      "type": "string",
+      "defaultValue": "[format('https://{0}.search.windows.net', parameters('projectName'))]"
     },
     "formrecName": {
       "type": "string",
@@ -447,6 +459,15 @@
       ]
     },
     {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobCogSearchContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2021-01-15",
       "name": "[variables('accountName_var')]",
@@ -561,6 +582,22 @@
       }
     },
     {
+        "apiVersion": "2021-04-01-Preview",
+        "name": "[parameters('cogSearchName')]",
+        "location": "[parameters('primaryRegion')]",
+        "type": "Microsoft.Search/searchServices",
+        "sku": {
+            "name": "standard"
+        },
+        "properties": {
+            "replicaCount": 1,
+            "partitionCount": 1,
+            "hostingMode": "Default"
+        },
+        "tags": {},
+        "dependsOn": []
+    },
+    {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
       "name": "[parameters('functionAppNamePython')]",
@@ -658,6 +695,14 @@
               "value": "node"
             },
             {
+              "name": "COGSEARCH_URL",
+              "value": "[parameters('cogSearchUrl')]"
+            },
+            {
+              "name": "COGSEARCH_APIKEY",
+              "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+            },
+            {
               "name": "BLOB_STORAGE_ACCOUNT_NAME",
               "value": "[parameters('projectName')]"
             },
@@ -672,6 +717,10 @@
             {
               "name": "BLOB_STORAGE_SPLIT_CONTAINER",
               "value": "[parameters('blobSplitContainerName')]"
+            },
+            {
+              "name": "BLOB_STORAGE_COGSEARCH_CONTAINER",
+              "value": "[parameters('blobCogSearchContainerName')]"
             },
             {
               "name": "DOCUMENT_TRANSLATION_ENDPOINT",
@@ -750,7 +799,8 @@
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]"
       ]
     },
     {
