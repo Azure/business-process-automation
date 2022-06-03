@@ -1,4 +1,4 @@
-import { SearchIndexClient, SearchIndexerClient, AzureKeyCredential, SearchIndexer, SearchIndexerDataSourceConnection, SearchIndexerSkillset, SearchIndex } from "@azure/search-documents";
+import { SearchIndexClient, SearchIndexerClient, AzureKeyCredential, SearchIndexer, SearchIndexerDataSourceConnection, SearchIndex } from "@azure/search-documents";
 import axios, { AxiosRequestConfig } from 'axios'
 
 export class CogSearch {
@@ -9,75 +9,94 @@ export class CogSearch {
     constructor(url: string, apikey: string, projectName: string) {
         this._apikey = apikey
         this._url = url
-        this._projectName = projectName
+        this._projectName = projectName + "1"
     }
 
-    public generateCustomSearchSkill = async (inputObject: any, targetSkillUrl: string): Promise<void> => {
+    public generateCustomSearchSkill = async (inputObject: any): Promise<void> => {
         //const skillset = await this._generateSkillSet(this._projectName, targetSkillUrl)
         const dataSource = await this._generateDataSource(this._projectName)
         const index = await this._generateIndex(this._projectName, inputObject)
         await this._generateIndexer(this._projectName, dataSource.name, index.name, null)
     }
 
-    private _generateSkillSet = async (name: string, targetSkillUrl: string) => {
-        const skill: any =
-        {
-            "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
-            name: name,
-            description: "BPA Accelerator Skillset",
-            context: "/document",
-            uri: `${targetSkillUrl}`,
-            httpMethod: "POST",
-            timeout: "PT230S",
-            batchSize: 1,
-            degreeOfParallelism: 1,
-            inputs: [
-                {
-                    name: "filename",
-                    source: "/document/metadata_storage_name"
-                }
-            ],
-            outputs: [
-                {
-                    name: "aggregatedResults",
-                    targetName: "aggregatedResults"
-                }
-            ],
-            httpHeaders: {}
-        }
+    // private _generateSkillSet = async (name: string, targetSkillUrl: string) => {
+    //     const skill: any =
+    //     {
+    //         "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+    //         name: name,
+    //         description: "BPA Accelerator Skillset",
+    //         context: "/document",
+    //         uri: `${targetSkillUrl}`,
+    //         httpMethod: "POST",
+    //         timeout: "PT230S",
+    //         batchSize: 1,
+    //         degreeOfParallelism: 1,
+    //         inputs: [
+    //             {
+    //                 name: "filename",
+    //                 source: "/document/metadata_storage_name"
+    //             }
+    //         ],
+    //         outputs: [
+    //             {
+    //                 name: "aggregatedResults",
+    //                 targetName: "aggregatedResults"
+    //             }
+    //         ],
+    //         httpHeaders: {}
+    //     }
 
 
-        const skillset: SearchIndexerSkillset = {
+    //     const skillset: SearchIndexerSkillset = {
+    //         name: name,
+    //         skills: [
+    //             skill
+    //         ]
+    //     }
+    //     const config: AxiosRequestConfig = {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "api-key": this._apikey
+    //         }
+    //     }
+    //     const url = `${this._url}/skillsets?api-version=2020-06-30`
+    //     const postResult = await axios.post(url, skillset, config)
+    //     return postResult.data
+    // }
+
+    private _generateDataSource = async (name: string): Promise<SearchIndexerDataSourceConnection> => {
+        const dataSourceConnection: any = {
             name: name,
-            skills: [
-                skill
-            ]
+            description: "BPA Accelerator Datasource Connection",
+            type: "cosmosdb",
+            credentials: {
+                connectionString: `${process.env.COSMOSDB_CONNECTION_STRING}Database=${process.env.COSMOSDB_DB_NAME}`
+            },
+            container: {
+                "name": process.env.COSMOSDB_CONTAINER_NAME,
+                "query": "SELECT * from c WHERE c.id != '1' AND c.id != '2' AND c._ts >= @HighWaterMark ORDER by c._ts"
+            },
+            "dataChangeDetectionPolicy": {
+                "@odata.type": "#Microsoft.Azure.Search.HighWaterMarkChangeDetectionPolicy",
+                "highWaterMarkColumnName": "_ts"
+            },
+            dataDeletionDetectionPolicy: null,
+            encryptionKey: null,
         }
+
         const config: AxiosRequestConfig = {
             headers: {
                 "Content-Type": "application/json",
                 "api-key": this._apikey
             }
         }
-        const url = `${this._url}/skillsets?api-version=2020-06-30`
-        const postResult = await axios.post(url, skillset, config)
+        const url = `${this._url}/datasources?api-version=2020-06-30`
+        const postResult = await axios.post(url, dataSourceConnection, config)
         return postResult.data
-    }
 
-    private _generateDataSource = async (name: string): Promise<SearchIndexerDataSourceConnection> => {
-        const dataSourceConnection: SearchIndexerDataSourceConnection = {
-            name: name,
-            description: "BPA Accelerator Datasource Connection",
-            type: "cosmosdb",
-            connectionString: process.env.COSMOSDB_CONNECTION_STRING,
-            container: {
-                "name": process.env.COSMOSDB_CONTAINER_NAME
-            }
-        }
-
-        const indexerClient = new SearchIndexerClient(this._url, new AzureKeyCredential(this._apikey));
-        const connection = await indexerClient.createDataSourceConnection(dataSourceConnection)
-        return connection
+        // const indexerClient = new SearchIndexerClient(this._url, new AzureKeyCredential(this._apikey));
+        // const connection = await indexerClient.createDataSourceConnection(dataSourceConnection)
+        // return connection
     }
 
     private _generateIndex = async (name: string, fields: any): Promise<SearchIndex> => {
@@ -85,20 +104,16 @@ export class CogSearch {
             name: "",
             fields: []
         }
-        try {
-            const indexFormat = this._convertToIndex(fields, "fields")
+        const indexFormat = this._convertToIndex(fields, "fields")
 
-            const all = {
-                "name": name,
-                "fields": [...indexFormat]
-            }
-
-            const indexClient = new SearchIndexClient(this._url, new AzureKeyCredential(this._apikey));
-            searchIndex = await indexClient.createIndex(all)
-
-        } catch (err) {
-            console.log(err)
+        const all = {
+            "name": name,
+            "fields": [...indexFormat]
         }
+
+        const indexClient = new SearchIndexClient(this._url, new AzureKeyCredential(this._apikey));
+        searchIndex = await indexClient.createIndex(all)
+
         return searchIndex
     }
 
@@ -131,9 +146,6 @@ export class CogSearch {
         let type: string = ""
         let indexSchema: any = []
         for (const s in inputObject) {
-            if (s === 'boundingBox') {
-                console.log("here")
-            }
             switch (typeof (inputObject[s])) {
                 case 'object':
                     type = 'object'
@@ -178,7 +190,7 @@ export class CogSearch {
 
                             console.log(indexSchema)
                         }
-                    } else if (inputObject[s] instanceof Date){
+                    } else if (inputObject[s] instanceof Date) {
                         const stringElement = {
                             "name": s,
                             "type": "Edm.String",
