@@ -90,14 +90,16 @@ Many of the pretrained models from the huggingface library can be used, dependin
 
 ## Prerequisities
 1. Github account
-2. Ensure your subscription has Microsoft.DocumentDB enabled  
+2. Azure Command Line interface installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources. This accelerator uses Azure CLI to deploy a set of services provided by the templates within your cloned repo, in just a few lines of code.  
+(https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)  
+3. Ensure your subscription has Microsoft.DocumentDB enabled  
 To check:  
       - Go to your subscription within portal.azure.com  
       - Select Resource Providers at bottom of left navigation pane  
       - Within the Filter by name menu, search for Microsoft.DocumentDB  
       - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
       **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-3. Ensure that you have accepted terms and conditions for Responsible AI  
+4. Ensure that you have accepted terms and conditions for Responsible AI  
 "You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
 
 ## Installation Steps  
@@ -157,7 +159,7 @@ cd business-process-automation/templates
 ```
 ren parameters.json.example parameters.json
 ```  
-4. Open parameters.json
+5. Open parameters.json
 **Note**:*If you have Visual Studio Code installed, you can launch at the current directory by typing "code ."  
 ```
 C:\Users\<UserName>\business-process-automation\templates\code .
@@ -166,16 +168,16 @@ Update the three "value" fields below:
 
 ![](images/update3valueFields.png)  
 
-  1. projectName: Must be a unique project name, only include lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
-  2. repository token: Copy the personal access token you recently created  
-  3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
+    1. projectName: Must be a unique project name, only include lowercase, alphanumeric characters only, and keep length between ~10-16 characters. This name is used across multiple Azure resources, many with strict project naming conventions  
+    2. repository token: Copy the personal access token you recently created  
+    3. repository url: Paste the link of your forked repository - i.e., https://github.com/[your-account]/business-process-automation  
   
   Save updates  
   
-5. Similarly, update your local deploy.yml file within the same directory
+6. Similarly, update your local deploy.yml file within the same directory
   1. Open the file C:\Users\<UserName>\business-process-automation\templates\deploy.yml
   2. Update the field AZURE_FUNCTIONAPP_NAME with the name of your ResourceGroup  
-  **Note**:*You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components
+  **Note**: *You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components*
   ![](images/updateDeploy_yml.png)  
 
   
@@ -247,6 +249,7 @@ Finally, paste that selection into the editor window.
  
  ![](images/find_static_web_app2.png)
  
+ 
 ## Load Documents!
 1. Select Configure a New Pipeline  
 ![](images/app_landing_page.png)  
@@ -265,7 +268,19 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 ![](images/home.png)  
 6. Select "Ingest Documents"
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
-**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*
+**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*  
+
+### Using HuggingFace library
+When using a custom HuggingFace, you'll be prompted select your desired model by specifiying the model name. To do so, you'll need to navigate to https://huggingface.co/models, filter on "Token Classification" (task), "PyTorch" (libraries), and "transformers" (libraries). Select your model from the filtered model list, and copy the modelID. See Images below for further guidance - if you're not using a HuggingFace model, skip to the next step.  
+**Note**: *When pasting the model ID, be sure to paste without quotes - see below image*  
+
+![](images/HuggingFace_input_name.png)  
+
+![](images/hugging_face_selections.png)  
+
+![](images/huggingFace_model_name.png)  
+
+
 
   ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
