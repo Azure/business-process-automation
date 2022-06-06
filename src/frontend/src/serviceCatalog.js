@@ -32,7 +32,7 @@ export const sc = {
         ],
         "image": summarize,
         "label": "Auto-ML NER Custom Model",
-        "name": "Auto-ML NER Custom Model",
+        "name": "automlNer",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
     },
