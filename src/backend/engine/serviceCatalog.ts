@@ -9,7 +9,7 @@ import { HuggingFace } from "../services/huggingface"
 import { Test } from "../services/test"
 import { Preprocess } from "../services/preprocess"
 import { DocumentTranslation } from "../services/documentTranslation"
-import { AutoMlNer } from "../services/automlNer"
+import { AutoMlNer } from "../services/automlner"
 
 const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)

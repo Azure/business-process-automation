@@ -1,7 +1,7 @@
 import { BpaServiceObject } from "../engine/types";
 import axios, { AxiosRequestConfig } from "axios"
 
-export class AutoMl {
+export class AutoMlNer {
 
     private _endpoint: string
     private _apikey: string
