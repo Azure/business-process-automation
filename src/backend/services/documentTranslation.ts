@@ -19,9 +19,10 @@ export class DocumentTranslation {
     public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
 
         const filename = input.projectName.replace("documents/","")
-        const targetLanguage = input.serviceSpecificConfig.targetLanguage
+        const targetLanguage = input.serviceSpecificConfig.to
+        const sourceLanguage = input.serviceSpecificConfig.from
 
-        const translationResult = this.translate(filename, targetLanguage)
+        const translationResult = this.translate(filename, targetLanguage, sourceLanguage)
 
         return {
             bpaId : input.bpaId,
@@ -33,7 +34,7 @@ export class DocumentTranslation {
         }
     }
 
-    public translate = async (filename: string, targetLanguage: string) => {
+    public translate = async (filename: string, targetLanguage: string, sourceLanguage : string) => {
 
         const sasSourseUrl = await this._getSasUrl(this._storageAccountName, "documents", this._storageAccountKey)
         const sasTargetUrl = await this._getSasUrl(this._storageAccountName, "translated-documents", this._storageAccountKey)
@@ -43,7 +44,8 @@ export class DocumentTranslation {
                 {
                     "storageType": "File",
                     "source": {
-                        "sourceUrl": `https://${this._storageAccountName}.blob.core.windows.net/documents/${filename}?${sasSourseUrl}`
+                        "sourceUrl": `https://${this._storageAccountName}.blob.core.windows.net/documents/${filename}?${sasSourseUrl}`,
+                        "language" : sourceLanguage
                     },
                     "targets": [
                         {
