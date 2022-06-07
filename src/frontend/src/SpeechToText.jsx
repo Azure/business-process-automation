@@ -10,7 +10,7 @@ export default function SpeechToTextDialog(props) {
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { to : selectedSourceLanguage, from : selectedTargetLanguage }
+        newOption.serviceSpecificConfig = { to : selectedSourceLanguage }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }
