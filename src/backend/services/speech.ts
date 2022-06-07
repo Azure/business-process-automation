@@ -16,9 +16,10 @@ export class Speech {
 
         return new Promise<BpaServiceObject>((resolve, reject)=> {
             try{
-                if(input?.serviceSpecificConfig?.to){
-                    this._client.speechRecognitionLanguage = input.serviceSpecificConfig.to
-                }
+                
+                // if(input?.serviceSpecificConfig?.to){
+                //     this._client.speechRecognitionLanguage = input.serviceSpecificConfig.to
+                // }
                 let audioConfig = sdk.AudioConfig.fromWavFileInput(input.data);
                 let speechRecognizer = new sdk.SpeechRecognizer(this._client, audioConfig);
             
