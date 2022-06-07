@@ -3,7 +3,7 @@ import { Dialog, Text } from '@fluentui/react-northstar';
 import LanguageDropdown, { languages } from './LanguageDropdown'
 
 
-export default function LanguageDialog(props) {
+export default function DocumentTranslationDialog(props) {
 
     const [selectedSourceLanguage, setSelectedSourceLanguage] = useState(null)
     const [selectedTargetLanguage, setSelectedTargetLanguage] = useState(null)
@@ -30,7 +30,7 @@ export default function LanguageDialog(props) {
 
     return (
         <Dialog
-            header="Language Translation"
+            header="Document Language Translation"
             content={
                 <>
                     <div style={{

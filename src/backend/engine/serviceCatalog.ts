@@ -108,6 +108,7 @@ const prebuiltBusinessCard : BpaService = {
     }
 }
 
+
 const prebuiltIdentity : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","jpeg"],

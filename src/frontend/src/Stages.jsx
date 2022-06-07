@@ -10,6 +10,7 @@ import LanguageCustomNerDialog from './LanguageCustomNerDialog';
 import LanguageMultiClassifyDialog from './LanguageMultiClassifyDialog';
 import LanguageSingleClassifyDialog from './LanguageSingleClassifyDialog'
 import HuggingFaceDialog from './HuggingFaceDialog'
+import DocumentTranslationDialog from './DocumentTranslationDialog';
 
 import { sc } from './serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
@@ -22,6 +23,7 @@ export default function Stages(props) {
     const [value, setValue] = useState(0)
     const [options, setOptions] = useState([])
     const [hideTranslateDialog, setHideTranslateDialog] = useState(true)
+    const [hideDocumentTranslateDialog, setHideDocumentTranslateDialog] = useState(true)
     const [hideFormRecDialog, setHideFormRecDialog] = useState(true)
     const [hideCustomNerDialog, setHideCustomNerDialog] = useState(true)
     const [hideCustomSingleDialog, setHideCustomSingleDialog] = useState(true)
@@ -103,6 +105,10 @@ export default function Stages(props) {
             setCurrentOption(_.cloneDeep(event))
             setHideTranslateDialog(false)
         }
+        else if (event.name === 'documentTranslation') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideDocumentTranslateDialog(false)
+        }
         else if (event.name === 'huggingFaceNER') {
             setCurrentOption(_.cloneDeep(event))
             setHideHuggingFaceDialog(false)
@@ -154,6 +160,7 @@ export default function Stages(props) {
                 <LanguageCustomNerDialog hideDialog={hideCustomNerDialog} setHideDialog={setHideCustomNerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <FormRecCustomDialog hideDialog={hideFormRecDialog} setHideDialog={setHideFormRecDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <LanguageDialog hideDialog={hideTranslateDialog} setHideDialog={setHideTranslateDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <DocumentTranslationDialog hideDialog={hideDocumentTranslateDialog} setHideDialog={setHideDocumentTranslateDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <HuggingFaceDialog hideDialog={hideHuggingFaceDialog} setHideDialog={setHideHuggingFaceDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
 
                 {renderOptions(options)}

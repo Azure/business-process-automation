@@ -429,9 +429,7 @@ export const sc = {
         "image": customClassification,
         "label": "Document Translation",
         "name": "documentTranslation",
-        "serviceSpecificConfig": { 
-            targetLanguage : "es"
-        },
+        "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
     }
 }
