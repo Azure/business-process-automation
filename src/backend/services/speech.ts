@@ -1,5 +1,4 @@
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
-import { SpeechConfig } from "microsoft-cognitiveservices-speech-sdk";
 import { BpaServiceObject } from '../engine/types'
 
 
@@ -10,12 +9,16 @@ export class Speech {
     constructor(subscriptionKey : string, region : string){
         this._client  = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
         this._client.setProfanity(sdk.ProfanityOption.Raw)
+        
     }
 
     public process = (input : BpaServiceObject) : Promise<BpaServiceObject> => {
 
         return new Promise<BpaServiceObject>((resolve, reject)=> {
             try{
+                if(input?.serviceSpecificConfig?.to){
+                    this._client.speechRecognitionLanguage = input.serviceSpecificConfig.to
+                }
                 let audioConfig = sdk.AudioConfig.fromWavFileInput(input.data);
                 let speechRecognizer = new sdk.SpeechRecognizer(this._client, audioConfig);
             
