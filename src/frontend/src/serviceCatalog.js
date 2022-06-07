@@ -22,6 +22,20 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
+    "automlNer": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "automlNer"
+        ],
+        "image": summarize,
+        "label": "Auto-ML NER Custom Model",
+        "name": "automlNer",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "test": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -415,9 +429,7 @@ export const sc = {
         "image": customClassification,
         "label": "Document Translation",
         "name": "documentTranslation",
-        "serviceSpecificConfig": { 
-            targetLanguage : "es"
-        },
+        "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
     }
 }

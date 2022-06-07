@@ -3,15 +3,14 @@ import { Dialog, Text } from '@fluentui/react-northstar';
 import LanguageDropdown, { languages } from './LanguageDropdown'
 
 
-export default function LanguageDialog(props) {
+export default function SpeechToTextDialog(props) {
 
     const [selectedSourceLanguage, setSelectedSourceLanguage] = useState(null)
-    const [selectedTargetLanguage, setSelectedTargetLanguage] = useState(null)
 
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { to : selectedTargetLanguage, from : selectedSourceLanguage }
+        newOption.serviceSpecificConfig = { to : selectedSourceLanguage }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }
@@ -20,13 +19,10 @@ export default function LanguageDialog(props) {
         props.setHideDialog(true)
     }
 
-    const onTranslateSourceDialogChange = (event, dropObject) => {
+    const onSourceDialogChange = (event, dropObject) => {
         setSelectedSourceLanguage(languages[dropObject.highlightedIndex].key)
     }
     
-    const onTranslateTargetDialogChange = (event, dropObject) => {
-        setSelectedTargetLanguage(languages[dropObject.highlightedIndex].key)
-    }
 
     return (
         <Dialog
@@ -40,18 +36,7 @@ export default function LanguageDialog(props) {
                             display: 'block', marginBottom: "10px"
                         }} />
                         <LanguageDropdown
-                            onDialogChange={onTranslateSourceDialogChange}
-                        />
-                    </div>
-                   
-                    <div style={{
-                            display: 'block', marginBottom: "10px"
-                        }}>
-                        <Text content="Target Language" style={{
-                            display: 'block', marginBottom: "10px"
-                        }} />
-                        <LanguageDropdown
-                            onDialogChange={onTranslateTargetDialogChange}
+                            onDialogChange={onSourceDialogChange}
                         />
                     </div>
                 </>}
