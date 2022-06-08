@@ -40,6 +40,7 @@ export default function LanguageDialog(props) {
                             display: 'block', marginBottom: "10px"
                         }} />
                         <LanguageDropdown
+                            languages={languages}
                             onDialogChange={onTranslateSourceDialogChange}
                         />
                     </div>
@@ -51,6 +52,7 @@ export default function LanguageDialog(props) {
                             display: 'block', marginBottom: "10px"
                         }} />
                         <LanguageDropdown
+                            languages={languages}
                             onDialogChange={onTranslateTargetDialogChange}
                         />
                     </div>
