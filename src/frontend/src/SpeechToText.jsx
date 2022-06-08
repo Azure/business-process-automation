@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dialog, Text } from '@fluentui/react-northstar';
-import LanguageDropdown, { languages } from './LanguageDropdown'
+import LanguageDropdown, { languages_bcp47 } from './LanguageDropdown'
 
 
 export default function SpeechToTextDialog(props) {
@@ -20,13 +20,13 @@ export default function SpeechToTextDialog(props) {
     }
 
     const onSourceDialogChange = (event, dropObject) => {
-        setSelectedSourceLanguage(languages[dropObject.highlightedIndex].key)
+        setSelectedSourceLanguage(languages_bcp47[dropObject.highlightedIndex].key)
     }
     
 
     return (
         <Dialog
-            header="Language Translation"
+            header="Speech To Text Language"
             content={
                 <>
                     <div style={{
@@ -36,6 +36,7 @@ export default function SpeechToTextDialog(props) {
                             display: 'block', marginBottom: "10px"
                         }} />
                         <LanguageDropdown
+                            languages={languages_bcp47}
                             onDialogChange={onSourceDialogChange}
                         />
                     </div>
