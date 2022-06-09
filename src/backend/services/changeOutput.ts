@@ -23,7 +23,7 @@ export class ChangeOutput {
         
         return {
             data: input.aggregatedResults[resultsIndex.name],
-            type: "changeOutput",
+            type: input.aggregatedResults[resultsIndex.name].type,
             label: "changeOutput",
             projectName: input.projectName,
             bpaId: input.bpaId,
