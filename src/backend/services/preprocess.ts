@@ -17,7 +17,7 @@ export class Preprocess {
         const result = await axios.post(`${this._endpoint}/api/preprocess`, body)
         const results = input.aggregatedResults
         results["preprocess"] = result
-        input.resultsIndexes.push({index : index, name : "preprocess"})
+        input.resultsIndexes.push({index : index, name : "preprocess", type : "preprocess"})
         return {
             data : result.data,
             label : "preprocess",

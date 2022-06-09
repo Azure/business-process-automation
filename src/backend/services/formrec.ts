@@ -17,7 +17,7 @@ export class FormRec {
         const layoutResult : LayoutResult = await poller.pollUntilDone()
         const results = input.aggregatedResults
         results["layout"] = layoutResult
-        input.resultsIndexes.push({index : index, name : "layout"})
+        input.resultsIndexes.push({index : index, name : "layout", type : "layout"})
         return {
             data : layoutResult,
             type : "layout",
@@ -35,7 +35,7 @@ export class FormRec {
         const result : GeneralDocumentResult = await poller.pollUntilDone()
         const results = input.aggregatedResults
         results["generalDocument"] = result
-        input.resultsIndexes.push({index : index, name : "generalDocument"})
+        input.resultsIndexes.push({index : index, name : "generalDocument", type : "generalDocument"})
         return {
             data : result,
             type : "generalDocument",
@@ -76,7 +76,7 @@ export class FormRec {
         const result : AnalyzeResult<AnalyzedDocument> = await poller.pollUntilDone()
         const results = input.aggregatedResults
         results[label] = result
-        input.resultsIndexes.push({index : index, name : label})
+        input.resultsIndexes.push({index : index, name : label, type : label})
         return {
             data : result,
             type : label,

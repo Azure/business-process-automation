@@ -10,7 +10,9 @@ import { Test } from "../services/test"
 import { Preprocess } from "../services/preprocess"
 import { DocumentTranslation } from "../services/documentTranslation"
 import { AutoMlNer } from "../services/automlner"
+import { ChangeOutput } from "../services/changeOutput"
 
+const changeOutput = new ChangeOutput()
 const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
@@ -22,6 +24,20 @@ const preprocess = new Preprocess(process.env.HUGGINGFACE_ENDPOINT)
 const documentTranslation = new DocumentTranslation(process.env.BLOB_STORAGE_ACCOUNT_NAME, process.env.BLOB_STORAGE_ACCOUNT_KEY, process.env.DOCUMENT_TRANSLATION_ENDPOINT, process.env.DOCUMENT_TRANSLATION_KEY)
 const automlNer = new AutoMlNer(process.env.AUTOML_NER_ENDPOINT, process.env.AUTOML_NER_APIKEY)
 const test = new Test()
+
+const changeOutputService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["any"],
+    outputTypes: ["changeOutput"],
+    name: "changeOutput",
+    process: changeOutput.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const automlNerService : BpaService = {
     bpaServiceId : "abc123",
@@ -429,6 +445,7 @@ export const serviceCatalog = {
     "testService" : testService,
     "healthCare" : healthCareService,
     "documentTranslation" : documentTranslationService,
-    "automlNer" : automlNerService
+    "automlNer" : automlNerService,
+    "changeOutput" : changeOutputService
 }
 

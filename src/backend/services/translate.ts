@@ -37,7 +37,7 @@ export class Translate {
         const out = await axios.post(url, [{ 'text': input.data }], config)
         const results = input.aggregatedResults
         results["translation"] = out.data
-        input.resultsIndexes.push({index : index, name : "translation"})
+        input.resultsIndexes.push({index : index, name : "translation", type : "text"})
         return {
             data: out.data[0].translations[0].text,
             type: "text",

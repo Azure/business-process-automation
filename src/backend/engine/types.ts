@@ -19,7 +19,8 @@ export interface BpaConfiguration {
 
 export interface ResultsIndex {
     name : string,
-    index : number
+    index : number,
+    type : string
 }
 
 export interface BpaServiceObject {

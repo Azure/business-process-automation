@@ -23,7 +23,7 @@ export class DocumentTranslation {
         const sourceLanguage = input.serviceSpecificConfig.from
 
         const translationResult = this.translate(filename, targetLanguage, sourceLanguage)
-        input.resultsIndexes.push({index : index, name : "documentTranslation"})
+        input.resultsIndexes.push({index : index, name : "documentTranslation", type : input.type})
         return {
             bpaId : input.bpaId,
             data : input.data,

@@ -47,7 +47,7 @@ export class AutoMlNer {
         const results = input.aggregatedResults
         const modelOutput = this._createOutput(JSON.parse(out.data).Results)
         results["automlNer"] = modelOutput
-        input.resultsIndexes.push({index : index, name : "automlNer"})
+        input.resultsIndexes.push({index : index, name : "automlNer", type : "automlNer"})
         return {
             data: modelOutput,
             type: "automlNer",

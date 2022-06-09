@@ -52,7 +52,7 @@ export class LanguageStudio {
         }
         const results = input.aggregatedResults
         results[type] = out
-        input.resultsIndexes.push({index : index, name : type})
+        input.resultsIndexes.push({index : index, name : type, type : type})
         const result: BpaServiceObject = {
             data: out,
             type: type,
@@ -122,7 +122,7 @@ export class LanguageStudio {
 
         const results = input.aggregatedResults
         results["extractSummary"] = out
-        input.resultsIndexes.push({index : index, name : "extractSummary"})
+        input.resultsIndexes.push({index : index, name : "extractSummary", type : "extractSummary"})
         return {
             data : out,
             type : "text",

@@ -15,13 +15,13 @@ export class BpaEngine {
             projectName: fileName,
             data: fileBuffer,
             bpaId: "1",
-            aggregatedResults : {},
-            resultsIndexes : []
+            aggregatedResults : { "buffer" : fileBuffer },
+            resultsIndexes : [{index : 0, name : "buffer", type : this._getFileType(fileName)}]
         }
 
         console.log(this._getFileType(fileName))
 
-        let stageIndex = 0
+        let stageIndex = 1
         for (const stage of config.stages) {
             console.log(`stage : ${stage.service.name}`)
             console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
@@ -43,6 +43,9 @@ export class BpaEngine {
 
     private _validateInput = (input: string, stage: BpaStage): boolean => {
         if (stage.service.name == 'view') {
+            return true
+        }
+        if (stage.service.name == 'changeOutput') {
             return true
         }
         if (stage.service.inputTypes.includes(input)) {

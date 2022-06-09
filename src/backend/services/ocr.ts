@@ -20,7 +20,7 @@ export class Ocr {
         const textOut : string = this.toText(readResult)
         const results = input.aggregatedResults
         results["ocr"] = textOut
-        input.resultsIndexes.push({index : index, name : "ocr"})
+        input.resultsIndexes.push({index : index, name : "ocr", type : "text"})
         const result : BpaServiceObject = {
             data : textOut,
             type : 'text',

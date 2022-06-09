@@ -6,9 +6,9 @@ export class ChangeOutput {
 
     }
 
-    private _getResultsIndex = (input : BpaServiceObject, index : number) : ResultsIndex => {
+    private _getResultsIndex = (input : BpaServiceObject) : ResultsIndex => {
         for(const i of input.resultsIndexes){
-            if(i.index === index){
+            if(i.index === input.serviceSpecificConfig.dataIndex){
                 return i
             }
         }
@@ -19,11 +19,11 @@ export class ChangeOutput {
     
     public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
-        const resultsIndex : ResultsIndex = this._getResultsIndex(input, index)
+        const resultsIndex : ResultsIndex = this._getResultsIndex(input)
         
         return {
             data: input.aggregatedResults[resultsIndex.name],
-            type: input.aggregatedResults[resultsIndex.name].type,
+            type: resultsIndex.type,
             label: "changeOutput",
             projectName: input.projectName,
             bpaId: input.bpaId,

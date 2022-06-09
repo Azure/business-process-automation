@@ -18,7 +18,7 @@ export class HuggingFace {
         const result = await axios.post(`${this._endpoint}/api/analyze`, body)
         const results = input.aggregatedResults
         results["huggingFaceNer"] = result
-        input.resultsIndexes.push({index : index, name : "huggingFaceNer"})
+        input.resultsIndexes.push({index : index, name : "huggingFaceNer", type : "huggingFaceNer"})
         return {
             data : result.data,
             label : "huggingFaceNer",

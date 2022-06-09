@@ -57,7 +57,7 @@ export class Speech {
                     speechRecognizer.stopContinuousRecognitionAsync();
                     const results = input.aggregatedResults
                     results["speechToText"] = out
-                    input.resultsIndexes.push({index : index, name : "speechToText"})
+                    input.resultsIndexes.push({index : index, name : "speechToText", type : "text"})
                     resolve( {
                         data : out,
                         label : "speechToText",
