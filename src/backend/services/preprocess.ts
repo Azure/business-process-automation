@@ -9,7 +9,7 @@ export class Preprocess {
         this._endpoint = endpoint
     }
 
-    public process = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+    public process = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         const body = {
             text : input.data
         }
@@ -17,13 +17,15 @@ export class Preprocess {
         const result = await axios.post(`${this._endpoint}/api/preprocess`, body)
         const results = input.aggregatedResults
         results["preprocess"] = result
+        input.resultsIndexes.push({index : index, name : "preprocess"})
         return {
             data : result.data,
             label : "preprocess",
             bpaId : input.bpaId,
             projectName : input.projectName,
             type : "preprocess",
-            aggregatedResults : results
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
         }
     }
 

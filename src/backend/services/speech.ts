@@ -12,7 +12,7 @@ export class Speech {
         
     }
 
-    public process = (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+    public process = (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
         return new Promise<BpaServiceObject>((resolve, reject)=> {
             try{
@@ -57,13 +57,15 @@ export class Speech {
                     speechRecognizer.stopContinuousRecognitionAsync();
                     const results = input.aggregatedResults
                     results["speechToText"] = out
+                    input.resultsIndexes.push({index : index, name : "speechToText"})
                     resolve( {
                         data : out,
                         label : "speechToText",
                         bpaId : input.bpaId,
                         type : 'text',
                         projectName : input.projectName,
-                        aggregatedResults : results
+                        aggregatedResults : results,
+                        resultsIndexes : input.resultsIndexes
                     })
                 };
 

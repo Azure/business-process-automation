@@ -2,7 +2,7 @@ export interface BpaService {
     bpaServiceId: string
     inputTypes: string[]
     outputTypes: string[]
-    process: (BpaServiceObject) => Promise<BpaServiceObject>
+    process: (BpaServiceObject, number) => Promise<BpaServiceObject>
     name: string
     serviceSpecificConfig: any
     serviceSpecificConfigDefaults: any
@@ -17,6 +17,11 @@ export interface BpaConfiguration {
     stages: BpaStage[]
 }
 
+export interface ResultsIndex {
+    name : string,
+    index : number
+}
+
 export interface BpaServiceObject {
     data : any,
     type : string,
@@ -24,5 +29,6 @@ export interface BpaServiceObject {
     projectName : string,
     bpaId : string
     aggregatedResults : any
+    resultsIndexes : ResultsIndex[]
     serviceSpecificConfig ?: any
 }

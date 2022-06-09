@@ -48,7 +48,7 @@ export class Test {
         ]
     }
 
-    public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+    public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
         //const output = []
         let requestObject : BpaServiceObject = _.cloneDeep(input)
         for (const testService of this._services) {
@@ -62,7 +62,7 @@ export class Test {
             //output.push(result)
         }
 
-        const ocrResult : BpaServiceObject = await ocr.process(input)
+        const ocrResult : BpaServiceObject = await ocr.process(input, index)
         requestObject.data = ocrResult.data
         for (const testService of this._textServices) {
             let result = "success"

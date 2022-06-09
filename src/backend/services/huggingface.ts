@@ -9,7 +9,7 @@ export class HuggingFace {
         this._endpoint = endpoint
     }
 
-    public process = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+    public process = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         const body = {
             text : input.data,
             modelId : input.serviceSpecificConfig.modelId
@@ -18,13 +18,15 @@ export class HuggingFace {
         const result = await axios.post(`${this._endpoint}/api/analyze`, body)
         const results = input.aggregatedResults
         results["huggingFaceNer"] = result
+        input.resultsIndexes.push({index : index, name : "huggingFaceNer"})
         return {
             data : result.data,
             label : "huggingFaceNer",
             bpaId : input.bpaId,
             projectName : input.projectName,
             type : "huggingFaceNer",
-            aggregatedResults : results
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
         }
     }
 

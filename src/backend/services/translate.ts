@@ -14,7 +14,7 @@ export class Translate {
         this._apikey = apikey
     }
 
-    public translate = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+    public translate = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
 
         const headers = {
@@ -37,13 +37,15 @@ export class Translate {
         const out = await axios.post(url, [{ 'text': input.data }], config)
         const results = input.aggregatedResults
         results["translation"] = out.data
+        input.resultsIndexes.push({index : index, name : "translation"})
         return {
             data: out.data[0].translations[0].text,
             type: "text",
             label: "translation",
             projectName: input.projectName,
             bpaId: input.bpaId,
-            aggregatedResults: results
+            aggregatedResults: results,
+            resultsIndexes : input.resultsIndexes
         }
 
     }
