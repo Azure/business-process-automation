@@ -22,6 +22,20 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
+    "changeOutput": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "any"
+        ],
+        "outputTypes": [
+            "any"
+        ],
+        "image": summarize,
+        "label": "Change Output",
+        "name": "changeOutput",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "automlNer": {
         "bpaServiceId": "abc123",
         "inputTypes": [
