@@ -10,7 +10,7 @@ export default function ChangeDataDialog(props) {
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { to: props.items[selectedDataIndex] }
+        newOption.serviceSpecificConfig = { dataIndex: setSelectedDataIndex }
         newOption.outputTypes = props.items[selectedDataIndex].outputTypes
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
