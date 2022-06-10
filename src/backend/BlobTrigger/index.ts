@@ -32,7 +32,6 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
 
         const engine = new BpaEngine()
         const out = await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
-        delete out.aggregatedResults["buffer"]
         await db.view(out) 
         context.res = {
             status : 200,
