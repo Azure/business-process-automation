@@ -22,6 +22,20 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
+    "copy": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf"
+        ],
+        "outputTypes": [
+            "pdf"
+        ],
+        "image": summarize,
+        "label": "Copy Document",
+        "name": "copy",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "changeOutput": {
         "bpaServiceId": "abc123",
         "inputTypes": [
