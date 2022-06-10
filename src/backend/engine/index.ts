@@ -15,8 +15,8 @@ export class BpaEngine {
             projectName: fileName,
             data: fileBuffer,
             bpaId: "1",
-            aggregatedResults : { "buffer" : fileBuffer },
-            resultsIndexes : [{index : 0, name : "buffer", type : this._getFileType(fileName)}]
+            aggregatedResults : {},
+            resultsIndexes : []
         }
 
         console.log(this._getFileType(fileName))
