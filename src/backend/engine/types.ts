@@ -24,12 +24,12 @@ export interface ResultsIndex {
 }
 
 export interface BpaServiceObject {
-    data : any,
+    data ?: any,
     type : string,
     label : string,
     projectName : string,
     bpaId : string
     aggregatedResults : any
-    resultsIndexes : ResultsIndex[]
+    resultsIndexes ?: ResultsIndex[]
     serviceSpecificConfig ?: any
 }

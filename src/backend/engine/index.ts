@@ -38,6 +38,11 @@ export class BpaEngine {
             }
             stageIndex++;
         }
+
+        delete currentInput.resultsIndexes
+        delete currentInput.data
+        delete currentInput.aggregatedResults.buffer
+
         return currentInput
     }
 
