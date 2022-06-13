@@ -21,6 +21,14 @@ export class Blob {
         return input
     }
 
+    public toTxt = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+        this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
+        const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.projectName}.txt`)
+        const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
+
+        return input
+    }
+
     public getBuffer = async (filename : string) : Promise<Buffer> => {
         const blobClient : BlobClient = this._blobContainerClient.getBlobClient(filename)
         return await blobClient.downloadToBuffer()
