@@ -27,6 +27,19 @@ const documentTranslation = new DocumentTranslation(process.env.BLOB_STORAGE_ACC
 const automlNer = new AutoMlNer(process.env.AUTOML_NER_ENDPOINT, process.env.AUTOML_NER_APIKEY)
 const test = new Test()
 
+const toTxtService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["text"],
+    name: "totxt",
+    process: blob.toTxt,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const copyService : BpaService = {
     bpaServiceId : "abc123",
@@ -464,6 +477,7 @@ export const serviceCatalog = {
     "healthCare" : healthCareService,
     "documentTranslation" : documentTranslationService,
     "automlNer" : automlNerService,
-    "changeOutput" : changeOutputService
+    "changeOutput" : changeOutputService,
+    "totxt" : toTxtService
 }
 

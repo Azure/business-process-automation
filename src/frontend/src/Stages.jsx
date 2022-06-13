@@ -14,6 +14,7 @@ import DocumentTranslationDialog from './DocumentTranslationDialog';
 import SpeechToTextDialog from './SpeechToText';
 import ChangeDataDialog from './ChangeDataDialog';
 import CopyDialog from './CopyDialog';
+import ToTxtDialog from './ToTxtDialog';
 
 import { sc } from './serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
@@ -34,6 +35,7 @@ export default function Stages(props) {
     const [hideHuggingFaceDialog, setHideHuggingFaceDialog] = useState(true)
     const [hideChangeDataDialog, setHideChangeDataDialog] = useState(true)
     const [hideCopyDialog, setHideCopyDialog] = useState(true)
+    const [hideToTxtDialog, setHideToTxtDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
 
@@ -114,6 +116,10 @@ export default function Stages(props) {
             setCurrentOption(_.cloneDeep(event))
             setHideDocumentTranslateDialog(false)
         }
+        else if (event.name === 'totxt') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideToTxtDialog(false)
+        }
         else if (event.name === 'copy') {
             setCurrentOption(_.cloneDeep(event))
             setHideCopyDialog(false)
@@ -182,6 +188,7 @@ export default function Stages(props) {
                 <SpeechToTextDialog hideDialog={hideSttDialog} setHideDialog={setHideSttDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ChangeDataDialog hideDialog={hideChangeDataDialog} setHideDialog={setHideChangeDataDialog} items={stages} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <CopyDialog hideDialog={hideCopyDialog} setHideDialog={setHideCopyDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <CopyDialog hideDialog={hideToTxtDialog} setHideDialog={setHideToTxtDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}
             </>
         )
