@@ -26,7 +26,7 @@ export class AutoMlNer {
         return result
     }
 
-    public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+    public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
         const headers = {
             'Authorization': `Bearer ${this._apikey}`,
             'Content-type': 'application/json'
@@ -47,14 +47,15 @@ export class AutoMlNer {
         const results = input.aggregatedResults
         const modelOutput = this._createOutput(JSON.parse(out.data).Results)
         results["automlNer"] = modelOutput
-
+        input.resultsIndexes.push({index : index, name : "automlNer", type : "automlNer"})
         return {
             data: modelOutput,
             type: "automlNer",
             label: "automlNer",
             projectName: input.projectName,
             bpaId: input.bpaId,
-            aggregatedResults: results
+            aggregatedResults: results,
+            resultsIndexes : input.resultsIndexes
         }
 
     }
