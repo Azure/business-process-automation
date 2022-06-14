@@ -36,20 +36,20 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
     },
-    "copy": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf"
-        ],
-        "outputTypes": [
-            "pdf"
-        ],
-        "image": summarize,
-        "label": "Copy Document",
-        "name": "copy",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
-    },
+    // "copy": {
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf"
+    //     ],
+    //     "outputTypes": [
+    //         "pdf"
+    //     ],
+    //     "image": summarize,
+    //     "label": "Copy Document",
+    //     "name": "copy",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {}
+    // },
     "changeOutput": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -78,20 +78,20 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
     },
-    "test": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf"
-        ],
-        "outputTypes": [
-            "test"
-        ],
-        "image": pdf,
-        "label": "Test Prebuilt Models",
-        "name": "test",
-        "serviceSpecificConfig": { "to":"es"},
-        "serviceSpecificConfigDefaults": {}
-    },
+    // "test": {
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf"
+    //     ],
+    //     "outputTypes": [
+    //         "test"
+    //     ],
+    //     "image": pdf,
+    //     "label": "Test Prebuilt Models",
+    //     "name": "test",
+    //     "serviceSpecificConfig": { "to":"es"},
+    //     "serviceSpecificConfigDefaults": {}
+    // },
     "pdf": {
         "bpaServiceId": "abc123",
         "inputTypes": [
