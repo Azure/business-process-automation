@@ -41,7 +41,7 @@ const toTxtService : BpaService = {
     }
 }
 
-<<<<<<< HEAD
+
 // const copyService : BpaService = {
 //     bpaServiceId : "abc123",
 //     inputTypes: ["pdf"],
@@ -49,25 +49,7 @@ const toTxtService : BpaService = {
 //     name: "copy",
 //     process: blob.conditionalCopy,
 //     serviceSpecificConfig: {
-=======
-const copyService : BpaService = {
-    bpaServiceId : "abc123",
-    inputTypes: ["pdf"],
-    outputTypes: ["pdf"],
-    name: "copy",
-<<<<<<< HEAD
-    process: blob.conditionalCopy,
-=======
-    process: blob.copy,
->>>>>>> a5f5108c087574d4e1eb238b7fb9dbf406f0027b
-    serviceSpecificConfig: {
->>>>>>> upstream/dev
-        
-//     },
-//     serviceSpecificConfigDefaults: {
 
-//     }
-// }
 
 const changeOutputService : BpaService = {
     bpaServiceId : "abc123",
