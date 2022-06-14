@@ -16,9 +16,19 @@ export class AutoMlNer {
         return resultText
     }
 
-    public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+    private _createOutput = (rawOutput) => {
+        const result = []
+        const splitText = rawOutput.split('\n')
+        for(const item of splitText){
+            const itemSplit = item.split(' ')
+            result.push({text : itemSplit[0], classification : itemSplit[1]})
+        }
+        return result
+    }
+
+    public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
         const headers = {
-            'Authorization': `BEARER ${this._apikey}`,
+            'Authorization': `Bearer ${this._apikey}`,
             'Content-type': 'application/json'
         }
 
@@ -35,14 +45,17 @@ export class AutoMlNer {
 
         const out = await axios.post(this._endpoint, body, config)
         const results = input.aggregatedResults
-        results["automlNer"] = out.data
+        const modelOutput = this._createOutput(JSON.parse(out.data).Results)
+        results["automlNer"] = modelOutput
+        input.resultsIndexes.push({index : index, name : "automlNer", type : "automlNer"})
         return {
-            data: out.data,
+            data: modelOutput,
             type: "automlNer",
             label: "automlNer",
             projectName: input.projectName,
             bpaId: input.bpaId,
-            aggregatedResults: results
+            aggregatedResults: results,
+            resultsIndexes : input.resultsIndexes
         }
 
     }
