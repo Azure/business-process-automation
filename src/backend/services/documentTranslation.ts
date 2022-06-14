@@ -16,21 +16,22 @@ export class DocumentTranslation {
         this._docTranslationKey = docTranslationKey
     }
 
-    public process = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+    public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
         const filename = input.projectName.replace("documents/","")
         const targetLanguage = input.serviceSpecificConfig.to
         const sourceLanguage = input.serviceSpecificConfig.from
 
         const translationResult = this.translate(filename, targetLanguage, sourceLanguage)
-
+        input.resultsIndexes.push({index : index, name : "documentTranslation", type : input.type})
         return {
             bpaId : input.bpaId,
             data : input.data,
             label : input.label,
             projectName : input.projectName,
             type : input.type,
-            aggregatedResults : input.aggregatedResults
+            aggregatedResults : input.aggregatedResults,
+            resultsIndexes : input.resultsIndexes
         }
     }
 

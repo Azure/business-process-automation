@@ -15,18 +15,20 @@ export class Ocr {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    public process = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+    public process = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         const readResult : ComputerVisionModels.ReadResult[] = await this.execute(input.data)
         const textOut : string = this.toText(readResult)
         const results = input.aggregatedResults
         results["ocr"] = textOut
+        input.resultsIndexes.push({index : index, name : "ocr", type : "text"})
         const result : BpaServiceObject = {
             data : textOut,
             type : 'text',
             label : 'ocr',
             bpaId : input.bpaId,
             projectName : input.projectName,
-            aggregatedResults : results
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
         }
         return result
     }

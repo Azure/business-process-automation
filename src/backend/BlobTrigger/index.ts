@@ -54,7 +54,8 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
             label : "error",
             projectName : "error",
             bpaId : "error",
-            aggregatedResults : {}
+            aggregatedResults : {},
+            resultsIndexes : null
         })
         context.res = {
             status : 500,

@@ -12,7 +12,7 @@ export class Speech {
         
     }
 
-    public process = (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+    public process = (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
         return new Promise<BpaServiceObject>((resolve, reject)=> {
             try{
@@ -20,7 +20,6 @@ export class Speech {
                 if(input?.serviceSpecificConfig?.to){
                     this._client.speechRecognitionLanguage = input.serviceSpecificConfig.to
                 }
-                
                 let audioConfig = sdk.AudioConfig.fromWavFileInput(input.data);
                 let speechRecognizer = new sdk.SpeechRecognizer(this._client, audioConfig);
             
@@ -58,13 +57,15 @@ export class Speech {
                     speechRecognizer.stopContinuousRecognitionAsync();
                     const results = input.aggregatedResults
                     results["speechToText"] = out
+                    input.resultsIndexes.push({index : index, name : "speechToText", type : "text"})
                     resolve( {
                         data : out,
                         label : "speechToText",
                         bpaId : input.bpaId,
                         type : 'text',
                         projectName : input.projectName,
-                        aggregatedResults : results
+                        aggregatedResults : results,
+                        resultsIndexes : input.resultsIndexes
                     })
                 };
 
