@@ -13,7 +13,7 @@ import HuggingFaceDialog from './HuggingFaceDialog'
 import DocumentTranslationDialog from './DocumentTranslationDialog';
 import SpeechToTextDialog from './SpeechToText';
 import ChangeDataDialog from './ChangeDataDialog';
-import CopyDialog from './CopyDialog';
+//import CopyDialog from './CopyDialog';
 import ToTxtDialog from './ToTxtDialog';
 
 import { sc } from './serviceCatalog'
@@ -34,7 +34,7 @@ export default function Stages(props) {
     const [hideCustomMultiDialog, setHideCustomMultiDialog] = useState(true)
     const [hideHuggingFaceDialog, setHideHuggingFaceDialog] = useState(true)
     const [hideChangeDataDialog, setHideChangeDataDialog] = useState(true)
-    const [hideCopyDialog, setHideCopyDialog] = useState(true)
+    //const [hideCopyDialog, setHideCopyDialog] = useState(true)
     const [hideToTxtDialog, setHideToTxtDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
