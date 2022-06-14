@@ -8,11 +8,10 @@ export default function CopyDialog(props) {
     const [regexString, setRegexString] = useState("")
     const [key, setKey] = useState("")
 
-
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { containerName : container, key : key, regexString : regexString }   
+        newOption.serviceSpecificConfig = { containerName : container, key : key, regexString : regexString }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }

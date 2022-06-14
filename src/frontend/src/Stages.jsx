@@ -117,18 +117,6 @@ export default function Stages(props) {
         } else if (event.name === 'totxt') {
             setCurrentOption(_.cloneDeep(event))
             setHideToTxtDialog(false)
-        } else if (event.name === 'copy') {
-            setCurrentOption(_.cloneDeep(event))
-            setHideCopyDialog(false)
-        } else if (event.name === 'changeOutput') {
-            setCurrentOption(_.cloneDeep(event))
-            setHideChangeDataDialog(false)
-        }  else if (event.name === 'stt') {
-            setCurrentOption(_.cloneDeep(event))
-            setHideToTxtDialog(false)
-        } else if (event.name === 'copy') {
-            setCurrentOption(_.cloneDeep(event))
-            setHideCopyDialog(false)
         } else if (event.name === 'changeOutput') {
             setCurrentOption(_.cloneDeep(event))
             setHideChangeDataDialog(false)
@@ -190,7 +178,6 @@ export default function Stages(props) {
                 <HuggingFaceDialog hideDialog={hideHuggingFaceDialog} setHideDialog={setHideHuggingFaceDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <SpeechToTextDialog hideDialog={hideSttDialog} setHideDialog={setHideSttDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ChangeDataDialog hideDialog={hideChangeDataDialog} setHideDialog={setHideChangeDataDialog} items={stages} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
-                <CopyDialog hideDialog={hideCopyDialog} setHideDialog={setHideCopyDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ToTxtDialog hideDialog={hideToTxtDialog} setHideDialog={setHideToTxtDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}
             </>
