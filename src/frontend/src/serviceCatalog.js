@@ -23,51 +23,6 @@ import wav from './images/wav.svg'
 
 export const sc = {
     "totxt": {
-<<<<<<< HEAD
-=======
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "text"
-        ],
-        "image": summarize,
-        "label": "Convert To TXT File",
-        "name": "totxt",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
-    },
-    "copy": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf"
-        ],
-        "outputTypes": [
-            "pdf"
-        ],
-        "image": summarize,
-        "label": "Copy Document",
-        "name": "copy",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
-    },
-    "changeOutput": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "any"
-        ],
-        "outputTypes": [
-            "any"
-        ],
-        "image": summarize,
-        "label": "Change Output",
-        "name": "changeOutput",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
-    },
-    "automlNer": {
->>>>>>> a5f5108c087574d4e1eb238b7fb9dbf406f0027b
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
