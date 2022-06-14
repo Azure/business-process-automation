@@ -125,6 +125,15 @@ export default function Stages(props) {
             setHideChangeDataDialog(false)
         }  else if (event.name === 'stt') {
             setCurrentOption(_.cloneDeep(event))
+            setHideToTxtDialog(false)
+        } else if (event.name === 'copy') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideCopyDialog(false)
+        } else if (event.name === 'changeOutput') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideChangeDataDialog(false)
+        }  else if (event.name === 'stt') {
+            setCurrentOption(_.cloneDeep(event))
             setHideSttDialog(false)
         } else if (event.name === 'huggingFaceNER') {
             setCurrentOption(_.cloneDeep(event))
