@@ -46,7 +46,7 @@ const copyService : BpaService = {
     inputTypes: ["pdf"],
     outputTypes: ["pdf"],
     name: "copy",
-    process: blob.copy,
+    process: blob.conditionalCopy,
     serviceSpecificConfig: {
         
     },
