@@ -21,6 +21,22 @@ export class Blob {
         return input
     }
 
+<<<<<<< HEAD
+    public conditionalCopy = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
+        const key : string = input.serviceSpecificConfig["key"]
+        const value : RegExp  = new RegExp(input.serviceSpecificConfig["regexString"])
+
+        if(input.aggregatedResults[key].match(value)){
+            this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
+            const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.projectName)
+            const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
+        }
+
+        return input
+    }
+
+=======
+>>>>>>> a5f5108c087574d4e1eb238b7fb9dbf406f0027b
     public toTxt = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
         const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.projectName}.txt`)

@@ -111,10 +111,21 @@ export default function Stages(props) {
         if (event.name === 'translate') {
             setCurrentOption(_.cloneDeep(event))
             setHideTranslateDialog(false)
-        }
-        else if (event.name === 'documentTranslation') {
+        } else if (event.name === 'documentTranslation') {
             setCurrentOption(_.cloneDeep(event))
             setHideDocumentTranslateDialog(false)
+<<<<<<< HEAD
+        } else if (event.name === 'totxt') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideToTxtDialog(false)
+        } else if (event.name === 'copy') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideCopyDialog(false)
+        } else if (event.name === 'changeOutput') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideChangeDataDialog(false)
+        }  else if (event.name === 'stt') {
+=======
         }
         else if (event.name === 'totxt') {
             setCurrentOption(_.cloneDeep(event))
@@ -129,10 +140,10 @@ export default function Stages(props) {
             setHideChangeDataDialog(false)
         }
         else if (event.name === 'stt') {
+>>>>>>> a5f5108c087574d4e1eb238b7fb9dbf406f0027b
             setCurrentOption(_.cloneDeep(event))
             setHideSttDialog(false)
-        }
-        else if (event.name === 'huggingFaceNER') {
+        } else if (event.name === 'huggingFaceNER') {
             setCurrentOption(_.cloneDeep(event))
             setHideHuggingFaceDialog(false)
         } else if (event.name === 'customFormRec') {
