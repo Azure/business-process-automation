@@ -14,6 +14,7 @@ export class Speech {
 
     public process = (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
+        console.log("kicking off stt .......")
         return new Promise<BpaServiceObject>((resolve, reject)=> {
             try{
 
@@ -49,7 +50,7 @@ export class Speech {
                     }
 
 
-                    //speechRecognizer.stopContinuousRecognitionAsync();
+                    speechRecognizer.stopContinuousRecognitionAsync();
                 };
                 
                 speechRecognizer.sessionStopped = (s, e) => {
