@@ -50,7 +50,7 @@ export class Speech {
                     }
 
 
-                    speechRecognizer.stopContinuousRecognitionAsync();
+                    //speechRecognizer.stopContinuousRecognitionAsync();
                 };
                 
                 speechRecognizer.sessionStopped = (s, e) => {
