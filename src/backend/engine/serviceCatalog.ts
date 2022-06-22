@@ -12,6 +12,7 @@ import { DocumentTranslation } from "../services/documentTranslation"
 import { AutoMlNer } from "../services/automlner"
 import { ChangeOutput } from "../services/changeOutput"
 import { Blob } from "../services/blob"
+import { ContentModerator } from "../services/contentModerator"
 
 const changeOutput = new ChangeOutput()
 const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -26,6 +27,21 @@ const preprocess = new Preprocess(process.env.HUGGINGFACE_ENDPOINT)
 const documentTranslation = new DocumentTranslation(process.env.BLOB_STORAGE_ACCOUNT_NAME, process.env.BLOB_STORAGE_ACCOUNT_KEY, process.env.DOCUMENT_TRANSLATION_ENDPOINT, process.env.DOCUMENT_TRANSLATION_KEY)
 const automlNer = new AutoMlNer(process.env.AUTOML_NER_ENDPOINT, process.env.AUTOML_NER_APIKEY)
 const test = new Test()
+const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDPOINT,process.env.CONTENT_MODERATOR_KEY)
+
+const contentModeratorService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["contentModeratorText"],
+    name: "contentModeratorText",
+    process: contentModerator.text,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const toTxtService : BpaService = {
     bpaServiceId : "abc123",
@@ -474,6 +490,7 @@ export const serviceCatalog = {
     "documentTranslation" : documentTranslationService,
     "automlNer" : automlNerService,
     "changeOutput" : changeOutputService,
-    "totxt" : toTxtService
+    "totxt" : toTxtService,
+    "contentModeratorText" : contentModeratorService 
 }
 

@@ -22,6 +22,20 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
+    "contentModeratorText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "contentModeratorText"
+        ],
+        "image": storage,
+        "label": "Content Moderator (Text)",
+        "name": "contentModeratorText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "totxt": {
         "bpaServiceId": "abc123",
         "inputTypes": [
