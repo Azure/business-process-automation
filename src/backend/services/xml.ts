@@ -1,11 +1,11 @@
 import { BpaServiceObject, ResultsIndex } from "../engine/types";
-import xml2Json from "xml2js"
+import * as xml2json from "xml2js"
 
 export class Xml {
     
     public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
-        const out = await xml2Json.parseStringPromise(input.data)
+        const out = await xml2json.parseStringPromise(input.data)
         
         const results = input.aggregatedResults
         results["xml2Json"] = out
