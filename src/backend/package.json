@@ -23,7 +23,8 @@
     "lodash": "^4.17.21",
     "microsoft-cognitiveservices-speech-sdk": "^1.20.0",
     "pdf-lib": "^1.17.1",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@azure/functions": "^3.0.0",

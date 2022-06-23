@@ -22,6 +22,20 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
+    "xmlToJson": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "xml"
+        ],
+        "outputTypes": [
+            "xmlToJson"
+        ],
+        "image": invoice,
+        "label": "Convert XML To JSON",
+        "name": "xmlToJson",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "contentModeratorText": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -106,6 +120,34 @@ export const sc = {
     //     "serviceSpecificConfig": { "to":"es"},
     //     "serviceSpecificConfigDefaults": {}
     // },
+    "images": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "tiff, gif, jpg, jpeg"
+        ],
+        "image": layoutLogo,
+        "label": "Image Document",
+        "name": "image",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
+    "xml": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "xml"
+        ],
+        "image": generaldoc,
+        "label": "XML Document",
+        "name": "xml",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "pdf": {
         "bpaServiceId": "abc123",
         "inputTypes": [

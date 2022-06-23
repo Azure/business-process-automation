@@ -12,24 +12,32 @@ export class ContentModerator {
     }
 
     public text = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
-        const headers = {
-            'Ocp-Apim-Subscription-Key': this._apikey,
-            'Content-type': 'text/plain'
-        }
 
-        const config: AxiosRequestConfig = {
-            headers: headers
+        const dividedText = this._divideText(input.data)
+        const result = []
+        for(const t of dividedText){
+            const language = await this._detectLanguage(t)
+            const headers = {
+                'Ocp-Apim-Subscription-Key': this._apikey,
+                'Content-type': 'text/plain'
+            }
+    
+            const config: AxiosRequestConfig = {
+                headers: headers
+            }
+            let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/Screen?language=${language["DetectedLanguage"]}`
+            
+            //console.log(url)
+    
+            const out = await axios.post(url, t, config)
+            result.push(out.data)
         }
-        let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/Screen`
         
-        console.log(url)
-
-        const out = await axios.post(url, input.data, config)
         const results = input.aggregatedResults
-        results["contentModeratorText"] = out.data
+        results["contentModeratorText"] = result
         input.resultsIndexes.push({index : index, name : "contentModeratorText", type : "contentModeratorText"})
         return {
-            data: out.data,
+            data: result,
             type: "contentModeratorText",
             label: "contentModeratorText",
             projectName: input.projectName,
@@ -38,5 +46,34 @@ export class ContentModerator {
             resultsIndexes : input.resultsIndexes
         }
 
+    }
+
+    private _divideText = (text : string) : string[] => {
+        const out : string[] = []
+        do {
+            const tempText = text.substring(0,1023)
+            const tempSplit = tempText.split(' ')
+            const offset = tempSplit[tempSplit.length-1].length
+            out.push(text.substring(0,1023 - offset - 1))
+            text = text.substring(1023 - offset)
+        } while(text.length > 0)
+        return out
+    }
+
+    private _detectLanguage = async (text : string) : Promise<string> => {
+        const headers = {
+            'Ocp-Apim-Subscription-Key': this._apikey,
+            'Content-type': 'text/plain'
+        }
+
+        const config: AxiosRequestConfig = {
+            headers: headers
+        }
+        let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/DetectLanguage`
+        
+        //console.log(url)
+
+        const out = await axios.post(url, text, config)
+        return out.data
     }
 }
