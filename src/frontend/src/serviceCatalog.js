@@ -140,7 +140,7 @@ export const sc = {
             "start"
         ],
         "outputTypes": [
-            "tiff, gif, jpg, jpeg"
+            "tiff","gif","jpg","jpeg"
         ],
         "image": layoutLogo,
         "label": "Image Document",
