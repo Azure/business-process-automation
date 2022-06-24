@@ -194,7 +194,7 @@ export const sc = {
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
-            "jpg"
+            "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "text"
@@ -224,7 +224,7 @@ export const sc = {
     "layout": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "layout"
@@ -295,7 +295,7 @@ export const sc = {
     "generalDocument": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "generalDocument"
@@ -309,7 +309,7 @@ export const sc = {
     "prebuiltInvoice": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltInvoice"
@@ -323,7 +323,7 @@ export const sc = {
     "prebuiltBusinessCard": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltBusinessCard"
@@ -337,7 +337,7 @@ export const sc = {
     "prebuiltIdentity": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltIdentity"
@@ -351,7 +351,7 @@ export const sc = {
     "prebuiltReceipt": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltReceipt"
@@ -365,7 +365,7 @@ export const sc = {
     "prebuiltTaxW2": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltTaxW2"
@@ -379,7 +379,7 @@ export const sc = {
     "customFormRec": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "customFormRec"

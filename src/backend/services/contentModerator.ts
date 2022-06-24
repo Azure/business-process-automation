@@ -27,8 +27,6 @@ export class ContentModerator {
             }
             let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/Screen?language=${language["DetectedLanguage"]}`
 
-            //console.log(url)
-
             const out = await axios.post(url, t, config)
             result.push(out.data)
         }
@@ -61,8 +59,6 @@ export class ContentModerator {
             headers: headers
         }
         let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessImage/Evaluate`
-
-        //console.log(url)
 
         const result = await axios.post(url, input.data, config)
         const results = input.aggregatedResults
@@ -108,8 +104,6 @@ export class ContentModerator {
             headers: headers
         }
         let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/DetectLanguage`
-
-        //console.log(url)
 
         const out = await axios.post(url, text, config)
         return out.data
