@@ -4,7 +4,7 @@ import { Text, Checkbox } from '@fluentui/react-northstar';
 import axios from 'axios'
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "WAV","JPEG","TIFF","XML"];
+    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV","JPEG","TIFF","XML"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
@@ -28,7 +28,6 @@ function Upload(props) {
     },[rerender])
 
     const onCogSearchClick = async (event) => {
-        //setIsCogSearch(!isCogSearch)
         try {
             await axios.post('/api/config', { createSkill: !isCogSearch , id : "2" })
         } catch (err) {
@@ -43,7 +42,6 @@ function Upload(props) {
                 console.log(`image : ${file}`)
                 setImage(file.name);
                 console.log(image, show, showFail)
-                // setCreateObjectURL(URL.createObjectURL(i));
                 const body = new FormData();
                 body.append("file", file);
                 console.log("sending...")

@@ -31,7 +31,21 @@ const test = new Test()
 const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDPOINT,process.env.CONTENT_MODERATOR_KEY)
 const xml = new Xml()
 
-const contentModeratorService : BpaService = {
+const contentModeratorImageService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: [ "bmp","jpg","tiff","gif"],
+    outputTypes: ["contentModeratorImage"],
+    name: "contentModeratorImage",
+    process: contentModerator.image,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const contentModeratorTextService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["text"],
     outputTypes: ["contentModeratorText"],
@@ -507,7 +521,8 @@ export const serviceCatalog = {
     "automlNer" : automlNerService,
     "changeOutput" : changeOutputService,
     "totxt" : toTxtService,
-    "contentModeratorText" : contentModeratorService,
+    "contentModeratorText" : contentModeratorTextService,
+    "contentModeratorImage" : contentModeratorImageService,
     "xmlToJson" : xmlToJsonService
 }
 

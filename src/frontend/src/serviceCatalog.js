@@ -36,6 +36,20 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {}
     },
+    "contentModeratorImage": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "bmp","jpg","tiff","gif"
+        ],
+        "outputTypes": [
+            "contentModeratorImage"
+        ],
+        "image": storage,
+        "label": "Content Moderator (Image)",
+        "name": "contentModeratorImage",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "contentModeratorText": {
         "bpaServiceId": "abc123",
         "inputTypes": [
