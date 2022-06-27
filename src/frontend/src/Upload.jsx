@@ -4,7 +4,7 @@ import { Text, Checkbox } from '@fluentui/react-northstar';
 import axios from 'axios'
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV","JPEG","TIFF","XML"];
+    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG","TIFF","XML"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
