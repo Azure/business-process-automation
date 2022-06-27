@@ -50,7 +50,7 @@ export default function SelectPipeline(props) {
     }
 
     const renderPipelines = () => {
-        if (pipelines && pipelines !== '') {
+        if (pipelines && pipelines.length > 0) {
             return (
                 pipelines.map(p=><div onClick={()=>onPipelineSelect(p.name)} value={p.name} style={{marginBottom : "20px", color : "blue"}}>{p.name}</div>)
             )
