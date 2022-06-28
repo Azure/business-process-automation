@@ -37,7 +37,6 @@ export default function Stages(props) {
         <div style={{ paddingTop: "50px" }}>
             <Text weight="semibold" content="Pipelines" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
             {renderPipelines()}
-            hello
 
         </div>
     )
