@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Button, TextArea } from '@fluentui/react-northstar';
+import { Text, Button, Input } from '@fluentui/react-northstar';
 import Stages from './Stages'
 
 export default function SelectPipeline(props) {
@@ -13,7 +13,7 @@ export default function SelectPipeline(props) {
         try {
             axios.get('/api/config?id=pipelines').then(ret => {
                 if (ret.data === '') {
-                    setPipelines("None")
+                    setPipelines([])
                 } else {
                     setPipelines(ret.data.pipelines)
                 }
@@ -71,7 +71,7 @@ export default function SelectPipeline(props) {
                 <Text weight="semibold" content="Create New Pipeline" style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
                 <div style={{ paddingBottom: "50px" }}>
                     <Text content="Enter New Pipeline Name" style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
-                    <TextArea style={{ height: "30px" }} value={newPipelineName} onChange={onPipelineNameChange} />
+                    <Input style={{ height: "30px" }} value={newPipelineName} onChange={onPipelineNameChange} />
                 </div>
     
                 <Button content="Create New Pipeline" primary onClick={onCreatePipeline} />
