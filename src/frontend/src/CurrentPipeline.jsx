@@ -7,7 +7,6 @@ import { Text } from '@fluentui/react-northstar';
 export default function Stages(props) {
 
     const [pipelines, setPipelines] = useState([])
-    const [stages, setStages] = useState([])
 
     useEffect(() => {
         try {
