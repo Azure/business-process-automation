@@ -8,6 +8,7 @@ export default function SelectPipeline(props) {
     const [pipelines, setPipelines] = useState(null)
     const [newPipelineName, setNewPipelineName] = useState("")
     const [selectedPipeline, setSelectedPipeline] = useState(null)
+    //const [forceUpdate, setForceUpdate] = useState(0)
 
     useEffect(() => {
         try {
@@ -37,6 +38,7 @@ export default function SelectPipeline(props) {
             currentPipelines.data.pipelines.push({ stages: [], name: newPipelineName })
             await axios.post('/api/config', currentPipelines.data)
         }
+        setSelectedPipeline({ stages: [], name: newPipelineName })
     }
 
     const onPipelineSelect = (pn) => {
@@ -58,7 +60,7 @@ export default function SelectPipeline(props) {
     }
 
     if(selectedPipeline){
-        return(<Stages onSelectContent={props.onSelectContent} selectedPipelineName={selectedPipeline.name}/>)
+        return(<Stages onSelectContent={props.onSelectContent} selectedPipelineName={selectedPipeline.name} />)
     } else {
         return (
             <div style={{ paddingTop: "50px" }}>

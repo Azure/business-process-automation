@@ -27,8 +27,8 @@ export default function PipelinePreview(props) {
         )
     } else {
         return (<>
-            <div style={{ paddingTop: "20px", paddingLeft: "0px" }}>
-                <Text content="No configuration found" style={{ display: "block", width: "100%", marginBottom: "20px" }} />
+            <div  style={{ display: "flex", padding: "30px", flexWrap: "wrap", justifyContent: "center"}}>
+                <Text content="No configuration found"  />
                 </div>
         </>)
     }
