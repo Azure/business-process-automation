@@ -33,7 +33,7 @@ export default function SelectPipeline(props) {
         console.log(newPipelineName)
         const currentPipelines = await axios.get('/api/config?id=pipelines')
         if (currentPipelines.data === '') {
-            await axios.post('/api/config', { pipelines: [{ stages: [], name: newPipelineName }], id: "pipelines" })
+            await axios.post('/api/config', { pipelines: [{ stages: [], name: newPipelineName }], id: pipelinesLabel })
         } else {
             currentPipelines.data.pipelines.push({ stages: [], name: newPipelineName })
             await axios.post('/api/config', currentPipelines.data)
