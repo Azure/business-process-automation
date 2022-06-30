@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import Stages from './Stages'
+//import Stages from './Stages'
 import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
@@ -8,6 +8,7 @@ import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import ViewInsights from './ViewInsights';
 import axios from 'axios';
+import SelectPipeline from './SelectPipeline';
 
 
 export default function Content(props) {
@@ -67,7 +68,7 @@ export default function Content(props) {
             case 'CURRENT_PIPELINE':
                 return (<CurrentPipeline theme={props.theme} />)
             case 'CONFIGURE_PIPELINE':
-                return (<Stages theme={props.theme} onSelectContent={onSelectContent} />)
+                return (<SelectPipeline theme={props.theme} onSelectContent={onSelectContent} />)
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
             case 'VIEW_INSIGHTS':

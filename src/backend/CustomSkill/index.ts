@@ -1,7 +1,7 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { CosmosDB } from "../services/cosmosdb";
 import { Blob } from "../services/blob"
-import { BpaConfiguration } from "../engine/types";
+import { BpaConfiguration, BpaPipelines } from "../engine/types";
 import { BpaEngine } from "../engine"
 import { serviceCatalog } from "../engine/serviceCatalog"
 const _ = require('lodash')
@@ -9,6 +9,7 @@ const _ = require('lodash')
 
 const processSkill = async(context, value) : Promise<any> => {
     try{
+        const directoryName = "hello2"
         const recordId = value.recordId
         const filename = value.data.filename
         console.log(filename)
@@ -18,19 +19,24 @@ const processSkill = async(context, value) : Promise<any> => {
         const fileBuffer : Buffer = await blob.getBuffer(filename)
         
     
-        const config = await db.getConfig()
-        context.log(JSON.stringify(config.stages))
+        const config : BpaPipelines = await db.getConfig()
         const bpaConfig: BpaConfiguration = {
-            stages: []
+            stages: [],
+            name : ""
         }
-    
-        for (const stage of config.stages) {
-            for(const sc of Object.keys(serviceCatalog)){
-                if(stage.name === serviceCatalog[sc].name){
-                    context.log(`found ${stage.name}`)
-                    const newStage = _.cloneDeep(serviceCatalog[sc])
-                    newStage.serviceSpecificConfig = stage.serviceSpecificConfig
-                    bpaConfig.stages.push({ service : newStage })
+
+        for(const pipeline of config.pipelines){
+            if(pipeline.name === directoryName){
+                for (const stage of pipeline.stages) {
+                    for(const sc of Object.keys(serviceCatalog)){
+                        if(stage.name === serviceCatalog[sc].name){
+                            context.log(`found ${stage.name}`)
+                            const newStage = _.cloneDeep(serviceCatalog[sc])
+                            newStage.serviceSpecificConfig = stage.serviceSpecificConfig
+                            bpaConfig.stages.push({ service : newStage })
+                            bpaConfig.name = pipeline.name
+                        }
+                    }
                 }
             }
         }

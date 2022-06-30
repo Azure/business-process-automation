@@ -18,7 +18,7 @@ export class DocumentTranslation {
 
     public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
-        const filename = input.projectName.replace("documents/","")
+        const filename = input.filename.replace("documents/","")
         const targetLanguage = input.serviceSpecificConfig.to
         const sourceLanguage = input.serviceSpecificConfig.from
 
@@ -28,7 +28,8 @@ export class DocumentTranslation {
             bpaId : input.bpaId,
             data : input.data,
             label : input.label,
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             type : input.type,
             aggregatedResults : input.aggregatedResults,
             resultsIndexes : input.resultsIndexes

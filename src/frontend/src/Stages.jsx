@@ -52,7 +52,14 @@ export default function Stages(props) {
 
     const onDone = async () => {
         try {
-            await axios.post('/api/config', { stages: stages.slice(1, stages.length), id: "1" })
+            const currentPipelines = await axios.get('api/config?id=pipelines')
+            for(const p of currentPipelines.data.pipelines){
+                if(p.name === props.selectedPipelineName){
+                    p.stages = stages.slice(1, stages.length)
+                    break;
+                }
+            }
+            await axios.post('/api/config', currentPipelines.data)
         } catch (err) {
             console.log(err)
         }

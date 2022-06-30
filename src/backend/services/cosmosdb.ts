@@ -1,5 +1,5 @@
 import { CosmosClient, Item } from "@azure/cosmos"
-import { BpaServiceObject } from "../engine/types"
+import { BpaPipelines, BpaServiceObject } from "../engine/types"
 
 export class CosmosDB {
 
@@ -33,12 +33,12 @@ export class CosmosDB {
         return input
     }
     
-    public getConfig = async () : Promise<any> => {
+    public getConfig = async () : Promise<BpaPipelines> => {
         try{
             const client = new CosmosClient(this._connectionString);
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
-            const item = await container.item("1").read()
+            const item = await container.item("pipelines").read()
             return item.resource
         } catch(err){
             console.log(err)
