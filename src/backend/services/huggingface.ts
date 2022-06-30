@@ -23,7 +23,8 @@ export class HuggingFace {
             data : result.data,
             label : "huggingFaceNer",
             bpaId : input.bpaId,
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             type : "huggingFaceNer",
             aggregatedResults : results,
             resultsIndexes : input.resultsIndexes

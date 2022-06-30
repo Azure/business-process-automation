@@ -58,7 +58,8 @@ export class LanguageStudio {
             type: type,
             label: label,
             bpaId: input.bpaId,
-            projectName: input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             aggregatedResults : results,
             resultsIndexes : input.resultsIndexes
         }
@@ -126,7 +127,8 @@ export class LanguageStudio {
         return {
             data : out,
             type : "text",
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId : input.bpaId,
             label : "extractSummary",
             aggregatedResults : results,
