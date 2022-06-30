@@ -52,7 +52,8 @@ export class AutoMlNer {
             data: modelOutput,
             type: "automlNer",
             label: "automlNer",
-            projectName: input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
             resultsIndexes : input.resultsIndexes

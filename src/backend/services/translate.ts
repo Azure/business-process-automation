@@ -42,7 +42,8 @@ export class Translate {
             data: out.data[0].translations[0].text,
             type: "text",
             label: "translation",
-            projectName: input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
             resultsIndexes : input.resultsIndexes

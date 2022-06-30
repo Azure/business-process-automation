@@ -1,7 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions"
 import { BpaEngine } from "../engine"
 import { serviceCatalog } from "../engine/serviceCatalog"
-import { BpaConfiguration } from "../engine/types"
+import { BpaConfiguration, BpaPipelines } from "../engine/types"
 import { CogSearch } from "../services/cogsearch"
 import { CosmosDB } from "../services/cosmosdb"
 const _ = require('lodash')
@@ -12,23 +12,33 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
     const cogSearch = new CogSearch(process.env.COGSEARCH_URL, process.env.COGSEARCH_APIKEY, `${process.env.BLOB_STORAGE_ACCOUNT_NAME}`)
     try {
         context.log(`Name of source doc : ${context.bindingData.blobTrigger}`)
-        
-        const config = await db.getConfig()
-        context.log(JSON.stringify(config.stages))
+        const directoryName = context.bindingData.blobTrigger.split('/')[1]
+        const config : BpaPipelines = await db.getConfig()
         const bpaConfig: BpaConfiguration = {
-            stages: []
+            stages: [],
+            name : ""
         }
 
-        for (const stage of config.stages) {
-            for(const sc of Object.keys(serviceCatalog)){
-                if(stage.name === serviceCatalog[sc].name){
-                    context.log(`found ${stage.name}`)
-                    const newStage = _.cloneDeep(serviceCatalog[sc])
-                    newStage.serviceSpecificConfig = stage.serviceSpecificConfig
-                    bpaConfig.stages.push({ service : newStage })
+        for(const pipeline of config.pipelines){
+            if(pipeline.name === directoryName){
+                for (const stage of pipeline.stages) {
+                    for(const sc of Object.keys(serviceCatalog)){
+                        if(stage.name === serviceCatalog[sc].name){
+                            context.log(`found ${stage.name}`)
+                            const newStage = _.cloneDeep(serviceCatalog[sc])
+                            newStage.serviceSpecificConfig = stage.serviceSpecificConfig
+                            bpaConfig.stages.push({ service : newStage })
+                            bpaConfig.name = pipeline.name
+                        }
+                    }
                 }
             }
         }
+
+        if(bpaConfig.stages.length === 0) {
+            throw new Error("No Pipeline Found")
+        }
+        
 
         const engine = new BpaEngine()
         const out = await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
@@ -52,7 +62,8 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
             data : err.message,
             type : "error",
             label : "error",
-            projectName : "error",
+            filename : context.bindingData.blobTrigger,
+            pipeline : "error",
             bpaId : "error",
             aggregatedResults : {},
             resultsIndexes : null
