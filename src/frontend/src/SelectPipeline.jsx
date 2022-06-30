@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { Text, Button, Input, Skeleton } from '@fluentui/react-northstar';
 import Stages from './Stages'
 
+const pipelinesLabel = "pipelines"
+
 export default function SelectPipeline(props) {
 
     const [pipelines, setPipelines] = useState(null)

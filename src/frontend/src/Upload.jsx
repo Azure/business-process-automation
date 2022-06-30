@@ -28,7 +28,7 @@ function Upload(props) {
                 }
             })
 
-            axios.get(`/api/config?id=${pipelines}`).then(value => {
+            axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
                 if (value?.data?.pipelines) {
                     const names = []
                     for(const p of value.data.pipelines){
