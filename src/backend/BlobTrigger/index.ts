@@ -62,7 +62,8 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
             data : err.message,
             type : "error",
             label : "error",
-            projectName : "error",
+            filename : context.bindingData.blobTrigger,
+            pipeline : "error",
             bpaId : "error",
             aggregatedResults : {},
             resultsIndexes : null

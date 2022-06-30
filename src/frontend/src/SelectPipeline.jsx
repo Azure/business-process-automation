@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Button, Input } from '@fluentui/react-northstar';
+import { Text, Button, Input, Skeleton } from '@fluentui/react-northstar';
 import Stages from './Stages'
 
 export default function SelectPipeline(props) {
@@ -42,9 +42,9 @@ export default function SelectPipeline(props) {
     }
 
     const onPipelineSelect = (pn) => {
-        if(pipelines){
-            for(const p of pipelines){
-                if(p.name === pn){
+        if (pipelines) {
+            for (const p of pipelines) {
+                if (p.name === pn) {
                     setSelectedPipeline(p)
                 }
             }
@@ -54,13 +54,23 @@ export default function SelectPipeline(props) {
     const renderPipelines = () => {
         if (pipelines && pipelines.length > 0) {
             return (
-                pipelines.map(p=><div onClick={()=>onPipelineSelect(p.name)} value={p.name} style={{marginBottom : "20px", color : "blue"}}>{p.name}</div>)
+                pipelines.map(p => <div onClick={() => onPipelineSelect(p.name)} value={p.name} style={{ marginBottom: "20px", color: "blue" }}>{p.name}</div>)
             )
+        } else {
+            return (
+                <>
+                    <Skeleton>
+                        <Skeleton.Line width="30%" />
+                        <Skeleton.Line width="30%" />
+                        <Skeleton.Line width="30%" />
+                        <Skeleton.Line width="30%" />
+                    </Skeleton>
+                </>)
         }
     }
 
-    if(selectedPipeline){
-        return(<Stages onSelectContent={props.onSelectContent} selectedPipelineName={selectedPipeline.name} />)
+    if (selectedPipeline) {
+        return (<Stages onSelectContent={props.onSelectContent} selectedPipelineName={selectedPipeline.name} />)
     } else {
         return (
             <div style={{ paddingTop: "50px" }}>
@@ -75,11 +85,11 @@ export default function SelectPipeline(props) {
                     <Text content="Enter New Pipeline Name" style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
                     <Input style={{ height: "30px" }} value={newPipelineName} onChange={onPipelineNameChange} />
                 </div>
-    
+
                 <Button content="Create New Pipeline" primary onClick={onCreatePipeline} />
             </div>
         )
     }
-    
+
 
 }

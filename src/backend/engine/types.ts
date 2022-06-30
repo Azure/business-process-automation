@@ -30,9 +30,10 @@ export interface ResultsIndex {
 
 export interface BpaServiceObject {
     data ?: any,
+    filename : string,
+    pipeline : string,
     type : string,
     label : string,
-    projectName : string,
     bpaId : string
     aggregatedResults : any
     resultsIndexes ?: ResultsIndex[]

@@ -38,7 +38,8 @@ export class ContentModerator {
             data: result,
             type: "contentModeratorText",
             label: "contentModeratorText",
-            projectName: input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes
@@ -48,7 +49,7 @@ export class ContentModerator {
 
     public image = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
-        const fileType = this._getFileType(input.projectName)
+        const fileType = this._getFileType(input.filename)
 
         const headers = {
             'Ocp-Apim-Subscription-Key': this._apikey,
@@ -68,7 +69,8 @@ export class ContentModerator {
             data: result.data,
             type: "contentModeratorText",
             label: "contentModeratorText",
-            projectName: input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes
