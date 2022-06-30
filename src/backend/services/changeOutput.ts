@@ -25,7 +25,8 @@ export class ChangeOutput {
             data: input.aggregatedResults[resultsIndex.name],
             type: resultsIndex.type,
             label: "changeOutput",
-            projectName: input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes : input.resultsIndexes

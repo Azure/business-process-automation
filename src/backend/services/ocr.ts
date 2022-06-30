@@ -26,7 +26,8 @@ export class Ocr {
             type : 'text',
             label : 'ocr',
             bpaId : input.bpaId,
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             aggregatedResults : results,
             resultsIndexes : input.resultsIndexes
         }

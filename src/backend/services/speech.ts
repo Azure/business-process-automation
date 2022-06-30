@@ -64,7 +64,8 @@ export class Speech {
                         label : "speechToText",
                         bpaId : input.bpaId,
                         type : 'text',
-                        projectName : input.projectName,
+                        filename: input.filename,
+                        pipeline: input.pipeline,
                         aggregatedResults : results,
                         resultsIndexes : input.resultsIndexes
                     })

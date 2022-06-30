@@ -15,7 +15,8 @@ export class Xml {
             type : 'xml2Json',
             label : 'xml2Json',
             bpaId : input.bpaId,
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             aggregatedResults : results,
             resultsIndexes : input.resultsIndexes
         }
