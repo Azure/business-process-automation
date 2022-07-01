@@ -50,8 +50,18 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
 
      
         const isCreateSkill = await db.getDocSearchCustomSkillConfig()
+        await db.view({
+            data : isCreateSkill,
+            type : "isCreateSkill",
+            label : "error",
+            filename : context.bindingData.blobTrigger,
+            pipeline : "error",
+            bpaId : "error",
+            aggregatedResults : {},
+            resultsIndexes : null
+        })
         if(isCreateSkill?.createSkill){
-            const customSkillUrl = `https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/CustomSkill`
+            //const customSkillUrl = `https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/CustomSkill`
             await cogSearch.generateCustomSearchSkill(out)
         }
 
