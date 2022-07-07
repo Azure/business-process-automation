@@ -50,4 +50,18 @@ export class Translate {
         }
 
     }
+
+    public getPricing = (numDocuments : number) : number => {
+        const million = 1000000
+        if(numDocuments < million){
+            return (numDocuments * 10)/100
+        } else if (numDocuments > million && numDocuments < (10*million)){
+            return 2000.0
+        }else if (numDocuments > (10*million) && numDocuments < (100*million)){
+            return 6000.0
+        }else if (numDocuments > (100*million) ){
+            return 45000.0
+        }
+        throw new Error("error in ContentModerator getPricing")
+    }
 }

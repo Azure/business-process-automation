@@ -259,5 +259,19 @@ export class CogSearch {
         return indexSchema
     }
 
+    public getPricing = (numDocuments : number) : number => {
+        const million = 1000000
+        if(numDocuments < million){
+            return 500
+        } else if (numDocuments > million && numDocuments < (10*million)){
+            return 5000
+        }else if (numDocuments > (10*million) && numDocuments < (100*million)){
+            return 10000
+        }else if (numDocuments > (100*million) ){
+            return 25000
+        }
+        throw new Error("error in ContentModerator getPricing")
+    }
+
 
 }

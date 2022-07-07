@@ -90,4 +90,46 @@ export class FormRec {
             resultsIndexes : input.resultsIndexes
         }
     }
+
+    public getReadPricing = (pages : number) : number => {
+        const million = 1000000
+        if(pages < (0.5*million)){
+            return (pages * 1)/1000
+        } else if (pages > (0.5*million) && pages < (2.5*million)){
+            return (pages * .75)/1000
+        }else if (pages > (2.5*million) && pages < (10*million)){
+            return (pages * .30)/1000
+        }else if (pages > (10*million) ){
+            return (pages * .25)/1000
+        }
+        throw new Error("error in Language Service getPricing")
+    }
+
+    public getPrebuiltPricing = (pages : number) : number => {
+        const million = 1000000
+        if(pages < (0.5*million)){
+            return (pages * 1)/1000
+        } else if (pages > (0.5*million) && pages < (2.5*million)){
+            return (pages * .75)/1000
+        }else if (pages > (2.5*million) && pages < (10*million)){
+            return (pages * .30)/1000
+        }else if (pages > (10*million) ){
+            return (pages * .25)/1000
+        }
+        throw new Error("error in Language Service getPricing")
+    }
+
+    public getCustomPricing = (pages : number) : number => {
+        const million = 1000000
+        if(pages < (0.5*million)){
+            return (pages * 1)/1000
+        } else if (pages > (0.5*million) && pages < (2.5*million)){
+            return (pages * .75)/1000
+        }else if (pages > (2.5*million) && pages < (10*million)){
+            return (pages * .30)/1000
+        }else if (pages > (10*million) ){
+            return (pages * .25)/1000
+        }
+        throw new Error("error in Language Service getPricing")
+    }
 }
