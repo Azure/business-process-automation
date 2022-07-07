@@ -3,6 +3,7 @@ export interface BpaService {
     inputTypes: string[]
     outputTypes: string[]
     process: (BpaServiceObject, number) => Promise<BpaServiceObject>
+    getPrice: (number) => number
     name: string
     serviceSpecificConfig: any
     serviceSpecificConfigDefaults: any
