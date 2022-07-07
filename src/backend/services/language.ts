@@ -168,34 +168,34 @@ export class LanguageStudio {
         return await this._recognize(input, actions, 'healthCare', 'healthCare', "healthCareResults", false, index)
     }
 
-    public getLanguagePricing = (numDocuments : number) : number => {
+    public getLanguagePricing = (pages : number) : number => {
         const million = 1000000
-        if(numDocuments < (0.5*million)){
-            return (numDocuments * 1)/1000
-        } else if (numDocuments > (0.5*million) && numDocuments < (2.5*million)){
-            return (numDocuments * .75)/1000
-        }else if (numDocuments > (2.5*million) && numDocuments < (10*million)){
-            return (numDocuments * .30)/1000
-        }else if (numDocuments > (10*million) ){
-            return (numDocuments * .25)/1000
+        if(pages < (0.5*million)){
+            return (pages * 1)/1000
+        } else if (pages > (0.5*million) && pages < (2.5*million)){
+            return (pages * .75)/1000
+        }else if (pages > (2.5*million) && pages < (10*million)){
+            return (pages * .30)/1000
+        }else if (pages > (10*million) ){
+            return (pages * .25)/1000
         }
         throw new Error("error in Language Service getPricing")
     }
 
-    public getHealthLanguagePricing = (numDocuments : number) : number => {
+    public getHealthLanguagePricing = (pages : number) : number => {
         const million = 1000000
-        if(numDocuments < (0.5*million)){
-            return (numDocuments * 25)/1000
-        } else if (numDocuments > (0.5*million) && numDocuments < (2.5*million)){
-            return (numDocuments * 15)/1000
-        }else if (numDocuments > (2.5*million)){
-            return (numDocuments * 10)/1000
+        if(pages < (0.5*million)){
+            return (pages * 25)/1000
+        } else if (pages > (0.5*million) && pages < (2.5*million)){
+            return (pages * 15)/1000
+        }else if (pages > (2.5*million)){
+            return (pages * 10)/1000
         }
         throw new Error("error in Language Service getPricing")
     }
 
-    public getCustomLanguagePricing = (numDocuments : number) : number => {
-        return (numDocuments * 5)/1000
+    public getCustomLanguagePricing = (pages : number) : number => {
+        return (pages * 5)/1000
     }
 
 }

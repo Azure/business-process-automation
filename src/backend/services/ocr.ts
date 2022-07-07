@@ -69,16 +69,16 @@ export class Ocr {
         return outString.replace('[A-Za-z0-9 *!$%&()?<>{}]+', '')
     }
 
-    public getPricing = (numDocuments : number) : number => {
+    public getPricing = (pages : number) : number => {
         const million = 1000000
-        if(numDocuments < million){
-            return numDocuments * 1
-        } else if (numDocuments > million && numDocuments < (10*million)){
-            return numDocuments * .65
-        }else if (numDocuments > (10*million) && numDocuments < (100*million)){
-            return numDocuments * .60
-        }else if (numDocuments > (100*million) ){
-            return numDocuments * .40
+        if(pages < million){
+            return (pages * 1)/1000
+        } else if (pages > million && pages < (10*million)){
+            return (pages * .65)/1000
+        }else if (pages > (10*million) && pages < (100*million)){
+            return (pages * .60)/1000
+        }else if (pages > (100*million) ){
+            return (pages * .40)/1000
         }
         throw new Error("error in OCR getPricing")
     }

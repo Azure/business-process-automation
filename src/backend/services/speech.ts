@@ -80,8 +80,9 @@ export class Speech {
         })
     }
 
-    public getPricing = (hours : number) : number => {
+    public getPricing = (pages : number) : number => {
         const thousand = 1000
+        const hours = pages/30
         if(hours < 2*thousand){
             return (hours * 1)
         } else if (hours > (2*thousand) && hours < (10*thousand)){
