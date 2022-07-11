@@ -168,34 +168,4 @@ export class LanguageStudio {
         return await this._recognize(input, actions, 'healthCare', 'healthCare', "healthCareResults", false, index)
     }
 
-    public getLanguagePricing = (pages : number) : number => {
-        const million = 1000000
-        if(pages < (0.5*million)){
-            return (pages * 1)/1000
-        } else if (pages > (0.5*million) && pages < (2.5*million)){
-            return (pages * .75)/1000
-        }else if (pages > (2.5*million) && pages < (10*million)){
-            return (pages * .30)/1000
-        }else if (pages > (10*million) ){
-            return (pages * .25)/1000
-        }
-        throw new Error("error in Language Service getPricing")
-    }
-
-    public getHealthLanguagePricing = (pages : number) : number => {
-        const million = 1000000
-        if(pages < (0.5*million)){
-            return (pages * 25)/1000
-        } else if (pages > (0.5*million) && pages < (2.5*million)){
-            return (pages * 15)/1000
-        }else if (pages > (2.5*million)){
-            return (pages * 10)/1000
-        }
-        throw new Error("error in Language Service getPricing")
-    }
-
-    public getCustomLanguagePricing = (pages : number) : number => {
-        return (pages * 5)/1000
-    }
-
 }

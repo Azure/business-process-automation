@@ -80,18 +80,5 @@ export class Speech {
         })
     }
 
-    public getPricing = (pages : number) : number => {
-        const thousand = 1000
-        const hours = pages/30
-        if(hours < 2*thousand){
-            return (hours * 1)
-        } else if (hours > (2*thousand) && hours < (10*thousand)){
-            return (hours * .80)
-        }else if (hours > (10*thousand) && hours < (50*thousand)){
-            return (hours * .65)
-        }else if (hours > (50*thousand) ){
-            return (hours * .50)
-        }
-        throw new Error("error in ContentModerator getPricing")
-    }
+    
 }

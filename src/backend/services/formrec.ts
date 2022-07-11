@@ -91,30 +91,5 @@ export class FormRec {
         }
     }
 
-    public getReadPricing = (pages : number) : number => {
-        const million = 1000000
-        if(pages < (1*million)){
-            return (pages * 1.5)/1000
-        } else {
-            return (pages * .60)/1000
-        }
-    }
 
-    public getPrebuiltPricing = (pages : number) : number => {
-        return (pages * 10)/1000
-    }
-
-    public getCustomPricing = (pages : number) : number => {
-        const thousand = 1000000
-        if(pages < (20*thousand)){
-            return (pages * 40.0)/1000
-        } else if (pages > (20*thousand) && pages < (100*thousand)){
-            return (((pages - (20*thousand)) * 40.0)/1000) + 800
-        } else if (pages > (100*thousand) && pages < (500*thousand)){
-            return (((pages - (100*thousand)) * 32.50)/1000) + 3250
-        } else if(pages > (500*thousand)){
-            return (((pages - (500*thousand)) * 25.0)/1000) + 12500.0
-        }
-        throw new Error("error in Language Service getPricing")
-    }
 }

@@ -110,18 +110,6 @@ export class ContentModerator {
         const out = await axios.post(url, text, config)
         return out.data
     }
-    public getPricing = (numDocuments : number) : number => {
-        const million = 1000000
-        if(numDocuments < million){
-            return (numDocuments * 1)/1000
-        } else if (numDocuments > million && numDocuments < (10*million)){
-            return (numDocuments * .75)/1000
-        }else if (numDocuments > (10*million) && numDocuments < (100*million)){
-            return (numDocuments * .60)/1000
-        }else if (numDocuments > (100*million) ){
-            return (numDocuments * .40)/1000
-        }
-        throw new Error("error in ContentModerator getPricing")
-    }
+
     
 }

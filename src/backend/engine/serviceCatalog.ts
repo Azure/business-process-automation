@@ -41,7 +41,6 @@ const contentModeratorImageService : BpaService = {
     outputTypes: ["contentModeratorImage"],
     name: "contentModeratorImage",
     process: contentModerator.image,
-    getPrice: contentModerator.getPricing,
     serviceSpecificConfig: {
         
     },
@@ -56,7 +55,6 @@ const contentModeratorTextService : BpaService = {
     outputTypes: ["contentModeratorText"],
     name: "contentModeratorText",
     process: contentModerator.text,
-    getPrice: contentModerator.getPricing,
     serviceSpecificConfig: {
         
     },
@@ -71,7 +69,6 @@ const toTxtService : BpaService = {
     outputTypes: ["text"],
     name: "totxt",
     process: blob.toTxt,
-    getPrice: noCharge,
     serviceSpecificConfig: {
         
     },
@@ -96,7 +93,6 @@ const changeOutputService : BpaService = {
     outputTypes: ["changeOutput"],
     name: "changeOutput",
     process: changeOutput.process,
-    getPrice: noCharge,
     serviceSpecificConfig: {
         
     },
@@ -111,7 +107,6 @@ const automlNerService : BpaService = {
     outputTypes: ["automlNer"],
     name: "automlNer",
     process: automlNer.process,
-    getPrice: noCharge,
     serviceSpecificConfig: {
         
     },
@@ -126,7 +121,6 @@ const translateService : BpaService = {
     outputTypes: ["text"],
     name: "translate",
     process: translate.translate,
-    getPrice: translate.getPricing,
     serviceSpecificConfig: {
         
     },
@@ -141,7 +135,6 @@ const testService : BpaService = {
     outputTypes: ["test"],
     name: "test",
     process: test.process,
-    getPrice: noCharge,
     serviceSpecificConfig: {
         
     },
@@ -157,7 +150,6 @@ const layout : BpaService = {
     outputTypes: ["layout"],
     name: "layout",
     process: formrec.layout,
-    getPrice: formrec.getReadPricing,
     serviceSpecificConfig: {
         
     },
@@ -172,7 +164,6 @@ const generalDocument : BpaService = {
     outputTypes: ["generalDocument"],
     name: "generalDocument",
     process: formrec.generalDocument,
-    getPrice: formrec.getPrebuiltPricing,
     serviceSpecificConfig: {
         
     },
@@ -187,7 +178,6 @@ const prebuiltBusinessCard : BpaService = {
     outputTypes: ["prebuiltBusinessCard"],
     name: "prebuiltBusinessCard",
     process: formrec.prebuiltBusinessCard,
-    getPrice: formrec.getPrebuiltPricing,
     serviceSpecificConfig: {
         
     },
@@ -203,7 +193,6 @@ const prebuiltIdentity : BpaService = {
     outputTypes: ["prebuiltIdentity"],
     name: "prebuiltIdentity",
     process: formrec.prebuiltIdentity,
-    getPrice: formrec.getPrebuiltPricing,
     serviceSpecificConfig: {
         
     },
@@ -218,7 +207,6 @@ const prebuiltInvoice : BpaService = {
     outputTypes: ["prebuiltInvoice"],
     name: "prebuiltInvoice",
     process: formrec.prebuiltInvoice,
-    getPrice: formrec.getPrebuiltPricing,
     serviceSpecificConfig: {
         
     },
@@ -233,7 +221,6 @@ const prebuiltReceipt : BpaService = {
     outputTypes: ["prebuiltReceipt"],
     name: "prebuiltReceipt",
     process: formrec.prebuiltReceipt,
-    getPrice: formrec.getPrebuiltPricing,
     serviceSpecificConfig: {
         
     },
@@ -248,7 +235,6 @@ const prebuiltTaxW2 : BpaService = {
     outputTypes: ["prebuiltTaxW2"],
     name: "prebuiltTaxW2",
     process: formrec.prebuiltTaxW2,
-    getPrice: formrec.getPrebuiltPricing,
     serviceSpecificConfig: {
         
     },
@@ -264,7 +250,6 @@ const customFormRec : BpaService = {
     outputTypes: ["customFormRec"],
     name: "customFormRec",
     process: formrec.customFormrec,
-    getPrice: formrec.getCustomPricing,
     serviceSpecificConfig: {
         
     },
@@ -280,7 +265,6 @@ const sttService : BpaService = {
     outputTypes: ["text"],
     name: "stt",
     process: speech.process,
-    getPrice: speech.getPricing,
     serviceSpecificConfig: {
 
     },
@@ -295,7 +279,6 @@ const ocrService : BpaService = {
     outputTypes: ["text"],
     name: "ocr",
     process: ocr.process,
-    getPrice: ocr.getPricing,
     serviceSpecificConfig: {
 
     },
@@ -310,7 +293,6 @@ const viewService : BpaService = {
     name: "view",
     bpaServiceId: "abc123",
     process: cosmosDb.view,
-    getPrice: noCharge,
     serviceSpecificConfig: {
 
     },
@@ -325,7 +307,6 @@ const extractSummary : BpaService = {
     name: "extractSummary",
     bpaServiceId: "abc123",
     process: language.extractSummary,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -340,7 +321,6 @@ const analyzeSentiment : BpaService = {
     name: "analyzeSentiment",
     bpaServiceId: "abc123",
     process: language.analyzeSentiment,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -355,7 +335,6 @@ const extractKeyPhrases : BpaService = {
     name: "extractKeyPhrases",
     bpaServiceId: "abc123",
     process: language.extractKeyPhrases,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -369,7 +348,6 @@ const multiCategoryClassify : BpaService = {
     name: "multiCategoryClassify",
     bpaServiceId: "abc123",
     process: language.multiCategoryClassify,
-    getPrice: language.getCustomLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -383,7 +361,6 @@ const recognizeCustomEntities : BpaService = {
     name: "recognizeCustomEntities",
     bpaServiceId: "abc123",
     process: language.recognizeCustomEntities,
-    getPrice: language.getCustomLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -397,7 +374,6 @@ const recognizeEntities : BpaService = {
     name: "recognizeEntities",
     bpaServiceId: "abc123",
     process: language.recognizeEntities,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -412,7 +388,6 @@ const recognizeLinkedEntities : BpaService = {
     name: "recognizeLinkedEntities",
     bpaServiceId: "abc123",
     process: language.recognizeLinkedEntities,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -427,7 +402,6 @@ const recognizePiiEntities : BpaService = {
     name: "recognizePiiEntities",
     bpaServiceId: "abc123",
     process: language.recognizePiiEntities,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -442,7 +416,6 @@ const singleCategoryClassify : BpaService = {
     name: "singleCategoryClassify",
     bpaServiceId: "abc123",
     process: language.singleCategoryClassify,
-    getPrice: language.getCustomLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -457,7 +430,6 @@ const healthCareService : BpaService = {
     name: "healthCare",
     bpaServiceId: "abc123",
     process: language.healthCare,
-    getPrice: language.getHealthLanguagePricing,
     serviceSpecificConfig: {
 
     },
@@ -472,7 +444,6 @@ const preprocessService : BpaService = {
     name: "preprocess",
     bpaServiceId: "abc123",
     process: preprocess.process,
-    getPrice: noCharge,
     serviceSpecificConfig: {
 
     },
@@ -487,7 +458,6 @@ const huggingFaceNER : BpaService = {
     name: "huggingFaceNER",
     bpaServiceId: "abc123",
     process: huggingface.process,
-    getPrice: noCharge,
     serviceSpecificConfig: {
 
     },
@@ -502,7 +472,6 @@ const documentTranslationService : BpaService = {
     name: "documentTranslation",
     bpaServiceId: "abc123",
     process: documentTranslation.process,
-    getPrice: documentTranslation.getPricing,
     serviceSpecificConfig: {
 
     },
@@ -517,7 +486,6 @@ const xmlToJsonService : BpaService = {
     name: "xmlToJson",
     bpaServiceId: "abc123",
     process: xml.process,
-    getPrice: language.getLanguagePricing,
     serviceSpecificConfig: {
 
     },

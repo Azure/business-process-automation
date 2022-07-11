@@ -51,18 +51,5 @@ export class Translate {
 
     }
 
-    public getPricing = (pages : number) : number => {
-        const million = 1000000
-        const characters = pages * 3000
-        if(characters < 250*million){
-            return (characters/million)*10
-        } else if (characters > 250*million && characters < (1000*million)){
-            return 2055 + ((8.22*(characters-(250*million))/million))
-        }else if (characters > (1000*million) && characters < (4000*million)){
-            return 6000 + ((6.00*(characters-(250*million))/million))
-        }else if (characters > (4000*million) ){
-            return 2055 + ((5.50*(characters-(250*million))/million))
-        }
-        throw new Error("error in ContentModerator getPricing")
-    }
+    
 }

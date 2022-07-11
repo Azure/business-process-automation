@@ -125,18 +125,5 @@ export class DocumentTranslation {
         return [newFilename, fileType]
     }
 
-    public getPricing = (pages : number) : number => {
-        const million = 1000000
-        if(pages < million){
-            return (pages * 10 * 1.5)/100
-        } else if (pages > million && pages < (10*million)){
-            return 2000.0 * 1.5
-        }else if (pages > (10*million) && pages < (100*million)){
-            return 6000.0 * 1.5
-        }else if (pages > (100*million) ){
-            return 45000.0 * 1.5
-        }
-        throw new Error("error in ContentModerator getPricing")
-    }
-
+    
 }
