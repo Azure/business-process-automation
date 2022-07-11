@@ -21,7 +21,8 @@ export class FormRec {
         return {
             data : layoutResult,
             type : "layout",
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId : input.bpaId,
             label : input.label,
             aggregatedResults : results,
@@ -39,7 +40,8 @@ export class FormRec {
         return {
             data : result,
             type : "generalDocument",
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId : input.bpaId,
             label : input.label,
             aggregatedResults : results,
@@ -80,7 +82,8 @@ export class FormRec {
         return {
             data : result,
             type : label,
-            projectName : input.projectName,
+            filename: input.filename,
+            pipeline: input.pipeline,
             bpaId : input.bpaId,
             label : label,
             aggregatedResults : results,

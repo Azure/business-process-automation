@@ -11,8 +11,9 @@ export class BpaEngine {
 
         let currentInput: BpaServiceObject = {
             label: "first",
+            pipeline : config.name,
             type: this._getFileType(fileName),
-            projectName: fileName,
+            filename: fileName,
             data: fileBuffer,
             bpaId: "1",
             aggregatedResults : { "buffer" : fileBuffer },

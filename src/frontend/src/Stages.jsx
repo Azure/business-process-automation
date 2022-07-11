@@ -34,7 +34,6 @@ export default function Stages(props) {
     const [hideCustomMultiDialog, setHideCustomMultiDialog] = useState(true)
     const [hideHuggingFaceDialog, setHideHuggingFaceDialog] = useState(true)
     const [hideChangeDataDialog, setHideChangeDataDialog] = useState(true)
-    //const [hideCopyDialog, setHideCopyDialog] = useState(true)
     const [hideToTxtDialog, setHideToTxtDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
@@ -46,9 +45,6 @@ export default function Stages(props) {
                 outputTypes: ["start"]
             })
             setOptions(matchingOptions)
-
-            // const result = await axios.get('/api/serviceCatalog')
-            // setServiceCatalog(result.data)
         }
         getSC()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,7 +52,14 @@ export default function Stages(props) {
 
     const onDone = async () => {
         try {
-            await axios.post('/api/config', { stages: stages.slice(1, stages.length), id: "1" })
+            const currentPipelines = await axios.get('api/config?id=pipelines')
+            for(const p of currentPipelines.data.pipelines){
+                if(p.name === props.selectedPipelineName){
+                    p.stages = stages.slice(1, stages.length)
+                    break;
+                }
+            }
+            await axios.post('/api/config', currentPipelines.data)
         } catch (err) {
             console.log(err)
         }
@@ -167,7 +170,6 @@ export default function Stages(props) {
         
         return (
             <>
-                
                 { header }
                 <LanguageSingleClassifyDialog hideDialog={hideCustomSingleDialog} setHideDialog={setHideCustomSingleDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <LanguageMultiClassifyDialog hideDialog={hideCustomMultiDialog} setHideDialog={setHideCustomMultiDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />

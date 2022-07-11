@@ -15,7 +15,7 @@ export class Blob {
 
     public copy = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-        const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.projectName)
+        const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.filename)
         const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
 
         return input
@@ -27,7 +27,7 @@ export class Blob {
 
         if(input.aggregatedResults[key].match(value)){
             this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-            const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.projectName)
+            const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.filename)
             const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
         }
 
@@ -36,7 +36,7 @@ export class Blob {
 
     public toTxt = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-        const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.projectName}.txt`)
+        const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.filename}.txt`)
         const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
 
         return input

@@ -22,6 +22,48 @@ import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
 export const sc = {
+    "xmlToJson": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "xml"
+        ],
+        "outputTypes": [
+            "xmlToJson"
+        ],
+        "image": invoice,
+        "label": "Convert XML To JSON",
+        "name": "xmlToJson",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
+    "contentModeratorImage": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "bmp","jpg","tiff","gif"
+        ],
+        "outputTypes": [
+            "contentModeratorImage"
+        ],
+        "image": storage,
+        "label": "Content Moderator (Image)",
+        "name": "contentModeratorImage",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
+    "contentModeratorText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "contentModeratorText"
+        ],
+        "image": storage,
+        "label": "Content Moderator (Text)",
+        "name": "contentModeratorText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "totxt": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -92,6 +134,34 @@ export const sc = {
     //     "serviceSpecificConfig": { "to":"es"},
     //     "serviceSpecificConfigDefaults": {}
     // },
+    "images": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "tiff","gif","jpg","jpeg"
+        ],
+        "image": layoutLogo,
+        "label": "Image Document",
+        "name": "image",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
+    "xml": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "xml"
+        ],
+        "image": generaldoc,
+        "label": "XML Document",
+        "name": "xml",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {}
+    },
     "pdf": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -124,7 +194,7 @@ export const sc = {
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
-            "jpg"
+            "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "text"
@@ -154,7 +224,7 @@ export const sc = {
     "layout": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "layout"
@@ -225,7 +295,7 @@ export const sc = {
     "generalDocument": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "generalDocument"
@@ -239,7 +309,7 @@ export const sc = {
     "prebuiltInvoice": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltInvoice"
@@ -253,7 +323,7 @@ export const sc = {
     "prebuiltBusinessCard": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltBusinessCard"
@@ -267,7 +337,7 @@ export const sc = {
     "prebuiltIdentity": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltIdentity"
@@ -281,7 +351,7 @@ export const sc = {
     "prebuiltReceipt": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltReceipt"
@@ -295,7 +365,7 @@ export const sc = {
     "prebuiltTaxW2": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltTaxW2"
@@ -309,7 +379,7 @@ export const sc = {
     "customFormRec": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf"
+            "pdf","tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "customFormRec"

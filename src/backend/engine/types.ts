@@ -14,7 +14,12 @@ export interface BpaStage {
 }
 
 export interface BpaConfiguration {
-    stages: BpaStage[]
+    stages: any[]
+    name : string
+}
+
+export interface BpaPipelines {
+    pipelines : BpaConfiguration[]
 }
 
 export interface ResultsIndex {
@@ -25,9 +30,10 @@ export interface ResultsIndex {
 
 export interface BpaServiceObject {
     data ?: any,
+    filename : string,
+    pipeline : string,
     type : string,
     label : string,
-    projectName : string,
     bpaId : string
     aggregatedResults : any
     resultsIndexes ?: ResultsIndex[]
