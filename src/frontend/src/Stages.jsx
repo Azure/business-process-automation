@@ -54,21 +54,24 @@ export default function Stages(props) {
     }, [])
 
     useEffect(() => {
-        setPrice((stages) => {
-            let _price = 73 //cost of default service plan S1
-            let _documents = 0
-            if (minutesPerAudioFile > 0) { //best guess at audio to document conversion (1 hour = 30 pages)
-                const _hours = numDocuments * ((minutesPerAudioFile) / 60)
-                _documents = _hours * 30
-            } else {
-                _documents = numDocuments
+        setPrice(() => {
+            if (stages) {
+                let _price = 73 //cost of default service plan S1
+                let _documents = 0
+                if (minutesPerAudioFile > 0) { //best guess at audio to document conversion (1 hour = 30 pages)
+                    const _hours = numDocuments * ((minutesPerAudioFile) / 60)
+                    _documents = _hours * 30
+                } else {
+                    _documents = numDocuments
+                }
+                for (const stage of stages) {
+                    _price += stage.getPrice(_documents)
+                }
+                return _price
             }
-            for (const stage of stages) {
-                _price += stage.getPrice(_documents)
-            }
-            return _price
+
         })
-        
+
     }, [stages, numDocuments, minutesPerAudioFile])
 
     const onDone = async () => {
