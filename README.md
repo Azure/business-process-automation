@@ -3,13 +3,21 @@
 
 ## Overview
 
-[Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing. 
+This accelerator provides a no code Studio to allow developers to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  End-users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even HuggingFace state-of-the-art models, into a single pipeline. Integration between services is automated by BPA, the user-created pipeline is triggered as soon as the first input file(s) are uploaded.
 
-This repo will create, and manage, a set of cognitive services and app resources, and most of the individual resource crendentials in your newly created Resource Group. And provide a React UI for uploading documents, creating language and audio pipelines using a variety of user-specified Azure Cogntive Services, and exporting the results. 
+![](images/high-level-architecture.png)  
 
-The following guide will present a high-level overview of the deployment architecture, with step-by-step instructions for immediate deployment, with several simple command-line steps.
+Once deployed, a web app is created. The UI provides and drag-n-drop interface for end users to build multi service pipelines:
+1.	Starting with specifying input file type(s), e.g. audio, texts, or emails,
+2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
+3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
+4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
+5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
 
 
+*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
+
+![](images/overview.png)  
 
 - [Overview](#overview)  
 - [Architecture](#architecture)  
@@ -31,7 +39,6 @@ The following guide will present a high-level overview of the deployment archite
 - [References](#references)  
 ---
 
-![](images/overview.png)
 
 
 ## Architecture
@@ -43,26 +50,19 @@ Once you've created a high-level Resource Group, you'll fork this repository and
 The initial release includes Cognitive Services provided by Azure Language Service and Form Recognizer, such as text classification and custom named entity recognition, as well as standardized interface for deploying State-of-the-Art Hugging Face models. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
 #### Form Recognizer Models  
 
-| Model | Description |
-| ----- | ----------- |
-|Read (preview)	| Extract printed and handwritten text lines, words, locations, and detected languages. |
-| General document (preview) |	Extract text, tables, structure, key-value pairs, and named entities.|
-| Layout |	Extract text and layout information from documents.|  
 
- Prebuilt  
-| Model | Description |
-| ----- | ----------- |
-| W-2 (preview) |	Extract employee, employer, wage information, etc. from US W-2 forms.|
-|Invoice	| Extract key information from English and Spanish invoices.|
-|Receipt	| Extract key information from English receipts.|
-|ID document	| Extract key information from US driver licenses and international passports.|
-|Business card	| Extract key information from English business cards.|  
-
-Custom
-| Model | Description |
-| ----- | ----------- |
-| Custom |	Extract data from forms and documents specific to your business. Custom models are trained for your distinct data and use cases. |
-| Composed |	Compose a collection of custom models and assign them to a single model built from your form types.|  
+| Type | Model | Description |
+| -----| ----- | ----------- |
+| Prebuilt |Read (preview)	| Extract printed and handwritten text lines, words, locations, and detected languages. |
+| | General document (preview) |	Extract text, tables, structure, key-value pairs, and named entities.|
+| | Layout |	Extract text and layout information from documents.|  
+| | W-2 (preview) |	Extract employee, employer, wage information, etc. from US W-2 forms.|
+| |Invoice	| Extract key information from English and Spanish invoices.|
+| |Receipt	| Extract key information from English receipts.|
+| |ID document	| Extract key information from US driver licenses and international passports.|
+| |Business card	| Extract key information from English business cards.|  
+| Custom | Custom |	Extract data from forms and documents specific to your business. Custom models are trained for your distinct data and use cases. |
+| Custom | Composed |	Compose a collection of custom models and assign them to a single model built from your form types.|  
 
 https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview
 #### Language Service Models
