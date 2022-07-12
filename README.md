@@ -4,21 +4,26 @@
 ## Overview
 
 This accelerator provides a no code Studio to allow developers to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  End-users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even HuggingFace state-of-the-art models, into a single pipeline. Integration between services is automated by BPA, the user-created pipeline is triggered as soon as the first input file(s) are uploaded.
-
+  
+<br/><br/> 
 ![](images/high-level-architecture.png)  
-
+<br/><br/>
+  
 Once deployed, a web app is created. The UI provides and drag-n-drop interface for end users to build multi service pipelines:
-1.	Starting with specifying input file type(s), e.g. audio, texts, or emails,
-2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
-3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
-4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
-5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
+  1.	Starting with specifying input file type(s), e.g. audio, texts, or emails,
+  2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
+  3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
+  4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
+  5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
 
 
 *Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
 
+<br/><br/>
 ![](images/overview.png)  
+<br/><br/>
 
+## Contents  
 - [Overview](#overview)  
 - [Architecture](#architecture)  
 - [Currently Inluded Algorithms](#currently-included-algorithms)  
@@ -46,10 +51,22 @@ Once you've created a high-level Resource Group, you'll fork this repository and
 
 ![](images/architecture_original_plus_huggingface_v2.png)
 
-## Currently Included Algorithms
-The initial release includes Cognitive Services provided by Azure Language Service and Form Recognizer, such as text classification and custom named entity recognition, as well as standardized interface for deploying State-of-the-Art Hugging Face models. Additional tasks and models are on the roadmap for inclusion (see Roadmap section later in this document).
-#### Form Recognizer Models  
+## Currently Included Services
+The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. Generally, these services will return a JSON response, which can then either be passed 
 
+![](images/json output.png)  
+
+
+
+- Azure Cognitive Services
+  - Form Recognizer
+  - Language Service
+  - Speech Service
+  - Cognitive Search
+- Azure Machine Learning Endpoints
+- HuggingFace Models  
+
+#### Form Recognizer Models  
 
 | Type | Model | Description |
 | -----| ----- | ----------- |
