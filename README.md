@@ -9,12 +9,9 @@ This accelerator provides a no code Studio to allow developers to quickly build 
 ![](images/high-level-architecture.png)  
 <br/><br/>
   
-Once deployed, a web app is created. The UI provides and drag-n-drop interface for end users to build multi service pipelines:
-  1.	Starting with specifying input file type(s), e.g. audio, texts, or emails,
-  2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
-  3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
-  4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
-  5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
+Once deployed, a web app is created. The UI provides and drag-n-drop interface for end users to build multi service pipelines. Once the user will upload files through 
+
+And, optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
 
 
 *Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
@@ -49,12 +46,22 @@ Once deployed, a web app is created. The UI provides and drag-n-drop interface f
 ## Architecture
 Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
 
-![](images/architecture_original_plus_huggingface_v2.png)
+![](images/architecture_original_plus_huggingface_v2.png)  
+
+Once deployed, a web app is created. The UI provides and drag-n-drop interface for end users to build multi service pipelines:
+  1.	Starting with specifying input file type(s), e.g. audio, texts, or emails,
+  2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
+  3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
+  4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
+  5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
+
+
+*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
 
 ## Currently Included Services
 The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. Generally, these services will return a JSON response, which can then either be passed 
 
-![](images/json output.png)  
+![](images/json-output.png)  
 
 
 
