@@ -16,9 +16,6 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 
 *Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
 
-<br/><br/>
-![](images/overview.png)  
-<br/><br/>
 
 ## Contents  
 - [Overview](#overview)  
@@ -57,6 +54,10 @@ Once deployed, a web app is created. The UI provides and drag-n-drop interface f
 
 
 *Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
+
+<br/><br/>
+![](images/overview.png)  
+<br/><br/>  
 
 ## Currently Included Services
 The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. Generally, these services will return a JSON response, which can then either be passed 
