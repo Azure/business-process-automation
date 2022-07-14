@@ -68,4 +68,6 @@ export class Ocr {
         }
         return outString.replace('[A-Za-z0-9 *!$%&()?<>{}]+', '')
     }
+
+    
 }

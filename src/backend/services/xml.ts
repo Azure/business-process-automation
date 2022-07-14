@@ -5,7 +5,7 @@ export class Xml {
     
     public process = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
-        const out = await xml2json.parseStringPromise(input.data)
+        const out = await xml2json.parseStringPromise(input.data,{explicitArray : false})
         
         const results = input.aggregatedResults
         results["xml2Json"] = out
