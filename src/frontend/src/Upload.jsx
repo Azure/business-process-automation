@@ -20,11 +20,7 @@ function Upload(props) {
 
     useEffect(() => {
         try {
-<<<<<<< HEAD
             axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
-=======
-            axios.get('/api/config?id=2').then(value => {
->>>>>>> 5ac23f30be9d4328e99f3befbed02ef2c523de3e
                 if (value?.data?.createSkill) {
                     setIsCogSearch(value.data.createSkill)
                 } else {
@@ -32,11 +28,7 @@ function Upload(props) {
                 }
             })
 
-<<<<<<< HEAD
             axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
-=======
-            axios.get('/api/config?id=pipelines').then(value => {
->>>>>>> 5ac23f30be9d4328e99f3befbed02ef2c523de3e
                 if (value?.data?.pipelines) {
                     const names = []
                     for(const p of value.data.pipelines){
@@ -54,11 +46,7 @@ function Upload(props) {
 
     const onCogSearchClick = async (event) => {
         try {
-<<<<<<< HEAD
             await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
-=======
-            await axios.post('/api/config', { createSkill: !isCogSearch, id: "2" })
->>>>>>> 5ac23f30be9d4328e99f3befbed02ef2c523de3e
         } catch (err) {
             console.log(err)
         }
