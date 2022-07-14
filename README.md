@@ -72,7 +72,7 @@ The resulting deployment pipeline leverages:
 Azure Speech Service, Azure Language Service, Azure Cosmos DB, Azure Functions
 <br/><br/>
 ![](images/sample_pipeline_call_center_mining.png)  
- 
+*Sample BPA pipeline for call center mining*   
 
 Once the pipeline is completed – this process typically takes <1 min for smaller documents and simpler pipelines – the results are found in your newly created Azure Cosmos DB, where we can quickly inspect our results.
 <br/><br/>
@@ -140,21 +140,21 @@ Cloud search over private heterogeneous content, with options for AI enrichment 
 Many of the pretrained models from the Hugging Face library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
 
 ![](images/hugging_face_models.png)
-*Hugging Face model repository
+*Hugging Face model repository*
 
 ---
 ## Prerequisities
-1. Github account
-2. Azure Command Line interface installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources. This accelerator uses Azure CLI to deploy a set of services provided by the templates within your cloned repo, in just a few lines of code.  
+1. **Github account**
+2. **Azure Command Line interface** installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources. This accelerator uses Azure CLI to deploy a set of services provided by the templates within your cloned repo, in just a few lines of code.  
 (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)  
-3. Ensure your subscription has Microsoft.DocumentDB enabled  
+3. Ensure your subscription has **Microsoft.DocumentDB enabled**  
 To confirm/enable:  
       - Navigate to your subscription within portal.azure.com  
       - Select Resource Providers at bottom of left navigation pane  
       - Within the Filter by name menu, search for Microsoft.DocumentDB  
       - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
       **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-4. Ensure that you have accepted terms and conditions for Responsible AI:  
+4. Ensure that you have **accepted terms and conditions for Responsible AI**:  
 You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: [Quickstart: Create a Cognitive Services resource using the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows).  
 Once accepted, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription.
   
@@ -163,14 +163,15 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 
 ## 1. Create a Resource Group in your Azure Portal
 Create your Resource Group.  
-**Note**:*When naming your Resource Group, please use lower case, alphanumeric characters only, as multiple Azure Services will be created later on, in the background, using your Resource Group name*  
+**Note**: *When naming your Resource Group, please use lower case, alphanumeric characters only, as multiple Azure Services will be created later on, in the background, using your Resource Group name*  
+  
 Select your preferred Region  
 
 ![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)    
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
   
 
-It will take a few seconds for your Resource Group to be created.  
+It will take several seconds for your Resource Group to be created.  
 
 ![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-create-group.png)    
 For more help, refer to https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
@@ -314,10 +315,11 @@ Finally, paste that selection into the editor window.
 ## Load Documents!
 1. Select Configure a New Pipeline  
 ![](images/app_landing_page.png)  
-2. If you have a .pdf file, select "PDF Document". You can also upload WAV files for transcription, and subsequent language processing  
+2. Select your input file(s) type
 **Note**: *The .pdf input tile can accomodate several image input file format types (including, JPEG, PNG, BMP, TIFF)* More information at https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/faq  
+Generally, please refer to the supported file types required by the various Azure Cognitive Services (documentation sections linked in Reference).
 3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
-    - Depending on your selection, new analytical services will appear. For example, for .pdf files, your first selection can extracting raw tables via the Form Recognizer's General Document Model.  
+    - Depending on your selection, new analytical services will appear. For example, if you start your pipeline with a .pdf document, your available Services within the pipeline builder will show Services compatible with .pdf inputs (e.g. Form Recognizer General Layout Pretrainted model). After adding a pipeline step, such as the aforementioned Layout Service, your data may be transformed to a different output (in this case text), and your pipeline builder will now show Services compatible with text inputs (e.g. Language Services such as text summarization).  
   
 ![](images/pdf_2views.png)  
 Alternatively, you can first OCR the raw image to text, by selecting Form Recognizer's OCR Service, after which your app will show new options that are available to you for processing converted text  
