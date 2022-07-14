@@ -14,7 +14,7 @@ export default function SelectPipeline(props) {
 
     useEffect(() => {
         try {
-            axios.get('/api/config?id=pipelines').then(ret => {
+            axios.get(`/api/config?id=${pipelinesLabel}`).then(ret => {
                 if (ret.data === '') {
                     setPipelines([])
                 } else {
@@ -33,7 +33,7 @@ export default function SelectPipeline(props) {
 
     const onCreatePipeline = async () => {
         console.log(newPipelineName)
-        const currentPipelines = await axios.get('/api/config?id=pipelines')
+        const currentPipelines = await axios.get(`/api/config?id=${pipelinesLabel}`)
         if (currentPipelines.data === '') {
             await axios.post('/api/config', { pipelines: [{ stages: [], name: newPipelineName }], id: pipelinesLabel })
         } else {

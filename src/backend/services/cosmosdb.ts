@@ -42,7 +42,11 @@ export class CosmosDB {
             const client = new CosmosClient(this._connectionString);
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
+<<<<<<< HEAD
             const item = await container.item(this._pipelinesLabel).read()
+=======
+            const item = await container.item("pipelines").read()
+>>>>>>> 5ac23f30be9d4328e99f3befbed02ef2c523de3e
             return item.resource
         } catch(err){
             console.log(err)
