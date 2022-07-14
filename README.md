@@ -73,13 +73,12 @@ Azure Speech Service, Azure Language Service, Azure Cosmos DB, Azure Functions
 
 <br/><br/>
 ![](images/sample_pipeline_call_center_mining.png)  
-<br/><br/>  
+ 
 
 Once the pipeline is completed – this process typically takes <1 min for smaller documents and simpler pipelines – the results are found in your newly created Azure Cosmos DB, where we can quickly inspect our results.  
 
 <br/><br/>
 ![](images/sample_output_call_center_mining.png.png)  
-
 
 ## Currently Included Services
 The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. New Services and Features are continuously being released. Please refer to each Service's documentation for the latest reference. 
@@ -112,7 +111,7 @@ The current release allows you to build pipelines from multiple Cognitives Servi
 [Form Recognizer Models Documentation](https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview)  
 #### Language Service Models
 
-| Model | Description |
+| Type | Model | Description |
 | -----| ----- | ----------- |
 | Prebuilt |Named Entity Recognition (NER)|	This pre-configured feature identifies entities in text across several pre-defined categories.|
 | |Personally Identifiable Information (PII) detection	|This pre-configured feature identifies entities in text across several pre-defined categories of sensitive |information, such as account information.|
@@ -120,7 +119,7 @@ The current release allows you to build pipelines from multiple Cognitives Servi
 | |Entity linking	|This pre-configured feature disambiguates the identity of an entity found in text and provides links to the entity on Wikipedia.|
 | |Text Analytics for health|	This pre-configured feature extracts information from unstructured medical texts, such as clinical notes and doctor's notes.|
 | Custom |Custom NER|	Build an AI model to extract custom entity categories, using unstructured text that you provide.|
-| |Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
+| Prebuilt |Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
 | Custom |Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
 | Prebuilt |Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
 
@@ -129,6 +128,10 @@ The current release allows you to build pipelines from multiple Cognitives Servi
 #### Speech Service
 The Speech service provides speech-to-text and text-to-speech capabilities with an Azure Speech resource. You can transcribe speech to text with high accuracy, produce natural-sounding text-to-speech voices, translate spoken audio, and use speaker recognition during conversations.  
 [Speech Service Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview)  
+
+#### Cognitive Search
+Cloud search over private heterogeneous content, with options for AI enrichment if your content is unstructured or unsearchable in raw form.
+[Cognitive Search Documentation](https://docs.microsoft.com/en-us/azure/search/) 
 
 #### Hugging Face Implementation
 Many of the pretrained models from the huggingface library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
@@ -155,10 +158,12 @@ To check:
 Create your Resource Group.  
 **Note**:*When naming your Resource Group, please use lower case, alphanumeric characters only, as multiple Azure Services will be created later on, in the background, using your Resource Group name*  
 Select your preferred Region  
+
 ![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)    
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
 
 It will take a few seconds for your Resource Group to be created.  
+
 ![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-create-group.png)    
 For more help, refer to https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
 
@@ -315,7 +320,7 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 ![](images/home.png)  
 6. Select "Ingest Documents"
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
-**Note**: *Your documents should be in pdf/image format or .wav format. The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*  
+**Note**: *The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*  
 
 ### Using HuggingFace library
 When using a custom HuggingFace, you'll be prompted select your desired model by specifiying the model name. To do so, you'll need to navigate to https://huggingface.co/models, filter on "Token Classification" (task), "PyTorch" (libraries), and "transformers" (libraries). Select your model from the filtered model list, and copy the modelID. See Images below for further guidance - if you're not using a HuggingFace model, skip to the next step.  
