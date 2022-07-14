@@ -3,7 +3,7 @@
 
 ## Overview
 
-This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even HuggingFace state-of-the-art models, into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a CosmosDB.
+This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even Hugging Face state-of-the-art models, into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a CosmosDB.
 
 And, optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
   
@@ -79,7 +79,7 @@ Once the pipeline is completed – this process typically takes <1 min for small
 ![](images/sample_output_call_center_mining.png.png)  
 
 ## Currently Included Services
-The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. New Services and Features are continuously being released. Please refer to each Service's documentation for the latest reference. 
+The current release of BPA allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, and even Hugging Face models. New Services and Features are continuously being released. Please refer to each Service's documentation for the latest reference. 
 
 ### Available Services
 - Azure Cognitive Services
@@ -107,6 +107,8 @@ The current release allows you to build pipelines from multiple Cognitives Servi
 | Custom | Composed |	Compose a collection of custom models and assign them to a single model built from your form types.|  
 
 [Form Recognizer Models Documentation](https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview)  
+  
+  
 #### Language Service Models
 
 | Type | Model | Description |
@@ -121,35 +123,42 @@ The current release allows you to build pipelines from multiple Cognitives Servi
 | Custom |Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
 | Prebuilt |Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
 
-[Language Service Models Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview)
-
+[Language Service Models Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview)  
+  
+  
 #### Speech Service
 The Speech service provides speech-to-text and text-to-speech capabilities with an Azure Speech resource. You can transcribe speech to text with high accuracy, produce natural-sounding text-to-speech voices, translate spoken audio, and use speaker recognition during conversations.  
 [Speech Service Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview)  
-
+  
+  
 #### Cognitive Search
-Cloud search over private heterogeneous content, with options for AI enrichment if your content is unstructured or unsearchable in raw form.
-[Cognitive Search Documentation](https://docs.microsoft.com/en-us/azure/search/) 
-
+Cloud search over private heterogeneous content, with options for AI enrichment if your content is unstructured or unsearchable in raw form.  
+[Cognitive Search Documentation](https://docs.microsoft.com/en-us/azure/search/)  
+  
+  
 #### Hugging Face Implementation
-Many of the pretrained models from the huggingface library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
+Many of the pretrained models from the Hugging Face library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
 
-![](images/hugging_face_models.png)  
+![](images/hugging_face_models.png)
+*Hugging Face model repository
 
+---
 ## Prerequisities
 1. Github account
 2. Azure Command Line interface installed. The Azure Command-Line Interface (CLI) is a cross-platform command-line tool that can be installed locally on Windows computers. You can use the Azure CLI for Windows to connect to Azure and execute administrative commands on Azure resources. This accelerator uses Azure CLI to deploy a set of services provided by the templates within your cloned repo, in just a few lines of code.  
 (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)  
 3. Ensure your subscription has Microsoft.DocumentDB enabled  
-To check:  
-      - Go to your subscription within portal.azure.com  
+To confirm/enable:  
+      - Navigate to your subscription within portal.azure.com  
       - Select Resource Providers at bottom of left navigation pane  
       - Within the Filter by name menu, search for Microsoft.DocumentDB  
       - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
       **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-4. Ensure that you have accepted terms and conditions for Responsible AI  
-"You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: Face, Language service, Computer Vision. After that, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription."
-
+4. Ensure that you have accepted terms and conditions for Responsible AI:  
+You must create your first Face, Language service, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. You can do so here: [Quickstart: Create a Cognitive Services resource using the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows).  
+Once accepted, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription.
+  
+  ---
 ## Installation Steps  
 
 ## 1. Create a Resource Group in your Azure Portal
@@ -159,6 +168,7 @@ Select your preferred Region
 
 ![](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/media/manage-resource-groups-portal/manage-resource-groups-add-group.png)    
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal  
+  
 
 It will take a few seconds for your Resource Group to be created.  
 
@@ -167,11 +177,11 @@ For more help, refer to https://docs.microsoft.com/en-us/azure/azure-resource-ma
 
 ## 2. Fork the repo
 Fork https://github.com/Azure/business-process-automation to your github account.  
-For basic instructions please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
-**Note**: *a Microsoft organization github account is **not** required*  
+For basic instructions for forking repos, please refer to https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio  
+**Note**: *a Microsoft organization GitHub account is **not** required*  
 
 ## 3. Create AND save personal access token
-1.  On your github repo page, click your profile  
+1.  On your Git Hub repo page, click on your profile  
 2.  Select Settings (under your profile icon in the top right)  
   
 ![](images/settings_upper_right.png)  
@@ -189,7 +199,7 @@ For basic instructions please refer to https://docs.microsoft.com/en-us/azure/de
 9.  Copy your newly generated token  
 **Note**: *Be sure to save this token for completing pipeline setup, else this token will need to be regenerated*  
   
-  For further information refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
+  For more help refer to https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
 
 ## 4. Update depoloyment template files within local repo  
 In step 4, you'll clone your repo locally, and make small updates to two deployment template files, which will automate deployment of multiple Azure resources within your Resource group.  
@@ -241,6 +251,7 @@ Update the three "value" fields below:
 ```  
   **Note**: *Be sure to maintain spaces while updating the project name and resource group*  
   **Note**: *This may take several minutes to run*  
+  
 3. When this has completed you should have the application infrastructure deployed to your resource group. You will see confirmation of numerous created Azure resources in your command window. Navigate to your Resource Group at your Azure Portal confirm to confirm your newly created resources.  
 `azure.portal.com`   
   
@@ -292,7 +303,7 @@ Finally, paste that selection into the editor window.
     - Select "Log Stream" in the left navigation pane (towards the bottom; may have to scroll down)
     - Switch the stream from "File System Logs" to "App Insights Logs" via the drop down menu, directly above your log window
  
-## Go to your React App!  
+## Navigate to your React App!  
 1. Navigate to your Resource Group within your Azure Portal
 2. Select your static webapp  
 3. Within the default Overview pane, Click on your URL, which will take you to your newly launced WebApp!  
@@ -316,37 +327,40 @@ Alternatively, you can first OCR the raw image to text, by selecting Form Recogn
 5. Navigate to "Home"  
   
 ![](images/home.png)  
-6. Select "Ingest Documents"
+6. Select "Ingest Documents"  
 7. Upload your first document! Once your document upload is completed, You'll see a message indicating "Upload Successful". You can upload more than one document at a time here.  
 **Note**: *The first document loaded may take several minutes. However, all subsequent documents should be processed much faster*  
 
 ### Using HuggingFace library
-When using a custom HuggingFace, you'll be prompted select your desired model by specifiying the model name. To do so, you'll need to navigate to https://huggingface.co/models, filter on "Token Classification" (task), "PyTorch" (libraries), and "transformers" (libraries). Select your model from the filtered model list, and copy the modelID. See Images below for further guidance - if you're not using a HuggingFace model, skip to the next step.  
+When using a custom Hugging Face model, you'll be prompted select your desired model by specifiying the model name. To do so, you'll need to navigate to https://huggingface.co/models, filter on "Token Classification" (task), "PyTorch" (libraries), and "transformers" (libraries). Select your model from the filtered model list, and copy the modelID. See Images below for further guidance - if you're not using a HuggingFace model, skip to the next step.  
 **Note**: *When pasting the model ID, be sure to paste without quotes - see below image*  
 
 ![](images/HuggingFace_input_name.png)  
+*Specifying Hugging Face model name*  
 
 ![](images/hugging_face_selections.png)  
+*Searching and filtering for BPA compatible Hugging Face models*  
 
 ![](images/huggingFace_model_name.png)  
-
+*Retreiving the Hugging Face model name*
 
 
   ## View Your Results
   Your results will be stored in a Cosmos database within your Azure Resource Group.  
   - Navigate to your cosmosDB in your Azure Resource Portal (which will also have the same name as your project name)  
   ![](images/navigate_to_cosmos_db.png)  
-  - Navigtate to your Data Explorer  [Work with data using Azure Cosmos DB Explorer](https://docs.microsoft.com/en-us/azure/cosmos-db/data-explorer)
-  - You should see a container, named after your project name. Select that container  
-  - You will see a SQL query, named after your project name. Select that query  
-  - Within that query, Select Items. Here you should see multiple items  
-    - The first item will be your pipeline metadata  
-    - The second will be contain the output from your first document  
-    - An additional item will be created for each uploaded document  
+  - Navigtate to your Data Explorer
+    - For help on using Azure Cosmosmos DB explorer for the first time, please see [Work with data using Azure Cosmos DB Explorer](https://docs.microsoft.com/en-us/azure/cosmos-db/data-explorer)
+  - The "items" folder (image below) will contain your pipeline output 
+    - You should see a container, named after your project name. Select that container  
+    - You will see a SQL query, named after your project name. Select that query  
+    - Within that query, Select Items. Here you should see multiple items  
+      - The first item will be your pipeline metadata  
+      - The second will be contain the output from your first document  
+      - An additional item will be created for each uploaded document  
     ![](images/navigating_cosmos_db_explorer.png)  
   
-You can further customize your UI via the repo - Simple instructions on how to quickly do so are coming soon
-
+---
 ## Further Customization
 All code for the front end React-based UI is provided for further customization (see references for designing and customizing React apps).  
 
@@ -371,5 +385,7 @@ Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
 | React source template | This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) |
 | Azure Form Recognizer |  https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview |
 | Azure Language Service | https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview |
+| Azure Speech Service | https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview |
+| Azure Cognitive Search | [https://azure.microsoft.com/en-us/services/search/](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) |
 | HuggingFace | https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads |
 | Additional Model Documentation | |
