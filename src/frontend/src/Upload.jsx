@@ -46,7 +46,15 @@ function Upload(props) {
 
     const onCogSearchClick = async (event) => {
         try {
+<<<<<<< HEAD
             await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
+=======
+<<<<<<< HEAD
+            await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
+=======
+            await axios.post('/api/config', { createSkill: !isCogSearch, id: "2" })
+>>>>>>> 2bced79022b82a39765875d9c9f12b12d33cac09
+>>>>>>> d9adf97157b62784b96577cfa033eee84c625711
         } catch (err) {
             console.log(err)
         }
