@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { Text, Button, Input, Skeleton } from '@fluentui/react-northstar';
 import Stages from './Stages'
 
+const pipelinesLabel = "pipelines"
+
 export default function SelectPipeline(props) {
 
     const [pipelines, setPipelines] = useState(null)
@@ -12,7 +14,7 @@ export default function SelectPipeline(props) {
 
     useEffect(() => {
         try {
-            axios.get('/api/config?id=pipelines').then(ret => {
+            axios.get(`/api/config?id=${pipelinesLabel}`).then(ret => {
                 if (ret.data === '') {
                     setPipelines([])
                 } else {
@@ -31,9 +33,9 @@ export default function SelectPipeline(props) {
 
     const onCreatePipeline = async () => {
         console.log(newPipelineName)
-        const currentPipelines = await axios.get('/api/config?id=pipelines')
+        const currentPipelines = await axios.get(`/api/config?id=${pipelinesLabel}`)
         if (currentPipelines.data === '') {
-            await axios.post('/api/config', { pipelines: [{ stages: [], name: newPipelineName }], id: "pipelines" })
+            await axios.post('/api/config', { pipelines: [{ stages: [], name: newPipelineName }], id: pipelinesLabel })
         } else {
             currentPipelines.data.pipelines.push({ stages: [], name: newPipelineName })
             await axios.post('/api/config', currentPipelines.data)
@@ -52,7 +54,7 @@ export default function SelectPipeline(props) {
     }
 
     const renderPipelines = () => {
-        if (pipelines && pipelines.length > 0) {
+        if (pipelines ) {
             return (
                 pipelines.map(p => <div onClick={() => onPipelineSelect(p.name)} value={p.name} style={{ marginBottom: "20px", color: "blue" }}>{p.name}</div>)
             )

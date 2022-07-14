@@ -1,4 +1,4 @@
-import { CosmosClient, Item } from "@azure/cosmos"
+import { CosmosClient } from "@azure/cosmos"
 import { BpaPipelines, BpaServiceObject } from "../engine/types"
 
 export class CosmosDB {
@@ -6,11 +6,15 @@ export class CosmosDB {
     private _connectionString : string
     private _dbName : string
     private _containerName : string
+    private _cogsearchLabel : string
+    private _pipelinesLabel : string
 
     constructor(connectionString : string, dbName : string, containerName : string) {
         this._connectionString = connectionString
         this._dbName = dbName
         this._containerName = containerName
+        this._cogsearchLabel = "cogsearch"
+        this._pipelinesLabel = "pipelines"
     }
 
     private _create = async (data) : Promise<any> => {
@@ -38,7 +42,7 @@ export class CosmosDB {
             const client = new CosmosClient(this._connectionString);
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
-            const item = await container.item("pipelines").read()
+            const item = await container.item(this._pipelinesLabel).read()
             return item.resource
         } catch(err){
             console.log(err)
@@ -51,7 +55,7 @@ export class CosmosDB {
             const client = new CosmosClient(this._connectionString);
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
-            const item = await container.item("2").read()
+            const item = await container.item(this._cogsearchLabel).read()
             return item.resource
         } catch(err){
             console.log(err)

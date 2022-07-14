@@ -110,4 +110,6 @@ export class ContentModerator {
         const out = await axios.post(url, text, config)
         return out.data
     }
+
+    
 }

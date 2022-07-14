@@ -71,6 +71,7 @@ export class Speech {
                     })
                 };
 
+                
                 speechRecognizer.startContinuousRecognitionAsync();
             } catch(err){
                 console.log(err)
@@ -78,4 +79,6 @@ export class Speech {
             }
         })
     }
+
+    
 }

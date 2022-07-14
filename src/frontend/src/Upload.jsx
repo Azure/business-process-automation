@@ -3,6 +3,9 @@ import { FileUploader } from "react-drag-drop-files";
 import { Text, Checkbox, Dropdown } from '@fluentui/react-northstar';
 import axios from 'axios'
 
+const cogsearchLabel = "cogsearch"
+const pipelinesLabel = "pipelines"
+
 function Upload(props) {
     const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML"];
 
@@ -17,7 +20,7 @@ function Upload(props) {
 
     useEffect(() => {
         try {
-            axios.get('/api/config?id=2').then(value => {
+            axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
                 if (value?.data?.createSkill) {
                     setIsCogSearch(value.data.createSkill)
                 } else {
@@ -25,7 +28,7 @@ function Upload(props) {
                 }
             })
 
-            axios.get('/api/config?id=pipelines').then(value => {
+            axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
                 if (value?.data?.pipelines) {
                     const names = []
                     for(const p of value.data.pipelines){
@@ -43,7 +46,7 @@ function Upload(props) {
 
     const onCogSearchClick = async (event) => {
         try {
-            await axios.post('/api/config', { createSkill: !isCogSearch, id: "2" })
+            await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
         } catch (err) {
             console.log(err)
         }

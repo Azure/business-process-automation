@@ -125,5 +125,5 @@ export class DocumentTranslation {
         return [newFilename, fileType]
     }
 
-
+    
 }

@@ -21,6 +21,8 @@ import businesscard from './images/businesscard.svg'
 import storage from './images/storage.svg'
 import wav from './images/wav.svg'
 
+import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './price'
+
 export const sc = {
     "xmlToJson": {
         "bpaServiceId": "abc123",
@@ -34,7 +36,8 @@ export const sc = {
         "label": "Convert XML To JSON",
         "name": "xmlToJson",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "contentModeratorImage": {
         "bpaServiceId": "abc123",
@@ -48,7 +51,8 @@ export const sc = {
         "label": "Content Moderator (Image)",
         "name": "contentModeratorImage",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getContentModeratorPricing
     },
     "contentModeratorText": {
         "bpaServiceId": "abc123",
@@ -62,7 +66,8 @@ export const sc = {
         "label": "Content Moderator (Text)",
         "name": "contentModeratorText",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getContentModeratorPricing
     },
     "totxt": {
         "bpaServiceId": "abc123",
@@ -76,7 +81,8 @@ export const sc = {
         "label": "Convert To TXT File",
         "name": "totxt",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     // "copy": {
     //     "bpaServiceId": "abc123",
@@ -104,7 +110,8 @@ export const sc = {
         "label": "Change Output",
         "name": "changeOutput",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "automlNer": {
         "bpaServiceId": "abc123",
@@ -118,7 +125,8 @@ export const sc = {
         "label": "Auto-ML NER Custom Model",
         "name": "automlNer",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     // "test": {
     //     "bpaServiceId": "abc123",
@@ -146,7 +154,8 @@ export const sc = {
         "label": "Image Document",
         "name": "image",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "xml": {
         "bpaServiceId": "abc123",
@@ -160,7 +169,8 @@ export const sc = {
         "label": "XML Document",
         "name": "xml",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "pdf": {
         "bpaServiceId": "abc123",
@@ -174,7 +184,8 @@ export const sc = {
         "label": "PDF Document",
         "name": "pdf",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "wav": {
         "bpaServiceId": "abc123",
@@ -188,7 +199,8 @@ export const sc = {
         "label": "WAV Document",
         "name": "wav",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "ocrService": {
         "bpaServiceId": "abc123",
@@ -203,7 +215,8 @@ export const sc = {
         "label": "Optical Character Recognition (OCR) Service",
         "name": "ocr",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
     },
     "translateService": {
         "bpaServiceId": "abc123",
@@ -219,7 +232,8 @@ export const sc = {
         "serviceSpecificConfig": {
             to : "string"
         },
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getTranslationPricing
     },
     "layout": {
         "bpaServiceId": "abc123",
@@ -233,7 +247,8 @@ export const sc = {
         "label": "Form Recognizer Layout Service",
         "name": "layout",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecReadPricing
     },
     "viewService": {
         "inputTypes": [
@@ -247,7 +262,8 @@ export const sc = {
         "name": "view",
         "bpaServiceId": "abc123",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "extractSummary": {
         "inputTypes": [
@@ -261,7 +277,8 @@ export const sc = {
         "name": "extractSummary",
         "bpaServiceId": "abc123",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
     },
     "recognizeEntities": {
         "inputTypes": [
@@ -275,7 +292,8 @@ export const sc = {
         "name": "recognizeEntities",
         "bpaServiceId": "abc123",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
     },
     "sttService": {
         "bpaServiceId": "abc123",
@@ -290,7 +308,8 @@ export const sc = {
         "label": "Speech To Text Service",
         "name": "stt",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getSpeechPricing
     },
     "generalDocument": {
         "bpaServiceId": "abc123",
@@ -304,7 +323,8 @@ export const sc = {
         "label": "Form Recognizer General Document Model",
         "name": "generalDocument",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltInvoice": {
         "bpaServiceId": "abc123",
@@ -318,7 +338,8 @@ export const sc = {
         "label": "Form Recognizer Prebuilt Invoice Model",
         "name": "prebuiltInvoice",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltBusinessCard": {
         "bpaServiceId": "abc123",
@@ -332,7 +353,8 @@ export const sc = {
         "label": "Form Recognizer Prebuilt Business Card Model",
         "name": "prebuiltBusinessCard",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltIdentity": {
         "bpaServiceId": "abc123",
@@ -346,7 +368,8 @@ export const sc = {
         "label": "Form Recognizer Prebuilt ID Model",
         "name": "prebuiltIdentity",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltReceipt": {
         "bpaServiceId": "abc123",
@@ -360,7 +383,8 @@ export const sc = {
         "label": "Form Recognizer Receipt ID Model",
         "name": "prebuiltReceipt",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltTaxW2": {
         "bpaServiceId": "abc123",
@@ -374,7 +398,8 @@ export const sc = {
         "label": "Form Recognizer Tax-W2 ID Model",
         "name": "prebuiltTaxW2",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecPrebuiltPricing
     },
     "customFormRec": {
         "bpaServiceId": "abc123",
@@ -388,7 +413,8 @@ export const sc = {
         "label": "Form Recognizer Custom Model",
         "name": "customFormRec",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecCustomPricing
     },
     "recognizePiiEntities": {
         "bpaServiceId": "abc123",
@@ -402,7 +428,8 @@ export const sc = {
         "label": "Language Studio PII Model",
         "name": "recognizePiiEntities",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
     },
     "extractKeyPhrases": {
         "bpaServiceId": "abc123",
@@ -416,7 +443,8 @@ export const sc = {
         "label": "Language Studio Key Phrases Model",
         "name": "extractKeyPhrases",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
     },
     "recognizeLinkedEntities": {
         "bpaServiceId": "abc123",
@@ -430,7 +458,8 @@ export const sc = {
         "label": "Language Studio Linked Entities Model",
         "name": "recognizeLinkedEntities",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
     },
     "analyzeSentiment": {
         "bpaServiceId": "abc123",
@@ -444,7 +473,8 @@ export const sc = {
         "label": "Language Studio Sentiment Model",
         "name": "analyzeSentiment",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
     },
     "recognizeCustomEntities": {
         "bpaServiceId": "abc123",
@@ -458,7 +488,8 @@ export const sc = {
         "label": "Language Studio Custom NER Model",
         "name": "recognizeCustomEntities",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getCustomLanguagePricing
     },
     "singleCategoryClassify": {
         "bpaServiceId": "abc123",
@@ -472,7 +503,8 @@ export const sc = {
         "label": "Language Studio Classify Single Class Model",
         "name": "singleCategoryClassify",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getCustomLanguagePricing
     },
     "multiCategoryClassify": {
         "bpaServiceId": "abc123",
@@ -486,7 +518,8 @@ export const sc = {
         "label": "Language Studio Classify Mulitiple Classes Model",
         "name": "multiCategoryClassify",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getCustomLanguagePricing
     },
     "huggingFaceNER": {
         "bpaServiceId": "abc123",
@@ -500,7 +533,8 @@ export const sc = {
         "label": "HuggingFace Pretrained NER Model",
         "name": "huggingFaceNER",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "preprocess": {
         "bpaServiceId": "abc123",
@@ -514,7 +548,8 @@ export const sc = {
         "label": "Preprocess Text",
         "name": "preprocess",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "healthCare": {
         "bpaServiceId": "abc123",
@@ -528,7 +563,8 @@ export const sc = {
         "label": "Health Care API",
         "name": "healthCare",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getHealthLanguagePricing
     },
     "documentTranslation": {
         "bpaServiceId": "abc123",
@@ -542,6 +578,7 @@ export const sc = {
         "label": "Document Translation",
         "name": "documentTranslation",
         "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {}
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getDocumentTranslatorPricing
     }
 }

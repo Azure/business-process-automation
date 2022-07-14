@@ -74,7 +74,7 @@ export class CogSearch {
             },
             container: {
                 "name": process.env.COSMOSDB_CONTAINER_NAME,
-                "query": "SELECT * from c WHERE c.id != '1' AND c.id != '2' AND c._ts >= @HighWaterMark ORDER by c._ts"
+                "query": "SELECT * from c WHERE c.id != 'pipelines' AND c.id != 'cogsearch' AND c._ts >= @HighWaterMark ORDER by c._ts"
             },
             "dataChangeDetectionPolicy": {
                 "@odata.type": "#Microsoft.Azure.Search.HighWaterMarkChangeDetectionPolicy",
@@ -258,6 +258,5 @@ export class CogSearch {
         }
         return indexSchema
     }
-
 
 }
