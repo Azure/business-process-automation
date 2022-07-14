@@ -34,6 +34,7 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 - [Go to your React App](#go-to-your-react-app)
 - [Load Documents!](#load-documents)
 - [View Your Results](#view-your-results)
+- [Further Customization](#further-customization)
 - [Contacts](#contacts)  
 - [Roadmap](#roadmap)
 - [References](#references)  
@@ -78,7 +79,6 @@ Once the pipeline is completed – this process typically takes <1 min for small
 
 <br/><br/>
 ![](images/sample_output_call_center_mining.png.png)  
-<br/><br/>  
 
 
 ## Currently Included Services
@@ -92,13 +92,6 @@ The current release allows you to build pipelines from multiple Cognitives Servi
   - Cognitive Search
 - Azure Machine Learning Endpoints
 - HuggingFace Tokenization Models  
-
-Generally, these services will return a JSON response, where the key output is passed to the next stage of the pipeline for continued processing, or finally stored in a CosmosDB. Each of these intermediate outputs, will also be added to a Cognitive Search Index, if the feature is added at the end of the pipeline.
-
-![](images/json-output.png)  
-
-
-
 
 
 #### Form Recognizer Models  
@@ -349,8 +342,16 @@ When using a custom HuggingFace, you'll be prompted select your desired model by
   
 You can further customize your UI via the repo - Simple instructions on how to quickly do so are coming soon
 
+## Further Customization
+All code for the front end React-based UI is provided for further customization (see references for designing and customizing React apps).  
+
+Generally, Services with text outputs (e.g. Azure Language Service, and many Services from Form Recognizer and Speech Service) will return a JSON response, where the key output is passed to the next stage of the pipeline for continued processing, or finally stored in a CosmosDB (see image below). Each of these intermediate outputs, will also be added to a Cognitive Search Index, if the feature is added at the end of the pipeline. Leveraging this accelerator as part of a broader pipeline is encouraged! The AI Rangers / AI Specialist CSA teams would love to hear about future use cases. See references for more contact information.
+
+![](images/json-output.png)  
+
+
 ## Contacts
- Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
+Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
 
 ## Roadmap
 | Priority | Item |
