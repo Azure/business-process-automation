@@ -361,16 +361,23 @@ When using a custom Hugging Face model, you'll be prompted select your desired m
       - The second will be contain the output from your first document  
       - An additional item will be created for each uploaded document  
     ![](images/navigating_cosmos_db_explorer.png)  
-  
+
+
+If a Cognitive Search index was added to the pipeline, you will need to navigate to your newly created Cognitive Search Resource within that same Resource Group.
+![](images/cognitive_search_index1.png)
+*Generated Cognitive Search Index*  
+
 ---
 ## Further Customization
 All code for the front end React-based UI is provided for further customization (see references for designing and customizing React apps).  
 
-Generally, Services with text outputs (e.g. Azure Language Service, and many Services from Form Recognizer and Speech Service) will return a JSON response, where the key output is passed to the next stage of the pipeline for continued processing, or finally stored in a CosmosDB (see image below). Each of these intermediate outputs, will also be added to a Cognitive Search Index, if the feature is added at the end of the pipeline. Leveraging this accelerator as part of a broader pipeline is encouraged! The AI Rangers / AI Specialist CSA teams would love to hear about future use cases. See references for more contact information.
+Generally, Services with text outputs (e.g. Azure Language Service, and many Services from Form Recognizer and Speech Service) will return a JSON response, where the key output is passed to the next stage of the pipeline for continued processing, or finally stored in a CosmosDB (see image below). Each of these intermediate outputs, will also be added to a Cognitive Search Index, if the feature is added to the end of the pipeline.  
+
+Leveraging this accelerator as part of a broader pipeline is encouraged! The AI Rangers / AI Specialist CSA teams would love to hear about future use cases. See references for more contact information.
 
 ![](images/json-output.png)  
 
-
+---
 ## Contacts
 Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
 
@@ -390,4 +397,4 @@ Please reach out to the AI Rangers for more info or feedback aka.ms/AIRangers
 | Azure Speech Service | https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview |
 | Azure Cognitive Search | [https://azure.microsoft.com/en-us/services/search/](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) |
 | HuggingFace | https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads |
-| Additional Model Documentation | |
+| Additional Model Documentation |tbd |
