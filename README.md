@@ -82,7 +82,7 @@ Once the pipeline is completed – this process typically takes <1 min for small
 
 
 ## Currently Included Services
-The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. 
+The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. New Services and Features are continuously being released. Please refer to each Service's documentation for the latest reference. 
 
 ### Available Services
 - Azure Cognitive Services
@@ -109,24 +109,26 @@ The current release allows you to build pipelines from multiple Cognitives Servi
 | Custom | Custom |	Extract data from forms and documents specific to your business. Custom models are trained for your distinct data and use cases. |
 | Custom | Composed |	Compose a collection of custom models and assign them to a single model built from your form types.|  
 
-https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview
+[Form Recognizer Models Documentation](https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/concept-model-overview)  
 #### Language Service Models
 
 | Model | Description |
-| ----- | ----------- |
-|Named Entity Recognition (NER)|	This pre-configured feature identifies entities in text across several pre-defined categories.|
-|Personally Identifiable Information (PII) detection	|This pre-configured feature identifies entities in text across several pre-defined categories of sensitive |information, such as account information.|
-|Key phrase extraction|	This pre-configured feature evaluates unstructured text, and for each input document, returns a list of key phrases and main points in the text.|
-|Entity linking	|This pre-configured feature disambiguates the identity of an entity found in text and provides links to the entity on Wikipedia.|
-|Text Analytics for health|	This pre-configured feature extracts information from unstructured medical texts, such as clinical notes and doctor's notes.|
-|Custom NER|	Build an AI model to extract custom entity categories, using unstructured text that you provide.|
-|Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
-|Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
-|Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
+| -----| ----- | ----------- |
+| Prebuilt |Named Entity Recognition (NER)|	This pre-configured feature identifies entities in text across several pre-defined categories.|
+| |Personally Identifiable Information (PII) detection	|This pre-configured feature identifies entities in text across several pre-defined categories of sensitive |information, such as account information.|
+| |Key phrase extraction|	This pre-configured feature evaluates unstructured text, and for each input document, returns a list of key phrases and main points in the text.|
+| |Entity linking	|This pre-configured feature disambiguates the identity of an entity found in text and provides links to the entity on Wikipedia.|
+| |Text Analytics for health|	This pre-configured feature extracts information from unstructured medical texts, such as clinical notes and doctor's notes.|
+| Custom |Custom NER|	Build an AI model to extract custom entity categories, using unstructured text that you provide.|
+| |Analyze sentiment and opinions|	This pre-configured feature provides sentiment labels (such as "negative", "neutral" and "positive") for sentences and documents. This feature can additionally provide granular information about the opinions related to words that appear in the text, such as the attributes of products or services.|
+| Custom |Custom text classification (preview)	|Build an AI model to classify unstructured text into custom classes that you define.|
+| Prebuilt |Text Summarization (preview)	|This pre-configured feature extracts key sentences that collectively convey the essence of a document.|
 
+[Language Service Models Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview)
 
-https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview
-
+#### Speech Service
+The Speech service provides speech-to-text and text-to-speech capabilities with an Azure Speech resource. You can transcribe speech to text with high accuracy, produce natural-sounding text-to-speech voices, translate spoken audio, and use speaker recognition during conversations.  
+[Speech Service Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview)  
 
 #### Hugging Face Implementation
 Many of the pretrained models from the huggingface library can be used, depending on the task selected! Find more information at https://huggingface.co/models?pipeline_tag=text-classification&sort=downloads
