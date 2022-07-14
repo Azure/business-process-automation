@@ -13,7 +13,8 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 <br/><br/>
   
 &ast;*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
-
+ 
+---
 
 ## Contents  
 - [Overview](#overview)  
@@ -23,12 +24,12 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
   - [Create a Resource Group](#1-create-a-resource-group-in-your-azure-portal)
-  - [Fork the Repo](#2-fork-the-repo)
+  - [Fork the repo](#2-fork-the-repo)
   - [Create AND save personal access token](#3-create-and-save-personal-access-token)
   - [Clone local repo for deployment](#4-navigate-to-and-open-for-editing-templatesparametersjsonexample-in-your-local-directory)
   - [Run initial deployment configuration](#5-run-initial-deployment-configuration)
   - [Create action to deploy](#6-collect-the-published-profiles-from-your-newly-created-azure-function-apps)
-  - [Create Github Action to build the code and deploy it to your Function Apps](#6-create-github-action-to-your-function-apps-deploying-your-front-and-back-end-resources)
+  - [Create GitHub Action to build the code and deploy it to your Function Apps](#6-create-github-action-to-your-function-apps-deploying-your-front-and-back-end-resources)
 - [Go to your React App](#go-to-your-react-app)
 - [Load Documents!](#load-documents)
 - [View Your Results](#view-your-results)
@@ -41,22 +42,22 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 
 
 ## Architecture
-Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. Once the pipeline is deployed, a static webapp will be created with your newly customizable POC UI for document processing!
+Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. After pipeline deployment, a static webapp will be created with your newly customizable POC UI for building and triggering pipelines.
 
 ![](images/architecture_original_plus_huggingface_v2.png)  
+*High-level technical architecture*  
 
-Once deployed, a web app is created. The UI provides and drag-n-drop interface for end users to build multi service pipelines:
-  1.	Starting with specifying input file type(s), e.g. audio, texts, or emails,
-  2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
+The UI provides and drag-n-drop interface for end users to build multi-service pipelines:
+  1.	Starting with specifying input file type(s), e.g. audio, texts, or emails
+  2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline 
   3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
   4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
   5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource  
 
 <br/><br/>
 ![](images/overview.png)  
+*BPA UI*
 <br/><br/>  
-
-*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
 
 ## Sample Pipeline  
 A simple example pipeline for a call center mining use case is below is illustrated below. For a general call center mining use case, the Business Process Accelerator could be used to deploy a pipeline ingesting, transcribing, (+optionally translating), summarizing, and analyzing the sentiment for each call.
@@ -66,15 +67,14 @@ Resulting Pipeline Steps [AI Service Deployed]:
 2.	Translate to another language (optional) [Speech Service]  
 3.	Store the transcribed and translated calls [CosmosDB]  
 4.	Apply suite of text analytics offerings (e.g. text summarization, sentiment analysis, call classification) [Language Service]  
-Using:  
-Azure Speech Service, Azure Language Service, Azure Cosmos DB, Azure Functions  
 
+The resulting deployment pipeline leverages: 
+Azure Speech Service, Azure Language Service, Azure Cosmos DB, Azure Functions
 <br/><br/>
 ![](images/sample_pipeline_call_center_mining.png)  
  
 
-Once the pipeline is completed – this process typically takes <1 min for smaller documents and simpler pipelines – the results are found in your newly created Azure Cosmos DB, where we can quickly inspect our results.  
-
+Once the pipeline is completed – this process typically takes <1 min for smaller documents and simpler pipelines – the results are found in your newly created Azure Cosmos DB, where we can quickly inspect our results.
 <br/><br/>
 ![](images/sample_output_call_center_mining.png.png)  
 
