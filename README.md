@@ -20,6 +20,7 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 ## Contents  
 - [Overview](#overview)  
 - [Architecture](#architecture)  
+- [Sample Pipeline](#sample-pipeline)  
 - [Currently Inluded Algorithms](#currently-included-algorithms)  
 - [Prerequisities](#prerequisities)  
 - [Installation Steps](#installation-steps)  
@@ -50,29 +51,55 @@ Once deployed, a web app is created. The UI provides and drag-n-drop interface f
   2.	Pipeline stages are added by selecting which Cognitive Services to add to the pipeline. 
   3.	Once a new pipeline stage is added, if the data is transformed to a new format type (e.g. OCR’ing a PDF to text), the new pipeline stages will become available to be added based on the transformed format of the data at the latest stage of the pipeline
   4.	Once the pipeline is specified, the user will upload files through the UI, triggering the pipeline, and saving the result in a CosmosDB
-  5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
-
-
-*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
+  5.	Optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource  
 
 <br/><br/>
 ![](images/overview.png)  
 <br/><br/>  
 
+*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
+
+## Sample Pipeline  
+A simple example pipeline for a call center mining use case is below is illustrated below. For a general call center mining use case, the Business Process Accelerator could be used to deploy a pipeline ingesting, transcribing, (+optionally translating), summarizing, and analyzing the sentiment for each call.
+Resulting Pipeline Steps [AI Service Deployed]:  
+
+1.	Transcribe audio calls [Speech Service]  
+2.	Translate to another language (optional) [Speech Service]  
+3.	Store the transcribed and translated calls [CosmosDB]  
+4.	Apply suite of text analytics offerings (e.g. text summarization, sentiment analysis, call classification) [Language Service]  
+Using:  
+Azure Speech Service, Azure Language Service, Azure Cosmos DB, Azure Functions  
+
+<br/><br/>
+![](images/sample_pipeline_call_center_mining.png)  
+<br/><br/>  
+
+Once the pipeline is completed – this process typically takes <1 min for smaller documents and simpler pipelines – the results are found in your newly created Azure Cosmos DB, where we can quickly inspect our results.  
+
+<br/><br/>
+![](images/sample_output_call_center_mining.png.png)  
+<br/><br/>  
+
+
 ## Currently Included Services
-The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. Generally, these services will return a JSON response, which can then either be passed 
+The current release allows you to build pipelines from multiple Cognitives Services, Azure Machine Learning Endpoints, even HuggingFace models. 
 
-![](images/json-output.png)  
-
-
-
+### Available Services
 - Azure Cognitive Services
   - Form Recognizer
   - Language Service
   - Speech Service
   - Cognitive Search
 - Azure Machine Learning Endpoints
-- HuggingFace Models  
+- HuggingFace Tokenization Models  
+
+Generally, these services will return a JSON response, where the key output is passed to the next stage of the pipeline for continued processing, or finally stored in a CosmosDB. Each of these intermediate outputs, will also be added to a Cognitive Search Index, if the feature is added at the end of the pipeline.
+
+![](images/json-output.png)  
+
+
+
+
 
 #### Form Recognizer Models  
 
