@@ -6,7 +6,7 @@ import Home from './Home'
 import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
-import ViewInsights from './ViewInsights';
+//import ViewInsights from './ViewInsights';
 //import axios from 'axios';
 import SelectPipeline from './SelectPipeline';
 
@@ -176,6 +176,7 @@ export default function Content(props) {
         <div className="content" >
             <a key={provider} href={`/.auth/login/aad?post_login_redirect_uri=${redirect}`}>
           {provider}
+          {userInfo}
         </a>
             <div style={{ paddingLeft: "0px", paddingTop: "50px", maxWidth: "1000px", minWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
