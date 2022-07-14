@@ -364,7 +364,7 @@ When using a custom Hugging Face model, you'll be prompted select your desired m
 
 
 If a Cognitive Search index was added to the pipeline, you will need to navigate to your newly created Cognitive Search Resource within that same Resource Group.
-![](images/cognitive_search_index1.png)
+![](images/cognitive_search_index1.png)  
 *Generated Cognitive Search Index*  
 
 ---
