@@ -12,13 +12,13 @@ export default function Content(props) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState("HOME");
     const [breadCrumbItems, setBreadCrumbItems] = useState([])
-    const [userInfo, setUserInfo] = useState();
+    //const [userInfo, setUserInfo] = useState();
 
-    useEffect(() => {
-        getUserInfo().then(value => {
-            setUserInfo(value)
-        })
-    }, [])
+    // useEffect(() => {
+    //     getUserInfo().then(value => {
+    //         setUserInfo(value)
+    //     })
+    // }, [])
 
     const getUserInfo = async () => {
         try {
@@ -161,20 +161,20 @@ export default function Content(props) {
         }
     }
 
-    const provider = "aad"
-    const redirect = window.location.pathname;
-    const showUserInfo = () => {
-        if(userInfo){
-            return(<div>{JSON.stringify(userInfo)}</div>)
-        }
-    }
+    // const provider = "aad"
+    // const redirect = window.location.pathname;
+    // const showUserInfo = () => {
+    //     if (userInfo) {
+    //         return (<div>{JSON.stringify(userInfo)}</div>)
+    //     }
+    // }
 
     return (
         <div className="content" >
-            <a key={provider} href={`/.auth/login/aad?post_login_redirect_uri=${redirect}`}>
-          {provider}
-          {showUserInfo()}
-        </a>
+            {/* <a key={provider} href={`/.auth/login/aad?post_login_redirect_uri=${redirect}`}>
+                {provider}
+                {showUserInfo()}
+            </a> */}
             <div style={{ paddingLeft: "0px", paddingTop: "50px", maxWidth: "1000px", minWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
                 {renderContent()}
