@@ -1,13 +1,10 @@
 
 import React, { useState, useEffect } from 'react'
-//import Stages from './Stages'
 import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
-//import ViewInsights from './ViewInsights';
-//import axios from 'axios';
 import SelectPipeline from './SelectPipeline';
 
 
@@ -15,14 +12,9 @@ export default function Content(props) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState("HOME");
     const [breadCrumbItems, setBreadCrumbItems] = useState([])
-    //const [documents, setDocuments] = useState(null)
     const [userInfo, setUserInfo] = useState();
 
     useEffect(() => {
-        // axios.get('/api/ner').then(response => {
-        //     console.log(JSON.stringify(response.data))
-        //     setDocuments(response.data)
-        // })
         getUserInfo().then(value => {
             setUserInfo(value)
         })
