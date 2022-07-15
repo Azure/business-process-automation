@@ -1,4 +1,7 @@
-on: [push]
+on:
+  push:
+    branches:
+      - auditpoc
 
 env:
   AZURE_FUNCTIONAPP_NAME: auditpoc    # set this to your application's name
