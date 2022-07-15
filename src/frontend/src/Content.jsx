@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
@@ -20,17 +20,17 @@ export default function Content(props) {
     //     })
     // }, [])
 
-    const getUserInfo = async () => {
-        try {
-            const response = await fetch('/.auth/me');
-            const payload = await response.json();
-            const { clientPrincipal } = payload;
-            return clientPrincipal;
-        } catch (error) {
-            console.error('No profile could be found');
-            return undefined;
-        }
-    }
+    // const getUserInfo = async () => {
+    //     try {
+    //         const response = await fetch('/.auth/me');
+    //         const payload = await response.json();
+    //         const { clientPrincipal } = payload;
+    //         return clientPrincipal;
+    //     } catch (error) {
+    //         console.error('No profile could be found');
+    //         return undefined;
+    //     }
+    // }
 
     const onBreadcrumbHome = () => {
         setSelectedMenuItem("HOME")
