@@ -1,13 +1,10 @@
 
-import React, { useState, useEffect } from 'react'
-//import Stages from './Stages'
+import React, { useState } from 'react'
 import CurrentPipeline from './CurrentPipeline'
 import Home from './Home'
 import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
-import ViewInsights from './ViewInsights';
-import axios from 'axios';
 import SelectPipeline from './SelectPipeline';
 
 
@@ -15,14 +12,25 @@ export default function Content(props) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState("HOME");
     const [breadCrumbItems, setBreadCrumbItems] = useState([])
-    const [documents, setDocuments] = useState(null)
+    //const [userInfo, setUserInfo] = useState();
 
-    useEffect(()=>{
-        axios.get('/api/ner').then(response => {
-            console.log(JSON.stringify(response.data))
-            setDocuments(response.data)
-        })
-    },[])
+    // useEffect(() => {
+    //     getUserInfo().then(value => {
+    //         setUserInfo(value)
+    //     })
+    // }, [])
+
+    // const getUserInfo = async () => {
+    //     try {
+    //         const response = await fetch('/.auth/me');
+    //         const payload = await response.json();
+    //         const { clientPrincipal } = payload;
+    //         return clientPrincipal;
+    //     } catch (error) {
+    //         console.error('No profile could be found');
+    //         return undefined;
+    //     }
+    // }
 
     const onBreadcrumbHome = () => {
         setSelectedMenuItem("HOME")
@@ -50,12 +58,12 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'Upload Documents', key: 'UPLOAD_DOCUMENTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
-            case 'VIEW_INSIGHTS':
-                setSelectedMenuItem('VIEW_INSIGHTS')
-                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
-                breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
-                setBreadCrumbItems(breadCrumbItems)
-                break
+            // case 'VIEW_INSIGHTS':
+            //     setSelectedMenuItem('VIEW_INSIGHTS')
+            //     breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+            //     breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
+            //     setBreadCrumbItems(breadCrumbItems)
+            //     break
             default:
                 break;
         }
@@ -71,8 +79,8 @@ export default function Content(props) {
                 return (<SelectPipeline theme={props.theme} onSelectContent={onSelectContent} />)
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
-            case 'VIEW_INSIGHTS':
-                return (<ViewInsights theme={props.theme} documents={documents} onSelectContent={onSelectContent} />)
+            // case 'VIEW_INSIGHTS':
+            //     return (<ViewInsights theme={props.theme} documents={[]} onSelectContent={onSelectContent} />)
 
             default:
                 return (<Home />)
@@ -133,28 +141,40 @@ export default function Content(props) {
                     </Breadcrumb.Item>
                 </>)
 
-            case 'VIEW_INSIGHTS':
-                return (<>
-                    <Breadcrumb >
-                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
-                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                    <Breadcrumb.Divider>
-                        <ChevronEndMediumIcon />
-                    </Breadcrumb.Divider>
-                    <Breadcrumb.Item>
-                        View Insights
-                    </Breadcrumb.Item>
-                </>)
+            // case 'VIEW_INSIGHTS':
+            //     return (<>
+            //         <Breadcrumb >
+            //             <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+            //                 <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+            //             </Breadcrumb.Item>
+            //         </Breadcrumb>
+            //         <Breadcrumb.Divider>
+            //             <ChevronEndMediumIcon />
+            //         </Breadcrumb.Divider>
+            //         <Breadcrumb.Item>
+            //             View Insights
+            //         </Breadcrumb.Item>
+            //     </>)
 
             default:
                 return (<Home />)
         }
     }
 
+    // const provider = "aad"
+    // const redirect = window.location.pathname;
+    // const showUserInfo = () => {
+    //     if (userInfo) {
+    //         return (<div>{JSON.stringify(userInfo)}</div>)
+    //     }
+    // }
+
     return (
         <div className="content" >
+            {/* <a key={provider} href={`/.auth/login/aad?post_login_redirect_uri=${redirect}`}>
+                {provider}
+                {showUserInfo()}
+            </a> */}
             <div style={{ paddingLeft: "0px", paddingTop: "50px", maxWidth: "1000px", minWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
                 {renderContent()}
