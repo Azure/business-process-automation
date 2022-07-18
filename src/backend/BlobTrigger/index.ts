@@ -46,6 +46,9 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         //for audit use case only   xml2json
         const body = out.aggregatedResults.xml2Json.document
         body["id"] = body["docId"]
+        body["metadata_storage_name"] = `${body["docId"]}.xml`
+        body["metadata_storage_path"] = context.bindingData.blobTrigger
+        body["id"] = body["docId"]
 
         await db.view(body) 
         context.res = {
