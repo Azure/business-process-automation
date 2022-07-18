@@ -42,10 +42,15 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
 
         const engine = new BpaEngine()
         const out = await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
+
+        //for audit use case only   xml2json
+        const body = out.aggregatedResults.aggregatedResults.xml2Json.document
+        body["id"] = body["docId"]
+
         await db.view(out) 
         context.res = {
             status : 200,
-            body : out.aggregatedResults
+            body : out.aggregatedResults.aggregatedResults.xml2Json.document
         }
 
      
