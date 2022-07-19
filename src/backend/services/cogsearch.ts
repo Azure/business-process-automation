@@ -9,7 +9,7 @@ export class CogSearch {
     constructor(url: string, apikey: string, projectName: string) {
         this._apikey = apikey
         this._url = url
-        this._projectName = projectName
+        this._projectName = projectName.toLocaleLowerCase()
     }
 
     public generateCustomSearchSkill = async (inputObject: any): Promise<void> => {
