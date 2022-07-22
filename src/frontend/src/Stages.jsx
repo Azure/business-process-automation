@@ -18,7 +18,7 @@ import ToTxtDialog from './ToTxtDialog';
 import Prices from './Prices'
 
 import { sc } from './serviceCatalog'
-import { Button, Input, Text } from '@fluentui/react-northstar'
+import { Button, Text } from '@fluentui/react-northstar'
 
 
 export default function Stages(props) {
@@ -212,9 +212,9 @@ export default function Stages(props) {
         )
     }
 
-    const estimatedPrice = () => {
-        return <>Estimated Monthly Price (not including Cognitive Search): <span style={{ color: "blue" }}>${price}</span></>
-    }
+    // const estimatedPrice = () => {
+    //     return <>Estimated Monthly Price (not including Cognitive Search): <span style={{ color: "blue" }}>${price}</span></>
+    // }
 
     const onNumDocuments = (event, value) => {
         isNumber = false

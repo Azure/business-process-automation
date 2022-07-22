@@ -21,7 +21,7 @@ export default function Price(props) {
             if (stagePrice.filteredItem) {
                 if (numDocuments > 0 && pagesPerDocument > 0) {
                     const unitOfMeasure = stagePrice.filteredItem.unitOfMeasure
-                    const perDuration = new RegExp('(\d*/Month)|(\d*/Day)|(\d*/Year)');
+                    //const perDuration = new RegExp('(\d*/Month)|(\d*/Day)|(\d*/Year)');
                     const quantityK = new RegExp('^(\d)K')
                     const quantityM = new RegExp('^(\d)M')
 
