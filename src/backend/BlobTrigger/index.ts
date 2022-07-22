@@ -48,7 +48,7 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         body["metadata_storage_name"] = `${body["docId"]}.xml`
         body["metadata_storage_path"] = context.bindingData.blobTrigger
         body["id"] = body["docId"]
-        body["pipeline"] = directoryName
+        body["pipeline"] = directoryName.toLocaleLowerCase()
 
         await db.view(body) 
         context.res = {
