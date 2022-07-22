@@ -263,32 +263,6 @@ export default function Stages(props) {
 
     const legalMessage = "* Prices are estimates only and are not intended as actual price quotes. Actual pricing may vary depending on the type of agreement entered with Microsoft, date of purchase, and the currency exchange rate. Prices are calculated based on US dollars and converted using Thomson Reuters benchmark rates refreshed on the first day of each calendar month. Sign in to the Azure pricing calculator to see pricing based on your current program/offer with Microsoft. Contact an Azure sales specialist for more information on pricing or to request a price quote. See frequently asked questions about Azure pricing."
 
-    const renderPriceInputs = () => {
-        if (stages && stages.length > 1) {
-            if(stages[0].name === 'pdf'){
-                return (
-                    <div>
-                        <Text weight="normal" content="Total number of files to be processed per month" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "5px" }} />
-                        <Input value={numDocuments} onChange={onNumDocuments} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                        <Text weight="normal" content="The average number of pages per document." style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "5px" }} />
-                        <Input value={pagesPerDocument} onChange={onPagesPerDocument} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                        <Text weight="semibold" content={estimatedPrice()} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                    </div>
-                )
-            } else if (stages[0].name === 'wav'){
-                return (
-                    <div>
-                        <Text weight="normal" content="Total number of files to be processed per month" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "5px" }} />
-                        <Input value={numDocuments} onChange={onNumDocuments} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                        <Text weight="normal" content="The average number of minutes of audio per file." style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "5px" }} />
-                        <Input value={minutesPerAudioFile} onChange={onMinutesPerAudioFile} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                        <Text weight="semibold" content={estimatedPrice()} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                    </div>
-                )
-            }
-        }
-    }
-
     const renderStageBottom = () => {
         if (stages && stages.length > 0) {
             return (

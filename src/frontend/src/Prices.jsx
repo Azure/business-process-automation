@@ -15,7 +15,6 @@ export default function Price(props) {
 
     useEffect(() => {
         //are all dropdowns filled in
-        let dropdownsFilled = true
         let _price = 0
         for (const key of Object.keys(stagePrices)) {
             const stagePrice = stagePrices[key]
@@ -23,10 +22,10 @@ export default function Price(props) {
                 if (numDocuments > 0 && pagesPerDocument > 0) {
                     const unitOfMeasure = stagePrice.filteredItem.unitOfMeasure
                     const perDuration = new RegExp('(\d*/Month)|(\d*/Day)|(\d*/Year)');
-                    const quantityK = /^(\d)K/
-                    const quantityM = /^(\d)M/
+                    const quantityK = new Regexp('^(\d)K')
+                    const quantityM = new Regexp('^(\d)M')
 
-                    const typeDuration = perDuration.test(unitOfMeasure)
+                    //const typeDuration = perDuration.test(unitOfMeasure)
                     const typeQuantityK = quantityK.test(unitOfMeasure)
                     const typeQuantityM = quantityM.test(unitOfMeasure)
                     let quantity = 0
@@ -134,7 +133,7 @@ export default function Price(props) {
             for (let i = 0; i < stageFilter.filters.length; i++) {
                 const f = stageFilter.filters[i]
                 url += `${f.key} eq '${f.value}'`
-                if (i != stageFilter.filters.length - 1) {
+                if (i !== stageFilter.filters.length - 1) {
                     url += ` and `
                 }
             }
@@ -199,7 +198,7 @@ export default function Price(props) {
 
     }
 
-    const legalMessage = "* Prices are estimates only and are not intended as actual price quotes. Actual pricing may vary depending on the type of agreement entered with Microsoft, date of purchase, and the currency exchange rate. Prices are calculated based on US dollars and converted using Thomson Reuters benchmark rates refreshed on the first day of each calendar month. Sign in to the Azure pricing calculator to see pricing based on your current program/offer with Microsoft. Contact an Azure sales specialist for more information on pricing or to request a price quote. See frequently asked questions about Azure pricing."
+    //const legalMessage = "* Prices are estimates only and are not intended as actual price quotes. Actual pricing may vary depending on the type of agreement entered with Microsoft, date of purchase, and the currency exchange rate. Prices are calculated based on US dollars and converted using Thomson Reuters benchmark rates refreshed on the first day of each calendar month. Sign in to the Azure pricing calculator to see pricing based on your current program/offer with Microsoft. Contact an Azure sales specialist for more information on pricing or to request a price quote. See frequently asked questions about Azure pricing."
 
     const renderPriceInputs = () => {
         if (props.stages && props.stages.length > 1) {
