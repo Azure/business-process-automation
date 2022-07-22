@@ -15,6 +15,7 @@ import SpeechToTextDialog from './SpeechToText';
 import ChangeDataDialog from './ChangeDataDialog';
 //import CopyDialog from './CopyDialog';
 import ToTxtDialog from './ToTxtDialog';
+import Prices from './Prices'
 
 import { sc } from './serviceCatalog'
 import { Button, Input, Text } from '@fluentui/react-northstar'
@@ -294,14 +295,15 @@ export default function Stages(props) {
                 <>
                     <Text weight="semibold" align="center" content="Pipeline Preview" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
                     <PipelinePreview stages={stages} />
-
+                    <Prices stages={stages}></Prices>
                     <Text weight="light" content={legalMessage} style={{ fontSize: "13px", display: "block", width: "100%", marginBottom: "50px" }} />
                         
                     <div style={{
                         marginLeft: "700px",
                         marginBottom: "50px"
                     }}>
-                        {renderPriceInputs()}
+                        {/* {renderPriceInputs()} */}
+                        
                         <Button onClick={onResetPipeline} content="Reset Pipeline" />{' '}
                         <Button onClick={onDone} content="Done" primary />{' '}
                     </div>
