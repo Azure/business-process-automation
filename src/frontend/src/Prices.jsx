@@ -22,8 +22,8 @@ export default function Price(props) {
                 if (numDocuments > 0 && pagesPerDocument > 0) {
                     const unitOfMeasure = stagePrice.filteredItem.unitOfMeasure
                     //const perDuration = new RegExp('(\d*/Month)|(\d*/Day)|(\d*/Year)');
-                    const quantityK = new RegExp('^(\d)K')
-                    const quantityM = new RegExp('^(\d)M')
+                    const quantityK = new RegExp('^(\d)K') // eslint-disable-line
+                    const quantityM = new RegExp('^(\d)M') // eslint-disable-line
 
                     //const typeDuration = perDuration.test(unitOfMeasure)
                     const typeQuantityK = quantityK.test(unitOfMeasure)

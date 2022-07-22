@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import PipelinePreview from './PipelinePreview'
 import OptionCard from './OptionCard';
-import _, { isNumber } from 'lodash'
+import _ from 'lodash'
 
 import LanguageDialog from './LanguageDialog';
 import FormRecCustomDialog from './FormRecCustomDialog';
@@ -38,10 +38,10 @@ export default function Stages(props) {
     const [hideToTxtDialog, setHideToTxtDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
-    const [price, setPrice] = useState(0)
-    const [numDocuments, setNumDocuments] = useState(0)
-    const [minutesPerAudioFile, setMinutesPerAudioFile] = useState(0)
-    const [pagesPerDocument, setPagesPerDocument] = useState(0)
+    //const [price, setPrice] = useState(0)
+    // const [numDocuments, setNumDocuments] = useState(0)
+    // const [minutesPerAudioFile, setMinutesPerAudioFile] = useState(0)
+    // const [pagesPerDocument, setPagesPerDocument] = useState(0)
 
 
     useEffect(() => {
@@ -55,26 +55,26 @@ export default function Stages(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        setPrice(() => {
-            if (stages && stages.length > 0) {
-                let _price = 73 //cost of default service plan S1
-                let _pages = 0
-                if (stages[0].name === 'wav') { //best guess at audio to document conversion (1 hour = 30 pages)
-                    const _hours = numDocuments * ((minutesPerAudioFile) / 60)
-                    _pages = _hours * 30
-                } else {
-                    _pages = numDocuments * pagesPerDocument
-                }
-                for (const stage of stages) {
-                    _price += stage.getPrice(_pages)
-                }
-                return _price
-            }
-            return 0
-        })
+    // useEffect(() => {
+    //     setPrice(() => {
+    //         if (stages && stages.length > 0) {
+    //             let _price = 73 //cost of default service plan S1
+    //             let _pages = 0
+    //             if (stages[0].name === 'wav') { //best guess at audio to document conversion (1 hour = 30 pages)
+    //                 const _hours = numDocuments * ((minutesPerAudioFile) / 60)
+    //                 _pages = _hours * 30
+    //             } else {
+    //                 _pages = numDocuments * pagesPerDocument
+    //             }
+    //             for (const stage of stages) {
+    //                 _price += stage.getPrice(_pages)
+    //             }
+    //             return _price
+    //         }
+    //         return 0
+    //     })
 
-    }, [stages, numDocuments, minutesPerAudioFile, pagesPerDocument])
+    // }, [stages, numDocuments, minutesPerAudioFile, pagesPerDocument])
 
     const onDone = async () => {
         try {
@@ -216,50 +216,50 @@ export default function Stages(props) {
     //     return <>Estimated Monthly Price (not including Cognitive Search): <span style={{ color: "blue" }}>${price}</span></>
     // }
 
-    const onNumDocuments = (event, value) => {
-        isNumber = false
-        try {
-            // eslint-disable-next-line no-unused-vars
-            const temp = Number(value)
-            isNumber = true
-        } catch (err) {
+    // const onNumDocuments = (event, value) => {
+    //     isNumber = false
+    //     try {
+    //         // eslint-disable-next-line no-unused-vars
+    //         const temp = Number(value)
+    //         isNumber = true
+    //     } catch (err) {
 
-        }
-        if (isNumber) {
-            setNumDocuments(Number(value.value))
-        }
+    //     }
+    //     if (isNumber) {
+    //         setNumDocuments(Number(value.value))
+    //     }
 
-    }
+    // }
 
-    const onMinutesPerAudioFile = (event, value) => {
-        isNumber = false
-        try {
-            // eslint-disable-next-line no-unused-vars
-            const temp = Number(value)
-            isNumber = true
-        } catch (err) {
+    // const onMinutesPerAudioFile = (event, value) => {
+    //     isNumber = false
+    //     try {
+    //         // eslint-disable-next-line no-unused-vars
+    //         const temp = Number(value)
+    //         isNumber = true
+    //     } catch (err) {
 
-        }
-        if (isNumber) {
-            setMinutesPerAudioFile(Number(value.value))
-        }
+    //     }
+    //     if (isNumber) {
+    //         setMinutesPerAudioFile(Number(value.value))
+    //     }
 
-    }
+    // }
 
-    const onPagesPerDocument = (event, value) => {
-        isNumber = false
-        try {
-            // eslint-disable-next-line no-unused-vars
-            const temp = Number(value)
-            isNumber = true
-        } catch (err) {
+    // const onPagesPerDocument = (event, value) => {
+    //     isNumber = false
+    //     try {
+    //         // eslint-disable-next-line no-unused-vars
+    //         const temp = Number(value)
+    //         isNumber = true
+    //     } catch (err) {
 
-        }
-        if (isNumber) {
-            setPagesPerDocument(Number(value.value))
-        }
+    //     }
+    //     if (isNumber) {
+    //         setPagesPerDocument(Number(value.value))
+    //     }
 
-    }
+    // }
 
     const legalMessage = "* Prices are estimates only and are not intended as actual price quotes. Actual pricing may vary depending on the type of agreement entered with Microsoft, date of purchase, and the currency exchange rate. Prices are calculated based on US dollars and converted using Thomson Reuters benchmark rates refreshed on the first day of each calendar month. Sign in to the Azure pricing calculator to see pricing based on your current program/offer with Microsoft. Contact an Azure sales specialist for more information on pricing or to request a price quote. See frequently asked questions about Azure pricing."
 
