@@ -49,6 +49,48 @@ export default function Price(props) {
                             _price += (characters * unitPrice) / quantity
                         }
                     }
+                } else if (numDocuments > 0 && minutesPerAudioFile > 0) {
+                    const unitOfMeasure = stagePrice.filteredItem.unitOfMeasure
+                    //const perDuration = new RegExp('(\d*/Month)|(\d*/Day)|(\d*/Year)');
+                    const quantityK = /^(\d)K/ // eslint-disable-line
+                    const quantityM = /^(\d)M/ // eslint-disable-line
+                    const quantityHour = /^(\d) Hour/ // eslint-disable-line
+
+                    //const typeDuration = perDuration.test(unitOfMeasure)
+                    const typeQuantityK = quantityK.test(unitOfMeasure)
+                    const typeQuantityM = quantityM.test(unitOfMeasure)
+                    const typeQuantityHour = quantityHour.test(unitOfMeasure)
+                    let quantity = 0
+                    if (typeQuantityHour) {
+                        const quantityRe = quantityHour.exec(unitOfMeasure)
+                        if (quantityRe && quantityRe[1]) {
+                            const quantityNum = Number(quantityRe[1])
+                            quantity = quantityNum
+                            const unitPrice = stagePrice.filteredItem.unitPrice
+                            const hours = (numDocuments * minutesPerAudioFile) / 60
+                            _price += (hours * unitPrice) / quantity
+                        }
+                    }
+                    if (typeQuantityK) {
+                        const quantityRe = quantityK.exec(unitOfMeasure)
+                        if (quantityRe && quantityRe[1]) {
+                            const quantityNum = Number(quantityRe[1])
+                            quantity = quantityNum * 1000
+                            const unitPrice = stagePrice.filteredItem.unitPrice
+                            const pages = (numDocuments * minutesPerAudioFile) * 30 //30 pages per minute of speech
+                            _price += (pages * unitPrice) / quantity
+                        }
+                    }
+                    if (typeQuantityM) {
+                        const quantityRe = quantityM.exec(unitOfMeasure)
+                        if (quantityRe && quantityRe[1]) {
+                            const quantityNum = Number(quantityRe[1])
+                            quantity = quantityNum * 1000000
+                            const unitPrice = stagePrice.filteredItem.unitPrice
+                            const characters = numDocuments * minutesPerAudioFile * 1800
+                            _price += (characters * unitPrice) / quantity
+                        }
+                    }
                 }
             }
         }
@@ -57,24 +99,6 @@ export default function Price(props) {
 
 
     }, [pagesPerDocument, minutesPerAudioFile, stagePrices, numDocuments])
-
-    // useEffect(() => {
-    //     try {
-    //         for (const stage of props.stages) {
-    //             if (stage && stage.filters) {
-    //                 if (!stagePrices[stage.name]) {
-    //                     callPriceAPi(stage).then(results => {
-    //                         const _stagePrices = _.cloneDeep(stagePrices)
-    //                         _stagePrices[stage.name] = results
-    //                         setStagePrices(_stagePrices)
-    //                     })
-    //                 }
-    //             }
-    //         }
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }, [props.stages])
 
 
     const onDropdownChange = (event, item) => {
@@ -109,15 +133,20 @@ export default function Price(props) {
         try {
             setButtonDisabled(true)
             const _stagePrices = _.cloneDeep(stagePrices)
+            let index = 0
             for (const stage of props.stages) {
                 if (stage && stage.filters) {
-                    if (!stagePrices[stage.name]) {
+                    if (!stagePrices[stage.name + `-${index}`]) {
                         const results = await callPriceAPi(stage)
-                        _stagePrices[stage.name] = results
-                        _stagePrices[stage.name].label = stage.label
+                        _stagePrices[stage.name + `-${index}`] = results
+                        _stagePrices[stage.name + `-${index}`].label = stage.label
+                        _stagePrices[stage.name + `-${index}`].selectedMeter = stage.defaultTier
+                        _stagePrices[stage.name + `-${index}`].defaultMeter = stage.defaultTier
                     }
+                    index++
                 }
             }
+            
             setStagePrices(_stagePrices)
         } catch (err) {
             console.log(err)
@@ -219,7 +248,6 @@ export default function Price(props) {
                         <Input value={numDocuments} onChange={onNumDocuments} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
                         <Text weight="normal" content="The average number of minutes of audio per file." style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "5px" }} />
                         <Input value={minutesPerAudioFile} onChange={onMinutesPerAudioFile} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-                        <Text weight="semibold" content={estimatedPrice()} style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
                     </div>
                 )
             }
@@ -242,6 +270,8 @@ export default function Price(props) {
                                 <Dropdown
                                     name={key}
                                     type="tier"
+                                    defaultSelectedKey={stagePrices[key].defaultMeter}
+                                    defaultValue={stagePrices[key].defaultMeter}
                                     serviceName={stagePrices[key].serviceNames[0]}
                                     productName={stagePrices[key].productNames[0]}
                                     placeholder="Select Tier"
@@ -281,8 +311,8 @@ export default function Price(props) {
 
     } else {
         return (<>
-            <Button primary disabled={buttonDisabled} onClick={onButtonClick} style={{marginRight:"10px"}}>Download Prices</Button>
-            {buttonDisabled ? <Text weight="semibold" content="downloading...." style={{ fontSize: "14px" }} /> : '' }
+            <Button primary disabled={buttonDisabled} onClick={onButtonClick} style={{ marginRight: "10px" }}>Download Prices</Button>
+            {buttonDisabled ? <Text weight="semibold" content="downloading...." style={{ fontSize: "14px" }} /> : ''}
         </>)
     }
 
