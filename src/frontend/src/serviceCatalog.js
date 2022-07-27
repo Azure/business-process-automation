@@ -310,6 +310,7 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "sttService": {
+        "defaultTier" : "Speech To Text",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
