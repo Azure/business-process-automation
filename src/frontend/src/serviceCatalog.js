@@ -40,6 +40,8 @@ export const sc = {
         getPrice : noCharge
     },
     "contentModeratorImage": {
+        "defaultTier" : "Standard Transactions",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Content Moderator' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "bmp","jpg","tiff","gif"
@@ -55,6 +57,8 @@ export const sc = {
         getPrice : getContentModeratorPricing
     },
     "contentModeratorText": {
+        "defaultTier" : "Standard Tansactions",
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' },{ key: 'productName', value: 'Content Moderator' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -203,6 +207,8 @@ export const sc = {
         getPrice : noCharge
     },
     "ocrService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
@@ -219,6 +225,8 @@ export const sc = {
         getPrice : getOcrPricing
     },
     "translateService": {
+        "defaultTier" : "S1 Characters",
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -236,6 +244,8 @@ export const sc = {
         getPrice : getTranslationPricing
     },
     "layout": {
+        "defaultTier" : "S0 Read Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -266,6 +276,8 @@ export const sc = {
         getPrice : noCharge
     },
     "extractSummary": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "inputTypes": [
             "text"
         ],
@@ -281,6 +293,8 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "recognizeEntities": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "inputTypes": [
             "text"
         ],
@@ -296,6 +310,8 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "sttService": {
+        "defaultTier" : "Speech To Text",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "wav",
@@ -312,6 +328,8 @@ export const sc = {
         getPrice : getSpeechPricing
     },
     "generalDocument": {
+        "defaultTier" : "S0 Pre-built Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -327,6 +345,8 @@ export const sc = {
         getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltInvoice": {
+        "defaultTier" : "S0 Pre-built Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -342,6 +362,8 @@ export const sc = {
         getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltBusinessCard": {
+        "defaultTier" : "S0 Pre-built Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -357,6 +379,8 @@ export const sc = {
         getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltIdentity": {
+        "defaultTier" : "S0 Pre-built Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -372,6 +396,8 @@ export const sc = {
         getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltReceipt": {
+        "defaultTier" : "S0 Pre-built Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -387,6 +413,8 @@ export const sc = {
         getPrice : getFormRecPrebuiltPricing
     },
     "prebuiltTaxW2": {
+        "defaultTier" : "S0 Pre-built Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -402,6 +430,8 @@ export const sc = {
         getPrice : getFormRecPrebuiltPricing
     },
     "customFormRec": {
+        "defaultTier" : "S0 Custom Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf","tiff","gif","jpg","jpeg"
@@ -417,6 +447,8 @@ export const sc = {
         getPrice : getFormRecCustomPricing
     },
     "recognizePiiEntities": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -432,6 +464,8 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "extractKeyPhrases": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -447,6 +481,8 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "recognizeLinkedEntities": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -462,6 +498,8 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "analyzeSentiment": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -477,6 +515,8 @@ export const sc = {
         getPrice : getLanguagePricing
     },
     "recognizeCustomEntities": {
+        "defaultTier" : "Standard Custom Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -492,6 +532,8 @@ export const sc = {
         getPrice : getCustomLanguagePricing
     },
     "singleCategoryClassify": {
+        "defaultTier" : "Standard Custom Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -507,6 +549,8 @@ export const sc = {
         getPrice : getCustomLanguagePricing
     },
     "multiCategoryClassify": {
+        "defaultTier" : "Standard Custom Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -552,6 +596,8 @@ export const sc = {
         getPrice : noCharge
     },
     "healthCare": {
+        "defaultTier" : "Standard Health Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
@@ -567,6 +613,8 @@ export const sc = {
         getPrice : getHealthLanguagePricing
     },
     "documentTranslation": {
+        "defaultTier" : "S1 Document Characters",
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf"
@@ -577,6 +625,54 @@ export const sc = {
         "image": customClassification,
         "label": "Document Translation",
         "name": "documentTranslation",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getDocumentTranslatorPricing
+    },
+    "blobStorage": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            
+        ],
+        "outputTypes": [
+           
+        ],
+        "image": customClassification,
+        "label": "Blob Storage",
+        "name": "blobStorage",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getDocumentTranslatorPricing
+    },
+    "cogSearch": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+           
+        ],
+        "outputTypes": [
+           
+        ],
+        "image": customClassification,
+        "label": "Cognitive Search",
+        "name": "cogSearch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getDocumentTranslatorPricing
+    },
+    "staticWebApp": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+           
+        ],
+        "outputTypes": [
+           
+        ],
+        "image": customClassification,
+        "label": "Static Web App",
+        "name": "staticWebApp",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getDocumentTranslatorPricing
