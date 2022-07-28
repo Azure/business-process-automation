@@ -17,7 +17,7 @@ export class CosmosDB {
         this._pipelinesLabel = "pipelines"
     }
 
-    private _create = async (data) : Promise<any> => {
+    public create = async (data) : Promise<any> => {
         try {
             const client = new CosmosClient(this._connectionString);
             console.log(`db: ${this._dbName}`)
@@ -33,7 +33,7 @@ export class CosmosDB {
     }
 
     public view = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
-        await this._create(input)
+        await this.create(input)
         return input
     }
     
