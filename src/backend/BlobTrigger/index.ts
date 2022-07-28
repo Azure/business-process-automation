@@ -42,18 +42,10 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         const engine = new BpaEngine()
         const out = await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
 
-        // //for audit use case only   xml2json
-        // const body = out.aggregatedResults.xml2Json.document
-        // body["id"] = body["docId"]
-        // body["metadata_storage_name"] = `${body["docId"]}.xml`
-        // body["metadata_storage_path"] = context.bindingData.blobTrigger
-        // body["id"] = body["docId"]
-        // body["pipeline"] = directoryName.toLocaleLowerCase()
-
-        //await db.view(body) 
+        await db.view(out) 
         context.res = {
             status : 200,
-            body : out //.aggregatedResults.xml2Json.document
+            body : out
         }
 
      
@@ -61,7 +53,7 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         if(isCreateSkill?.createSkill){
             const cogSearch = new CogSearch(process.env.COGSEARCH_URL, process.env.COGSEARCH_APIKEY, directoryName)
             const customSkillUrl = `https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/CustomSkill`
-            await cogSearch.generateCustomSearchSkill(out) //.aggregatedResults.xml2Json.document)
+            await cogSearch.generateCustomSearchSkill(out)
         }
 
     }
