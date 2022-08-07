@@ -6,6 +6,7 @@ import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import SelectPipeline from './SelectPipeline';
+import ViewInsights from './ViewInsights';
 
 
 export default function Content(props) {
@@ -58,12 +59,12 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'Upload Documents', key: 'UPLOAD_DOCUMENTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
-            // case 'VIEW_INSIGHTS':
-            //     setSelectedMenuItem('VIEW_INSIGHTS')
-            //     breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
-            //     breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
-            //     setBreadCrumbItems(breadCrumbItems)
-            //     break
+            case 'VIEW_INSIGHTS':
+                setSelectedMenuItem('VIEW_INSIGHTS')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
+                setBreadCrumbItems(breadCrumbItems)
+                break
             default:
                 break;
         }
@@ -79,8 +80,8 @@ export default function Content(props) {
                 return (<SelectPipeline theme={props.theme} onSelectContent={onSelectContent} />)
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
-            // case 'VIEW_INSIGHTS':
-            //     return (<ViewInsights theme={props.theme} documents={[]} onSelectContent={onSelectContent} />)
+            case 'VIEW_INSIGHTS':
+                return (<ViewInsights theme={props.theme} documents={[]} onSelectContent={onSelectContent} />)
 
             default:
                 return (<Home />)
@@ -141,20 +142,20 @@ export default function Content(props) {
                     </Breadcrumb.Item>
                 </>)
 
-            // case 'VIEW_INSIGHTS':
-            //     return (<>
-            //         <Breadcrumb >
-            //             <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
-            //                 <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
-            //             </Breadcrumb.Item>
-            //         </Breadcrumb>
-            //         <Breadcrumb.Divider>
-            //             <ChevronEndMediumIcon />
-            //         </Breadcrumb.Divider>
-            //         <Breadcrumb.Item>
-            //             View Insights
-            //         </Breadcrumb.Item>
-            //     </>)
+            case 'VIEW_INSIGHTS':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        View Insights
+                    </Breadcrumb.Item>
+                </>)
 
             default:
                 return (<Home />)

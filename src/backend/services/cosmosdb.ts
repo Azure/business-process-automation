@@ -50,6 +50,20 @@ export class CosmosDB {
         return null
     }
 
+    public getAsyncTransactions = async () : Promise<any[]> => {
+        try{
+            const client = new CosmosClient(this._connectionString);
+            const database = client.database(this._dbName);
+            const container = database.container(this._containerName);
+            const items = await container.items.query("SELECT * from c WHERE c.type='async transaction'").fetchAll()
+            
+            return items.resources
+        } catch(err){
+            console.log(err)
+        }
+        return null
+    }
+
     public getDocSearchCustomSkillConfig = async () : Promise<any> => {
         try{
             const client = new CosmosClient(this._connectionString);
