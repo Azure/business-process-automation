@@ -7,8 +7,7 @@
       "name": "req",
       "methods": [
         "get"
-      ],
-      "route":"cogsearch/indexes"
+      ]
     },
     {
       "type": "http",
@@ -16,5 +15,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/cogsearch/index.js"
+  "scriptFile": "../dist/indexes/index.js"
 }

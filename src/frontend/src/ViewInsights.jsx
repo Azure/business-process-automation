@@ -1,43 +1,167 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import PipelinePreview from './PipelinePreview'
-import { Text } from '@fluentui/react-northstar';
-
+import { Text, Dropdown, Input, Checkbox, SearchIcon } from '@fluentui/react-northstar';
 
 export default function ViewInsights(props) {
 
     const [indexes, setIndexes] = useState([])
+    const [selectedIndex, setSelectedIndex] = useState(null)
+    const [searchQuery, setSearchQuery] = useState('*')
+    const [searchResults, setSearchResults] = useState([])
+    const [useSemanticSearch, setUseSemanticSearch] = useState(false)
+    const [semanticConfiguration, setSemanticConfiguration] = useState("")
+    const [resultWaiting, setResultWaiting] = useState(false)
 
     useEffect(() => {
         try {
-            axios.get('/api/cogsearch/indexes').then(value => setIndexes(value.data.indexes))
+            axios.get('/api/indexes').then(value => {
+                setIndexes(value.data.indexes)
+                if (value?.data?.indexes.length > 0) {
+                    setSelectedIndex(value.data.indexes[0])
+                }
+            })
         } catch (err) {
             console.log(err)
         }
-
     }, [])
 
-    const renderIndexes = () => {
+    const onIndexChange = (event, item) => {
+        setSelectedIndex(item.value)
+    }
 
-        if (indexes) {
+    const onSearchQuery = (event, item) => {
+        setSearchQuery(item.value)
+    }
+
+    const onSemanticConfiguration = (event, item) => {
+        setSemanticConfiguration(item.value)
+    }
+
+    const onSearch = async () => {
+        console.log(searchQuery)
+        try {
+            setResultWaiting(true)
+            const url = `/api/search?semantic=${useSemanticSearch}&index=${selectedIndex}&text=${searchQuery}&semanticConfig=${semanticConfiguration}`
+            const axiosResult = await axios.get(url)
+            setSearchResults(axiosResult.data.results)
+            console.log(axiosResult.data.results["@search.answers"])
+        } catch (err) {
+            console.log(err)
+        }
+        setResultWaiting(false)
+    }
+
+    const onEnter = (event) => {
+        if (event.key === 'Enter') {
+            onSearch()
+        }
+    }
+
+    const onSemanticSearch = (event, item) => {
+        setUseSemanticSearch(!useSemanticSearch)
+    }
+
+    const renderIndexes = () => {
+        if (indexes && selectedIndex) {
             return (
-                indexes.map(p => {
-                    return (
-                        <div style={{marginBottom : "100px"}}>
-                            <Text weight="semibold" content={p.name} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px", marginLeft : "100px" }} />
-                           
-                        </div>
-                    )
-                })
+                <div style={{ paddingBottom: "20px" }}>
+                    <Text content="Choose a Cognitive Search Index" style={{
+                        display: 'flex', marginBottom: "10px"
+                    }} />
+                    <div style={{ display: "flex" }}>
+
+                        <Dropdown
+                            placeholder=""
+                            label="Output"
+                            items={indexes}
+                            onChange={onIndexChange}
+                            defaultValue={selectedIndex}
+                            style={{ marginRight: "40px" }}
+                        />
+                        <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} label="Semantic Search" toggle />
+
+                    </div>
+                    {useSemanticSearch ? (
+                        <>
+                            <Text content="Select a Semantic Search Configuration" style={{ display: 'flex', marginTop: "10px" }} />
+                            <Input value={semanticConfiguration} style={{ marginTop: "10px" }} onChange={onSemanticConfiguration} />
+                        </>
+                    ) : (<></>)}
+                    <Input fluid value={searchQuery} style={{ marginTop: "30px" }} onKeyDown={onEnter} icon={<SearchIcon />} onChange={onSearchQuery} />
+                </div>
             )
+        } else {
+            return (
+                <div style={{ paddingBottom: "20px" }}>
+                    <Text content="Accessing Cognitive Search Indexes ...." style={{
+                        display: 'block', marginBottom: "10px"
+                    }} />
+                </div>
+            )
+        }
+    }
+
+    const renderResult = (result) => {
+        const filenameSplit = result.filename.split('/')
+        const filename = filenameSplit[filenameSplit.length - 1]
+        const keys = Object.keys(result.aggregatedResults)
+
+        return (
+            <div style={{ display: "flex", flexDirection: "column", marginBottom: "30px", padding: "10px" }}>
+                <Text weight="semibold" content={filename} style={{ fontSize: "14px", width: "100%", marginBottom: "20px" }} />
+                {keys.map(key => {
+                    const keyString = `${key} : `
+                    if (key === 'ocr') {
+                        return (
+                            <div style={{ display: 'block', marginBottom: "40px" }}>
+                                <Text weight="semibold" content={keyString} style={{ fontSize: "18px", width: "100%", marginBottom: "30px" }} />
+                                <Text weight="semibold" content={result.aggregatedResults[key].substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} />
+                            </div>
+                        )
+                    } else {
+                        return (
+                            <div style={{ display: 'block', marginBottom: "40px" }}>
+                                <Text weight="semibold" content={keyString} style={{ fontSize: "18px", width: "100%", marginBottom: "30px" }} />
+                                <Text weight="semibold" content={JSON.stringify(result.aggregatedResults[key]).substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} />
+                            </div>
+                        )
+                    }
+                })}
+            </div>
+        )
+    }
+
+    const renderResults = () => {
+        if (searchResults && searchResults?.value && !resultWaiting) {
+            return (
+                <div style={{ marginTop: "40px" }}>
+                    {searchResults["@search.answers"] ? (<>{searchResults["@search.answers"].map(answer => {
+                        return (
+                            <div style={{ backgroundColor: "limegreen", marginBottom: "30px", fontSize: "18px", padding: "10px" }}>
+                                <Text weight="semibold" content="Answer: " style={{ fontSize: "18px", width: "100%", marginBottom: "30px" }} />
+                                <div dangerouslySetInnerHTML={{ __html: answer.highlights }} />
+                            </div>)
+                    })
+                    }</>) : (<></>)}
+                    {searchResults.value.map(result => {
+                        return (
+                            <div style={{ backgroundColor: "rgb(243, 242, 241)" }}>
+                                {renderResult(result)}
+                            </div>
+                        )
+                    })}
+                </div>
+            )
+        } else{
+            return(<></>)
         }
     }
 
     return (
         <div style={{ paddingTop: "50px" }}>
-            <Text weight="semibold" content="Pipelines" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
+            <Text weight="semibold" content="Cognitive Search Indexes" style={{ fontSize: "18px", width: "100%", marginBottom: "20px" }} />
             {renderIndexes()}
-
+            {renderResults()}
         </div>
     )
 }
