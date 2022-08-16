@@ -23,9 +23,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                     "api-key" : process.env.COGSEARCH_APIKEY
                 }
             }
-            let url = `${process.env.COGSEARCH_URL}indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
+            let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
             if(semantic === 'false'){
-                url = `${process.env.COGSEARCH_URL}indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US`
+                url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US`
             }
             const axiosResult = await axios.get(url,headers)
 

@@ -128,7 +128,7 @@ export default function ViewInsights(props) {
                         const panels = [{
                             key : "recognizeEntities",
                             title : "Entities (Language Service)",
-                            content : JSON.stringify(result.aggregatedResults[key])
+                            content : (<h1>{JSON.stringify(result.aggregatedResults[key])}</h1>)
                         }]
                         return (
                             <div >
