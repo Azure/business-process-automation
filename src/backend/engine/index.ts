@@ -30,32 +30,6 @@ export class BpaEngine {
 
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex)
-        // for (const stage of config.stages) {
-        //     console.log(`stage : ${stage.service.name}`)
-        //     console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
-        //     console.log('validating...')
-        //     if (this._validateInput(currentInput.type, stage)) {
-        //         console.log('validation passed')
-        //         currentInput.serviceSpecificConfig = stage.service.serviceSpecificConfig
-        //         const currentOutput: BpaServiceObject = await stage.service.process(currentInput, stageIndex)
-        //         console.log('exiting stage')
-        //         currentInput = _.cloneDeep(currentOutput)
-        //         if(currentInput.type === 'async transaction'){
-        //             currentInput.stages = config.stages
-        //             break;
-        //         }
-        //     }
-        //     else {
-        //         throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)
-        //     }
-        //     stageIndex++;
-        // }
-
-        // delete currentInput.resultsIndexes
-        // delete currentInput.data
-        // delete currentInput.aggregatedResults.buffer
-
-        // return currentInput
     }
 
     private _process = async (currentInput : BpaServiceObject, config : BpaConfiguration, stageIndex : number) => {

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, Input, Checkbox, SearchIcon } from '@fluentui/react-northstar';
+import { Text, Dropdown, Input, Checkbox, SearchIcon, Accordion } from '@fluentui/react-northstar';
 
 export default function ViewInsights(props) {
 
@@ -108,19 +108,49 @@ export default function ViewInsights(props) {
 
         return (
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "30px", padding: "10px" }}>
-                <Text weight="semibold" content={filename} style={{ fontSize: "14px", width: "100%", marginBottom: "20px" }} />
+                <Text weight="semibold" content={filename} style={{ fontSize: "20px", width: "100%", marginBottom: "20px" }} />
                 {keys.map(key => {
                     const keyString = `${key} : `
+                    
                     if (key === 'ocr') {
+                        const panels = [{
+                            key : "ocr",
+                            title : "OCR Results",
+                            content : result.aggregatedResults[key]
+                        }]
                         return (
-                            <div style={{ display: 'block', marginBottom: "40px" }}>
-                                <Text weight="semibold" content={keyString} style={{ fontSize: "18px", width: "100%", marginBottom: "30px" }} />
-                                <Text weight="semibold" content={result.aggregatedResults[key].substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} />
+                            <div>
+                                <Accordion panels = {panels} />
+                                {/* <Text weight="semibold" content={result.aggregatedResults[key].substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} /> */}
                             </div>
                         )
-                    } else {
+                    } else if (key === 'recognizeEntities'){
+                        const panels = [{
+                            key : "recognizeEntities",
+                            title : "Entities (Language Service)",
+                            content : JSON.stringify(result.aggregatedResults[key])
+                        }]
                         return (
-                            <div style={{ display: 'block', marginBottom: "40px" }}>
+                            <div >
+                                <Accordion panels = {panels} />
+                                {/* <Text weight="semibold" content={result.aggregatedResults[key].substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} /> */}
+                            </div>
+                        )
+                    } else if (key === 'recognizePiiEntities'){
+                        const panels = [{
+                            key : "recognizePiiEntities",
+                            title : "PII Entities (Language Service)",
+                            content : JSON.stringify(result.aggregatedResults[key])
+                        }]
+                        return (
+                            <div >
+                                <Accordion panels = {panels} />
+                                {/* <Text weight="semibold" content={result.aggregatedResults[key].substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} /> */}
+                            </div>
+                        )
+                    }else {
+                        return (
+                            <div style={{ display: 'block', marginBottom: "5px" }}>
                                 <Text weight="semibold" content={keyString} style={{ fontSize: "18px", width: "100%", marginBottom: "30px" }} />
                                 <Text weight="semibold" content={JSON.stringify(result.aggregatedResults[key]).substring(0, 500)} style={{ fontSize: "12px", width: "100%", marginBottom: "20px" }} />
                             </div>
