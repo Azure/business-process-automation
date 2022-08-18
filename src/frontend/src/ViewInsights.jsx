@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, Input, Checkbox, SearchIcon, Accordion } from '@fluentui/react-northstar';
+import { Text, Dropdown, Input, Checkbox, SearchIcon, Accordion, Pill } from '@fluentui/react-northstar';
 
 export default function ViewInsights(props) {
 
@@ -128,7 +128,26 @@ export default function ViewInsights(props) {
                         const panels = [{
                             key : "recognizeEntities",
                             title : "Entities (Language Service)",
-                            content : (<h1>{JSON.stringify(result.aggregatedResults[key])}</h1>)
+                            content : result.aggregatedResults[key][0]["recognizeEntitiesResults"][0]["results"][0]["entities"].map(entity => {
+                                let color = "red"
+                                if(entity.category === 'Organization'){
+                                    color = "light blue"
+                                }
+                                if(entity.category === 'Quantity'){
+                                    color = "green"
+                                }
+                                if(entity.category === 'Address'){
+                                    color = "orange"
+                                }
+                                if(entity.category === 'DateTime'){
+                                    color = "purple"
+                                }
+                                if(entity.category === 'Skill'){
+                                    color = "pink"
+                                }
+                        
+                                return(<Pill size="smaller" style={{backgroundColor:`${color}`}}>{entity.text}</Pill>)
+                            })
                         }]
                         return (
                             <div >
