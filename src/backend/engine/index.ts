@@ -7,6 +7,12 @@ export class BpaEngine {
 
     }
 
+    public processAsync = async (serviceObject : BpaServiceObject, stageIndex : number, config: BpaConfiguration) : Promise<BpaServiceObject> => {
+
+        return this._process(serviceObject, config, stageIndex)
+
+    }
+
     public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration) : Promise<BpaServiceObject> => {
 
         let currentInput: BpaServiceObject = {
@@ -23,7 +29,13 @@ export class BpaEngine {
         console.log(this._getFileType(fileName))
 
         let stageIndex = 1
-        for (const stage of config.stages) {
+        return this._process(currentInput, config, stageIndex)
+    }
+
+    private _process = async (currentInput : BpaServiceObject, config : BpaConfiguration, stageIndex : number) => {
+        for(let i=stageIndex;i<config.stages.length + 1;i++){
+            const stage = config.stages[i-1]
+        //for (const stage of config.stages) {
             console.log(`stage : ${stage.service.name}`)
             console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
             console.log('validating...')
@@ -33,6 +45,11 @@ export class BpaEngine {
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput, stageIndex)
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
+                if(currentInput.type === 'async transaction'){
+                    currentInput.stages = config.stages
+                    currentInput.index = stageIndex
+                    break
+                }
             }
             else {
                 throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)
@@ -40,11 +57,11 @@ export class BpaEngine {
             stageIndex++;
         }
 
-        delete currentInput.resultsIndexes
         delete currentInput.data
         delete currentInput.aggregatedResults.buffer
 
         return currentInput
+
     }
 
     private _validateInput = (input: string, stage: BpaStage): boolean => {
