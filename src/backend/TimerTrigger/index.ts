@@ -66,10 +66,7 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
                     body: err.message
                 }
             }
-
-
         }
-
     }
     catch (err) {
         context.log(err)
