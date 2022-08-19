@@ -63,7 +63,7 @@ export class Speech {
             }
             const axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
 
-            input.aggregatedResults.stt = {
+            input.aggregatedResults["speechToText"] = {
                 index : index,
                 location : axiosResp.headers.location, 
                 stage : "stt",
