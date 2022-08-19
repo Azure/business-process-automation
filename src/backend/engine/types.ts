@@ -39,4 +39,5 @@ export interface BpaServiceObject {
     resultsIndexes ?: ResultsIndex[]
     serviceSpecificConfig ?: any
     stages ?: any
+    index ?: number
 }

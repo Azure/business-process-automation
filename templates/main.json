@@ -783,6 +783,10 @@
               "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01', 'full').location]"
             },
             {
+              "name": "SPEECH_SUB_ENDPOINT",
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+            },
+            {
               "name": "TRANSLATE_APIKEY",
               "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
             },
@@ -842,7 +846,9 @@
         "COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
         "BLOB_STORAGE_CONNECTION_STRING": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]",
         "BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
-        "BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]"
+        "BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]",
+        "COGSEARCH_APIKEY" : "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
+        "COGSEARCH_URL" : "[parameters('cogSearchUrl')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
