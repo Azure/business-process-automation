@@ -17,7 +17,7 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
             }
             let status = 'initializing'
             //let result = ""
-            const axiosGetResp =  await axios.get(transaction.aggregatedResults.stt.location, axiosParams)
+            const axiosGetResp = await axios.get(transaction.aggregatedResults.stt.location, axiosParams)
             if (axiosGetResp?.data?.status) {
                 status = axiosGetResp.data.status
             } else {
@@ -36,14 +36,21 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
                         for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
                             result += " " + combined.display
                         }
+                        let index = transaction.index
+                        transaction.aggregatedResults.stt = result
+                        transaction.resultsIndexes.push({index : index, name : "speechToText", type : "text"})
+                        transaction.type = "text"
+                        transaction.index = index + 1
+                        transaction.data = result
+                        await db.create(transaction)
+                        await axios.post(`https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/AsyncCompletion`,JSON.stringify(transaction))
                         break
                     }
                 }
-                console.log("here")
             }
 
         }
-        
+
     }
     catch (err) {
         context.log(err)
