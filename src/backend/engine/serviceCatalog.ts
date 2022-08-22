@@ -31,9 +31,9 @@ const test = new Test()
 const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDPOINT,process.env.CONTENT_MODERATOR_KEY)
 const xml = new Xml()
 
-const noCharge = (documents : number) : number =>{
-    return 0
-}
+// const noCharge = (documents : number) : number =>{
+//     return 0
+// }
 
 const contentModeratorImageService : BpaService = {
     bpaServiceId : "abc123",
