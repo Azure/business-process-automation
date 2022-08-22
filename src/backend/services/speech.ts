@@ -63,25 +63,13 @@ export class Speech {
             }
             const axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
 
-            let result = {}
-            let status = "initializing"
-            do{
-                const axiosGetResp = await axios.get(axiosResp.headers.location, axiosParams)
-                if(axiosGetResp?.data?.status){
-                    status = axiosGetResp.data.status
-                } else{
-                    throw new Error(`failed in Speech accessing ${axiosResp.headers.location}`)
-                }
-                if(status === 'Failed'){
-                    throw new Error('batch transcription failed')
-                }
-                if(status === 'succeeded' && axiosGetResp?.data?.links?.files){
-                    result = axiosGetResp.data.links.files
-                }
-            } while(status !== 'Succeeded')
+            input.aggregatedResults.stt = {
+                index : index,
+                location : axiosResp.headers.location, 
+                stage : "stt",
+                filename : input.filename}
 
             return {
-                data : result,
                 type : "async transaction",
                 label : input.label,
                 filename : input.filename,
@@ -90,6 +78,35 @@ export class Speech {
                 aggregatedResults : input.aggregatedResults,
                 resultsIndexes : input.resultsIndexes
             }
+
+            // let result = {}
+            // let status = "initializing"
+            // do{
+            //     const axiosGetResp = await axios.get(axiosResp.headers.location, axiosParams)
+            //     if(axiosGetResp?.data?.status){
+            //         status = axiosGetResp.data.status
+            //     } else{
+            //         throw new Error(`failed in Speech accessing ${axiosResp.headers.location}`)
+            //     }
+            //     if(status === 'Failed'){
+            //         throw new Error('batch transcription failed')
+            //     }
+            //     if(status === 'Succeeded' && axiosGetResp?.data?.links?.files){
+            //         result = {files : axiosGetResp.data.links.files, stage : "stt"}
+            //     }
+            // } while(status !== 'Succeeded')
+            // input.aggregatedResults.stt = result
+
+            // return {
+            //     data : result,
+            //     type : "async transaction",
+            //     label : input.label,
+            //     filename : input.filename,
+            //     pipeline : input.pipeline,
+            //     bpaId : input.bpaId,
+            //     aggregatedResults : input.aggregatedResults,
+            //     resultsIndexes : input.resultsIndexes
+            // }
 
             // this._cosmosDb.create({
             //     data : result,
