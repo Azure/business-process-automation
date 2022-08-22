@@ -63,11 +63,8 @@ export class Speech {
             }
             const axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
 
-<<<<<<< HEAD
-            input.aggregatedResults.stt = {
-=======
+
             input.aggregatedResults["speechToText"] = {
->>>>>>> c55b29acb59884f7b1b55ca752d0400469f81439
                 index : index,
                 location : axiosResp.headers.location, 
                 stage : "stt",
@@ -82,69 +79,6 @@ export class Speech {
                 aggregatedResults : input.aggregatedResults,
                 resultsIndexes : input.resultsIndexes
             }
-
-            // let result = {}
-            // let status = "initializing"
-            // do{
-            //     const axiosGetResp = await axios.get(axiosResp.headers.location, axiosParams)
-            //     if(axiosGetResp?.data?.status){
-            //         status = axiosGetResp.data.status
-            //     } else{
-            //         throw new Error(`failed in Speech accessing ${axiosResp.headers.location}`)
-            //     }
-            //     if(status === 'Failed'){
-            //         throw new Error('batch transcription failed')
-            //     }
-            //     if(status === 'Succeeded' && axiosGetResp?.data?.links?.files){
-            //         result = {files : axiosGetResp.data.links.files, stage : "stt"}
-            //     }
-            // } while(status !== 'Succeeded')
-            // input.aggregatedResults.stt = result
-
-            // return {
-            //     data : result,
-            //     type : "async transaction",
-            //     label : input.label,
-            //     filename : input.filename,
-            //     pipeline : input.pipeline,
-            //     bpaId : input.bpaId,
-            //     aggregatedResults : input.aggregatedResults,
-            //     resultsIndexes : input.resultsIndexes
-            // }
-
-            // this._cosmosDb.create({
-            //     data : result,
-            //     type : "async transaction",
-            //     label : input.label,
-            //     filename : input.filename,
-            //     pipeline : input.pipeline,
-            //     bpaId : input.bpaId,
-            //     aggregatedResults : input.aggregatedResults,
-            //     resultsIndexes : input.resultsIndexes
-            // })
-
-            //     const axiosGetResp = await axios.get(axiosResp.headers.location, axiosParams)
-            //     if(axiosGetResp.data.status === 'Succeeded'){
-            //         const axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
-            //         for(const value of axiosGetResp2.data.values){
-            //             if(value.kind === 'Transcription'){
-            //                 const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
-            //                 let result = ""
-            //                 for(const combined of axiosGetResp3.data.combinedRecognizedPhrases)
-            //                 {
-            //                     result += " " + combined.display
-            //                 }
-            //                 break
-            //                 console.log("here")
-            //             }
-            //         }
-            //         console.log("here")
-            //     }
-            //     console.log("here")
-            // }
-
-            // //const sasUrl = await this._blobContainerClient.generateSasUrl(options)
-            // console.log(result)
 
         } catch (err) {
             console.log(err)

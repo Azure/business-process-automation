@@ -9,43 +9,6 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
     try {
         const transactions = await db.getAsyncTransactions()
         for (const transaction of transactions) {
-<<<<<<< HEAD
-            const axiosParams: AxiosRequestConfig = {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
-                }
-            }
-            let status = 'initializing'
-            //let result = ""
-            const axiosGetResp =  await axios.get(transaction.aggregatedResults.stt.location, axiosParams)
-            if (axiosGetResp?.data?.status) {
-                status = axiosGetResp.data.status
-            } else {
-                throw new Error(`failed in Speech accessing ${transaction.aggregatedResults.stt.location}`)
-            }
-            if (status === 'Failed') {
-                throw new Error(`batch transcription failed ${transaction.aggregatedResults.stt.filename}`)
-            }
-            if (status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
-                //result = { files: axiosGetResp.data.links.files, stage: "stt" }
-                const axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
-                for (const value of axiosGetResp2.data.values) {
-                    if (value.kind === 'Transcription') {
-                        const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
-                        let result = ""
-                        for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
-                            result += " " + combined.display
-                        }
-                        break
-                    }
-                }
-                console.log("here")
-            }
-
-        }
-        
-=======
             try {
                 const axiosParams: AxiosRequestConfig = {
                     headers: {
@@ -104,7 +67,6 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
                 }
             }
         }
->>>>>>> c55b29acb59884f7b1b55ca752d0400469f81439
     }
     catch (err) {
         context.log(err)
