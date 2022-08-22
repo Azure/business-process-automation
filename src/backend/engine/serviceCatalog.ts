@@ -273,6 +273,20 @@ const sttService : BpaService = {
     }
 }
 
+const sttBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["wav","mp3"],
+    outputTypes: ["text"],
+    name: "sttBatch",
+    process: speech.processBatch,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg"],
@@ -500,6 +514,7 @@ export const serviceCatalog = {
     "viewService" : viewService,
     "extractSummary" : extractSummary,
     "sttService" : sttService,
+    "sttBatchService" : sttBatchService,
     "layout" : layout,
     "translate" : translateService,
     "generalDocument" : generalDocument,

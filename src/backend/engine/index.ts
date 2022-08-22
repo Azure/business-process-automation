@@ -30,6 +30,7 @@ export class BpaEngine {
 
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex)
+<<<<<<< HEAD
         // for (const stage of config.stages) {
         //     console.log(`stage : ${stage.service.name}`)
         //     console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
@@ -60,6 +61,14 @@ export class BpaEngine {
 
     private _process = async (currentInput : BpaServiceObject, config : BpaConfiguration, stageIndex : number) => {
         for (const stage of config.stages) {
+=======
+    }
+
+    private _process = async (currentInput : BpaServiceObject, config : BpaConfiguration, stageIndex : number) => {
+        for(let i=stageIndex;i<config.stages.length + 1;i++){
+            const stage = config.stages[i-1]
+        //for (const stage of config.stages) {
+>>>>>>> c55b29acb59884f7b1b55ca752d0400469f81439
             console.log(`stage : ${stage.service.name}`)
             console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
             console.log('validating...')
@@ -71,6 +80,11 @@ export class BpaEngine {
                 currentInput = _.cloneDeep(currentOutput)
                 if(currentInput.type === 'async transaction'){
                     currentInput.stages = config.stages
+<<<<<<< HEAD
+=======
+                    currentInput.index = stageIndex
+                    break
+>>>>>>> c55b29acb59884f7b1b55ca752d0400469f81439
                 }
             }
             else {

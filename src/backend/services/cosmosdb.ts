@@ -24,7 +24,7 @@ export class CosmosDB {
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
             console.log(`container: ${this._containerName}`)
-            const { resource: createdItem } = await container.items.create(data);
+            const { resource: createdItem } = await container.items.upsert(data);
             return createdItem
         } catch (err) {
             console.log(err)
