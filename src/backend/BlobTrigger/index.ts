@@ -62,7 +62,7 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         await db.view({
             data : err.message,
             type : "error",
-            label : "error",
+            label : "blobTrigger",
             filename : context.bindingData.blobTrigger,
             pipeline : "error",
             bpaId : "error",

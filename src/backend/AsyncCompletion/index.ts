@@ -55,7 +55,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         await db.view({
             data : err.message,
             type : "error",
-            label : "error",
+            label : "Async Completion Trigger",
             filename : req.body.filename,
             pipeline : "error",
             bpaId : "error",
