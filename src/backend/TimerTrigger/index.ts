@@ -13,7 +13,7 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
     try {
         const transactions = await db.getAsyncTransactions()
-        for (const transaction of transactions.slice(0,transactions.length > 16 ? 16 : transactions.length)) { //take at most the top 30 items
+        for (const transaction of transactions.slice(0,transactions.length > 100 ? 100 : transactions.length)) { //take at most the top 30 items
             try {
                 const axiosParams: AxiosRequestConfig = {
                     headers: {
