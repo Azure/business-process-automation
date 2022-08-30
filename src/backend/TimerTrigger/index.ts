@@ -11,9 +11,13 @@ const delay = (ms: number) => {
 const blobTrigger: AzureFunction = async function (context: Context): Promise<void> {
 
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+    context.res = {
+        status: 200,
+        body: {}
+    }
     try {
         const transactions = await db.getAsyncTransactions()
-        for (const transaction of transactions.slice(0,transactions.length > 100 ? 100 : transactions.length)) { //take at most the top 30 items
+        for (const transaction of transactions.slice(0,transactions.length > 100 ? 100 : transactions.length)) { //take at most the top 100 items
             try {
                 const axiosParams: AxiosRequestConfig = {
                     headers: {
@@ -21,8 +25,6 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
                         "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
                     }
                 }
-                let status = 'initializing'
-                //let result = ""
                 if (transaction?.aggregatedResults["speechToText"]?.location) {
                     let httpResult = 429
 
@@ -100,10 +102,6 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
                     aggregatedResults: {},
                     resultsIndexes: null
                 })
-                context.res = {
-                    status: 500,
-                    body: err.message
-                }
             }
         }
     }
@@ -119,10 +117,6 @@ const blobTrigger: AzureFunction = async function (context: Context): Promise<vo
             aggregatedResults: {},
             resultsIndexes: null
         })
-        context.res = {
-            status: 500,
-            body: err.message
-        }
     }
 };
 
