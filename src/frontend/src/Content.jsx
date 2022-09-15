@@ -7,6 +7,62 @@ import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import SelectPipeline from './SelectPipeline';
 import ViewInsights from './ViewInsights';
+import Search from './searchComponents/pages/Search/Search'
+import AppHeader from './searchComponents/components/AppHeader/AppHeader';
+import { searchHtml } from './searchHtml'
+const template = { __html: searchHtml };
+
+const theme = {
+    componentVariables: {
+      // 💡 `colorScheme` is the object containing all color tokens
+      Header: ({ colorScheme }) => ({
+        // `brand` contains all design tokens for the `brand` color
+        // `foreground3` and `background3` are theme-dependent tokens that should
+        // be used as value in styles, you can define own tokens 💪
+      }),
+      Label : ({ colorScheme }) => ({
+        // `brand` contains all design tokens for the `brand` color
+        color: "rgb(0, 120, 212)",
+        backgroundColor: colorScheme.default.background,
+        fontSize: "20px",
+        height: "50px"
+        // `foreground3` and `background3` are theme-dependent tokens that should
+        // be used as value in styles, you can define own tokens 💪
+      }),
+      Breadcrumb : ({ colorScheme }) => ({
+        // `brand` contains all design tokens for the `brand` color
+        backgroundColor: colorScheme.default.background,
+        // fontSize: "18px"
+        // `foreground3` and `background3` are theme-dependent tokens that should
+        // be used as value in styles, you can define own tokens 💪
+      }),
+    },
+    componentStyles: {
+      Header: {
+        // 🚀 We recomend to use `colorScheme` from variables mapping
+        root: ({ variables }) => ({
+          color: variables.color,
+          backgroundColor: variables.backgroundColor,
+        }),
+      },
+      Label: {
+        // 🚀 We recomend to use `colorScheme` from variables mapping
+        root: ({ variables }) => ({
+          color: variables.color,
+          backgroundColor: variables.backgroundColor,
+          fontSize: variables.fontSize,
+          height: variables.height
+        }),
+      },
+      Breadcrumb: {
+        // 🚀 We recomend to use `colorScheme` from variables mapping
+        root: ({ variables }) => ({
+          backgroundColor: variables.backgroundColor,
+          fontSize: variables.fontSize
+        }),
+      },
+    },
+  }
 
 
 export default function Content(props) {
@@ -81,7 +137,9 @@ export default function Content(props) {
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
             case 'VIEW_INSIGHTS':
-                return (<ViewInsights theme={props.theme} documents={[]} onSelectContent={onSelectContent} />)
+                return (<><AppHeader/>
+                <Search theme={props.theme} documents={[]} onSelectContent={onSelectContent} /></>
+                        )
 
             default:
                 return (<Home />)

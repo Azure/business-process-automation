@@ -1,0 +1,8 @@
+.item {
+    margin: 1em auto;
+}
+
+.pager {
+    margin: auto;
+    max-width: fit-content;
+}

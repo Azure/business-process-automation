@@ -1,0 +1,30 @@
+.result {
+    width: 250px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    margin: 10px;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.result:hover,
+.result:active {
+    background-color: #C0DDF5;
+}
+
+.title-style {
+    vertical-align: middle;
+}
+
+.card-img-top {
+    width: auto;
+    min-width: 6em;
+    max-width: 10em;
+    height: auto;
+    max-height: 12em;
+    vertical-align: middle;
+}

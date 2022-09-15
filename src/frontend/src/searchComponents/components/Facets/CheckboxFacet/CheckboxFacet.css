@@ -1,0 +1,14 @@
+.facet-checkbox {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.card-body {
+    padding-left: 0px;
+}
+
+.facet-header:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

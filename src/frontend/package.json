@@ -18,7 +18,15 @@
     "react-dom": "^16.12.0",
     "react-drag-drop-files": "^2.3.4",
     "react-scripts": "^5.0.0",
-    "sass": "^1.49.9"
+    "sass": "^1.49.9",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "bootstrap": "^4.5.2",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
