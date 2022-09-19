@@ -24,34 +24,25 @@ import wav from './images/wav.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './price'
 
 export const sc = {
-    "video": {
+
+    "xmlToJson": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "start"
+            "xml"
         ],
         "outputTypes": [
-            "flv",
-            "mxf",
-            "gxf",
-            "mpg",
-            "wmv",
-            "asf",
-            "avi",
-            "mp4",
-            "wav",
-            "mov",
-            "isma",
-            "ismv",
-            "mkv"
+            "xmlToJson"
         ],
-        "image": layoutLogo,
-        "label": "Video",
-        "name": "video",
+        "image": invoice,
+        "label": "Convert XML To JSON",
+        "name": "xmlToJson",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
-    "xmlToJson": {
+    "videoIndexer": {
+        "defaultTier" : "Standard Transactions",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Video Indexer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "flv",
@@ -71,24 +62,7 @@ export const sc = {
         "outputTypes": [
             "videoIndexer"
         ],
-        "image": invoice,
-        "label": "Convert XML To JSON",
-        "name": "xmlToJson",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
-    "videoIndexer": {
-        "defaultTier" : "Standard Transactions",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Video Indexer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "bmp","jpg","tiff","gif"
-        ],
-        "outputTypes": [
-            "contentModeratorImage"
-        ],
-        "image": generaldoc,
+        "image": storage,
         "label": "Video Indexer",
         "name": "videoIndexer",
         "serviceSpecificConfig": {},
@@ -202,6 +176,32 @@ export const sc = {
     //     "serviceSpecificConfig": { "to":"es"},
     //     "serviceSpecificConfigDefaults": {}
     // },
+    "video": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "flv",
+            "mxf",
+            "gxf",
+            "mpg",
+            "wmv",
+            "asf",
+            "avi",
+            "mp4",
+            "mov",
+            "isma",
+            "ismv",
+            "mkv"
+        ],
+        "image": layoutLogo,
+        "label": "Video",
+        "name": "video",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "images": {
         "bpaServiceId": "abc123",
         "inputTypes": [
