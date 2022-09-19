@@ -24,17 +24,73 @@ import wav from './images/wav.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './price'
 
 export const sc = {
+    "video": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "flv",
+            "mxf",
+            "gxf",
+            "mpg",
+            "wmv",
+            "asf",
+            "avi",
+            "mp4",
+            "wav",
+            "mov",
+            "isma",
+            "ismv",
+            "mkv"
+        ],
+        "image": layoutLogo,
+        "label": "Video",
+        "name": "video",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "xmlToJson": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "xml"
+            "flv",
+            "mxf",
+            "gxf",
+            "mpg",
+            "wmv",
+            "asf",
+            "avi",
+            "mp4",
+            "wav",
+            "mov",
+            "isma",
+            "ismv",
+            "mkv"
         ],
         "outputTypes": [
-            "xmlToJson"
+            "videoIndexer"
         ],
         "image": invoice,
         "label": "Convert XML To JSON",
         "name": "xmlToJson",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+    "videoIndexer": {
+        "defaultTier" : "Standard Transactions",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Video Indexer' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "bmp","jpg","tiff","gif"
+        ],
+        "outputTypes": [
+            "contentModeratorImage"
+        ],
+        "image": generaldoc,
+        "label": "Video Indexer",
+        "name": "videoIndexer",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge

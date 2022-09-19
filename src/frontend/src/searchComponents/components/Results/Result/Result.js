@@ -10,7 +10,7 @@ export default function Result(props) {
     return(
     <div className="card result">
         <a href={`/details/${props.document}`}>
-            <img className="card-img-top" src={pdf}></img>
+            <img className="card-img-top" src={pdf} alt={pdf}></img>
             <div className="card-body">
                 <h6 className="title-style">{props.document}</h6>
             </div>
