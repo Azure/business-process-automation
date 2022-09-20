@@ -7,7 +7,7 @@ const cogsearchLabel = "cogsearch"
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML"];
+    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML","MP4"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
