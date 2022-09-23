@@ -50,14 +50,19 @@ export class CosmosDB {
         return null
     }
 
-    public getAsyncTransactions = async () : Promise<any[]> => {
+    public getUnlockedAsyncTransactions = async () : Promise<any[]> => {
         try{
             const client = new CosmosClient(this._connectionString);
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
             const items = await container.items.query("SELECT * from c WHERE c.type='async transaction'").fetchAll()
+            const lockedItems = await container.items.query("SELECT * from c WHERE c.type='async locked'").fetchAll()
+            if(lockedItems.resources.length > 0){
+                return items.resources
+            } else{
+                return []
+            }
             
-            return items.resources
         } catch(err){
             console.log(err)
         }

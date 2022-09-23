@@ -34,37 +34,54 @@ export class VideoIndexer {
             try {
                 const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename) // can throw 429
                 const sasUrl = await blobClient.generateSasUrl(options)
-                // let payload = {
-                //     "contentUrls": [
-                //         sasUrl
-                //     ],
-                //     "properties": {
-                //         "wordLevelTimestampsEnabled": true
-                //     },
-                //     "locale": "en-US",
-                //     "displayName": "Transcription of file using default model for en-US"
-                // }
-                // if (input?.serviceSpecificConfig?.to) {
-                //     payload = {
-                //         "contentUrls": [
-                //             sasUrl
-                //         ],
-                //         "properties": {
-                //             "wordLevelTimestampsEnabled": true
-                //         },
-                //         "locale": input.serviceSpecificConfig.to,
-                //         "displayName": "Transcription of file using default model for en-US"
-                //     }
-                // }
-                // const axiosParams: AxiosRequestConfig = {
-                //     headers: {
-                //         "Content-Type": "application/json",
-                //         "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
-                //     }
-                // }
-                // axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
-                // httpResult = axiosResp.status
-                httpResult = 200
+                const tokenUrl = `https://api.videoindexer.ai/auth/${process.env.VIDEO_INDEXER_LOCATION}/Accounts?generateAccessTokens=true&allowEdit=true`
+                let axiosParams: AxiosRequestConfig = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Ocp-Apim-Subscription-Key": process.env.VIDEO_INDEXER_APIKEY
+                    }
+                }
+
+                axiosResp = await axios.get(tokenUrl, axiosParams)
+                httpResult = axiosResp.status
+                axiosParams = {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+                const postUrl = `https://api.videoindexer.ai/${axiosResp.data[0].location}/Accounts/${axiosResp.data[0].id}/Videos?name=test&videoUrl=${encodeURIComponent(sasUrl)}&accessToken=${axiosResp.data[0].accessToken}`
+                const axiosRespUpload = await axios.post(postUrl)
+                httpResult = axiosResp.status
+
+                const tokenVideoUrl = `https://api.videoindexer.ai/auth/${axiosResp.data[0].location}/Accounts/${axiosResp.data[0].id}/Videos/${axiosRespUpload.data.id}/AccessToken?allowEdit=true`
+                axiosParams = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Ocp-Apim-Subscription-Key": process.env.VIDEO_INDEXER_APIKEY
+                    }
+                }
+
+        
+
+                const tokenVideoAxiosResp = await axios.get(tokenVideoUrl, axiosParams)
+                httpResult = axiosResp.status
+
+                        ///Index?accessToken={videoAccessToken}&language=English
+
+                let state = 'Processing'
+                while(state === 'Processing'){
+                    const tokenVideoGetUrl = `https://api.videoindexer.ai/${axiosResp.data[0].location}/Accounts/${axiosResp.data[0].id}/Videos/${axiosRespUpload.data.id}/Index?accessToken=${tokenVideoAxiosResp.data}&language=English`
+
+                    const tokenVideoGetAxiosResp = await axios.get(tokenVideoGetUrl, axiosParams)
+                    state = tokenVideoGetAxiosResp.data.state
+                    httpResult = axiosResp.status
+                    console.log(tokenVideoGetAxiosResp.data.state)
+                    await this._delay(2000)
+                    if(state !== 'Processing'){
+                        console.log('done')
+                    }
+                }
+
             } catch (err) {
                 if (err.response.status === 429) {
                     httpResult = err.response.status
