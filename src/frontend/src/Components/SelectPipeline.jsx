@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Text, Button, Input, Skeleton } from '@fluentui/react-northstar';
-import Stages from './Stages'
+import Stages from './Pages/Stages'
 
 const pipelinesLabel = "pipelines"
 

@@ -13,6 +13,10 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
     try {
         const transactions = await db.getUnlockedAsyncTransactions()
+        for (let transaction of transactions) {
+            transaction.type = 'async locked'
+            transaction = await db.create(transaction)
+        }
         for (const transaction of transactions) {
             try {
                 const axiosParams: AxiosRequestConfig = {
@@ -24,26 +28,25 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                 if (transaction?.aggregatedResults["speechToText"]?.location) {
                     let httpResult = 429
                     let axiosGetResp: AxiosResponse
-                    //while (httpResult === 429) {
                     try {
                         axiosGetResp = await axios.get(transaction.aggregatedResults["speechToText"].location, axiosParams)
                         httpResult = axiosGetResp.status
                     } catch (err) {
                         if (err?.response?.status && err.response.status === 429) {
-                            //httpResult = err.response.status
                             console.log('429.5')
-                            //await delay(5000)
-                        } else {
-                            //throw new Error(err)
                         }
+                        transaction.type = 'async transaction'
+                        await db.create(transaction)
                     }
-                    //}
-                    if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
+                    if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed'){
+                        transaction.type = 'async failed'
+                        transaction.data = axiosGetResp.data
+                        await db.create(transaction)
+                    }
+                    else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
                         transaction.type = 'async completion'
                         await db.create(transaction)
                         let axiosGetResp2: AxiosResponse
-                        //httpResult = 429
-                        //while (httpResult == 429) {
                         try {
                             axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
                             httpResult = axiosGetResp2.status
@@ -72,16 +75,14 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                             }
                         } catch (err) {
                             if (err?.response?.status && err.response.status === 429) {
-                                //httpResult = err.response.status
                                 console.log('429.5')
-                                //await delay(5000)
-                            } else {
-                                //throw new Error(err)
-                            }
+                            } 
                             transaction.type = 'async transaction'
                             await db.create(transaction)
                         }
-                        //}
+                    } else {
+                        transaction.type = 'async transaction'
+                        await db.create(transaction)
                     }
                 } else {
                     transaction.type = 'async transaction'

@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import PipelinePreview from './PipelinePreview'
-import OptionCard from './OptionCard';
+import OptionCard from '../OptionCard';
 import _ from 'lodash'
 
-import LanguageDialog from './LanguageDialog';
-import FormRecCustomDialog from './FormRecCustomDialog';
-import LanguageCustomNerDialog from './LanguageCustomNerDialog';
-import LanguageMultiClassifyDialog from './LanguageMultiClassifyDialog';
-import LanguageSingleClassifyDialog from './LanguageSingleClassifyDialog'
-import HuggingFaceDialog from './HuggingFaceDialog'
-import DocumentTranslationDialog from './DocumentTranslationDialog';
-import SpeechToTextDialog from './SpeechToText';
-import ChangeDataDialog from './ChangeDataDialog';
+import LanguageDialog from '../LanguageDialog';
+import FormRecCustomDialog from '../FormRecCustomDialog';
+import LanguageCustomNerDialog from '../LanguageCustomNerDialog';
+import LanguageMultiClassifyDialog from '../LanguageMultiClassifyDialog';
+import LanguageSingleClassifyDialog from '../LanguageSingleClassifyDialog'
+import HuggingFaceDialog from '../HuggingFaceDialog'
+import DocumentTranslationDialog from '../DocumentTranslationDialog';
+import SpeechToTextDialog from '../SpeechToText';
+import ChangeDataDialog from '../Components/Dialogs/ChangeDataDialog';
 //import CopyDialog from './CopyDialog';
-import ToTxtDialog from './ToTxtDialog';
-import Prices from './Prices'
+import ToTxtDialog from '../ToTxtDialog';
+import Prices from '../Prices'
 
-import { sc } from './serviceCatalog'
+import { sc } from '../serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
 
 

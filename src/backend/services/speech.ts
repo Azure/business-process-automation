@@ -82,13 +82,13 @@ export class Speech {
             }
         }
         input.aggregatedResults["speechToText"] = {
-            index: index,
             location: axiosResp.headers.location,
             stage: "stt",
             filename: input.filename
         }
 
         return {
+            index: index,
             type: "async transaction",
             label: input.label,
             filename: input.filename,

@@ -291,7 +291,7 @@ const sttService : BpaService = {
     inputTypes: ["wav","mp3"],
     outputTypes: ["text"],
     name: "stt",
-    process: speech.processBatch,
+    process: speech.process,
     serviceSpecificConfig: {
 
     },

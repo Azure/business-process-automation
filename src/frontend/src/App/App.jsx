@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/update.css'
-import HeaderComponent from './HeaderComponent';
-import Content from './Content';
+import HeaderComponent from '../../HeaderComponent';
+import Content from '../../Content';
 import { Provider, teamsTheme, mergeThemes } from '@fluentui/react-northstar'
 
 const theme = {

@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react'
-import CurrentPipeline from './CurrentPipeline'
-import Home from './Home'
+import CurrentPipeline from '../CurrentPipeline'
+import Home from '../App/Home'
 import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
-import SelectPipeline from './SelectPipeline';
+import SelectPipeline from '../SelectPipeline';
 //import ViewInsights from './ViewInsights';
 import Search from './searchComponents/pages/Search/Search'
 import AppHeader from './searchComponents/components/AppHeader/AppHeader';
