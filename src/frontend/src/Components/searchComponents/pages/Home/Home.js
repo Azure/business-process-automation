@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import SearchBar from '../../components/SearchBar/SearchBar';
 
 import "./Home.css";
-import "../../pages/Search/Search.css";
+import "../Search/Search.css";
 
 export default function Home() {
   const history = useHistory();

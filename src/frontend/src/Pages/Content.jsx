@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react'
-import CurrentPipeline from '../CurrentPipeline'
+import CurrentPipeline from '../Pages/CurrentPipeline'
 import Home from '../App/Home'
 import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
-import SelectPipeline from '../SelectPipeline';
+import SelectPipeline from '../Components/SelectPipeline';
 //import ViewInsights from './ViewInsights';
-import Search from './searchComponents/pages/Search/Search'
-import AppHeader from './searchComponents/components/AppHeader/AppHeader';
+import Search from '../Components/searchComponents/pages/Search/Search'
+import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
 //import { searchHtml } from './searchHtml'
 //const template = { __html: searchHtml };
 

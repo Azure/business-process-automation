@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dialog, Text } from '@fluentui/react-northstar';
-import LanguageDropdown, { languages_bcp47 } from './LanguageDropdown'
+import LanguageDropdown, { languages_bcp47 } from '../Components/Language/LanguageDropdown'
 
 
 export default function SpeechToTextDialog(props) {
