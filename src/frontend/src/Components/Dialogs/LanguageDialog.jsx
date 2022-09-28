@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dialog, Text } from '@fluentui/react-northstar';
-import LanguageDropdown, { languages } from './LanguageDropdown'
+import LanguageDropdown, { languages } from '../Language/LanguageDropdown'
 
 
 export default function LanguageDialog(props) {

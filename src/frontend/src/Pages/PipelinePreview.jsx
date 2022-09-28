@@ -1,4 +1,4 @@
-import OptionCard from "./OptionCard"
+import OptionCard from "../Components/OptionCard"
 
 import { Text } from '@fluentui/react-northstar';
 import { ArrowRightIcon } from '@fluentui/react-icons-northstar'
