@@ -19,13 +19,47 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
         }
         for (const transaction of transactions) {
             try {
-                const axiosParams: AxiosRequestConfig = {
+                let axiosParams: AxiosRequestConfig = {
                     headers: {
                         "Content-Type": "application/json",
                         "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
                     }
                 }
-                if (transaction?.aggregatedResults["speechToText"]?.location) {
+                if (transaction?.aggregatedResults["videoIndexer"]?.location) {
+                    axiosParams = {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Ocp-Apim-Subscription-Key": process.env.VIDEO_INDEXER_APIKEY
+                        }
+                    }
+                    const tokenVideoUrl = `https://api.videoindexer.ai/auth/${transaction.aggregatedResults.videoIndexer.location}/Accounts/${transaction.aggregatedResults.videoIndexer.account}/Videos/${transaction.aggregatedResults.videoIndexer.videoId}/AccessToken?allowEdit=true`
+                    const tokenVideoAxiosResp = await axios.get(tokenVideoUrl, axiosParams)
+
+
+                    const tokenVideoGetUrl = `https://api.videoindexer.ai/${transaction.aggregatedResults.videoIndexer.location}/Accounts/${transaction.aggregatedResults.videoIndexer.account}/Videos/${transaction.aggregatedResults.videoIndexer.videoId}/Index?accessToken=${tokenVideoAxiosResp.data}&language=English`
+                    const tokenVideoGetAxiosResp = await axios.get(tokenVideoGetUrl, axiosParams)
+                    const state = tokenVideoGetAxiosResp.data.state
+                    console.log(tokenVideoGetAxiosResp.data.state)
+                    if (state != 'Processing') {
+                        transaction.type = 'async completion'
+                        await db.create(transaction)
+                        transaction.resultsIndexes.push({ index: transaction.index, name: "videoIndexer", type: 'video' })
+                        transaction.aggregatedResults["videoIndexer"] = tokenVideoGetAxiosResp.data
+                        let index = transaction.index
+                        transaction.type = "videoIndexer"
+                        transaction.index = index + 1
+                        transaction.data = tokenVideoGetAxiosResp.data
+                        await db.create(transaction)
+                        if (process.env.DEV === 'true') {
+                            axios.post(`http://localhost:7071/api/AsyncCompletion`, JSON.stringify(transaction))
+                        } else {
+                            axios.post(`https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/AsyncCompletion`, JSON.stringify(transaction))
+                        }
+                    } else{
+                        transaction.type = 'async transaction'
+                        await db.create(transaction)
+                    }
+                } else if (transaction?.aggregatedResults["speechToText"]?.location) {
                     let httpResult = 429
                     let axiosGetResp: AxiosResponse
                     try {
@@ -38,7 +72,7 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                         transaction.type = 'async transaction'
                         await db.create(transaction)
                     }
-                    if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed'){
+                    if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed') {
                         transaction.type = 'async failed'
                         transaction.data = axiosGetResp.data
                         await db.create(transaction)
@@ -76,7 +110,7 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                         } catch (err) {
                             if (err?.response?.status && err.response.status === 429) {
                                 console.log('429.5')
-                            } 
+                            }
                             transaction.type = 'async transaction'
                             await db.create(transaction)
                         }
