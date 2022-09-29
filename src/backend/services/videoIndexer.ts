@@ -53,33 +53,12 @@ export class VideoIndexer {
                 const axiosRespUpload = await axios.post(postUrl)
                 httpResult = axiosResp.status
 
-                const tokenVideoUrl = `https://api.videoindexer.ai/auth/${axiosResp.data[0].location}/Accounts/${axiosResp.data[0].id}/Videos/${axiosRespUpload.data.id}/AccessToken?allowEdit=true`
-                axiosParams = {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Ocp-Apim-Subscription-Key": process.env.VIDEO_INDEXER_APIKEY
-                    }
-                }
-
-        
-
-                const tokenVideoAxiosResp = await axios.get(tokenVideoUrl, axiosParams)
-                httpResult = axiosResp.status
-
-                        ///Index?accessToken={videoAccessToken}&language=English
-
-                let state = 'Processing'
-                while(state === 'Processing'){
-                    const tokenVideoGetUrl = `https://api.videoindexer.ai/${axiosResp.data[0].location}/Accounts/${axiosResp.data[0].id}/Videos/${axiosRespUpload.data.id}/Index?accessToken=${tokenVideoAxiosResp.data}&language=English`
-
-                    const tokenVideoGetAxiosResp = await axios.get(tokenVideoGetUrl, axiosParams)
-                    state = tokenVideoGetAxiosResp.data.state
-                    httpResult = axiosResp.status
-                    console.log(tokenVideoGetAxiosResp.data.state)
-                    await this._delay(2000)
-                    if(state !== 'Processing'){
-                        console.log('done')
-                    }
+                input.aggregatedResults["videoIndexer"] = {
+                    location: axiosResp.data[0].location,
+                    account: axiosResp.data[0].id,
+                    videoId: axiosRespUpload.data.id,
+                    stage: "videoIndexer",
+                    filename: input.filename
                 }
 
             } catch (err) {
@@ -92,14 +71,9 @@ export class VideoIndexer {
                 }
             }
         }
-        // input.aggregatedResults["videoIndexer"] = {
-        //     index: index,
-        //     location: axiosResp.headers.location,
-        //     stage: "videoIndexer",
-        //     filename: input.filename
-        // }
 
         return {
+            index: index,
             type: "async transaction",
             label: input.label,
             filename: input.filename,
