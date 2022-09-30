@@ -55,8 +55,7 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                         }
                     }
 
-                }
-                if (transaction?.aggregatedResults["speechToText"]?.location) {
+                } else if (transaction?.aggregatedResults["speechToText"]?.location) {
                     let httpResult = 429
                     let axiosGetResp: AxiosResponse
                     try {
