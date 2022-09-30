@@ -28,9 +28,40 @@ export default function Search(props) {
 
   useEffect(() => {
 
-    executeSearch()
+    //setIsLoading(true);
+    setSkip((currentPage - 1) * top);
+    const body = {
+      q: q,
+      top: top,
+      skip: skip,
+      filters: filters,
+      facets: [],
+      index: props.index
+    };
 
-  }, [q, top, skip, filters, currentPage]);
+    if (props.index) {
+      axios.post('/api/search', body)
+        .then(response => {
+          //console.log(JSON.stringify(response.data))
+          if (response?.data?.results) {
+            setResults(response.data.results);
+            
+            setResultCount(response.data.results.length);
+            setIsLoading(false);
+            if(response.data.results["@search.facets"])
+            {
+              setFacets(response.data.results["@search.facets"]);
+            }
+          }
+
+        })
+        .catch(error => {
+          console.log(error);
+          setIsLoading(false);
+        });
+    }
+
+  }, [q, top, skip, filters, currentPage, props.index]);
 
   const executeSearch = () => {
     //setIsLoading(true);

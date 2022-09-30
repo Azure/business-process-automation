@@ -8,7 +8,7 @@ import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import SelectPipeline from '../Components/SelectPipeline';
 import ViewInsights from './ViewInsights';
 //import Search from '../Components/searchComponents/pages/Search/Search'
-import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
+//import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
 //import { searchHtml } from './searchHtml'
 //const template = { __html: searchHtml };
 
