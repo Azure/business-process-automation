@@ -26,7 +26,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     try {
         context.log('HTTP trigger function processed a request.');
 
-        const index = "cogsearch2"
+        const index = req.body.index
 
         const headers: AxiosRequestConfig = {
             headers: {
@@ -37,23 +37,30 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         const body = {
             search: req.body.q,
             count: true,
-            facets: req.body.facets ? req.body.facets : [],
-            filter: constructFilter(req.body.filters),
+            facets: req?.body?.facets ? req.body.facets : [],
+            filter: req?.body?.facets ? constructFilter(req.body.filters) : "",
             queryType: "simple",
             skip: req.body.skip,
             top: req.body.top
         }
-        let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2021-04-30-Preview`
-        const axiosResult = await axios.post(url, body, headers)
-        // let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
-        // if(semantic === 'false'){
-        //     url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&facet=label&search=${encodeURIComponent(text)}&queryLanguage=en-US`
-        // }
-        //const axiosResult = await axios.get(url,headers)
-
-        context.res = {
-            body: { "results": axiosResult.data }
+        if(index){
+            let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2021-04-30-Preview`
+            const axiosResult = await axios.post(url, body, headers)
+            // let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
+            // if(semantic === 'false'){
+            //     url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&facet=label&search=${encodeURIComponent(text)}&queryLanguage=en-US`
+            // }
+            //const axiosResult = await axios.get(url,headers)
+    
+            context.res = {
+                body: { "results": axiosResult.data.value }
+            }
+        } else {
+            context.res = {
+                body: { "results": [] }
+            }
         }
+
     } catch (err) {
         context.log(err)
         context.res = {
