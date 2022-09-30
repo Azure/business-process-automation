@@ -6,9 +6,9 @@ import Upload from './Upload';
 import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import SelectPipeline from '../Components/SelectPipeline';
-//import ViewInsights from './ViewInsights';
-import Search from '../Components/searchComponents/pages/Search/Search'
-import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
+import ViewInsights from './ViewInsights';
+//import Search from '../Components/searchComponents/pages/Search/Search'
+//import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
 //import { searchHtml } from './searchHtml'
 //const template = { __html: searchHtml };
 
@@ -84,9 +84,7 @@ export default function Content(props) {
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
             case 'VIEW_INSIGHTS':
-                return (<><AppHeader/>
-                <Search theme={props.theme} documents={[]} onSelectContent={onSelectContent} /></>
-                        )
+                return (<ViewInsights /> )
 
             default:
                 return (<Home />)

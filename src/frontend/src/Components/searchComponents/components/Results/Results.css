@@ -17,3 +17,13 @@
     width: 10rem;
     max-height: 18rem;
 }
+
+.json-tree {
+
+    text-align: left;
+}
+
+ul[style] {
+    display: inline !important;
+    background-color: white !important; 
+}

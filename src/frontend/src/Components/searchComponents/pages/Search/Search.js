@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CircularProgress  from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Results from '../../components/Results/Results';
 import Pager from '../../components/Pager/Pager';
@@ -9,48 +9,94 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 
 import "./Search.css";
 
-export default function Search() {
-  
+export default function Search(props) {
+
   // let location = useLocation();
   // let history = useHistory();
-  
-  const [ results, setResults ] = useState([]);
-  const [ resultCount, setResultCount ] = useState(0);
-  const [ currentPage, setCurrentPage ] = useState(1);
-  const [ q, setQ ] = useState("*");
-  const [ top ] = useState(8);
-  const [ skip, setSkip ] = useState(0);
-  const [ filters, setFilters ] = useState([]);
-  const [ facets, setFacets ] = useState({});
-  const [ isLoading, setIsLoading ] = useState(true);
+
+  const [results, setResults] = useState([]);
+  const [resultCount, setResultCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [q, setQ] = useState("*");
+  const [top] = useState(20);
+  const [skip, setSkip] = useState(0);
+  const [filters, setFilters] = useState([]);
+  const [facets, setFacets] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   let resultsPerPage = top;
-  
+
   useEffect(() => {
-    setIsLoading(true);
-    setSkip((currentPage-1) * top);
+
+    //setIsLoading(true);
+    setSkip((currentPage - 1) * top);
     const body = {
       q: q,
       top: top,
       skip: skip,
       filters: filters,
-      facets: ["label"]
+      facets: [],
+      index: props.index
     };
 
-    axios.post( '/api/search', body)
-      .then(response => {
-            //console.log(JSON.stringify(response.data))
-            setResults(response.data.results.value);
-            setFacets(response.data.results["@search.facets"]);
-            setResultCount(response.data.results.value.length);
+    if (props.index) {
+      axios.post('/api/search', body)
+        .then(response => {
+          //console.log(JSON.stringify(response.data))
+          if (response?.data?.results) {
+            setResults(response.data.results);
+            
+            setResultCount(response.data.results.length);
             setIsLoading(false);
-        } )
+            if(response.data.results["@search.facets"])
+            {
+              setFacets(response.data.results["@search.facets"]);
+            }
+          }
+
+        })
         .catch(error => {
-            console.log(error);
-            setIsLoading(false);
+          console.log(error);
+          setIsLoading(false);
         });
-    
-  }, [q, top, skip, filters, currentPage]);
+    }
+
+  }, [q, top, skip, filters, currentPage, props.index]);
+
+  const executeSearch = () => {
+    //setIsLoading(true);
+    setSkip((currentPage - 1) * top);
+    const body = {
+      q: q,
+      top: top,
+      skip: skip,
+      filters: filters,
+      facets: [],
+      index: props.index
+    };
+
+    if (props.index) {
+      axios.post('/api/search', body)
+        .then(response => {
+          //console.log(JSON.stringify(response.data))
+          if (response?.data?.results) {
+            setResults(response.data.results);
+            
+            setResultCount(response.data.results.length);
+            setIsLoading(false);
+            if(response.data.results["@search.facets"])
+            {
+              setFacets(response.data.results["@search.facets"]);
+            }
+          }
+
+        })
+        .catch(error => {
+          console.log(error);
+          setIsLoading(false);
+        });
+    }
+  }
 
   // pushing the new search term to history when q is updated
   // allows the back button to work as expected when coming back from the details page
@@ -65,6 +111,7 @@ export default function Search() {
   let postSearchHandler = (searchTerm) => {
     //console.log(searchTerm);
     setQ(searchTerm);
+    executeSearch()
   }
 
   var body;

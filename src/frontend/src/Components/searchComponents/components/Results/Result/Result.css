@@ -1,5 +1,5 @@
 .result {
-    width: 250px;
+    width: 100%;
     padding: 16px;
     text-align: center;
     border: 1px solid #eee;
@@ -11,10 +11,10 @@
     cursor: pointer;
 }
 
-.result:hover,
+/* .result:hover,
 .result:active {
     background-color: #C0DDF5;
-}
+} */
 
 .title-style {
     vertical-align: middle;

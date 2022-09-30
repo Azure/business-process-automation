@@ -54,7 +54,17 @@ export class VideoIndexer {
                 axiosRespUpload = await axios.post(postUrl)
                 httpResult = axiosResp.status
 
+<<<<<<< HEAD
                 
+=======
+                input.aggregatedResults["videoIndexer"] = {
+                    location: axiosResp.data[0].location,
+                    account: axiosResp.data[0].id,
+                    videoId: axiosRespUpload.data.id,
+                    stage: "videoIndexer",
+                    filename: input.filename
+                }
+>>>>>>> 36fb882d0afc9c6c9f55c8a01c948c0bae2ca88e
 
             } catch (err) {
                 if (err.response.status === 429) {
@@ -66,6 +76,7 @@ export class VideoIndexer {
                 }
             }
         }
+<<<<<<< HEAD
 
         input.aggregatedResults["videoIndexer"] = {
             location: axiosResp.data[0].location,
@@ -74,6 +85,8 @@ export class VideoIndexer {
             stage: "videoIndexer",
             filename: input.filename
         }
+=======
+>>>>>>> 36fb882d0afc9c6c9f55c8a01c948c0bae2ca88e
 
         return {
             index: index,

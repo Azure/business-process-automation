@@ -21,7 +21,7 @@ import './App.css';
 
 export default function App() {
   // React Hook: useState with a var name, set function, & default value
-  const [user, setUser] = useState({});
+  //const [user, setUser] = useState({});
 
   // // Fetch authentication API & set user state
   // async function fetchAuth() {
