@@ -26,17 +26,12 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                     }
                 }
                 if (transaction?.aggregatedResults["videoIndexer"]?.location) {
-<<<<<<< HEAD
-=======
-                    const tokenVideoUrl = `https://api.videoindexer.ai/auth/${transaction.aggregatedResults.videoIndexer.location}/Accounts/${transaction.aggregatedResults.videoIndexer.account}/Videos/${transaction.aggregatedResults.videoIndexer.videoId}/AccessToken?allowEdit=true`
->>>>>>> 36fb882d0afc9c6c9f55c8a01c948c0bae2ca88e
                     axiosParams = {
                         headers: {
                             "Content-Type": "application/json",
                             "Ocp-Apim-Subscription-Key": process.env.VIDEO_INDEXER_APIKEY
                         }
                     }
-<<<<<<< HEAD
                     const tokenVideoUrl = `https://api.videoindexer.ai/auth/${transaction.aggregatedResults.videoIndexer.location}/Accounts/${transaction.aggregatedResults.videoIndexer.account}/Videos/${transaction.aggregatedResults.videoIndexer.videoId}/AccessToken?allowEdit=true`
                     const tokenVideoAxiosResp = await axios.get(tokenVideoUrl, axiosParams)
 
@@ -51,19 +46,6 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                         transaction.resultsIndexes.push({ index: transaction.index, name: "videoIndexer", type: 'video' })
                         transaction.aggregatedResults["videoIndexer"] = tokenVideoGetAxiosResp.data
                         let index = transaction.index
-=======
-
-                    const tokenVideoAxiosResp = await axios.get(tokenVideoUrl, axiosParams)
-                    const tokenVideoGetUrl = `https://api.videoindexer.ai/${transaction.aggregatedResults.videoIndexer.location}/Accounts/${transaction.aggregatedResults.videoIndexer.account}/Videos/${transaction.aggregatedResults.videoIndexer.videoId}/Index?accessToken=${tokenVideoAxiosResp.data}&language=English`
-
-                    const tokenVideoGetAxiosResp = await axios.get(tokenVideoGetUrl, axiosParams)
-                    const state = tokenVideoGetAxiosResp.data.state
-                    console.log(tokenVideoGetAxiosResp.data.state)
-                    if (state !== 'Processing') {
-                        let index = transaction.index
-                        transaction.aggregatedResults["videoIndexer"] = tokenVideoGetAxiosResp.data
-                        transaction.resultsIndexes.push({ index: index, name: "videoIndexer", type: "videoIndexer" })
->>>>>>> 36fb882d0afc9c6c9f55c8a01c948c0bae2ca88e
                         transaction.type = "videoIndexer"
                         transaction.index = index + 1
                         transaction.data = tokenVideoGetAxiosResp.data
@@ -73,15 +55,10 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                         } else {
                             axios.post(`https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/AsyncCompletion`, JSON.stringify(transaction))
                         }
-<<<<<<< HEAD
                     } else{
                         transaction.type = 'async transaction'
                         await db.create(transaction)
                     }
-=======
-                    }
-
->>>>>>> 36fb882d0afc9c6c9f55c8a01c948c0bae2ca88e
                 } else if (transaction?.aggregatedResults["speechToText"]?.location) {
                     let httpResult = 429
                     let axiosGetResp: AxiosResponse
