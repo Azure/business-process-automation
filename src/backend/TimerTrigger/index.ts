@@ -65,59 +65,59 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
                     try {
                         axiosGetResp = await axios.get(transaction.aggregatedResults["speechToText"].location, axiosParams)
                         httpResult = axiosGetResp.status
-                    } catch (err) {
-                        if (err?.response?.status && err.response.status === 429) {
-                            console.log('429.5')
-                        }
-                        transaction.type = 'async transaction'
-                        await db.create(transaction)
-                    }
-                    if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed') {
-                        transaction.type = 'async failed'
-                        transaction.data = axiosGetResp.data
-                        await db.create(transaction)
-                    }
-                    else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
-                        transaction.type = 'async completion'
-                        await db.create(transaction)
-                        let axiosGetResp2: AxiosResponse
-                        try {
-                            axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
-                            httpResult = axiosGetResp2.status
-                            for (const value of axiosGetResp2.data.values) {
-                                if (value.kind === 'Transcription') {
-                                    const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
-                                    let result = ""
-                                    for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
-                                        result += " " + combined.display
+                        if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed') {
+                            transaction.type = 'async failed'
+                            transaction.data = axiosGetResp.data
+                            await db.create(transaction)
+                        } else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
+                            transaction.type = 'async completion'
+                            await db.create(transaction)
+                            let axiosGetResp2: AxiosResponse
+                            try {
+                                axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
+                                httpResult = axiosGetResp2.status
+                                for (const value of axiosGetResp2.data.values) {
+                                    if (value.kind === 'Transcription') {
+                                        const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
+                                        let result = ""
+                                        for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
+                                            result += " " + combined.display
+                                        }
+                                        let index = transaction.index
+                                        transaction.aggregatedResults["speechToText"] = result
+                                        transaction.resultsIndexes.push({ index: index, name: "speechToText", type: "text" })
+                                        transaction.type = "text"
+                                        transaction.index = index + 1
+                                        transaction.data = result
+                                        await db.create(transaction)
+                                        if (process.env.DEV === 'true') {
+                                            axios.post(`http://localhost:7071/api/AsyncCompletion`, JSON.stringify(transaction))
+                                        } else {
+                                            axios.post(`https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/AsyncCompletion`, JSON.stringify(transaction))
+                                        }
+    
+                                        break
                                     }
-                                    let index = transaction.index
-                                    transaction.aggregatedResults["speechToText"] = result
-                                    transaction.resultsIndexes.push({ index: index, name: "speechToText", type: "text" })
-                                    transaction.type = "text"
-                                    transaction.index = index + 1
-                                    transaction.data = result
-                                    await db.create(transaction)
-                                    if (process.env.DEV === 'true') {
-                                        axios.post(`http://localhost:7071/api/AsyncCompletion`, JSON.stringify(transaction))
-                                    } else {
-                                        axios.post(`https://${process.env.BLOB_STORAGE_ACCOUNT_NAME}.azurewebsites.net/api/AsyncCompletion`, JSON.stringify(transaction))
-                                    }
-
-                                    break
                                 }
+                            } catch (err) {
+                                if (err?.response?.status && err.response.status === 429) {
+                                    console.log('429.5')
+                                }
+                                transaction.type = 'async transaction'
+                                await db.create(transaction)
                             }
-                        } catch (err) {
-                            if (err?.response?.status && err.response.status === 429) {
-                                console.log('429.5')
-                            }
+                        } else {
                             transaction.type = 'async transaction'
                             await db.create(transaction)
                         }
-                    } else {
+                    } catch (err) {
+                        if (err?.response?.status && err.response.status === 429) {
+                            console.log('429.2')
+                        }
                         transaction.type = 'async transaction'
                         await db.create(transaction)
                     }
+                    
                 } else {
                     transaction.type = 'async transaction'
                     await db.create(transaction)
