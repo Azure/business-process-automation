@@ -97,7 +97,7 @@ function Upload(props) {
             />
            
             <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
-            <Checkbox onClick={onCogSearchClick} checked={isCogSearch} style={{ paddingTop: "20px" }} label="Create a Cognitive Search Index with the output of this document." />
+            <Checkbox onClick={onCogSearchClick} checked={isCogSearch} style={{ paddingTop: "20px" }} label="Create a Cognitive Search Data Source with the output of this document.  Sending more than one document while enabled will generate errors once the Data Source exists." />
         </div>
     )
 }
