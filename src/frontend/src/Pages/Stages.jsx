@@ -13,6 +13,7 @@ import HuggingFaceDialog from '../Components/Dialogs/HuggingFaceDialog'
 import DocumentTranslationDialog from '../Components/Dialogs/DocumentTranslationDialog';
 import SpeechToTextDialog from '../Components/SpeechToText';
 import ChangeDataDialog from '../Components/Dialogs/ChangeDataDialog';
+import VideoIndexerDialog from '../Components/Dialogs/VideoIndexerDialog';
 //import CopyDialog from './CopyDialog';
 import ToTxtDialog from '../Components/Dialogs/ToTxtDialog';
 import Prices from '../Components/Prices/Prices'
@@ -37,6 +38,7 @@ export default function Stages(props) {
     const [hideChangeDataDialog, setHideChangeDataDialog] = useState(true)
     const [hideToTxtDialog, setHideToTxtDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
+    const [hideVideoIndexerDialog, setHideVideoIndexerDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
     //const [price, setPrice] = useState(0)
     // const [numDocuments, setNumDocuments] = useState(0)
@@ -167,6 +169,9 @@ export default function Stages(props) {
         } else if (event.name === 'multiCategoryClassify') {
             setCurrentOption(_.cloneDeep(event))
             setHideCustomMultiDialog(false)
+        } else if (event.name === 'videoIndexer') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideVideoIndexerDialog(false)
         } else {
             addItemToPipeline(event)
         }
@@ -207,6 +212,7 @@ export default function Stages(props) {
                 <SpeechToTextDialog hideDialog={hideSttDialog} setHideDialog={setHideSttDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ChangeDataDialog hideDialog={hideChangeDataDialog} setHideDialog={setHideChangeDataDialog} items={stages} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ToTxtDialog hideDialog={hideToTxtDialog} setHideDialog={setHideToTxtDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <VideoIndexerDialog hideDialog={hideVideoIndexerDialog} setHideDialog={setHideVideoIndexerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}
             </>
         )

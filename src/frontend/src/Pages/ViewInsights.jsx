@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown } from '@fluentui/react-northstar';
+import { Text, Dropdown, Input, Checkbox, SearchIcon, Accordion, Pill } from '@fluentui/react-northstar';
 import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
 import Search from '../Components/searchComponents/pages/Search/Search'
 
@@ -11,11 +11,11 @@ export default function ViewInsights(props) {
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
-            if(_indexes?.data?.indexes){
-                setIndexes(_indexes.data.indexes)
-                setSelectedIndex(_indexes.data.indexes[0])
-                console.log(_indexes.data.indexes[0])
-            }
+            // if(_indexes?.data?.indexes){
+            //     setIndexes(_indexes.data.indexes)
+            //     setSelectedIndex(_indexes.data.indexes[0])
+            //     console.log(_indexes.data.indexes[0])
+            // }
         })
     },[])
 
@@ -23,9 +23,9 @@ export default function ViewInsights(props) {
         setSelectedIndex(value.value)
     }
 
-    const renderIndexes = () => {
-        if(selectedIndex){
-            return(
+    if(selectedIndex){
+        return(
+            <>
                 <div style={{ paddingBottom: "20px", paddingTop: "60px", fontWeight: "bold" }}>
                     <Text content="Choose a Cognitive Search Index" style={{
                     display: 'flex', marginBottom: "10px"
@@ -41,15 +41,23 @@ export default function ViewInsights(props) {
                         />
                         {/* <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} label="Semantic Search" toggle /> */}
                     </div>
-                </div>)
-        }
+                </div>
+                <AppHeader/>
+                <Search index={selectedIndex} />
+            </>
+            )
+    } else {
+        return(
+            <>
+                <div style={{ paddingBottom: "20px", paddingTop: "60px", fontWeight: "bold" }}>
+                    <Text content="No Cognitive Search Indexes Exist" style={{
+                    display: 'flex', marginBottom: "10px"
+                }} />  
+                </div>
+               
+            </>
+        )
     }
-
-    return(<>
-            {renderIndexes()}
-            <AppHeader/>
-            <Search index={selectedIndex} />
-        </>)
 }
     // const [indexes, setIndexes] = useState([])
     // const [selectedIndex, setSelectedIndex] = useState(null)

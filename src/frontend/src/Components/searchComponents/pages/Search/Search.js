@@ -18,7 +18,7 @@ export default function Search(props) {
   const [resultCount, setResultCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [q, setQ] = useState("*");
-  const [top] = useState(20);
+  const [top] = useState(10);
   const [skip, setSkip] = useState(0);
   const [filters, setFilters] = useState([]);
   const [facets, setFacets] = useState("");
@@ -43,10 +43,9 @@ export default function Search(props) {
       axios.post('/api/search', body)
         .then(response => {
           //console.log(JSON.stringify(response.data))
-          if (response?.data?.results) {
-            setResults(response.data.results);
-            
-            setResultCount(response.data.results.length);
+          if (response?.data?.results?.value) {
+            setResults(response.data.results.value);
+            setResultCount(response.data.results["@odata.count"]);
             setIsLoading(false);
             if(response.data.results["@search.facets"])
             {
@@ -63,40 +62,40 @@ export default function Search(props) {
 
   }, [q, top, skip, filters, currentPage, props.index]);
 
-  const executeSearch = () => {
-    //setIsLoading(true);
-    setSkip((currentPage - 1) * top);
-    const body = {
-      q: q,
-      top: top,
-      skip: skip,
-      filters: filters,
-      facets: [],
-      index: props.index
-    };
+  // const executeSearch = () => {
+  //   //setIsLoading(true);
+  //   setSkip((currentPage - 1) * top);
+  //   const body = {
+  //     q: q,
+  //     top: top,
+  //     skip: skip,
+  //     filters: filters,
+  //     facets: [],
+  //     index: props.index
+  //   };
 
-    if (props.index) {
-      axios.post('/api/search', body)
-        .then(response => {
-          //console.log(JSON.stringify(response.data))
-          if (response?.data?.results) {
-            setResults(response.data.results);
+  //   if (props.index) {
+  //     axios.post('/api/search', body)
+  //       .then(response => {
+  //         //console.log(JSON.stringify(response.data))
+  //         if (response?.data?.results) {
+  //           setResults(response.data.results);
             
-            setResultCount(response.data.results.length);
-            setIsLoading(false);
-            if(response.data.results["@search.facets"])
-            {
-              setFacets(response.data.results["@search.facets"]);
-            }
-          }
+  //           setResultCount(response.data.results.length);
+  //           setIsLoading(false);
+  //           if(response.data.results["@search.facets"])
+  //           {
+  //             setFacets(response.data.results["@search.facets"]);
+  //           }
+  //         }
 
-        })
-        .catch(error => {
-          console.log(error);
-          setIsLoading(false);
-        });
-    }
-  }
+  //       })
+  //       .catch(error => {
+  //         console.log(error);
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }
 
   // pushing the new search term to history when q is updated
   // allows the back button to work as expected when coming back from the details page
@@ -109,9 +108,18 @@ export default function Search(props) {
 
 
   let postSearchHandler = (searchTerm) => {
-    //console.log(searchTerm);
+    // pushing the new search term to history when q is updated
+    // allows the back button to work as expected when coming back from the details page
+    //history.push('/search?q=' + searchTerm);  
+    setCurrentPage(1);
+    setSkip(0);
+    setFilters([]);
     setQ(searchTerm);
-    executeSearch()
+  }
+
+  let updatePagination = (newPageNumber) => {
+    setCurrentPage(newPageNumber);
+    setSkip((newPageNumber-1) * top);
   }
 
   var body;
@@ -124,7 +132,7 @@ export default function Search(props) {
     body = (
       <div className="col-md-9">
         <Results documents={results} top={top} skip={skip} count={resultCount}></Results>
-        <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={setCurrentPage}></Pager>
+        <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )
   }

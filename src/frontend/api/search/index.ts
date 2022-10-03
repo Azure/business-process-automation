@@ -53,7 +53,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             //const axiosResult = await axios.get(url,headers)
     
             context.res = {
-                body: { "results": axiosResult.data.value }
+                body: { "results": axiosResult.data }
             }
         } else {
             context.res = {
