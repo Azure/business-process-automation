@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dialog, Text, TextArea } from '@fluentui/react-northstar';
+import { Dialog, Text } from '@fluentui/react-northstar';
 
 
 export default function VideoIndexerDialog(props) {

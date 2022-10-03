@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, Input, Checkbox, SearchIcon, Accordion, Pill } from '@fluentui/react-northstar';
+import { Text, Dropdown } from '@fluentui/react-northstar';
 import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
 import Search from '../Components/searchComponents/pages/Search/Search'
 
@@ -11,11 +11,11 @@ export default function ViewInsights(props) {
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
-            // if(_indexes?.data?.indexes){
-            //     setIndexes(_indexes.data.indexes)
-            //     setSelectedIndex(_indexes.data.indexes[0])
-            //     console.log(_indexes.data.indexes[0])
-            // }
+            if(_indexes?.data?.indexes){
+                setIndexes(_indexes.data.indexes)
+                setSelectedIndex(_indexes.data.indexes[0])
+                console.log(_indexes.data.indexes[0])
+            }
         })
     },[])
 
