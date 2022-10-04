@@ -314,8 +314,9 @@ Finally, paste that selection into the editor window.
  
 ## Load Documents!
 1. Select Configure a New Pipeline  
+**Important: When naming your pipeline, please choose a length greater then 5 characters to satisfy naming requirements of various Azure Services created through the pipeline**  
 ![](images/app_landing_page.png)  
-2. Select your input file(s) type
+2. Select your input file(s) type  
 **Note**: *The .pdf input tile can accomodate several image input file format types (including, JPEG, PNG, BMP, TIFF)* More information at https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/faq  
 Generally, please refer to the supported file types required by the various Azure Cognitive Services (documentation sections linked in Reference).
 3. Next, continue building your pipepline by selelecting which analytical service you would like to apply:
@@ -363,7 +364,7 @@ When using a custom Hugging Face model, you'll be prompted select your desired m
     ![](images/navigating_cosmos_db_explorer.png)  
 
 
-If a Cognitive Search index was added to the pipeline, you will need to navigate to your newly created Cognitive Search Resource within that same Resource Group.
+If a Cognitive Search index was added to the pipeline, you will need to navigate to your newly created Cognitive Search Resource within that same Resource Group.  
 ![](images/cognitive_search_index1.png)  
 *Generated Cognitive Search Index*  
 
