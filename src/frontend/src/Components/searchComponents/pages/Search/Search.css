@@ -1,0 +1,23 @@
+.sui-layout-header {
+    background-color: #0078d7;
+    color: #eee;
+}
+.sui-search-box__submit {
+    background: linear-gradient(rgb(60, 226, 102), rgb(34, 151, 57));
+    letter-spacing: 0.1em;
+}
+.sui-search-box__submit:hover {
+    background: linear-gradient(rgb(34, 151, 57), rgb(60, 226, 102));
+}
+
+.pager-style {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: fit-content;
+}
+
+.search-bar {
+    margin: 1em;
+    margin-bottom: 1em;
+    margin-top: 2em;
+}

@@ -20,10 +20,10 @@ export class CosmosDB {
     public create = async (data) : Promise<any> => {
         try {
             const client = new CosmosClient(this._connectionString);
-            console.log(`db: ${this._dbName}`)
+            //console.log(`db: ${this._dbName}`)
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
-            console.log(`container: ${this._containerName}`)
+            //console.log(`container: ${this._containerName}`)
             const { resource: createdItem } = await container.items.upsert(data);
             return createdItem
         } catch (err) {
@@ -50,7 +50,7 @@ export class CosmosDB {
         return null
     }
 
-    public getAsyncTransactions = async () : Promise<any[]> => {
+    public getUnlockedAsyncTransactions = async () : Promise<any[]> => {
         try{
             const client = new CosmosClient(this._connectionString);
             const database = client.database(this._dbName);

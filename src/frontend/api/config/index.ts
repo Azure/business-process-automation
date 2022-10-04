@@ -15,13 +15,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 body: err
             }
             return
-        } finally {
-            const out = await create(context, req)
-            context.res = {
-                // status: 200, /* Defaults to 200 */
-                body: out
-            };
-        }
+        } 
     } else {
         try{
             const client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
