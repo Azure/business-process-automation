@@ -316,21 +316,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getFormRecReadPricing
     },
-    "viewService": {
-        "inputTypes": [
-            "any"
-        ],
-        "outputTypes": [
-            "any"
-        ],
-        "image": storage,
-        "label": "Export Last Stage To DB",
-        "name": "view",
-        "bpaServiceId": "abc123",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
+    // "viewService": {
+    //     "inputTypes": [
+    //         "any"
+    //     ],
+    //     "outputTypes": [
+    //         "any"
+    //     ],
+    //     "image": storage,
+    //     "label": "Export Last Stage To DB",
+    //     "name": "view",
+    //     "bpaServiceId": "abc123",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : noCharge
+    // },
     "extractSummary": {
         "defaultTier" : "Standard Text Records",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
