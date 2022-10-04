@@ -518,8 +518,7 @@
                 "path": "/myPathToNotIndex/*"
               }
             ]
-          },
-          "defaultTtl": 86400
+          }
         },
         "options": {
           "autoscaleSettings": {

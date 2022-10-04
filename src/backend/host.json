@@ -10,12 +10,11 @@
   },
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
-    "version": "[2.*, 3.0.0)"
+    "version": "[3.3.0, 4.0.0)"
   },
   "extensions": {
     "queues": {
-      "batchSize": 30,
-      "newBatchThreshold": 10
+      "batchSize": 32
     }
   }
 }

@@ -1,0 +1,15 @@
+.header {
+    background-color: #0078d7;
+    color: #eee;
+}
+
+.navbar-logo {
+    width: 1.5em;
+    height: auto;
+}
+
+.nav-link { color: #fff; }
+.nav-link:hover { color: #eee; }
+
+.auth-link { color: #fff; }
+.auth-link:hover { color: #eee; }

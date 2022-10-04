@@ -1,0 +1,16 @@
+.home-search {
+    margin: 5em auto;
+    max-width: 45%;
+    display: block;
+}
+
+.logo {
+    height: 12em;
+    width: auto;
+    display:block;
+    margin: auto auto 0;
+}
+
+.poweredby {
+    text-align: center;
+}

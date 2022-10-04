@@ -5,7 +5,6 @@ import { BpaEngine } from "../engine"
 import { serviceCatalog } from "../engine/serviceCatalog"
 const _ = require('lodash')
 
-
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
     try {
@@ -56,7 +55,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         await db.view({
             data : err.message,
             type : "error",
-            label : "error",
+            label : "Async Completion Trigger",
             filename : req.body.filename,
             pipeline : "error",
             bpaId : "error",

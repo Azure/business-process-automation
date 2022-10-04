@@ -3,48 +3,71 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import axios, { AxiosRequestConfig } from 'axios'
 
 interface SemanticResult {
-    answers : []
-    values : []
+    answers: []
+    values: []
+}
+
+const constructFilter = (filters : []) => {
+    let filterString = ""
+    let index = 0
+    for(const filter of filters){
+        if(index === 0){
+            filterString += `${filter["field"]} eq '${filter["value"]}'`
+        } else {
+            filterString += `and ${filter["field"]} eq '${filter["value"]}'`
+        }
+        
+    }
+    return filterString
 }
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
     try {
         context.log('HTTP trigger function processed a request.');
-        if(req?.query?.index && req?.query?.text){
-            const index = req.query["index"]
-            const text = req.query["text"]
-            const semantic = req.query["semantic"]
-            const semanticConfig = req.query["semanticConfig"]
-    
-            const headers : AxiosRequestConfig = {
-                headers : {
-                    "Content-Type" : "application/json",
-                    "api-key" : process.env.COGSEARCH_APIKEY
-                }
-            }
-            let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
-            if(semantic === 'false'){
-                url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US`
-            }
-            const axiosResult = await axios.get(url,headers)
 
+        const index = req.body.index
+
+        const headers: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "application/json",
+                "api-key": process.env.COGSEARCH_APIKEY
+            }
+        }
+        const body = {
+            search: req.body.q,
+            count: true,
+            facets: req?.body?.facets ? req.body.facets : [],
+            filter: req?.body?.facets ? constructFilter(req.body.filters) : "",
+            queryType: "simple",
+            skip: req.body.skip,
+            top: req.body.top
+        }
+        if(index){
+            let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2021-04-30-Preview`
+            const axiosResult = await axios.post(url, body, headers)
+            // let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
+            // if(semantic === 'false'){
+            //     url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&facet=label&search=${encodeURIComponent(text)}&queryLanguage=en-US`
+            // }
+            //const axiosResult = await axios.get(url,headers)
+    
             context.res = {
-                body: {"results": axiosResult.data}
+                body: { "results": axiosResult.data }
             }
         } else {
             context.res = {
-                body: "error"
+                body: { "results": [] }
             }
         }
-        
+
     } catch (err) {
         context.log(err)
         context.res = {
             body: err
         }
-        return
     }
+    return
 }
 
 export default httpTrigger;

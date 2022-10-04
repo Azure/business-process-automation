@@ -30,6 +30,7 @@ export class BpaEngine {
 
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex)
+
     }
 
     private _process = async (currentInput : BpaServiceObject, config : BpaConfiguration, stageIndex : number) => {
