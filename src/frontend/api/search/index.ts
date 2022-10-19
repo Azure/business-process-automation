@@ -39,9 +39,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             count: true,
             facets: req?.body?.facets ? req.body.facets : [],
             filter: req?.body?.facets ? constructFilter(req.body.filters) : "",
-            queryType: "simple",
+            queryType: req?.body?.useSemanticSearch == true ? "semantic" : "simple",
             skip: req.body.skip,
-            top: req.body.top
+            top: req.body.top,
+            semanticConfiguration : req.body.semanticConfig,
+            queryLanguage : req.body.queryLanguage
         }
         if(index){
             let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2021-04-30-Preview`

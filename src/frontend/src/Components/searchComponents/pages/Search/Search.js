@@ -21,8 +21,9 @@ export default function Search(props) {
   const [top] = useState(10);
   const [skip, setSkip] = useState(0);
   const [filters, setFilters] = useState([]);
-  const [facets, setFacets] = useState("");
+  const [facets, setFacets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false)
 
   let resultsPerPage = top;
 
@@ -35,8 +36,11 @@ export default function Search(props) {
       top: top,
       skip: skip,
       filters: filters,
-      facets: [],
-      index: props.index
+      facets: props.facets,
+      index: props.index,
+      useSemanticSearch: props.useSemanticSearch,
+      semanticConfig: props.semanticConfig,
+      queryLanguage: "en-US"
     };
 
     if (props.index) {
@@ -51,6 +55,12 @@ export default function Search(props) {
             {
               setFacets(response.data.results["@search.facets"]);
             }
+            setIsError(false)
+          } else{
+            setResults([]);
+            setResultCount(0);
+            setIsLoading(false);
+            setIsError(true)
           }
 
         })
@@ -60,7 +70,7 @@ export default function Search(props) {
         });
     }
 
-  }, [q, top, skip, filters, currentPage, props.index]);
+  }, [q, top, skip, filters, currentPage, props.index, props.facets, props.useSemanticSearch, props.semanticConfig]);
 
   // const executeSearch = () => {
   //   //setIsLoading(true);
@@ -128,7 +138,13 @@ export default function Search(props) {
       <div className="col-md-9">
         <CircularProgress />
       </div>);
-  } else {
+  } else if(isError){
+    body = (
+      <div className="col-md-9" style={{margin: "100px"}}>
+         Search Failed.  Make sure you have Semantic Search enabled. 
+      </div>);
+  } 
+  else {
     body = (
       <div className="col-md-9">
         <Results documents={results} top={top} skip={skip} count={resultCount}></Results>
