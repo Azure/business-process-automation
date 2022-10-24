@@ -15,8 +15,8 @@ export class CogSearch {
     public generateCustomSearchSkill = async (inputObject: any): Promise<void> => {
         //const skillset = await this._generateSkillSet(this._projectName, targetSkillUrl)
         const dataSource = await this._generateDataSource(this._projectName)
-        const index = await this._generateIndex(this._projectName, inputObject)
-        await this._generateIndexer(this._projectName, dataSource.name, index.name, null)
+        // const index = await this._generateIndex(this._projectName, inputObject)
+        // await this._generateIndexer(this._projectName, dataSource.name, index.name, null)
     }
 
     // private _generateSkillSet = async (name: string, targetSkillUrl: string) => {
