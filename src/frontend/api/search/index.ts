@@ -1,4 +1,4 @@
-import { SearchIndexClient, SearchOptions, AzureKeyCredential, SearchIndexer, SearchIndexerDataSourceConnection, SearchIndex } from "@azure/search-documents";
+//import { SearchIndexClient, SearchOptions, AzureKeyCredential, SearchIndexer, SearchIndexerDataSourceConnection, SearchIndex } from "@azure/search-documents";
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import axios, { AxiosRequestConfig } from 'axios'
 
@@ -7,16 +7,19 @@ interface SemanticResult {
     values: []
 }
 
-const constructFilter = (filters : []) => {
+const constructFilter = (filters : any[]) => {
     let filterString = ""
     let index = 0
     for(const filter of filters){
         if(index === 0){
-            filterString += `${filter["field"]} eq '${filter["value"]}'`
-        } else {
-            filterString += `and ${filter["field"]} eq '${filter["value"]}'`
+            const split = filter["field"].split('/')
+            filterString += `${split[0]}/any(${split[0]}:${split[0]}/${split[split.length-1]} eq ${filter["value"]})`
+
         }
-        
+        // } else {
+        //     filterString += ` and ${filter["field"]} eq '${filter["value"]}'`
+        // }
+        index++
     }
     return filterString
 }

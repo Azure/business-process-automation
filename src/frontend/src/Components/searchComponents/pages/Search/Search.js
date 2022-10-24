@@ -27,6 +27,18 @@ export default function Search(props) {
 
   let resultsPerPage = top;
 
+  const updateFilters = (filters) => {
+    let out = ""
+    if(filters){
+      for(const f of filters){
+        const localFilter = f.field.replace(/\//g, '.')
+        out += `${localFilter} eq '${f.value}'`
+
+      }
+    }
+    return out
+  }
+
   useEffect(() => {
 
     //setIsLoading(true);

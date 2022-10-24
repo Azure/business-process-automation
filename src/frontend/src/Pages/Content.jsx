@@ -156,7 +156,7 @@ export default function Content(props) {
                         <ChevronEndMediumIcon />
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
-                        View Insights
+                        Sample Search Application
                     </Breadcrumb.Item>
                 </>)
 

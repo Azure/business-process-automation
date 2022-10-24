@@ -48,8 +48,8 @@ export default function ViewInsights(props) {
         if(useSemanticSearch){
             return(
                 <>
-                <Text content="Semantic Search Configuration" style={{marginBottom: "10px"}} />
-                <TextArea value={semanticConfig} label="label" style={{height: "40px",marginBottom:"40px", width:"20%"}} onChange={onSemanticConfigChange} />
+                <Text content="Semantic Search Configuration"  />
+                <TextArea value={semanticConfig} label="label"  onChange={onSemanticConfigChange} style={{height:"40px", width: "250px"}}/>
                 </>
                 
             )
@@ -59,27 +59,33 @@ export default function ViewInsights(props) {
     }
 
     if(selectedIndex){
+        const style = {display:"flex", flexFlow:"column", fontWeight:"bold", margin: "10px"}
         return(
-            <>
-                <div style={{ paddingBottom: "20px", paddingTop: "60px", fontWeight: "bold" }}>
-                <Text content="Choose a Cognitive Search Index" style={{display: 'flex', marginBottom: "10px"}} />
-                <Dropdown
-                    placeholder=""
-                    label="Output"
-                    items={indexes}
-                    onChange={onIndexChange}
-                    defaultValue={selectedIndex}
-                    style={{ marginRight: "40px" }}
-                />
-                </div>
-                <div style={{display:"flex", flexDirection:"column", fontWeight: "bold"}}>
-                            <Text content="Facets" style={{marginBottom: "10px"}} />
-                            <TextArea value={facetsString} label="label" style={{height: "40px",marginBottom: "20px",width:"20%"}} onChange={onFacetsChange}/>
-                            <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} label="Semantic Search" style={{marginBottom: "20px"}} toggle />
-                            {renderSemanticSearchConfig()}
+            <> 
+              <div style={{marginTop:"50px", marginBottom:"50px", display:"flex",flexFlow:"row",flexWrap:"wrap"}}>
+                    <div style={style}>
+                        <Text content="Choose a Cognitive Search Index" />
+                        <Dropdown
+                            placeholder=""
+                            label="Output"
+                            items={indexes}
+                            onChange={onIndexChange}
+                            defaultValue={selectedIndex}
                             
-                </div>
-                <AppHeader/>
+                        />
+                    </div>
+                        
+                    <div style={style}>
+                        <Text content="Facets"/>
+                        <TextArea value={facetsString} label="label" onChange={onFacetsChange} style={{height:"40px", width: "300px"}}/>
+                    </div>
+                    <div style={style}>
+                        <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} style={{marginBottom:"35px"}} label="Semantic Search" toggle />
+                        {renderSemanticSearchConfig()}
+                    </div>
+              </div>
+                
+                {/* <AppHeader/> */}
                 <Search index={selectedIndex} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
             </>
             )
