@@ -95,7 +95,7 @@ export default function Search(props) {
         });
     }
 
-  }, [q, top, skip, filters, currentPage, props.index, props.facets, props.useSemanticSearch, props.semanticConfig]);
+  }, [q, top, skip, filters, currentPage, props.index, props.facets, props.useSemanticSearch, props.semanticConfig, props.filterCollections]);
 
   // const executeSearch = () => {
   //   //setIsLoading(true);
