@@ -39,6 +39,18 @@ export default function Search(props) {
   //   return out
   // }
 
+  const getFacets = (_facets) => {
+    const result = []
+    for(const _facet of _facets){
+      result.push(`${_facet},count:1000`)
+    }
+    // let result = ""
+    // for(const _facet of _facets.split(',')){
+    //   result += `${_facet},count:1000`
+    // }
+    return result
+  }
+
   useEffect(() => {
 
     //setIsLoading(true);
@@ -48,11 +60,12 @@ export default function Search(props) {
       top: top,
       skip: skip,
       filters: filters,
-      facets: props.facets,
+      facets: getFacets(props.facets),
       index: props.index,
       useSemanticSearch: props.useSemanticSearch,
       semanticConfig: props.semanticConfig,
-      queryLanguage: "en-US"
+      queryLanguage: "en-US",
+      filterCollections : props.filterCollections
     };
 
     if (props.index) {

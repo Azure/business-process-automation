@@ -49,11 +49,11 @@ export default function CheckboxFacet(props) {
 }
 
 const FacetListItem = styled(ListItem)({
-    paddingLeft: '36px !important',
+    // paddingLeft: '36px !important',
 })
 
 const FacetValueListItem= styled(ListItem)({
-    paddingLeft: '46px !important',
+    //paddingLeft: '46px !important',
 });
 
 const FacetValuesList= styled(List)({

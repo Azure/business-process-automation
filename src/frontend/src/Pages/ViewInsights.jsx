@@ -12,28 +12,39 @@ export default function ViewInsights(props) {
     const [useSemanticSearch, setUseSemanticSearch] = useState(false)
     const [semanticConfig, setSemanticConfig] = useState("")
     const [facets, setFacets] = useState([])
-    const [facetsString, setFacetsString] = useState("")
+    const [filterCollections ,setFilterCollections] = useState([])
+    //const [_ , setFacetsString] = useState("")
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
             if(_indexes?.data?.indexes){
                 setIndexes(_indexes.data.indexes)
-                setSelectedIndex(_indexes.data.indexes[0])
+                setSelectedIndex(_indexes.data.indexes[0].name)
                 setIndexSearchDone(true)
-                console.log(_indexes.data.indexes[0])
+                //setFacetsString(getFacetsString(_indexes.data.indexes[0].facetableFields))
+                setFacets(getFacetsString(_indexes.data.indexes[0].facetableFields).split(','))
+                setFilterCollections(_indexes.data.indexes[0].collections)
             }
         }).catch(err => {
             console.log(err)
         })
     },[])
 
-    const onFacetsChange = (_, value) => {
-        setFacetsString(value.value)
-        setFacets(value.value.split(','))
-    }
+    // const onFacetsChange = (_, value) => {
+    //     setFacetsString(value.value)
+    //     setFacets(value.value.split(','))
+    // }
 
     const onIndexChange = (_, value) => {
         setSelectedIndex(value.value)
+        for(const index of indexes){
+            if(value.value === index.name){
+                //setFacetsString(getFacetsString(index.facetableFields))
+                setFacets(getFacetsString(index.facetableFields).split(','))
+                setFilterCollections(index.collections)
+            }
+        }
+        
     }
 
     const onSemanticSearch = (_, value) => {
@@ -42,6 +53,20 @@ export default function ViewInsights(props) {
 
     const onSemanticConfigChange = (_, value) => {
         setSemanticConfig(value.value)
+    }
+
+    const getFacetsString = (facets) => {
+        let result = ""
+        let index = 0
+        for(const facet of facets){
+            if(index === 0){
+                result = facet
+            } else{
+                result += `, ${facet}`
+            }
+            index++
+        }
+        return result
     }
 
     const renderSemanticSearchConfig = () => {
@@ -58,6 +83,14 @@ export default function ViewInsights(props) {
         }
     }
 
+    const indexNames = () => {
+        const out = []
+        for(const index of indexes){
+            out.push(index.name)
+        }
+        return out
+    }
+
     if(selectedIndex){
         const style = {display:"flex", flexFlow:"column", fontWeight:"bold", margin: "10px"}
         return(
@@ -68,17 +101,16 @@ export default function ViewInsights(props) {
                         <Dropdown
                             placeholder=""
                             label="Output"
-                            items={indexes}
+                            items={indexNames()}
                             onChange={onIndexChange}
                             defaultValue={selectedIndex}
-                            
                         />
                     </div>
                         
-                    <div style={style}>
+                    {/* <div style={style}>
                         <Text content="Facets"/>
                         <TextArea value={facetsString} label="label" onChange={onFacetsChange} style={{height:"40px", width: "300px"}}/>
-                    </div>
+                    </div> */}
                     <div style={style}>
                         <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} style={{marginBottom:"35px"}} label="Semantic Search" toggle />
                         {renderSemanticSearchConfig()}
@@ -86,7 +118,7 @@ export default function ViewInsights(props) {
               </div>
                 
                 {/* <AppHeader/> */}
-                <Search index={selectedIndex} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
+                <Search index={selectedIndex} filterCollections={filterCollections} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
             </>
             )
     } else if (indexSearchDone){
