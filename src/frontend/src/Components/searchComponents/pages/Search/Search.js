@@ -24,6 +24,7 @@ export default function Search(props) {
   const [facets, setFacets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false)
+  const [answers, setAnswers] = useState([])
 
   let resultsPerPage = top;
 
@@ -79,6 +80,11 @@ export default function Search(props) {
             if(response.data.results["@search.facets"])
             {
               setFacets(response.data.results["@search.facets"]);
+            }
+            if(response.data.results["@search.answers"]){
+              setAnswers(response.data.results["@search.answers"]);
+            } else {
+              setAnswers([])
             }
             setIsError(false)
           } else{
@@ -172,7 +178,7 @@ export default function Search(props) {
   else {
     body = (
       <div className="col-md-9">
-        <Results facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results answers={answers} facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )

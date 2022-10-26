@@ -96,7 +96,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 "api-key": process.env.COGSEARCH_APIKEY
             }
         }
-        const body = {
+        let body = {
             search: req.body.q,
             count: true,
             facets: req?.body?.facets ? req.body.facets : [],
@@ -106,8 +106,10 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             top: req.body.top,
             semanticConfiguration: req.body.semanticConfig,
             queryLanguage: req.body.queryLanguage,
-            answers: "extractive|count-3",
-            captions: "extractive|highlight-true",
+        }
+        if(body.queryType === 'semantic'){
+            body['answers'] = "extractive|count-3"
+            body['captions'] = "extractive|highlight-true"
         }
         if (index) {
             let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2021-04-30-Preview`
