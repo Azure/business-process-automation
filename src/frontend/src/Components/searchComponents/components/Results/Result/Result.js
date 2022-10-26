@@ -8,7 +8,7 @@ import './Result.css';
 export default function Result(props) {
 
     const getNextColor = (index) => {
-        const colors = ['lightblue','pink','lightyellow','lightorange','lightpurple','lightgreen']
+        const colors = ['lightblue','pink','lightyellow','orange','violet','lightgreen']
         return colors[index%(colors.length)]
     }
 
@@ -22,7 +22,7 @@ export default function Result(props) {
                         <div>
                             {props.facets[k].slice(0,20).map(f => {
                             return (<Pill
-                                style={{ backgroundColor: getNextColor(index) }}
+                                style={{ backgroundColor: getNextColor(index), color : ""}}
                                 content={`${f.value} (${f.count})`}
                                 size="small"
                             />)
@@ -54,6 +54,25 @@ export default function Result(props) {
        
     }
 
+    const theme = {
+        base00: 'white',
+        base01: 'white',
+        base02: 'white',
+        base03: 'white',
+        base04: 'white',
+        base05: 'white',
+        base06: 'white',
+        base07: 'white',
+        base08: 'white',
+        base09: 'white',
+        base0A: 'white',
+        base0B: 'white',
+        base0C: 'white',
+        base0D: 'white',
+        base0E: 'white',
+        base0F: 'white'
+      };
+
     return (
         <div className="card result">
 
@@ -67,7 +86,7 @@ export default function Result(props) {
                     {renderPills()}
                 </div>
                 <div className="json-tree">
-                    <JSONTree data={props.data} shouldExpandNode={() => false} />
+                    <JSONTree data={props.data} theme={theme} shouldExpandNode={() => false} />
                 </div>
             </div>
         </div>
