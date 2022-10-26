@@ -80,6 +80,8 @@ export default function Search(props) {
             if(response.data.results["@search.facets"])
             {
               setFacets(response.data.results["@search.facets"]);
+            } else {
+              setFacets([])
             }
             if(response.data.results["@search.answers"]){
               setAnswers(response.data.results["@search.answers"]);
@@ -92,6 +94,8 @@ export default function Search(props) {
             setResultCount(0);
             setIsLoading(false);
             setIsError(true)
+            setFacets([])
+            setAnswers([])
           }
 
         })
