@@ -8,8 +8,10 @@ export default function Results(props) {
   let results = props.documents.map((result, index) => {
     return <Result 
         key={result.id} 
+        searchables={props.searchables}
         document={result.filename.split('/')[result.filename.split('/').length - 1]}
         data={result}
+        facets={props.facets}
       />;
   });
 

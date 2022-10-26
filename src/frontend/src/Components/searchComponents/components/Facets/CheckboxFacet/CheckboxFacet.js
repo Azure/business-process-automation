@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Collapse, Checkbox, List, ListItem, ListItemText } from '@material-ui/core';
+import { Collapse, Checkbox, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 
@@ -35,7 +35,9 @@ export default function CheckboxFacet(props) {
         <div>
             <FacetListItem disableRipple={true} button onClick={() => setIsExpanded(!isExpanded)}>
                 <ListItemText 
-                    primary={props.mapFacetName(props.name)}
+                    disableTypography
+                    primary={<Typography type="body2" style={{ color: '#007bff', fontWeight: 'bold' }}>{props.mapFacetName(props.name.toUpperCase())}</Typography>}
+                    
                 />
                 {isExpanded ? <ExpandLess /> : <ExpandMore />}
             </FacetListItem>
@@ -57,7 +59,7 @@ const FacetValueListItem= styled(ListItem)({
 });
 
 const FacetValuesList= styled(List)({
-    maxHeight: 340,
+    maxHeight: 400,
     overflowY: 'auto !important',
     marginRight: '18px !important'
 })

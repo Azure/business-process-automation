@@ -9,6 +9,7 @@
     padding-bottom: 3px;
     box-sizing: border-box;
     cursor: pointer;
+    background-color: #eee !important;
 }
 
 /* .result:hover,
@@ -18,6 +19,8 @@
 
 .title-style {
     vertical-align: middle;
+    text-align: left;
+    font-weight: bold;
 }
 
 .card-img-top {

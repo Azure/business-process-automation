@@ -5,6 +5,7 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 interface Index {
     name : string,
     facetableFields : string[]
+    searchableFields : string[]
     collections : string[]
 }
 
@@ -35,6 +36,33 @@ const getFacetableFields = (fields : any, name : string, result : string[], coll
     return { result : result, collections : collections }
 }
 
+const getSearchableFields = (fields : any, name : string, result : string[], collections : string[]) => {
+    for(const field of fields){
+        if(field.searchable === true){
+            if(name){
+                result.push(`${name}/${field.name}`)
+            } else{
+                result.push(`${field.name}`)
+            }
+        }
+        if(field.type.includes('Collection(')){
+            collections.push(field.name)
+        }
+        if(field?.fields){
+            if(name){
+                const _result = getSearchableFields(field.fields, `${name}/${field.name}`, result, collections)
+                result = _result.result
+            } else{
+                const _result = getSearchableFields(field.fields, field.name, result, collections)
+                result = _result.result
+            }
+            
+        }
+    }
+
+    return { result : result, collections : collections }
+}
+
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
@@ -47,9 +75,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         
         for await (const index of indexesList){
             const facetableFields = getFacetableFields(index.fields, null, [], [])
+            const searchableFields = getSearchableFields(index.fields, null, [], [])
             const _index : Index = {
                 name : index.name,
                 facetableFields : facetableFields.result,
+                searchableFields : searchableFields.result,
                 collections : facetableFields.collections
             }
             indexes.push(_index)

@@ -13,6 +13,7 @@ export default function ViewInsights(props) {
     const [semanticConfig, setSemanticConfig] = useState("")
     const [facets, setFacets] = useState([])
     const [filterCollections ,setFilterCollections] = useState([])
+    const [searchables, setSearchables] = useState([])
     //const [_ , setFacetsString] = useState("")
 
     useEffect(()=>{
@@ -22,8 +23,20 @@ export default function ViewInsights(props) {
                 setSelectedIndex(_indexes.data.indexes[0].name)
                 setIndexSearchDone(true)
                 //setFacetsString(getFacetsString(_indexes.data.indexes[0].facetableFields))
-                setFacets(getFacetsString(_indexes.data.indexes[0].facetableFields).split(','))
-                setFilterCollections(_indexes.data.indexes[0].collections)
+                if(_indexes.data.indexes[0].facetableFields.length > 0){
+                    setFacets(getFacetsString(_indexes.data.indexes[0].facetableFields).split(','))
+                    setFilterCollections(_indexes.data.indexes[0].collections)
+                }else{
+                    setFacets([])
+                    setFilterCollections([])
+                }
+
+                if(_indexes.data.indexes[0].searchableFields.length > 0){
+                    setSearchables(_indexes.data.indexes[0].searchableFields)
+                }else{
+                    setSearchables([])
+                }
+                
             }
         }).catch(err => {
             console.log(err)
@@ -40,11 +53,22 @@ export default function ViewInsights(props) {
         for(const index of indexes){
             if(value.value === index.name){
                 //setFacetsString(getFacetsString(index.facetableFields))
-                setFacets(getFacetsString(index.facetableFields).split(','))
-                setFilterCollections(index.collections)
+                if(index.facetableFields.length > 0){
+                    const facetableFields = getFacetsString(index.facetableFields).split(',')
+                    setFacets(facetableFields)
+                    setFilterCollections(index.collections)
+                } else {
+                    setFacets([])
+                    setFilterCollections([])
+                }
+
+                if(index.searchableFields.length > 0){
+                    setSearchables(index.searchableFields)
+                } else{
+                    setSearchables([])
+                }
             }
         }
-        
     }
 
     const onSemanticSearch = (_, value) => {
@@ -113,12 +137,15 @@ export default function ViewInsights(props) {
                     </div> */}
                     <div style={style}>
                         <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} style={{marginBottom:"35px"}} label="Semantic Search" toggle />
+                        
+                    </div>
+                    <div style={style}>
                         {renderSemanticSearchConfig()}
                     </div>
               </div>
                 
                 {/* <AppHeader/> */}
-                <Search index={selectedIndex} filterCollections={filterCollections} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
+                <Search index={selectedIndex} searchables={searchables} filterCollections={filterCollections} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
             </>
             )
     } else if (indexSearchDone){

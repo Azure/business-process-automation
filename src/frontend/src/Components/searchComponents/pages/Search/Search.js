@@ -39,7 +39,7 @@ export default function Search(props) {
   //   return out
   // }
 
-  const getFacets = (_facets) => {
+  const getFacetSearchConfig = (_facets) => {
     const result = []
     for(const _facet of _facets){
       result.push(`${_facet},count:1000`)
@@ -60,7 +60,7 @@ export default function Search(props) {
       top: top,
       skip: skip,
       filters: filters,
-      facets: getFacets(props.facets),
+      facets: getFacetSearchConfig(props.facets),
       index: props.index,
       useSemanticSearch: props.useSemanticSearch,
       semanticConfig: props.semanticConfig,
@@ -172,7 +172,7 @@ export default function Search(props) {
   else {
     body = (
       <div className="col-md-9">
-        <Results documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )
