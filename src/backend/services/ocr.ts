@@ -46,7 +46,7 @@ export class Ocr {
         while (status !== 'succeeded') {
             result = await this._client.getReadResult(operation);
             status = result.status
-            await this.sleep(10000);
+            await this.sleep(1000);
         }
         return result.analyzeResult.readResults;
        
