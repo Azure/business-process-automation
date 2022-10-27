@@ -13,7 +13,7 @@ export default function Facets(props) {
         facetName = capitalizeFirstLetter(facetName);
 
         facetName = facetName.replace('_', ' ');
-        return facetName;
+        return facetName.split('/')[facetName.split('/').length - 1];
     }
 
     function addFilter(name, value) {

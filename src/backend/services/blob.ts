@@ -47,11 +47,11 @@ export class Blob {
         return await blobClient.downloadToBuffer()
     }
 
-    public split = async (myBlob : Buffer, filename : string) : Promise<void> => {
+    public split = async (myBlob : Buffer, filename : string, directoryName : string) : Promise<void> => {
         const pages : Buffer[] = await this._splitPdf(myBlob)
         let index = 0
         for(const page of pages){
-            const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${filename.replace(".pdf",`_${index}`)}.pdf`)
+            const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${directoryName}/${filename.replace(".pdf",`_${index}`)}.pdf`)
             const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(page, page.length)
             console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
             index++

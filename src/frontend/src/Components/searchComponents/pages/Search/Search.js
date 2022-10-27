@@ -21,10 +21,36 @@ export default function Search(props) {
   const [top] = useState(10);
   const [skip, setSkip] = useState(0);
   const [filters, setFilters] = useState([]);
-  const [facets, setFacets] = useState("");
+  const [facets, setFacets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false)
+  const [answers, setAnswers] = useState([])
 
   let resultsPerPage = top;
+
+  // const updateFilters = (filters) => {
+  //   let out = ""
+  //   if(filters){
+  //     for(const f of filters){
+  //       const localFilter = f.field.replace(/\//g, '.')
+  //       out += `${localFilter} eq '${f.value}'`
+
+  //     }
+  //   }
+  //   return out
+  // }
+
+  const getFacetSearchConfig = (_facets) => {
+    const result = []
+    for(const _facet of _facets){
+      result.push(`${_facet},count:1000`)
+    }
+    // let result = ""
+    // for(const _facet of _facets.split(',')){
+    //   result += `${_facet},count:1000`
+    // }
+    return result
+  }
 
   useEffect(() => {
 
@@ -35,8 +61,12 @@ export default function Search(props) {
       top: top,
       skip: skip,
       filters: filters,
-      facets: [],
-      index: props.index
+      facets: getFacetSearchConfig(props.facets),
+      index: props.index,
+      useSemanticSearch: props.useSemanticSearch,
+      semanticConfig: props.semanticConfig,
+      queryLanguage: "en-US",
+      filterCollections : props.filterCollections
     };
 
     if (props.index) {
@@ -50,7 +80,22 @@ export default function Search(props) {
             if(response.data.results["@search.facets"])
             {
               setFacets(response.data.results["@search.facets"]);
+            } else {
+              setFacets([])
             }
+            if(response.data.results["@search.answers"]){
+              setAnswers(response.data.results["@search.answers"]);
+            } else {
+              setAnswers([])
+            }
+            setIsError(false)
+          } else{
+            setResults([]);
+            setResultCount(0);
+            setIsLoading(false);
+            setIsError(true)
+            setFacets([])
+            setAnswers([])
           }
 
         })
@@ -60,7 +105,7 @@ export default function Search(props) {
         });
     }
 
-  }, [q, top, skip, filters, currentPage, props.index]);
+  }, [q, top, skip, filters, currentPage, props.index, props.facets, props.useSemanticSearch, props.semanticConfig, props.filterCollections]);
 
   // const executeSearch = () => {
   //   //setIsLoading(true);
@@ -128,10 +173,16 @@ export default function Search(props) {
       <div className="col-md-9">
         <CircularProgress />
       </div>);
-  } else {
+  } else if(isError){
+    body = (
+      <div className="col-md-9" style={{margin: "100px"}}>
+         Search Failed.  Make sure you have Semantic Search enabled. 
+      </div>);
+  } 
+  else {
     body = (
       <div className="col-md-9">
-        <Results documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results answers={answers} facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )

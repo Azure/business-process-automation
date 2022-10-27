@@ -92,23 +92,14 @@ export class DocumentTranslation {
         //  Gets a reference to the container.
         const blobContainerClient = blobServiceClient.getContainerClient(containerName);
 
-
         const permissions: ContainerSASPermissions = ContainerSASPermissions.parse("rwl")
 
         const options: ContainerGenerateSasUrlOptions = {
             permissions: permissions,
-            expiresOn: new Date(new Date().valueOf() + 86400)
+            expiresOn: new Date(new Date().valueOf() + (1000 * 60 * 60 * 24))
         }
 
-        let url = null
-        try {
-            url = await (await blobContainerClient.generateSasUrl(options)).split("?")[1]
-            //url = `https://${accountName}.blob.core.windows.net/${containerName}/${blobName}?${sasUrl}`
-            console.log("here")
-        } catch (err) {
-            console.log(err)
-        }
-
+        let url = await (await blobContainerClient.generateSasUrl(options)).split("?")[1]
         return url
     }
 
