@@ -156,7 +156,7 @@ export default function Content(props) {
                         <ChevronEndMediumIcon />
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
-                        View Insights
+                        Sample Search Application
                     </Breadcrumb.Item>
                 </>)
 
@@ -179,7 +179,7 @@ export default function Content(props) {
                 {provider}
                 {showUserInfo()}
             </a> */}
-            <div style={{ paddingLeft: "0px", paddingTop: "50px", maxWidth: "1000px", minWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}>
+            <div style={{ paddingLeft: "0px", paddingTop: "50px", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
                 {renderContent()}
             </div>

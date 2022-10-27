@@ -35,27 +35,21 @@ export class Ocr {
     }
 
     public execute = async (fileBuffer: Buffer): Promise<ComputerVisionModels.ReadResult[]> => {
-        try { 
-            let fileStream = await this._client.readInStream(fileBuffer);
-            //Operation ID is last path segment of operationLocation (a URL)
-            let operation: string = fileStream.operationLocation.split('/').slice(-1)[0];
-            // Wait for read recognition to complete
-            // result.status is initially undefined, since it's the result of read
-            let status: string = ''
-            let result: ComputerVisionModels.GetReadResultResponse = null
-            while (status !== 'succeeded') {
-                console.log("in ocr read loop")
-                result = await this._client.getReadResult(operation);
-                status = result.status
-                console.log(`ocr status: ${status}`)
-                await this.sleep(1000);
-            }
-            console.log("completed")
-            return result.analyzeResult.readResults;
-        } catch (err) {
-            console.log(`error in ocr execute ${err}`)
+        
+        let fileStream = await this._client.readInStream(fileBuffer);
+        //Operation ID is last path segment of operationLocation (a URL)
+        let operation: string = fileStream.operationLocation.split('/').slice(-1)[0];
+        // Wait for read recognition to complete
+        // result.status is initially undefined, since it's the result of read
+        let status: string = ''
+        let result: ComputerVisionModels.GetReadResultResponse = null
+        while (status !== 'succeeded') {
+            result = await this._client.getReadResult(operation);
+            status = result.status
+            await this.sleep(1000);
         }
-        return null
+        return result.analyzeResult.readResults;
+       
     }
 
     public toText = (results: ComputerVisionModels.ReadResult[]): string => {

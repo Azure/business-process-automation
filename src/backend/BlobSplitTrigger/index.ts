@@ -6,7 +6,8 @@ const blob : Blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_S
 const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buffer): Promise<void> {
     try {
         context.log(`Name of source doc to split : ${context.bindingData.blobTrigger}`)
-        blob.split(myBlob,context.bindingData.blobTrigger )
+        const directoryName = context.bindingData.blobTrigger.split('/')[1]
+        blob.split(myBlob, context.bindingData.blobTrigger, directoryName )
     }
     catch (err) {
         context.log(err)

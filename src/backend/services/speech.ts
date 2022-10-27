@@ -31,7 +31,7 @@ export class Speech {
 
         const options: ContainerGenerateSasUrlOptions = {
             permissions: ContainerSASPermissions.parse("r"),
-            expiresOn: new Date(new Date().valueOf() + (1000 * 60 * 24 * 2)),
+            expiresOn: new Date(new Date().valueOf() + (1000 * 60 * 60 * 24)),
         }
         const filename = input.filename.replace("documents/", "")
 

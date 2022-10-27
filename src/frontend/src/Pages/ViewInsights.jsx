@@ -1,56 +1,169 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown } from '@fluentui/react-northstar';
-import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
+import { Text, Dropdown, Checkbox, TextArea } from '@fluentui/react-northstar';
+//import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
 import Search from '../Components/searchComponents/pages/Search/Search'
 
 export default function ViewInsights(props) {
 
     const [indexes, setIndexes] = useState([])
     const [selectedIndex, setSelectedIndex] = useState(null)
+    const [indexSearchDone, setIndexSearchDone] = useState(false)
+    const [useSemanticSearch, setUseSemanticSearch] = useState(false)
+    const [semanticConfig, setSemanticConfig] = useState("")
+    const [facets, setFacets] = useState([])
+    const [filterCollections ,setFilterCollections] = useState([])
+    const [searchables, setSearchables] = useState([])
+    //const [_ , setFacetsString] = useState("")
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
             if(_indexes?.data?.indexes){
                 setIndexes(_indexes.data.indexes)
-                setSelectedIndex(_indexes.data.indexes[0])
-                console.log(_indexes.data.indexes[0])
+                setSelectedIndex(_indexes.data.indexes[0].name)
+                setIndexSearchDone(true)
+                //setFacetsString(getFacetsString(_indexes.data.indexes[0].facetableFields))
+                if(_indexes.data.indexes[0].facetableFields.length > 0){
+                    setFacets(getFacetsString(_indexes.data.indexes[0].facetableFields).split(','))
+                    setFilterCollections(_indexes.data.indexes[0].collections)
+                }else{
+                    setFacets([])
+                    setFilterCollections([])
+                }
+
+                if(_indexes.data.indexes[0].searchableFields.length > 0){
+                    setSearchables(_indexes.data.indexes[0].searchableFields)
+                }else{
+                    setSearchables([])
+                }
+                
             }
+        }).catch(err => {
+            console.log(err)
         })
     },[])
 
-    const onIndexChange = (event, value) => {
+    // const onFacetsChange = (_, value) => {
+    //     setFacetsString(value.value)
+    //     setFacets(value.value.split(','))
+    // }
+
+    const onIndexChange = (_, value) => {
         setSelectedIndex(value.value)
+        for(const index of indexes){
+            if(value.value === index.name){
+                //setFacetsString(getFacetsString(index.facetableFields))
+                if(index.facetableFields.length > 0){
+                    const facetableFields = getFacetsString(index.facetableFields).split(',')
+                    setFacets(facetableFields)
+                    setFilterCollections(index.collections)
+                } else {
+                    setFacets([])
+                    setFilterCollections([])
+                }
+
+                if(index.searchableFields.length > 0){
+                    setSearchables(index.searchableFields)
+                } else{
+                    setSearchables([])
+                }
+            }
+        }
+    }
+
+    const onSemanticSearch = (_, value) => {
+        setUseSemanticSearch(value.checked)
+    }
+
+    const onSemanticConfigChange = (_, value) => {
+        setSemanticConfig(value.value)
+    }
+
+    const getFacetsString = (facets) => {
+        let result = ""
+        let index = 0
+        for(const facet of facets){
+            if(index === 0){
+                result = facet
+            } else{
+                result += `, ${facet}`
+            }
+            index++
+        }
+        return result
+    }
+
+    const renderSemanticSearchConfig = () => {
+        if(useSemanticSearch){
+            return(
+                <>
+                <Text content="Semantic Search Configuration"  />
+                <TextArea value={semanticConfig} label="label"  onChange={onSemanticConfigChange} style={{height:"40px", width: "250px"}}/>
+                </>
+                
+            )
+        }else{
+
+        }
+    }
+
+    const indexNames = () => {
+        const out = []
+        for(const index of indexes){
+            out.push(index.name)
+        }
+        return out
     }
 
     if(selectedIndex){
+        const style = {display:"flex", flexFlow:"column", fontWeight:"bold", margin: "10px"}
         return(
-            <>
-                <div style={{ paddingBottom: "20px", paddingTop: "60px", fontWeight: "bold" }}>
-                    <Text content="Choose a Cognitive Search Index" style={{
-                    display: 'flex', marginBottom: "10px"
-                }} />
-                    <div style={{ display: "flex" }}>
+            <> 
+              <div style={{marginTop:"50px", marginBottom:"50px", display:"flex",flexFlow:"row",flexWrap:"wrap"}}>
+                    <div style={style}>
+                        <Text content="Choose a Cognitive Search Index" />
                         <Dropdown
                             placeholder=""
                             label="Output"
-                            items={indexes}
+                            items={indexNames()}
                             onChange={onIndexChange}
                             defaultValue={selectedIndex}
-                            style={{ marginRight: "40px" }}
                         />
-                        {/* <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} label="Semantic Search" toggle /> */}
                     </div>
-                </div>
-                <AppHeader/>
-                <Search index={selectedIndex} />
+                        
+                    {/* <div style={style}>
+                        <Text content="Facets"/>
+                        <TextArea value={facetsString} label="label" onChange={onFacetsChange} style={{height:"40px", width: "300px"}}/>
+                    </div> */}
+                    <div style={style}>
+                        <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} style={{marginBottom:"35px"}} label="Semantic Search" toggle />
+                        
+                    </div>
+                    <div style={style}>
+                        {renderSemanticSearchConfig()}
+                    </div>
+              </div>
+                
+                {/* <AppHeader/> */}
+                <Search index={selectedIndex} searchables={searchables} filterCollections={filterCollections} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
             </>
             )
-    } else {
+    } else if (indexSearchDone){
         return(
             <>
                 <div style={{ paddingBottom: "20px", paddingTop: "60px", fontWeight: "bold" }}>
                     <Text content="No Cognitive Search Indexes Exist" style={{
+                    display: 'flex', marginBottom: "10px"
+                }} />  
+                </div>
+               
+            </>
+        )
+    } else {
+        return(
+            <>
+                <div style={{ paddingBottom: "20px", paddingTop: "60px", fontWeight: "bold" }}>
+                    <Text content="Searching for Cognitive Search Indexes" style={{
                     display: 'flex', marginBottom: "10px"
                 }} />  
                 </div>
