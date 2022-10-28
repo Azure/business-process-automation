@@ -8,8 +8,8 @@ import './Result.css';
 export default function Result(props) {
 
     const getNextColor = (index) => {
-        const colors = ['lightblue','pink','lightyellow','orange','violet','lightgreen']
-        return colors[index%(colors.length)]
+        const colors = ['lightblue', 'pink', 'lightyellow', 'orange', 'violet', 'lightgreen']
+        return colors[index % (colors.length)]
     }
 
 
@@ -17,32 +17,35 @@ export default function Result(props) {
         console.log(props.facets)
         if (props.facets) {
             return (
-                Object.keys(props.facets).map((k,index) => {
-                    return(
+                Object.keys(props.facets).map((k, index) => {
+                    return (
                         <div>
-                            {props.facets[k].slice(0,20).map(f => {
-                            return (<Pill
-                                style={{ backgroundColor: getNextColor(index), color : ""}}
-                                content={`${f.value} (${f.count})`}
-                                size="small"
-                            />)
-                        })}
+                            {props.facets[k].slice(0, 20).map(f => {
+                                if (f) {
+                                    return (<Pill
+                                        style={{ backgroundColor: getNextColor(index), color: "" }}
+                                        content={`${f} `}
+                                        size="small"
+                                    />)
+                                }
+
+                            })}
                         </div>
-                        
+
                     )
-                    
+
                 })
             )
         }
     }
 
     const getText = (searchables, data) => {
-        try{
+        try {
             if (searchables.length === 0) {
                 return ""
             }
             let out = ""
-            
+
             for (const s of searchables) {
                 let currentData = data
                 for (const i of s.split('/')) {
@@ -51,10 +54,10 @@ export default function Result(props) {
                 out += currentData
             }
             return out
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
-       
+
     }
 
     const theme = {
@@ -74,7 +77,7 @@ export default function Result(props) {
         base0D: 'white',
         base0E: 'white',
         base0F: 'white'
-      };
+    };
 
     return (
         <div className="card result">
