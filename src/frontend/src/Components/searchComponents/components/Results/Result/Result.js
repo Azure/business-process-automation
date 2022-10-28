@@ -41,13 +41,16 @@ export default function Result(props) {
             if (searchables.length === 0) {
                 return ""
             }
-            let currentData = data
+            let out = ""
+            
             for (const s of searchables) {
+                let currentData = data
                 for (const i of s.split('/')) {
                     currentData = currentData[i]
                 }
+                out += currentData
             }
-            return currentData
+            return out
         }catch(err){
             console.log(err)
         }

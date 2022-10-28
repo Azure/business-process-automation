@@ -97,8 +97,8 @@ export default function ViewInsights(props) {
         if(useSemanticSearch){
             return(
                 <>
-                <Text content="Semantic Search Configuration"  />
-                <TextArea value={semanticConfig} label="label"  onChange={onSemanticConfigChange} style={{height:"40px", width: "250px"}}/>
+                    <Text content="Semantic Search Configuration"  style={{marginBottom:"10px"}}/>
+                    <TextArea value={semanticConfig} label="label"  onChange={onSemanticConfigChange} style={{height:"40px", width: "250px"}}/>
                 </>
                 
             )
@@ -116,18 +116,19 @@ export default function ViewInsights(props) {
     }
 
     if(selectedIndex){
-        const style = {display:"flex", flexFlow:"column", fontWeight:"bold", margin: "10px"}
+        const style = {display:"flex", flexFlow:"column", fontWeight:"500", margin: "20px"}
         return(
             <> 
               <div style={{marginTop:"50px", marginBottom:"50px", display:"flex",flexFlow:"row",flexWrap:"wrap"}}>
                     <div style={style}>
-                        <Text content="Choose a Cognitive Search Index" />
+                        <Text style={{marginBottom:"10px"}}content="Choose a Cognitive Search Index" />
                         <Dropdown
                             placeholder=""
                             label="Output"
                             items={indexNames()}
                             onChange={onIndexChange}
                             defaultValue={selectedIndex}
+                            style={{fontWeight:"400"}}
                         />
                     </div>
                         
