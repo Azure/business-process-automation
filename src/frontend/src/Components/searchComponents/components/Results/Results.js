@@ -1,4 +1,3 @@
-import { isString } from 'lodash';
 import React from 'react';
 import Result from './Result/Result';
 
