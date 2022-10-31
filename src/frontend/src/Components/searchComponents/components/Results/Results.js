@@ -44,11 +44,9 @@ export default function Results(props) {
 
           for (const item of document[indexes[index]]) {
             results = crawlDocument(item, indexes, index + 1, results)
-            console.log('here')
           }
         } else {
           results = crawlDocument(document[indexes[index]], indexes, index + 1, results)
-          console.log('here')
         }
   
         return results
