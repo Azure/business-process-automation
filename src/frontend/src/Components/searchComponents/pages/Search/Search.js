@@ -54,7 +54,7 @@ export default function Search(props) {
 
   useEffect(() => {
 
-    //setIsLoading(true);
+    setIsLoading(true);
     setSkip((currentPage - 1) * top);
     const body = {
       q: q,

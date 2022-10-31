@@ -7,26 +7,26 @@ import "./Results.css";
 export default function Results(props) {
 
 
-  const getText = (searchables, data) => {
-    try {
-      if (searchables.length === 0) {
-        return ""
-      }
-      let out = ""
+  // const getText = (searchables, data) => {
+  //   try {
+  //     if (searchables.length === 0) {
+  //       return ""
+  //     }
+  //     let out = ""
 
-      for (const s of searchables) {
-        let currentData = data
-        for (const i of s.split('/')) {
-          currentData = currentData[i]
-        }
-        out += currentData
-      }
-      return out
-    } catch (err) {
-      console.log(err)
-    }
+  //     for (const s of searchables) {
+  //       let currentData = data
+  //       for (const i of s.split('/')) {
+  //         currentData = currentData[i]
+  //       }
+  //       out += currentData
+  //     }
+  //     return out
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
 
-  }
+  // }
 
 
   const crawlDocument = (document, indexes, index, results) => {
@@ -40,33 +40,52 @@ export default function Results(props) {
       return results
 
     } else {
-      if (Array.isArray(document[indexes[index]])) {
+      if(document && indexes){
+        if (document && indexes && Array.isArray(document[indexes[index]])) {
 
-        for (const item of document[indexes[index]]) {
-          results = crawlDocument(item, indexes, index + 1, results)
+          for (const item of document[indexes[index]]) {
+            results = crawlDocument(item, indexes, index + 1, results)
+            console.log('here')
+          }
+        } else {
+          results = crawlDocument(document[indexes[index]], indexes, index + 1, results)
           console.log('here')
         }
-      } else {
-        results = crawlDocument(document[indexes[index]], indexes, index + 1, results)
-        console.log('here')
+  
+        return results
       }
-
-      return results
     }
-
+    return []
   }
+
+  const containsFacet = (index, facetList, facet) => {
+    if(facetList[index] && facetList[index][facet]){
+      return true
+    }
+    return false
+  }
+
+
   const getDocumentFacets = (document, indexes, collections) => {
     const results = {}
     for (const index of indexes) {
-      const result = crawlDocument(document, index.split('/'), 0, [])
-      results[index] = result
-      console.log(results)
+      const facetList = crawlDocument(document, index.split('/'), 0, [])
+      for(const facet of facetList){
+        if(containsFacet(index, results, facet)){
+          results[index][facet]++
+        } else {
+          if(!results[index]){
+            results[index] = {}
+          }
+          results[index][facet] = 1
+        }
+      }
     }
 
     return results
   }
 
-  let results = props.documents.map((result, index) => {
+  let results = props.documents.map((result) => {
     return <Result
       key={result.id}
       searchables={props.searchables}

@@ -20,20 +20,17 @@ export default function Result(props) {
                 Object.keys(props.facets).map((k, index) => {
                     return (
                         <div>
-                            {props.facets[k].slice(0, 20).map(f => {
-                                if (f) {
-                                    return (<Pill
+                            {Object.keys(props.facets[k]).map(f => {
+                               return(
+                                    <Pill
                                         style={{ backgroundColor: getNextColor(index), color: "" }}
-                                        content={`${f} `}
+                                        content={`${f} (${props.facets[k][f]}) `}
                                         size="small"
-                                    />)
-                                }
-
-                            })}
+                                    />
+                               )
+                             })} 
                         </div>
-
                     )
-
                 })
             )
         }
