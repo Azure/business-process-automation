@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, Checkbox, TextArea } from '@fluentui/react-northstar';
+import { Text, Dropdown, Checkbox } from '@fluentui/react-northstar';
 //import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
 import Search from '../Components/searchComponents/pages/Search/Search'
 
@@ -10,10 +10,11 @@ export default function ViewInsights(props) {
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [indexSearchDone, setIndexSearchDone] = useState(false)
     const [useSemanticSearch, setUseSemanticSearch] = useState(false)
-    const [semanticConfig, setSemanticConfig] = useState("")
     const [facets, setFacets] = useState([])
     const [filterCollections ,setFilterCollections] = useState([])
     const [searchables, setSearchables] = useState([])
+    const [semanticConfigs, setSemanticConfigs] = useState([])
+    const [selectedSemanticConfig, setSelectedSemanticConfig] = useState("")
     //const [_ , setFacetsString] = useState("")
 
     useEffect(()=>{
@@ -35,6 +36,14 @@ export default function ViewInsights(props) {
                     setSearchables(_indexes.data.indexes[0].searchableFields)
                 }else{
                     setSearchables([])
+                }
+
+                if(_indexes.data.indexes[0].semanticConfigurations.length > 0){
+                    setSemanticConfigs(_indexes.data.indexes[0].semanticConfigurations)
+                    setSelectedSemanticConfig(_indexes.data.indexes[0].semanticConfigurations[0].name)
+                }else{
+                    setSemanticConfigs([])
+                    setSelectedSemanticConfig("")
                 }
                 
             }
@@ -67,6 +76,13 @@ export default function ViewInsights(props) {
                 } else{
                     setSearchables([])
                 }
+                if(index.semanticConfigurations.length > 0){
+                    setSemanticConfigs(index.semanticConfigurations)
+                }else{
+                    setSemanticConfigs([])
+                    setSelectedSemanticConfig("")
+                }
+
             }
         }
     }
@@ -76,7 +92,7 @@ export default function ViewInsights(props) {
     }
 
     const onSemanticConfigChange = (_, value) => {
-        setSemanticConfig(value.value)
+        setSemanticConfigs(value.value)
     }
 
     const getFacetsString = (facets) => {
@@ -97,37 +113,35 @@ export default function ViewInsights(props) {
         if(useSemanticSearch){
             return(
                 <>
-                <Text content="Semantic Search Configuration"  />
-                <TextArea value={semanticConfig} label="label"  onChange={onSemanticConfigChange} style={{height:"40px", width: "250px"}}/>
+                    <Text content="Semantic Search Configuration"  style={{marginBottom:"10px"}}/>
+                    <Dropdown
+                            placeholder=""
+                            label="Output"
+                            items={semanticConfigs.map(sc => sc.name)}
+                            onChange={onSemanticConfigChange}
+                            value={selectedSemanticConfig}
+                            style={{fontWeight:"400"}}
+                        />
                 </>
                 
             )
-        }else{
-
         }
-    }
-
-    const indexNames = () => {
-        const out = []
-        for(const index of indexes){
-            out.push(index.name)
-        }
-        return out
     }
 
     if(selectedIndex){
-        const style = {display:"flex", flexFlow:"column", fontWeight:"bold", margin: "10px"}
+        const style = {display:"flex", flexFlow:"column", fontWeight:"500", margin: "20px"}
         return(
             <> 
               <div style={{marginTop:"50px", marginBottom:"50px", display:"flex",flexFlow:"row",flexWrap:"wrap"}}>
                     <div style={style}>
-                        <Text content="Choose a Cognitive Search Index" />
+                        <Text style={{marginBottom:"10px"}}content="Choose a Cognitive Search Index" />
                         <Dropdown
                             placeholder=""
                             label="Output"
-                            items={indexNames()}
+                            items={indexes.map(index => index.name)}
                             onChange={onIndexChange}
                             defaultValue={selectedIndex}
+                            style={{fontWeight:"400"}}
                         />
                     </div>
                         
@@ -145,7 +159,7 @@ export default function ViewInsights(props) {
               </div>
                 
                 {/* <AppHeader/> */}
-                <Search index={selectedIndex} searchables={searchables} filterCollections={filterCollections} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={semanticConfig} />
+                <Search index={selectedIndex} searchables={searchables} filterCollections={filterCollections} facets={facets} useSemanticSearch={useSemanticSearch} semanticConfig={selectedSemanticConfig} />
             </>
             )
     } else if (indexSearchDone){

@@ -1,5 +1,6 @@
 import { SearchIndexClient, AzureKeyCredential } from "@azure/search-documents";
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
+import axios, { AxiosRequestConfig } from "axios";
 
 
 interface Index {
@@ -7,7 +8,9 @@ interface Index {
     facetableFields : string[]
     searchableFields : string[]
     collections : string[]
+    semanticConfigurations : string[]
 }
+
 
 const getFacetableFields = (fields : any, name : string, result : string[], collections : string[]) => {
     for(const field of fields){
@@ -72,15 +75,24 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         const indexClient = new SearchIndexClient(process.env.COGSEARCH_URL, new AzureKeyCredential(process.env.COGSEARCH_APIKEY));
         const indexesList = indexClient.listIndexes()
         const indexes : Index[] = []
+
+        const axiosOptions : AxiosRequestConfig = {
+            headers : {
+                "Content-Type" : "application/json",
+                "api-key" : process.env.COGSEARCH_APIKEY
+            }
+        }
+        const axiosResult = await axios.get(`${process.env.COGSEARCH_URL}/indexes?api-version=2021-04-30-Preview`, axiosOptions)
         
-        for await (const index of indexesList){
+        for (const index of axiosResult.data.value){
             const facetableFields = getFacetableFields(index.fields, null, [], [])
             const searchableFields = getSearchableFields(index.fields, null, [], [])
             const _index : Index = {
                 name : index.name,
                 facetableFields : facetableFields.result,
                 searchableFields : searchableFields.result,
-                collections : facetableFields.collections
+                collections : facetableFields.collections,
+                semanticConfigurations : index?.semantic?.configurations ? index.semantic.configurations : []
             }
             indexes.push(_index)
         }

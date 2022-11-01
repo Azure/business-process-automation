@@ -54,7 +54,7 @@ export default function Search(props) {
 
   useEffect(() => {
 
-    //setIsLoading(true);
+    setIsLoading(true);
     setSkip((currentPage - 1) * top);
     const body = {
       q: q,
@@ -182,7 +182,7 @@ export default function Search(props) {
   else {
     body = (
       <div className="col-md-9">
-        <Results answers={answers} facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results filterCollections={props.filterCollections} answers={answers} facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )

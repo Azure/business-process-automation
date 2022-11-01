@@ -15,7 +15,7 @@
     "axios": "^0.26.1",
     "http-status-enum": "^1.0.2",
     "parse-multipart": "^1.0.4",
-    "@azure/search-documents": "^11.2.1"
+    "@azure/search-documents": "^11.3.0"
   },
   "devDependencies": {
     "@azure/functions": "^1.2.3",
