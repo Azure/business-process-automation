@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, Checkbox, TextArea } from '@fluentui/react-northstar';
+import { Text, Dropdown, Checkbox } from '@fluentui/react-northstar';
 //import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
 import Search from '../Components/searchComponents/pages/Search/Search'
 
