@@ -36,7 +36,7 @@ export default function CheckboxFacet(props) {
             <FacetListItem disableRipple={true} button onClick={() => setIsExpanded(!isExpanded)}>
                 <ListItemText 
                     disableTypography
-                    primary={<Typography type="body2" style={{ color: '#007bff', fontWeight: 'bold' }}>{props.mapFacetName(props.name.toUpperCase())}</Typography>}
+                    primary={<Typography type="body2" style={{ color: '#007bff', fontWeight: '500' }}>{props.mapFacetName(props.name.toUpperCase())}</Typography>}
                     
                 />
                 {isExpanded ? <ExpandLess /> : <ExpandMore />}
