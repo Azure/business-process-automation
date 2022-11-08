@@ -27,9 +27,9 @@ export class LanguageStudio {
         const client = new TextAnalyticsClient(this._endpoint, new AzureKeyCredential(this._apikey));
         let poller
         if(analyzeType){
-            poller = await this._analyze(client, [input.data.substring(5000)], actions);
+            poller = await this._analyze(client, [input.data.length > 5000 ? input.data.substring(5000) : input.data], actions);
         } else {
-            poller = await this._healthCare(client, [input.data.substring(5000)])
+            poller = await this._healthCare(client, [input.data.length > 5000 ? input.data.substring(5000) : input.data])
         }
 
         poller.onProgress(() => {
