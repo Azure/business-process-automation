@@ -34,7 +34,7 @@ export class Translate {
         }
         console.log(url)
 
-        const out = await axios.post(url, [{ 'text': input.data.length > 5000 ? input.data.substring(5000) : input.data }], config)
+        const out = await axios.post(url, [{ 'text': input.data.length > 45000 ? input.data.substring(0,45000) : input.data }], config)
         const results = input.aggregatedResults
         results["translation"] = out.data
         input.resultsIndexes.push({index : index, name : "translation", type : "text"})
