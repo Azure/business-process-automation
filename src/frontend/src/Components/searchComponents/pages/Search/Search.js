@@ -43,7 +43,9 @@ export default function Search(props) {
   const getFacetSearchConfig = (_facets) => {
     const result = []
     for(const _facet of _facets){
-      result.push(`${_facet},count:1000`)
+      if(_facet !== ''){
+        result.push(`${_facet},count:1000`)
+      }
     }
     // let result = ""
     // for(const _facet of _facets.split(',')){
