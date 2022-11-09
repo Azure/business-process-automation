@@ -14,6 +14,18 @@ export class Translate {
         this._apikey = apikey
     }
 
+    // private _toText = (translationResults : any) : string => {
+    //     let text = ""
+    //     for(const result of translationResults){
+    //         for(const t of result.translations){
+    //             for(const r of t){
+    //                 text += ` ${r.text}`
+    //             }
+    //         }
+    //     }
+    //     return text
+    // }
+
     public translate = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
 
 
@@ -34,9 +46,13 @@ export class Translate {
         }
         console.log(url)
 
-        const out = await axios.post(url, [{ 'text': input.data }], config)
+        const out = await axios.post(url, [{ 'text': input.data.length > 45000 ? input.data.substring(0,45000) : input.data }], config)
         const results = input.aggregatedResults
-        results["translation"] = out.data
+        out.data.translationText = out.data[0].translations[0].text
+        results["translation"] = { 
+            results : out.data,
+            translationText : out.data[0].translations[0].text
+        }
         input.resultsIndexes.push({index : index, name : "translation", type : "text"})
         return {
             data: out.data[0].translations[0].text,

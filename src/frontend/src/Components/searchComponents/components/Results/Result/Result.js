@@ -14,13 +14,12 @@ export default function Result(props) {
 
 
     const renderPills = () => {
-        console.log(props.facets)
         if (props.facets) {
             return (
                 Object.keys(props.facets).map((k, index) => {
                     return (
                         <div>
-                            {Object.keys(props.facets[k]).map(f => {
+                            {Object.keys(props.facets[k]).slice(0,50).map(f => {
                                return(
                                     <Pill
                                         style={{ backgroundColor: getNextColor(index), color: "" }}
@@ -38,7 +37,7 @@ export default function Result(props) {
 
     const getText = (searchables, data) => {
         try {
-            if (searchables.length === 0) {
+            if (!searchables || searchables.length === 0) {
                 return ""
             }
             let out = ""
@@ -77,7 +76,7 @@ export default function Result(props) {
     };
 
     return (
-        <div className="card result">
+        <div className="card result" id={props.key}>
 
             {/* <img className="card-img-top" src={pdf} alt={pdf}></img> */}
             <div className="card-body">
