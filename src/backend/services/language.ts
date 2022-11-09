@@ -19,7 +19,7 @@ export class LanguageStudio {
         });
     }
 
-    private _analyze = async (client : TextAnalyticsClient, documents, actions) : Promise<AnalyzeActionsPollerLike> => {
+    private _analyze = async (client : TextAnalyticsClient, documents: string[], actions) : Promise<AnalyzeActionsPollerLike> => {
         return await client.beginAnalyzeActions(documents, actions, this._language);
     }
 
@@ -27,9 +27,9 @@ export class LanguageStudio {
         const client = new TextAnalyticsClient(this._endpoint, new AzureKeyCredential(this._apikey));
         let poller
         if(analyzeType){
-            poller = await this._analyze(client, [input.data], actions);
+            poller = await this._analyze(client, [input.data.length > 5000 ? input.data.substring(0,5000) : input.data], actions);
         } else {
-            poller = await this._healthCare(client, [input.data])
+            poller = await this._healthCare(client, [input.data.length > 5000 ? input.data.substring(0,5000) : input.data])
         }
 
         poller.onProgress(() => {

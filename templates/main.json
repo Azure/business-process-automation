@@ -42,10 +42,10 @@
       "type": "string",
       "defaultValue": "[format('https://{0}.search.windows.net', parameters('projectName'))]"
     },
-    "formrecName": {
-      "type": "string",
-      "defaultValue": "[parameters('projectName')]"
-    },
+    // "formrecName": {
+    //   "type": "string",
+    //   "defaultValue": "[parameters('projectName')]"
+    // },
     "docTranslatorAccountName": {
       "type": "string",
       "defaultValue": "[format('doctranslator{0}', parameters('projectName'))]"
@@ -176,26 +176,26 @@
     }
   },
   "variables": {
-    "formrecDefaultVNetName": "frCSDefaultVNet9901",
-    "formrecDefaultSubnetName": "frCSDefaultSubnet9901",
-    "formrecDefaultAddressPrefix": "13.41.6.0/26",
-    "formrecLocation": "eastus",
-    "formrecSku": "S0",
-    "formrecTagValues": {},
-    "formrecVnet": {},
-    "formrecIpRules": [],
-    "formrecVirtualNetworkType": "None",
-    "formrecIdentity": {
-      "type": "None"
-    },
-    "formrecPrivateEndpoints": [],
-    "formrecIsCommitmentPlanForDisconnectedContainerEnabled": false,
-    "formrecCommitmentPlanForDisconnectedContainer": {
-      "current": {},
-      "hostingModel": "DisconnectedContainer",
-      "planType": "CustomInvoice",
-      "autoRenew": true
-    },
+    // "formrecDefaultVNetName": "frCSDefaultVNet9901",
+    // "formrecDefaultSubnetName": "frCSDefaultSubnet9901",
+    // "formrecDefaultAddressPrefix": "13.41.6.0/26",
+    // "formrecLocation": "eastus2",
+    // "formrecSku": "S0",
+    // "formrecTagValues": {},
+    // "formrecVnet": {},
+    // "formrecIpRules": [],
+    // "formrecVirtualNetworkType": "None",
+    // "formrecIdentity": {
+    //   "type": "None"
+    // },
+    // "formrecPrivateEndpoints": [],
+    // "formrecIsCommitmentPlanForDisconnectedContainerEnabled": false,
+    // "formrecCommitmentPlanForDisconnectedContainer": {
+    //   "current": {},
+    //   "hostingModel": "DisconnectedContainer",
+    //   "planType": "CustomInvoice",
+    //   "autoRenew": true
+    // },
     "storageAccountSkuName": "[if(equals(parameters('environmentType'), 'prod'), 'Standard_GRS', 'Standard_LRS')]",
     "accountName_var": "[toLower(parameters('accountName'))]",
     "consistencyPolicy": {
@@ -243,173 +243,173 @@
         "publicNetworkAccess": "Enabled"
       }
     },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "deployVnet",
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "parameters": {},
-          "variables": {},
-          "resources": [
-            {
-              "type": "Microsoft.Network/virtualNetworks",
-              "apiVersion": "2020-04-01",
-              "name": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].name, variables('formrecDefaultVNetName'))]",
-              "location": "[variables('formrecLocation')]",
-              "properties": {
-                "addressSpace": {
-                  "addressPrefixes": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].addressPrefixes, json(concat('[{\"', variables('formrecDefaultAddressPrefix'),'\"}]')))]"
-                },
-                "subnets": [
-                  {
-                    "name": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].subnets.subnet.name, variables('formrecDefaultSubnetName'))]",
-                    "properties": {
-                      "serviceEndpoints": [
-                        {
-                          "service": "Microsoft.CognitiveServices",
-                          "locations": [
-                            "[variables('formrecLocation')]"
-                          ]
-                        }
-                      ],
-                      "addressPrefix": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].subnets.subnet.addressPrefix, variables('formrecDefaultAddressPrefix'))]"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        "parameters": {}
-      },
-      "condition": "[and(and(not(empty(variables('formrecVnet'))), equals(variables('formrecVnet')[copyIndex()].newOrExisting, 'new')), equals(variables('formrecVirtualNetworkType'), 'External'))]"
-    },
-    {
-      "apiVersion": "2021-04-30",
-      "name": "[parameters('formrecName')]",
-      "location": "[variables('formrecLocation')]",
-      "type": "Microsoft.CognitiveServices/accounts",
-      "kind": "FormRecognizer",
-      "tags": "[if(contains(variables('formrecTagValues'), 'Microsoft.CognitiveServices/accounts'), variables('formrecTagValues')['Microsoft.CognitiveServices/accounts'], json('{}'))]",
-      "sku": {
-        "name": "[variables('formrecSku')]"
-      },
-      "identity": "[variables('formrecIdentity')]",
-      "properties": {
-        "customSubDomainName": "[toLower(parameters('formrecName'))]",
-        "publicNetworkAccess": "[if(equals(variables('formrecVirtualNetworkType'), 'Internal'), 'Disabled', 'Enabled')]",
-        "networkAcls": {
-          "defaultAction": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), 'Deny', 'Allow')]",
-          "virtualNetworkRules": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), json(concat('[{\"id\": \"', concat(subscription().id, '/resourceGroups/', variables('formrecVnet')[copyIndex()].resourceGroup, '/providers/Microsoft.Network/virtualNetworks/', variables('formrecVnet')[copyIndex()].name, '/subnets/', variables('formrecVnet')[copyIndex()].subnets.subnet.name), '\"}]')), json('[]'))]",
-          "ipRules": "[if(or(empty(variables('formrecIpRules')), empty(variables('formrecIpRules')[0].value)), json('[]'), variables('formrecIpRules'))]"
-        }
-      },
-      "resources": [
-        {
-          "type": "commitmentPlans",
-          "apiVersion": "2021-10-01",
-          "name": "DisconnectedContainer-FormRecognizer-1",
-          "properties": "[variables('formrecCommitmentPlanForDisconnectedContainer')]",
-          "condition": "[variables('formrecIsCommitmentPlanForDisconnectedContainerEnabled')]",
-          "dependsOn": [
-            "[parameters('formrecName')]"
-          ]
-        }
-      ],
+    // {
+    //   "type": "Microsoft.Resources/deployments",
+    //   "apiVersion": "2017-05-10",
+    //   "name": "deployVnet",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "template": {
+    //       "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    //       "contentVersion": "1.0.0.0",
+    //       "parameters": {},
+    //       "variables": {},
+    //       "resources": [
+    //         {
+    //           "type": "Microsoft.Network/virtualNetworks",
+    //           "apiVersion": "2020-04-01",
+    //           "name": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].name, variables('formrecDefaultVNetName'))]",
+    //           "location": "[variables('formrecLocation')]",
+    //           "properties": {
+    //             "addressSpace": {
+    //               "addressPrefixes": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].addressPrefixes, json(concat('[{\"', variables('formrecDefaultAddressPrefix'),'\"}]')))]"
+    //             },
+    //             "subnets": [
+    //               {
+    //                 "name": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].subnets.subnet.name, variables('formrecDefaultSubnetName'))]",
+    //                 "properties": {
+    //                   "serviceEndpoints": [
+    //                     {
+    //                       "service": "Microsoft.CognitiveServices",
+    //                       "locations": [
+    //                         "[variables('formrecLocation')]"
+    //                       ]
+    //                     }
+    //                   ],
+    //                   "addressPrefix": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].subnets.subnet.addressPrefix, variables('formrecDefaultAddressPrefix'))]"
+    //                 }
+    //               }
+    //             ]
+    //           }
+    //         }
+    //       ]
+    //     },
+    //     "parameters": {}
+    //   },
+    //   "condition": "[and(and(not(empty(variables('formrecVnet'))), equals(variables('formrecVnet')[copyIndex()].newOrExisting, 'new')), equals(variables('formrecVirtualNetworkType'), 'External'))]"
+    // },
+    // {
+    //   "apiVersion": "2021-04-30",
+    //   "name": "[parameters('formrecName')]",
+    //   "location": "[variables('formrecLocation')]",
+    //   "type": "Microsoft.CognitiveServices/accounts",
+    //   "kind": "FormRecognizer",
+    //   "tags": "[if(contains(variables('formrecTagValues'), 'Microsoft.CognitiveServices/accounts'), variables('formrecTagValues')['Microsoft.CognitiveServices/accounts'], json('{}'))]",
+    //   "sku": {
+    //     "name": "[variables('formrecSku')]"
+    //   },
+    //   "identity": "[variables('formrecIdentity')]",
+    //   "properties": {
+    //     "customSubDomainName": "[toLower(parameters('formrecName'))]",
+    //     "publicNetworkAccess": "[if(equals(variables('formrecVirtualNetworkType'), 'Internal'), 'Disabled', 'Enabled')]",
+    //     "networkAcls": {
+    //       "defaultAction": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), 'Deny', 'Allow')]",
+    //       "virtualNetworkRules": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), json(concat('[{\"id\": \"', concat(subscription().id, '/resourceGroups/', variables('formrecVnet')[copyIndex()].resourceGroup, '/providers/Microsoft.Network/virtualNetworks/', variables('formrecVnet')[copyIndex()].name, '/subnets/', variables('formrecVnet')[copyIndex()].subnets.subnet.name), '\"}]')), json('[]'))]",
+    //       "ipRules": "[if(or(empty(variables('formrecIpRules')), empty(variables('formrecIpRules')[0].value)), json('[]'), variables('formrecIpRules'))]"
+    //     }
+    //   },
+    //   "resources": [
+    //     {
+    //       "type": "commitmentPlans",
+    //       "apiVersion": "2021-10-01",
+    //       "name": "DisconnectedContainer-FormRecognizer-1",
+    //       "properties": "[variables('formrecCommitmentPlanForDisconnectedContainer')]",
+    //       "condition": "[variables('formrecIsCommitmentPlanForDisconnectedContainerEnabled')]",
+    //       "dependsOn": [
+    //         "[parameters('formrecName')]"
+    //       ]
+    //     }
+    //   ],
 
-      "dependsOn": [
-        "[concat('Microsoft.Resources/deployments/', 'deployVnet')]"
-      ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "[concat('deployPrivateEndpoint-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name)]",
-      "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('formrecPrivateEndpoints')[copyIndex()].resourceGroup.value.name]",
-      "subscriptionId": "[variables('formrecPrivateEndpoints')[copyIndex()].subscription.subscriptionId]",
-      "dependsOn": [
-        "[parameters('formrecName')]"
-      ],
-      "condition": "[equals(variables('formrecVirtualNetworkType'), 'Internal')]",
-      "copy": {
-        "name": "privateendpointscopy",
-        "count": "[length(variables('formrecPrivateEndpoints'))]"
-      },
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "location": "[variables('formrecLocation')]",
-              "name": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name]",
-              "type": "Microsoft.Network/privateEndpoints",
-              "apiVersion": "2020-03-01",
-              "properties": {
-                "subnet": {
-                  "id": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.properties.subnet.id]"
-                },
-                "privateLinkServiceConnections": [
-                  {
-                    "name": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name]",
-                    "properties": {
-                      "privateLinkServiceId": "[concat(resourceGroup().id, '/providers/Microsoft.CognitiveServices/accounts/', parameters('formrecName'))]",
-                      "groupIds": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.properties.privateLinkServiceConnections[0].properties.groupIds]"
-                    }
-                  }
-                ]
-              },
-              "tags": {}
-            }
-          ]
-        }
-      }
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "[concat('deployDnsZoneGroup-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name)]",
-      "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('formrecPrivateEndpoints')[copyIndex()].resourceGroup.value.name]",
-      "subscriptionId": "[variables('formrecPrivateEndpoints')[copyIndex()].subscription.subscriptionId]",
-      "dependsOn": [
-        "[concat('Microsoft.Resources/deployments/', concat('deployPrivateEndpoint-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name))]"
-      ],
-      "condition": "[equals(variables('formrecVirtualNetworkType'), 'Internal')]",
-      "copy": {
-        "name": "privateendpointdnscopy",
-        "count": "[length(variables('formrecPrivateEndpoints'))]"
-      },
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-              "apiVersion": "2020-03-01",
-              "name": "[concat(variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name, '/', 'default')]",
-              "location": "[variables('formrecLocation')]",
-              "properties": {
-                "privateDnsZoneConfigs": [
-                  {
-                    "name": "privatelink-cognitiveservices-azure-com",
-                    "properties": {
-                      "privateDnsZoneId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/privateDnsZones/privatelink.cognitiveservices.azure.com')]"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
+    //   "dependsOn": [
+    //     "[concat('Microsoft.Resources/deployments/', 'deployVnet')]"
+    //   ]
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "[concat('deployPrivateEndpoint-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name)]",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "resourceGroup": "[variables('formrecPrivateEndpoints')[copyIndex()].resourceGroup.value.name]",
+    //   "subscriptionId": "[variables('formrecPrivateEndpoints')[copyIndex()].subscription.subscriptionId]",
+    //   "dependsOn": [
+    //     "[parameters('formrecName')]"
+    //   ],
+    //   "condition": "[equals(variables('formrecVirtualNetworkType'), 'Internal')]",
+    //   "copy": {
+    //     "name": "privateendpointscopy",
+    //     "count": "[length(variables('formrecPrivateEndpoints'))]"
+    //   },
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "template": {
+    //       "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    //       "contentVersion": "1.0.0.0",
+    //       "resources": [
+    //         {
+    //           "location": "[variables('formrecLocation')]",
+    //           "name": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name]",
+    //           "type": "Microsoft.Network/privateEndpoints",
+    //           "apiVersion": "2020-03-01",
+    //           "properties": {
+    //             "subnet": {
+    //               "id": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.properties.subnet.id]"
+    //             },
+    //             "privateLinkServiceConnections": [
+    //               {
+    //                 "name": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name]",
+    //                 "properties": {
+    //                   "privateLinkServiceId": "[concat(resourceGroup().id, '/providers/Microsoft.CognitiveServices/accounts/', parameters('formrecName'))]",
+    //                   "groupIds": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.properties.privateLinkServiceConnections[0].properties.groupIds]"
+    //                 }
+    //               }
+    //             ]
+    //           },
+    //           "tags": {}
+    //         }
+    //       ]
+    //     }
+    //   }
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "[concat('deployDnsZoneGroup-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name)]",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "resourceGroup": "[variables('formrecPrivateEndpoints')[copyIndex()].resourceGroup.value.name]",
+    //   "subscriptionId": "[variables('formrecPrivateEndpoints')[copyIndex()].subscription.subscriptionId]",
+    //   "dependsOn": [
+    //     "[concat('Microsoft.Resources/deployments/', concat('deployPrivateEndpoint-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name))]"
+    //   ],
+    //   "condition": "[equals(variables('formrecVirtualNetworkType'), 'Internal')]",
+    //   "copy": {
+    //     "name": "privateendpointdnscopy",
+    //     "count": "[length(variables('formrecPrivateEndpoints'))]"
+    //   },
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "template": {
+    //       "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    //       "contentVersion": "1.0.0.0",
+    //       "resources": [
+    //         {
+    //           "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+    //           "apiVersion": "2020-03-01",
+    //           "name": "[concat(variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name, '/', 'default')]",
+    //           "location": "[variables('formrecLocation')]",
+    //           "properties": {
+    //             "privateDnsZoneConfigs": [
+    //               {
+    //                 "name": "privatelink-cognitiveservices-azure-com",
+    //                 "properties": {
+    //                   "privateDnsZoneId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/privateDnsZones/privatelink.cognitiveservices.azure.com')]"
+    //                 }
+    //               }
+    //             ]
+    //           }
+    //         }
+    //       ]
+    //     }
+    //   }
+    // },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-08-01",
@@ -767,11 +767,11 @@
             },
             {
               "name": "FORMREC_APIKEY",
-              "value": "[listkeys(resourceId('Microsoft.CognitiveServices/accounts',parameters('formrecName')),'2021-04-30').key1]"
+              "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
             },
             {
               "name": "FORMREC_ENDPOINT",
-              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts',parameters('formrecName')),'2021-04-30').endpoints.FormRecognizer]"
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
             },
             {
               "name": "SPEECH_SUB_KEY",

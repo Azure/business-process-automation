@@ -43,7 +43,9 @@ export default function Search(props) {
   const getFacetSearchConfig = (_facets) => {
     const result = []
     for(const _facet of _facets){
-      result.push(`${_facet},count:1000`)
+      if(_facet !== ''){
+        result.push(`${_facet},count:1000`)
+      }
     }
     // let result = ""
     // for(const _facet of _facets.split(',')){
@@ -51,6 +53,20 @@ export default function Search(props) {
     // }
     return result
   }
+
+  const getFacetsString = (facets) => {
+    let result = ""
+    let index = 0
+    for(const facet of facets){
+        if(index === 0){
+            result = facet
+        } else{
+            result += `, ${facet}`
+        }
+        index++
+    }
+    return result
+}
 
   useEffect(() => {
 
@@ -61,12 +77,12 @@ export default function Search(props) {
       top: top,
       skip: skip,
       filters: filters,
-      facets: getFacetSearchConfig(props.facets),
-      index: props.index,
+      facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
+      index: props.index.name,
       useSemanticSearch: props.useSemanticSearch,
       semanticConfig: props.semanticConfig,
       queryLanguage: "en-US",
-      filterCollections : props.filterCollections
+      filterCollections : props.index.collections
     };
 
     if (props.index) {
@@ -105,42 +121,8 @@ export default function Search(props) {
         });
     }
 
-  }, [q, top, skip, filters, currentPage, props.index, props.facets, props.useSemanticSearch, props.semanticConfig, props.filterCollections]);
+  }, [q, top, skip, filters, currentPage, props.index, props.useSemanticSearch, props.semanticConfig]);
 
-  // const executeSearch = () => {
-  //   //setIsLoading(true);
-  //   setSkip((currentPage - 1) * top);
-  //   const body = {
-  //     q: q,
-  //     top: top,
-  //     skip: skip,
-  //     filters: filters,
-  //     facets: [],
-  //     index: props.index
-  //   };
-
-  //   if (props.index) {
-  //     axios.post('/api/search', body)
-  //       .then(response => {
-  //         //console.log(JSON.stringify(response.data))
-  //         if (response?.data?.results) {
-  //           setResults(response.data.results);
-            
-  //           setResultCount(response.data.results.length);
-  //           setIsLoading(false);
-  //           if(response.data.results["@search.facets"])
-  //           {
-  //             setFacets(response.data.results["@search.facets"]);
-  //           }
-  //         }
-
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //         setIsLoading(false);
-  //       });
-  //   }
-  // }
 
   // pushing the new search term to history when q is updated
   // allows the back button to work as expected when coming back from the details page
@@ -182,7 +164,7 @@ export default function Search(props) {
   else {
     body = (
       <div className="col-md-9">
-        <Results filterCollections={props.filterCollections} answers={answers} facets={facets} searchables={props.searchables} documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )
