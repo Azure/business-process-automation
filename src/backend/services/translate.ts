@@ -49,7 +49,10 @@ export class Translate {
         const out = await axios.post(url, [{ 'text': input.data.length > 45000 ? input.data.substring(0,45000) : input.data }], config)
         const results = input.aggregatedResults
         out.data.translationText = out.data[0].translations[0].text
-        results["translation"] = out.data
+        results["translation"] = { 
+            results : out.data,
+            translationText : out.data[0].translations[0].text
+        }
         input.resultsIndexes.push({index : index, name : "translation", type : "text"})
         return {
             data: out.data[0].translations[0].text,
