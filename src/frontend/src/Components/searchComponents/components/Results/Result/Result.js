@@ -19,7 +19,7 @@ export default function Result(props) {
                 Object.keys(props.facets).map((k, index) => {
                     return (
                         <div>
-                            {Object.keys(props.facets[k]).map(f => {
+                            {Object.keys(props.facets[k]).slice(0,50).map(f => {
                                return(
                                     <Pill
                                         style={{ backgroundColor: getNextColor(index), color: "" }}
