@@ -19,6 +19,7 @@ export class FormRec {
             new AzureKeyCredential(apikey)
         )
     }
+    
 
     // public layout = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
     //     const poller : AnalysisPoller<LayoutResult> = await this._client.beginExtractLayout(input.data)
