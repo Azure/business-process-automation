@@ -10,7 +10,7 @@ export default function Results(props) {
 
     if (indexes.length === 0) return;
     if (index === indexes.length - 1) {
-      if (document[indexes[index]]) {
+      if (document && indexes.length > index) {
         const tempOut = [...results, document[indexes[index]]]
         return tempOut
       }
