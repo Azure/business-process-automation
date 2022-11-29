@@ -78,3 +78,8 @@ body {
     display: inline-block;
 }
 
+.hoverPipeline:hover{
+
+    cursor: pointer;
+}
+

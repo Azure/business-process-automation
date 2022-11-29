@@ -47,7 +47,13 @@ const constructFilter = (filters: string[], collections: string[]) => {
                         filterString = s
                     }
                 } else if (last) {
-                    filterString += `/${s} eq '${filter["value"]}'`
+                    const out = typeof(filter["value"])
+                    if(typeof(filter["value"]) === 'string'){
+                        filterString += `/${s} eq '${filter["value"]}'`
+                    } else {
+                        filterString += `/${s} eq ${filter["value"]}`
+                    }
+                    
                     for (let i = 0; i < collectionIndex; i++) {
                         filterString += ')'
                     }

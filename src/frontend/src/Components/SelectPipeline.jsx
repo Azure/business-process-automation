@@ -2,6 +2,8 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Text, Button, Input, Skeleton } from '@fluentui/react-northstar';
 import Stages from '../Pages/Stages'
+import { DeleteOutline } from '@material-ui/icons';
+
 
 const pipelinesLabel = "pipelines"
 
@@ -53,10 +55,39 @@ export default function SelectPipeline(props) {
         }
     }
 
+    const onDeletePipeline = async (pn) => {
+        
+        // if (currentPipelines.data === '') {
+        //     await axios.post('/api/config', { pipelines: [{ stages: [], name: newPipelineName }], id: pipelinesLabel })
+        // } else {
+        //     currentPipelines.data.pipelines.push({ stages: [], name: newPipelineName })
+        //     await axios.post('/api/config', currentPipelines.data)
+        // }
+
+
+        if (pipelines) {
+            const currentPipelines = await axios.get(`/api/config?id=${pipelinesLabel}`)
+            currentPipelines.data.pipelines = currentPipelines.data.pipelines.filter(p => (p.name !== pn))
+            await axios.post('/api/config', currentPipelines.data)
+            setPipelines(currentPipelines.data.pipelines)
+        }
+    }
+
     const renderPipelines = () => {
         if (pipelines ) {
             return (
-                pipelines.map(p => <div onClick={() => onPipelineSelect(p.name)} value={p.name} style={{ marginBottom: "20px", color: "blue" }}>{p.name}</div>)
+                pipelines.map(p => 
+                        {return(
+                            <div style={{display:"flex"}}>
+                                <div className="hoverPipeline" onClick={() => onPipelineSelect(p.name)} value={p.name} style={{ color: "blue", width : "10em" }}>
+                                    {p.name}
+                                </div>
+                                <div className="hoverPipeline" onClick={() => onDeletePipeline(p.name)} style={{ marginBottom: "20px"}}>
+                                    <DeleteOutline/>
+                                </div>
+                            </div>
+                            )}
+                        )
             )
         } else {
             return (

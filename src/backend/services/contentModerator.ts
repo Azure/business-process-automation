@@ -25,7 +25,7 @@ export class ContentModerator {
             const config: AxiosRequestConfig = {
                 headers: headers
             }
-            let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/Screen?language=${language["DetectedLanguage"]}`
+            let url = `${this._endpoint}contentmoderator/moderate/v1.0/ProcessText/Screen?language=${language["DetectedLanguage"]}&classify=True&autocorrect=True&PII=True`
 
             const out = await axios.post(url, t, config)
             result.push(out.data)
