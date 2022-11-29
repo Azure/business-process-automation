@@ -666,14 +666,6 @@
           "alwaysOn": true,
           "appSettings": [
             {
-              "name": "AzureFunctionsJobHost__extensions__queues__batchSize",
-              "value": "1"
-            },
-            {
-              "name": "AzureFunctionsJobHost__extensions__queues__newBatchThreshold",
-              "value": "5"
-            },
-            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
             },
@@ -684,10 +676,6 @@
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
               "value": "~4"
-            },
-            {
-              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
