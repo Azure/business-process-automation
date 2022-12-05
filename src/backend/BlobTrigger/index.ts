@@ -4,11 +4,13 @@ import { serviceCatalog } from "../engine/serviceCatalog"
 import { BpaConfiguration, BpaPipelines } from "../engine/types"
 import { CogSearch } from "../services/cogsearch"
 import { CosmosDB } from "../services/cosmosdb"
+import { DataLake } from "../services/datalake"
 const _ = require('lodash')
 
 const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buffer): Promise<void> {
 
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+    const datalake = new DataLake(process.env.ADLS_ACCOUNT_NAME, process.env.ADLS_ACCOUNT_KEY, process.env.ADLS_ADLS_FILESYSTEM_NAME)
     try {
         context.log(`Name of source doc : ${context.bindingData.blobTrigger}`)
         const directoryName = context.bindingData.blobTrigger.split('/')[1]
@@ -43,6 +45,8 @@ const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buf
         const out = await engine.processFile(myBlob, context.bindingData.blobTrigger, bpaConfig)
 
         await db.view(out) 
+        await datalake.writeFile(out.filename , JSON.stringify(out))
+
         context.res = {
             status : 200,
             body : out
