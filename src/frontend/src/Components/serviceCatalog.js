@@ -24,7 +24,21 @@ import wav from '../images/wav.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
-
+    "tableParser": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "customFormRec"
+        ],
+        "outputTypes": [
+            "tableParser"
+        ],
+        "image": idcard,
+        "label": "Extract Table Information for Search",
+        "name": "tableParser",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "xmlToJson": {
         "bpaServiceId": "abc123",
         "inputTypes": [
