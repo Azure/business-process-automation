@@ -87,7 +87,7 @@ export class FormRec {
     }
 
     public customFormrec = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
-        return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customModel", index)
+        return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
     } 
 
     private _analyzeDocument = async (input : BpaServiceObject, modelId : any, label : string, index : number) : Promise<BpaServiceObject> => {
