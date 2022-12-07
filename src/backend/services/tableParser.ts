@@ -15,7 +15,7 @@ export class TableParser {
         let company: string = ""
         let type: string = ""
         let date: string = ""
-        for (const d of input.aggregatedResults.customModel.documents) {
+        for (const d of input.aggregatedResults.customFormRec.documents) {
             const stuff = d.fields
             if (d?.fields?.Company) {
                 company = d.fields.Company.value
@@ -30,7 +30,7 @@ export class TableParser {
         }
 
         const _pageText: any = {}
-        for (const p of input.aggregatedResults.customModel.pages) {
+        for (const p of input.aggregatedResults.customFormRec.pages) {
             const pageNumber = p.pageNumber
             let content = ""
             for (const l of p.lines) {
@@ -41,7 +41,7 @@ export class TableParser {
 
 
         const tables = []
-        for (let t of input.aggregatedResults.customModel.tables) {
+        for (let t of input.aggregatedResults.customFormRec.tables) {
             let table = t as any
 
             let pageText = {}
