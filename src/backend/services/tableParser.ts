@@ -49,9 +49,9 @@ export class TableParser {
             if (t?.boundingRegions[0]?.pageNumber) {
                 pageText = _pageText[t.boundingRegions[0].pageNumber]
             }
-
-            tables.push({ company: company, type: type, date: date, table: table, pageContent: pageText })
-            await this._db.create({ tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, table: table, pageContent: pageText } })
+            const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, table: table, pageContent: pageText } }
+            tables.push(content)
+            await this._db.create(content)
         }
 
         // const cells = []
@@ -84,8 +84,9 @@ export class TableParser {
                         text += " " + ca.content
                     }
 
-                    cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: text })
-                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: text, cell: c, table: t } })
+                    const content = { type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: text, cell: c, table: t } }
+                    cells.push(content)
+                    await this._db.create(content)
                 } else {
                     cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: "" })
                     await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: "", cell: c, table: t } })
