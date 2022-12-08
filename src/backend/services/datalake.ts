@@ -6,12 +6,14 @@ export class DataLake {
     private _fileSystemClient : DataLakeFileSystemClient
 
     constructor(account : string, accountKey : string, fileSystemName) {
-        const sharedKeyCredential = new StorageSharedKeyCredential(account, accountKey);
+        try{const sharedKeyCredential = new StorageSharedKeyCredential(account, accountKey);
         this._client = new DataLakeServiceClient(
           `https://${account}.dfs.core.windows.net`,
           sharedKeyCredential
         );
-        this._fileSystemClient = this._client.getFileSystemClient(fileSystemName);
+        this._fileSystemClient = this._client.getFileSystemClient(fileSystemName); }
+        
+        catch(e){console.log(e)}
     }
 
 
