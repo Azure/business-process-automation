@@ -41,6 +41,7 @@ export class TableParser {
 
 
         const tables = []
+        let tableIndex = 0
         for (let t of input.aggregatedResults.customFormRec.tables) {
             let table = t as any
 
@@ -50,7 +51,7 @@ export class TableParser {
             }
 
             tables.push({ company: company, type: type, date: date, table: table, pageContent: pageText })
-            await this._db.create({ type: "table", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, table: table, pageContent: pageText } })
+            await this._db.create({ tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, table: table, pageContent: pageText } })
         }
 
         // const cells = []
