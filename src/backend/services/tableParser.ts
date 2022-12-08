@@ -85,10 +85,10 @@ export class TableParser {
                     }
 
                     cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: text })
-                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, outerText: text, cell: c, table: t } })
+                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: text, cell: c, table: t } })
                 } else {
                     cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: "" })
-                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, outerText: "", cell: c, table: t } })
+                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: "", cell: c, table: t } })
                 }
             }
         }
