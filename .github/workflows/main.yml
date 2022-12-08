@@ -1,4 +1,7 @@
-on: [push]
+on:
+  push:
+    branches:
+      - adls
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'rg-bpa-001'    # set this to your application's name
