@@ -65,10 +65,10 @@ export class TableParser {
         const cells = []
         for (const t of tables) {
             const cellOuterText: any = []
-            for (const c of t.table.cells) {
+            for (const c of t.data.table.cells) {
                 cellOuterText.push({ row: c.rowIndex, column: c.columnIndex, content: c.content })
             }
-            for (const c of t.table.cells) {
+            for (const c of t.data.table.cells) {
                 if (c.columnIndex !== 0 || c.rowIndex !== 0) {
                     const contentArray = cellOuterText.filter((v: any) => {
                         if (c.columnIndex === v.column && v.row === 0) {
@@ -84,11 +84,10 @@ export class TableParser {
                         text += " " + ca.content
                     }
 
-                    const content = { type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: text, cell: c, table: t } }
-                    cells.push(content)
-                    await this._db.create(content)
+                    //cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: text })
+                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: text, cell: c, table: t } })
                 } else {
-                    cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: "" })
+                    //cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: "" })
                     await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: "", cell: c, table: t } })
                 }
             }
