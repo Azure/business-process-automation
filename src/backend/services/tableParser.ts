@@ -13,7 +13,7 @@ export class TableParser {
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
         let documentFields = []
         for (const d of input.aggregatedResults.customFormRec.documents) {
-            if(d?.fields && d.fields.length > 0){
+            if(d?.fields && Object.keys(d.fields).length > 0){
                 documentFields.push(d.fields)
             }
         }
