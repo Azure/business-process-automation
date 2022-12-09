@@ -27,7 +27,9 @@ export const sc = {
     "tableParser": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "customFormRec"
+            "customFormRec",
+            "layout",
+            "generalDocument"
         ],
         "outputTypes": [
             "tableParser"

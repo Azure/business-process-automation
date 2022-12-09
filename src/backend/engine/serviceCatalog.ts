@@ -41,7 +41,7 @@ const tableParser = new TableParser(cosmosDb)
 
 const tableParserService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["customFormRec"],
+    inputTypes: ["customFormRec","layout","generalDocument"],
     outputTypes: ["tableParser"],
     name: "tableParser",
     process: tableParser.process,
