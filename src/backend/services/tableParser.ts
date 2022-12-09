@@ -12,6 +12,8 @@ export class TableParser {
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
         const services = ["customFormRec", "layout", "generalDocument"]
+        console.log("log")
+        console.log(JSON.stringify(input))
         let documentFields = []
         for (const s of services) {
             if (input?.aggregatedResults[s].documents) {
