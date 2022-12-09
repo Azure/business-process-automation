@@ -1,6 +1,6 @@
 import React from 'react';
 import { JSONTree } from 'react-json-tree';
-import { Pill, Table } from '@fluentui/react-northstar'
+import { Pill } from '@fluentui/react-northstar'
 
 import './TableResult.css';
 
@@ -95,26 +95,26 @@ export default function Result(props) {
         }
     }
 
-    const getText = (searchables, data) => {
-        try {
-            if (!searchables || searchables.length === 0) {
-                return ""
-            }
-            let out = ""
+    // const getText = (searchables, data) => {
+    //     try {
+    //         if (!searchables || searchables.length === 0) {
+    //             return ""
+    //         }
+    //         let out = ""
 
-            for (const s of searchables) {
-                let currentData = data
-                for (const i of s.split('/')) {
-                    currentData = currentData[i]
-                }
-                out += currentData
-            }
-            return out
-        } catch (err) {
-            console.log(err)
-        }
+    //         for (const s of searchables) {
+    //             let currentData = data
+    //             for (const i of s.split('/')) {
+    //                 currentData = currentData[i]
+    //             }
+    //             out += currentData
+    //         }
+    //         return out
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
 
-    }
+    // }
 
     const theme = {
         base00: 'white',
