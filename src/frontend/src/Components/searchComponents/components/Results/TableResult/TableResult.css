@@ -1,0 +1,47 @@
+.answer{
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    margin: 10px;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: rgb(216, 255, 216) !important ;
+}
+
+.result {
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    margin: 10px;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: #eee !important;
+}
+
+/* .result:hover,
+.result:active {
+    background-color: #C0DDF5;
+} */
+
+.title-style {
+    vertical-align: middle;
+    text-align: left;
+    font-weight: bold;
+}
+
+.card-img-top {
+    width: auto;
+    min-width: 6em;
+    max-width: 10em;
+    height: auto;
+    max-height: 12em;
+    vertical-align: middle;
+}

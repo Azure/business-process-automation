@@ -11,9 +11,6 @@ import "./Search.css";
 
 export default function Search(props) {
 
-  // let location = useLocation();
-  // let history = useHistory();
-
   const [results, setResults] = useState([]);
   const [resultCount, setResultCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,17 +25,6 @@ export default function Search(props) {
 
   let resultsPerPage = top;
 
-  // const updateFilters = (filters) => {
-  //   let out = ""
-  //   if(filters){
-  //     for(const f of filters){
-  //       const localFilter = f.field.replace(/\//g, '.')
-  //       out += `${localFilter} eq '${f.value}'`
-
-  //     }
-  //   }
-  //   return out
-  // }
 
   const getFacetSearchConfig = (_facets) => {
     const result = []
@@ -47,10 +33,6 @@ export default function Search(props) {
         result.push(`${_facet},count:1000`)
       }
     }
-    // let result = ""
-    // for(const _facet of _facets.split(',')){
-    //   result += `${_facet},count:1000`
-    // }
     return result
   }
 
@@ -164,7 +146,7 @@ export default function Search(props) {
   else {
     body = (
       <div className="col-md-9">
-        <Results filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results useTableSearch={props.useTableSearch} tableSearchConfig={props.tableSearchConfig} filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )

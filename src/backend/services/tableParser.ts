@@ -11,22 +11,11 @@ export class TableParser {
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-
-        let company: string = ""
-        let type: string = ""
-        let date: string = ""
+        let documentFields = []
         for (const d of input.aggregatedResults.customFormRec.documents) {
-            const stuff = d.fields
-            if (d?.fields?.Company) {
-                company = d.fields.Company.value
+            if(d?.fields && d.fields.length > 0){
+                documentFields.push(d.fields)
             }
-            if (d?.fields?.Type) {
-                type = d.fields.Type.value
-            }
-            if (d?.fields?.Date) {
-                date = d.fields.Date.value
-            }
-
         }
 
         const _pageText: any = {}
@@ -49,7 +38,7 @@ export class TableParser {
             if (t?.boundingRegions[0]?.pageNumber) {
                 pageText = _pageText[t.boundingRegions[0].pageNumber]
             }
-            const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { company: company, type: type, date: date, table: table, pageContent: pageText } }
+            const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields : documentFields, table: table, pageContent: pageText } }
             tables.push(content)
             await this._db.create(content)
         }
@@ -62,7 +51,6 @@ export class TableParser {
         //     }
         // }
 
-        const cells = []
         for (const t of tables) {
             const cellOuterText: any = []
             for (const c of t.data.table.cells) {
@@ -85,10 +73,10 @@ export class TableParser {
                     }
 
                     //cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: text })
-                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: text, cell: c, table: t } })
+                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, documentFields : documentFields, outerText: text, cell: c, table: t } })
                 } else {
                     //cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: "" })
-                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, company: company, type: type, date: date, outerText: "", cell: c, table: t } })
+                    await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, documentFields : documentFields, outerText: "", cell: c, table: t } })
                 }
             }
         }
