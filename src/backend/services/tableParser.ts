@@ -15,7 +15,7 @@ export class TableParser {
         let documentFields = []
         for (const s of services) {
             if (input?.aggregatedResults && input?.aggregatedResults[s]) {
-                if (input?.aggregatedResults[s]?.documents) {
+                if (input?.aggregatedResults[s]?.documents) { //read the custom labels if there are any for attachment to the document
                     for (const d of input.aggregatedResults[s].documents) {
                         if (d?.fields && Object.keys(d.fields).length > 0) {
                             documentFields.push(d.fields)
@@ -25,10 +25,10 @@ export class TableParser {
 
 
                 const _pageText: any = {}
-                if (input?.aggregatedResults[s]?.pages) {
+                if (input?.aggregatedResults[s]?.pages) { //read the entire text available on the page for attachment
                     for (const p of input.aggregatedResults[s].pages) {
                         const pageNumber = p.pageNumber
-                        let content = ""
+                        let content = " "
                         for (const l of p.lines) {
                             content += l.content + " "
                         }
@@ -40,14 +40,20 @@ export class TableParser {
                 const tables = []
                 let tableIndex = 0
                 if (input?.aggregatedResults[s]?.tables) {
-                    for (let t of input.aggregatedResults[s].tables) {
+                    for (const t of input.aggregatedResults[s].tables) {
+                        let tableHeaders = []
+                        for(const c of t.cells){
+                            if(c.kind != 'content'){
+                                tableHeaders.push({header : c.content})
+                            }
+                        }
                         let table = t as any
 
                         let pageText = {}
                         if (t?.boundingRegions[0]?.pageNumber) {
                             pageText = _pageText[t.boundingRegions[0].pageNumber]
                         }
-                        const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields: documentFields, table: table, pageContent: pageText } }
+                        const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields: documentFields, table: table, pageContent: pageText, tableHeaders: tableHeaders } }
                         tables.push(content)
                         await this._db.create(content)
                     }
@@ -70,16 +76,16 @@ export class TableParser {
                                 }
                             })
 
-                            let text = ""
+                            let text = " "
                             for (const ca of contentArray) {
-                                text += " " + ca.content
+                                text += ca.content + " "
                             }
 
                             //cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: text })
                             await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, documentFields: documentFields, outerText: text, cell: c, table: t } })
                         } else {
                             //cells.push({ company: company, type: type, date: date, cell: c, table: t, outerText: "" })
-                            await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, documentFields: documentFields, outerText: "", cell: c, table: t } })
+                            await this._db.create({ type: "cell", pipeline: input.pipeline, filename: input.filename, data: { tableIndex: t.tableIndex, documentFields: documentFields, outerText: " ", cell: c, table: t } })
                         }
                     }
 

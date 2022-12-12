@@ -78,7 +78,7 @@ export default function Result(props) {
             return (
                 Object.keys(props.facets).map((k, index) => {
                     return (
-                        <div>
+                        <div style={{textAlign:"left"}}>
                             {Object.keys(props.facets[k]).slice(0, 50).map(f => {
                                 return (
                                     <Pill
