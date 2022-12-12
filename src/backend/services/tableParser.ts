@@ -41,10 +41,10 @@ export class TableParser {
                 let tableIndex = 0
                 if (input?.aggregatedResults[s]?.tables) {
                     for (const t of input.aggregatedResults[s].tables) {
-                        let tableHeaders = []
+                        let tableHeaders = ""
                         for(const c of t.cells){
                             if(c.kind != 'content'){
-                                tableHeaders.push({header : c.content})
+                                tableHeaders += " " + c.content
                             }
                         }
                         let table = t as any

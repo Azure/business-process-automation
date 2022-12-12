@@ -38,7 +38,6 @@ export default function Result(props) {
                         </td>
                     )
                 }
-                
             })
         )
     }
@@ -58,11 +57,6 @@ export default function Result(props) {
     const renderTable = () => {
         const table = props.data.data.table
         const rows = convertCellsToTableRows(table)
-        // return (
-        //     <div>
-        //         <Table rows={rows} aria-label="Static table" />
-        //     </div>
-        // )
         return (
             <table>
 
@@ -95,27 +89,6 @@ export default function Result(props) {
         }
     }
 
-    // const getText = (searchables, data) => {
-    //     try {
-    //         if (!searchables || searchables.length === 0) {
-    //             return ""
-    //         }
-    //         let out = ""
-
-    //         for (const s of searchables) {
-    //             let currentData = data
-    //             for (const i of s.split('/')) {
-    //                 currentData = currentData[i]
-    //             }
-    //             out += currentData
-    //         }
-    //         return out
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-
-    // }
-
     const theme = {
         base00: 'white',
         base01: 'white',
@@ -137,13 +110,8 @@ export default function Result(props) {
 
     return (
         <div className="card result" id={props.key}>
-
-            {/* <img className="card-img-top" src={pdf} alt={pdf}></img> */}
             <div className="card-body">
                 <h6 className="title-style">{props.document}</h6>
-                {/* <div style={{ textAlign: "left" }}>
-                    {getText(props.searchables, props.data) ? getText(props.searchables, props.data).substring(0, 1000) : ""}
-                </div> */}
                 <div>
                     {renderTable()}
                 </div>
