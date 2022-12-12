@@ -41,9 +41,9 @@ export class TableParser {
                 let tableIndex = 0
                 if (input?.aggregatedResults[s]?.tables) {
                     for (const t of input.aggregatedResults[s].tables) {
-                        let tableHeaders = ""
+                        let tableData = ""
                         for(const c of t.cells){
-                            tableHeaders += " " + c.content
+                            tableData += " " + c.content
                         }
                         let table = t as any
 
@@ -51,7 +51,7 @@ export class TableParser {
                         if (t?.boundingRegions[0]?.pageNumber) {
                             pageText = _pageText[t.boundingRegions[0].pageNumber]
                         }
-                        const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields: documentFields, table: table, pageContent: pageText, tableHeaders: tableHeaders } }
+                        const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields: documentFields, table: table, pageContent: pageText, tableData: tableData } }
                         tables.push(content)
                         await this._db.create(content)
                     }
