@@ -51,7 +51,11 @@ export class TableParser {
                         if (t?.boundingRegions[0]?.pageNumber) {
                             pageText = _pageText[t.boundingRegions[0].pageNumber]
                         }
-                        const content = { tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields: documentFields, table: table, pageContent: pageText, tableData: tableData } }
+                        const suggester : string[] = []
+                        for(const c of t.cells){
+                            suggester.push(c.content)
+                        }
+                        const content = { suggester: suggester, tableIndex: tableIndex++, type: "table", pipeline: input.pipeline, filename: input.filename, data: { documentFields: documentFields, table: table, pageContent: pageText, tableData: tableData } }
                         tables.push(content)
                         await this._db.create(content)
                     }

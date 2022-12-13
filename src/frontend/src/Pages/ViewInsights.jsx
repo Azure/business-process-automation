@@ -12,6 +12,7 @@ export default function ViewInsights(props) {
     const [selectedSemanticConfig, setSelectedSemanticConfig] = useState("")
     const [useTableSearch, setUseTableSearch] = useState(false)
     const [tableSearchConfig, setTableSearchConfig] = useState("")
+    const [tableAvailable, setTableAvailable] = useState(false)
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
@@ -92,6 +93,16 @@ export default function ViewInsights(props) {
         }
     }
 
+    const onSetTableAvailable = (available) => {
+        setTableAvailable(available)
+    }
+
+    const renderTableSearch = () => {
+        if(tableAvailable){
+            return(<Checkbox onClick={onTableSearch} checked={useTableSearch} style={{marginBottom:"35px"}} label="Table Search" toggle />)
+        }
+    }
+
     if(selectedIndex){
         const style = {display:"flex", flexFlow:"column", fontWeight:"500", margin: "20px"}
         return(
@@ -115,7 +126,8 @@ export default function ViewInsights(props) {
                         {renderSemanticSearchConfig()}
                     </div>
                     <div style={style}>
-                        <Checkbox onClick={onTableSearch} checked={useTableSearch} style={{marginBottom:"35px"}} label="Table Search" toggle />
+                        {renderTableSearch()}
+                        
                     </div>
                     <div style={style}>
                         {renderTableSearchConfig()}
@@ -123,7 +135,7 @@ export default function ViewInsights(props) {
               </div>
                 
                 {/* <AppHeader/> */}
-                <Search index={selectedIndex} useSemanticSearch={useSemanticSearch} semanticConfig={selectedSemanticConfig} useTableSearch={useTableSearch} tableSearchConfig />
+                <Search index={selectedIndex} useSemanticSearch={useSemanticSearch} semanticConfig={selectedSemanticConfig} useTableSearch={useTableSearch} onSetTableAvailable={onSetTableAvailable} />
             </>
             )
     } else if (indexSearchDone){
