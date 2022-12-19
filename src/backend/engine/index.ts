@@ -53,7 +53,7 @@ export class BpaEngine {
                 }
             }
             else {
-                throw new Error(`invalid input type ${currentInput} for stage ${stage.service.name}`)
+                throw new Error(`invalid input type ${JSON.stringify(currentInput)} for stage ${stage.service.name}`)
             }
             stageIndex++;
         }
