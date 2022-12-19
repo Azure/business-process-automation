@@ -47,7 +47,7 @@ const serviceBusQueueTrigger: AzureFunction = async function(context: Context, m
         
 
         const engine = new BpaEngine()
-        const out = await engine.processFile(myBuffer, context.bindingData.blobTrigger, bpaConfig)
+        const out = await engine.processFile(myBuffer, filename, bpaConfig)
 
         await db.view(out) 
         context.res = {
