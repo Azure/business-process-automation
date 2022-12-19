@@ -19,6 +19,7 @@ export class FormRec {
             new AzureKeyCredential(apikey)
         )
     }
+    
 
     // public layout = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
     //     const poller : AnalysisPoller<LayoutResult> = await this._client.beginExtractLayout(input.data)
@@ -86,7 +87,7 @@ export class FormRec {
     }
 
     public customFormrec = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
-        return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customModel", index)
+        return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
     } 
 
     private _analyzeDocument = async (input : BpaServiceObject, modelId : any, label : string, index : number) : Promise<BpaServiceObject> => {

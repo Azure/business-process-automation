@@ -11,9 +11,6 @@ import "./Search.css";
 
 export default function Search(props) {
 
-  // let location = useLocation();
-  // let history = useHistory();
-
   const [results, setResults] = useState([]);
   const [resultCount, setResultCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,45 +25,30 @@ export default function Search(props) {
 
   let resultsPerPage = top;
 
-  // const updateFilters = (filters) => {
-  //   let out = ""
-  //   if(filters){
-  //     for(const f of filters){
-  //       const localFilter = f.field.replace(/\//g, '.')
-  //       out += `${localFilter} eq '${f.value}'`
-
-  //     }
-  //   }
-  //   return out
-  // }
 
   const getFacetSearchConfig = (_facets) => {
     const result = []
-    for(const _facet of _facets){
-      if(_facet !== ''){
+    for (const _facet of _facets) {
+      if (_facet !== '') {
         result.push(`${_facet},count:1000`)
       }
     }
-    // let result = ""
-    // for(const _facet of _facets.split(',')){
-    //   result += `${_facet},count:1000`
-    // }
     return result
   }
 
   const getFacetsString = (facets) => {
     let result = ""
     let index = 0
-    for(const facet of facets){
-        if(index === 0){
-            result = facet
-        } else{
-            result += `, ${facet}`
-        }
-        index++
+    for (const facet of facets) {
+      if (index === 0) {
+        result = facet
+      } else {
+        result += `, ${facet}`
+      }
+      index++
     }
     return result
-}
+  }
 
   useEffect(() => {
 
@@ -82,7 +64,7 @@ export default function Search(props) {
       useSemanticSearch: props.useSemanticSearch,
       semanticConfig: props.semanticConfig,
       queryLanguage: "en-US",
-      filterCollections : props.index.collections
+      filterCollections: props.index.collections
     };
 
     if (props.index) {
@@ -91,21 +73,25 @@ export default function Search(props) {
           //console.log(JSON.stringify(response.data))
           if (response?.data?.results?.value) {
             setResults(response.data.results.value);
+            if (response.data.results.value.length > 0 && response.data.results.value[0]?.type && response.data.results.value[0].type === 'table') {
+              props.onSetTableAvailable(true)
+            } else {
+              props.onSetTableAvailable(false)
+            }
             setResultCount(response.data.results["@odata.count"]);
             setIsLoading(false);
-            if(response.data.results["@search.facets"])
-            {
+            if (response.data.results["@search.facets"]) {
               setFacets(response.data.results["@search.facets"]);
             } else {
               setFacets([])
             }
-            if(response.data.results["@search.answers"]){
+            if (response.data.results["@search.answers"]) {
               setAnswers(response.data.results["@search.answers"]);
             } else {
               setAnswers([])
             }
             setIsError(false)
-          } else{
+          } else {
             setResults([]);
             setResultCount(0);
             setIsLoading(false);
@@ -146,7 +132,7 @@ export default function Search(props) {
 
   let updatePagination = (newPageNumber) => {
     setCurrentPage(newPageNumber);
-    setSkip((newPageNumber-1) * top);
+    setSkip((newPageNumber - 1) * top);
   }
 
   var body;
@@ -155,16 +141,16 @@ export default function Search(props) {
       <div className="col-md-9">
         <CircularProgress />
       </div>);
-  } else if(isError){
+  } else if (isError) {
     body = (
-      <div className="col-md-9" style={{margin: "100px"}}>
-         Search Failed.  Make sure you have Semantic Search enabled. 
+      <div className="col-md-9" style={{ margin: "100px" }}>
+        Search Failed.  Make sure you have Semantic Search enabled.
       </div>);
-  } 
+  }
   else {
     body = (
       <div className="col-md-9">
-        <Results filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results useTableSearch={props.useTableSearch} tableSearchConfig={props.tableSearchConfig} filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )

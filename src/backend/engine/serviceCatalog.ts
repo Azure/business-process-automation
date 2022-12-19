@@ -15,6 +15,7 @@ import { Blob } from "../services/blob"
 import { ContentModerator } from "../services/contentModerator"
 import { Xml } from "../services/xml"
 import { VideoIndexer } from "../services/videoIndexer"
+import { TableParser } from "../services/tableParser"
 
 const changeOutput = new ChangeOutput()
 const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -32,10 +33,25 @@ const test = new Test()
 const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDPOINT,process.env.CONTENT_MODERATOR_KEY)
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
+const tableParser = new TableParser(cosmosDb)
 
 // const noCharge = (documents : number) : number =>{
 //     return 0
 // }
+
+const tableParserService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["customFormRec","layout","generalDocument"],
+    outputTypes: ["tableParser"],
+    name: "tableParser",
+    process: tableParser.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const videoIndexerService : BpaService = {
     bpaServiceId : "abc123",
@@ -570,6 +586,7 @@ export const serviceCatalog = {
     "contentModeratorText" : contentModeratorTextService,
     "contentModeratorImage" : contentModeratorImageService,
     "xmlToJson" : xmlToJsonService,
-    "videoIndexer" : videoIndexerService
+    "videoIndexer" : videoIndexerService,
+    "tableParser" : tableParserService
 }
 
