@@ -1,5 +1,6 @@
 import React from 'react';
 import Result from './Result/Result';
+import TableResult from './TableResult/TableResult'
 
 import "./Results.css";
 
@@ -61,16 +62,31 @@ export default function Results(props) {
   }
 
   let results = props.documents.map((result) => {
-    return (
-      <div key={result.id}>
-        <Result
+    if (props.useTableSearch) {
+      return (
+        <div key={result.id}>
+        <TableResult
           searchables={props.searchables}
           document={result.filename.split('/')[result.filename.split('/').length - 1]}
           data={result}
           facets={getDocumentFacets(result, Object.keys(props.facets), props.filterCollections)}
         />
-        
+
+      </div>);
+
+    } else {
+      return (
+        <div key={result.id}>
+          <Result
+            searchables={props.searchables}
+            document={result.filename.split('/')[result.filename.split('/').length - 1]}
+            data={result}
+            facets={getDocumentFacets(result, Object.keys(props.facets), props.filterCollections)}
+          />
+
         </div>);
+    }
+
   });
 
   let answers = props.answers.map((result) => {
