@@ -1,4 +1,4 @@
-# Business Process Accelerator
+# Business Process Automation Accelerator
 
 
 ## Overview
