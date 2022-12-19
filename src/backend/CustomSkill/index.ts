@@ -15,7 +15,7 @@ const processSkill = async(context, value) : Promise<any> => {
         console.log(filename)
         const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 
-        const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_COGSEARCH_CONTAINER)
+        const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
         const fileBuffer : Buffer = await blob.getBuffer(filename)
         
     

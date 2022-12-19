@@ -15,6 +15,23 @@
   "extensions": {
     "queues": {
       "batchSize": 32
-    }
+    },
+    "serviceBus": {
+      "prefetchCount": 100,
+      "messageHandlerOptions": {
+          "autoComplete": true,
+          "maxConcurrentCalls": 2,
+          "maxAutoRenewDuration": "00:05:00"
+      },
+      "batchOptions": {
+          "maxMessageCount": 2,
+          "operationTimeout": "00:01:00",
+          "autoComplete": true
+      }
+  }
+  },
+  "concurrency": {
+    "dynamicConcurrencyEnabled": true,
+    "snapshotPersistenceEnabled": true
   }
 }
