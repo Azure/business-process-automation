@@ -107,7 +107,7 @@ export default function Search(props) {
         });
     }
 
-  }, [q, top, skip, filters, currentPage, props.index, props.useSemanticSearch, props.semanticConfig]);
+  }, [q, top, skip, filters, currentPage, props.index, props.useSemanticSearch, props.semanticConfig, props]);
 
 
   // pushing the new search term to history when q is updated
