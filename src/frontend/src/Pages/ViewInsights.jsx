@@ -1,7 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Text, Dropdown, Checkbox } from '@fluentui/react-northstar';
-//import AppHeader from "../Components/searchComponents/components/AppHeader/AppHeader";
 import Search from '../Components/searchComponents/pages/Search/Search'
 
 export default function ViewInsights(props) {
@@ -11,6 +10,9 @@ export default function ViewInsights(props) {
     const [indexSearchDone, setIndexSearchDone] = useState(false)
     const [useSemanticSearch, setUseSemanticSearch] = useState(false)
     const [selectedSemanticConfig, setSelectedSemanticConfig] = useState("")
+    const [useTableSearch, setUseTableSearch] = useState(false)
+    const [tableSearchConfig, setTableSearchConfig] = useState("")
+    const [tableAvailable, setTableAvailable] = useState(false)
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
@@ -64,6 +66,43 @@ export default function ViewInsights(props) {
         }
     }
 
+    const onTableSearch = (_, value) => {
+        setUseTableSearch(value.checked)
+    }
+
+    const onTableConfigChange = (_, value) => {
+        setTableSearchConfig(value.value)
+    }
+
+    const renderTableSearchConfig = () => {
+        if(useTableSearch){
+            return(
+                <>
+                    <Text content="Table Search Configuration"  style={{marginBottom:"10px"}}/>
+                    <Dropdown
+                            placeholder=""
+                            label="Output"
+                            items={indexes.map(sc => sc.name)}
+                            onChange={onTableConfigChange}
+                            value={tableSearchConfig}
+                            style={{fontWeight:"400"}}
+                        />
+                </>
+                
+            )
+        }
+    }
+
+    const onSetTableAvailable = (available) => {
+        setTableAvailable(available)
+    }
+
+    const renderTableSearch = () => {
+        if(tableAvailable){
+            return(<Checkbox onClick={onTableSearch} checked={useTableSearch} style={{marginBottom:"35px"}} label="Table Search" toggle />)
+        }
+    }
+
     if(selectedIndex){
         const style = {display:"flex", flexFlow:"column", fontWeight:"500", margin: "20px"}
         return(
@@ -82,15 +121,21 @@ export default function ViewInsights(props) {
                     </div>
                     <div style={style}>
                         <Checkbox onClick={onSemanticSearch} checked={useSemanticSearch} style={{marginBottom:"35px"}} label="Semantic Search" toggle />
-                        
                     </div>
                     <div style={style}>
                         {renderSemanticSearchConfig()}
                     </div>
+                    <div style={style}>
+                        {renderTableSearch()}
+                        
+                    </div>
+                    <div style={style}>
+                        {renderTableSearchConfig()}
+                    </div>
               </div>
                 
                 {/* <AppHeader/> */}
-                <Search index={selectedIndex} useSemanticSearch={useSemanticSearch} semanticConfig={selectedSemanticConfig} />
+                <Search index={selectedIndex} useSemanticSearch={useSemanticSearch} semanticConfig={selectedSemanticConfig} useTableSearch={useTableSearch} onSetTableAvailable={onSetTableAvailable} />
             </>
             )
     } else if (indexSearchDone){

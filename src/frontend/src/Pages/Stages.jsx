@@ -104,7 +104,7 @@ export default function Stages(props) {
                     _options.push(serviceCatalog[k])
                     break;
                 }
-                if (previousStage.outputTypes.includes(acceptedInputType.toLowerCase())) {
+                if (previousStage.outputTypes.includes(acceptedInputType)) {
                     _options.push(serviceCatalog[k])
                     break;
                 }
