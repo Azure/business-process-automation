@@ -14,17 +14,17 @@
   },
   "extensions": {
     "queues": {
-      "batchSize": 32
+      "batchSize": 1
     },
     "serviceBus": {
-      "prefetchCount": 100,
+      "prefetchCount": 1,
       "messageHandlerOptions": {
           "autoComplete": true,
-          "maxConcurrentCalls": 2,
+          "maxConcurrentCalls": 1,
           "maxAutoRenewDuration": "00:05:00"
       },
       "batchOptions": {
-          "maxMessageCount": 2,
+          "maxMessageCount": 1,
           "operationTimeout": "00:01:00",
           "autoComplete": true
       }
