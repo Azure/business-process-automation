@@ -61,13 +61,13 @@ export class BpaEngine {
                     ]
    
                     await sender.sendMessages(messages)
-                    await sender.close();
-                    await serviceBusClient.close();
+                    await sender.close()
+                    await serviceBusClient.close()
                     break
                 }
             }
             else {
-                throw new Error(`invalid input type ${JSON.stringify(currentInput)} for stage ${stage.service.name}`)
+                throw new Error(`invalid input type ${JSON.stringify(currentInput.type)} for stage ${stage.service.name}`)
             }
             stageIndex++;
         }
