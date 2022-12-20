@@ -1,4 +1,6 @@
 import { BpaConfiguration, BpaStage, BpaServiceObject } from "./types"
+
+import { ServiceBusClient } from "@azure/service-bus"
 const _ = require('lodash')
 
 export class BpaEngine {
@@ -7,23 +9,23 @@ export class BpaEngine {
 
     }
 
-    public processAsync = async (serviceObject : BpaServiceObject, stageIndex : number, config: BpaConfiguration) : Promise<BpaServiceObject> => {
+    public processAsync = async (serviceObject: BpaServiceObject, stageIndex: number, config: BpaConfiguration): Promise<BpaServiceObject> => {
 
         return this._process(serviceObject, config, stageIndex)
 
     }
 
-    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration) : Promise<BpaServiceObject> => {
+    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration): Promise<BpaServiceObject> => {
 
         let currentInput: BpaServiceObject = {
             label: "first",
-            pipeline : config.name,
+            pipeline: config.name,
             type: this._getFileType(fileName),
             filename: fileName,
             data: fileBuffer,
             bpaId: "1",
-            aggregatedResults : { "buffer" : fileBuffer },
-            resultsIndexes : [{index : 0, name : "buffer", type : this._getFileType(fileName)}]
+            aggregatedResults: { "buffer": fileBuffer },
+            resultsIndexes: [{ index: 0, name: "buffer", type: this._getFileType(fileName) }]
         }
 
         console.log(this._getFileType(fileName))
@@ -33,10 +35,10 @@ export class BpaEngine {
 
     }
 
-    private _process = async (currentInput : BpaServiceObject, config : BpaConfiguration, stageIndex : number) => {
-        for(let i=stageIndex;i<config.stages.length + 1;i++){
-            const stage = config.stages[i-1]
-        //for (const stage of config.stages) {
+    private _process = async (currentInput: BpaServiceObject, config: BpaConfiguration, stageIndex: number) => {
+        for (let i = stageIndex; i < config.stages.length + 1; i++) {
+            const stage = config.stages[i - 1]
+            //for (const stage of config.stages) {
             console.log(`stage : ${stage.service.name}`)
             console.log(`currentInput : ${JSON.stringify(currentInput.type)}`)
             console.log('validating...')
@@ -46,9 +48,21 @@ export class BpaEngine {
                 const currentOutput: BpaServiceObject = await stage.service.process(currentInput, stageIndex)
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
-                if(currentInput.type === 'async transaction'){
+                if (currentInput.type === 'async transaction') {
+                    const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
+                    const sender = serviceBusClient.createSender("upload")
+                    delete currentInput.data
+                    delete currentInput.aggregatedResults.buffer
+
                     currentInput.stages = config.stages
                     currentInput.index = stageIndex
+                    const messages = [
+                        { body: currentInput }
+                    ]
+   
+                    await sender.sendMessages(messages)
+                    await sender.close();
+                    await serviceBusClient.close();
                     break
                 }
             }

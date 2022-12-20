@@ -37,50 +37,50 @@ export class Speech {
 
         let httpResult = 429
         let axiosResp: AxiosResponse
-        while (httpResult === 429) {
-            try {
-                const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename) // can throw 429
-                const sasUrl = await blobClient.generateSasUrl(options)
-                let payload = {
-                    "contentUrls": [
-                        sasUrl
-                    ],
-                    "properties": {
-                        "wordLevelTimestampsEnabled": true
-                    },
-                    "locale": "en-US",
-                    "displayName": "Transcription of file using default model for en-US"
-                }
-                if (input?.serviceSpecificConfig?.to) {
-                    payload = {
-                        "contentUrls": [
-                            sasUrl
-                        ],
-                        "properties": {
-                            "wordLevelTimestampsEnabled": true
-                        },
-                        "locale": input.serviceSpecificConfig.to,
-                        "displayName": "Transcription of file using default model for en-US"
-                    }
-                }
-                const axiosParams: AxiosRequestConfig = {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
-                    }
-                }
-                axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
-                httpResult = axiosResp.status
-            } catch (err) {
-                if (err.response.status === 429) {
-                    httpResult = err.response.status
-                    console.log('429.1')
-                    await this._delay(5000)
-                } else {
-                    throw new Error(err)
-                }
+        //while (httpResult === 429) {
+        //try {
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.pipeline}/${filename}`) // can throw 429
+        const sasUrl = await blobClient.generateSasUrl(options)
+        let payload = {
+            "contentUrls": [
+                sasUrl
+            ],
+            "properties": {
+                "wordLevelTimestampsEnabled": true
+            },
+            "locale": "en-US",
+            "displayName": "Transcription of file using default model for en-US"
+        }
+        if (input?.serviceSpecificConfig?.to) {
+            payload = {
+                "contentUrls": [
+                    sasUrl
+                ],
+                "properties": {
+                    "wordLevelTimestampsEnabled": true
+                },
+                "locale": input.serviceSpecificConfig.to,
+                "displayName": "Transcription of file using default model for en-US"
             }
         }
+        const axiosParams: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
+            }
+        }
+        axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
+        httpResult = axiosResp.status
+        // } catch (err) {
+        //     if (err.response.status === 429) {
+        //         httpResult = err.response.status
+        //         console.log('429.1')
+        //         await this._delay(5000)
+        //     } else {
+        //         throw new Error(err)
+        //     }
+        // }
+        //}
         input.aggregatedResults["speechToText"] = {
             location: axiosResp.headers.location,
             stage: "stt",
