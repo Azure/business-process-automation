@@ -39,7 +39,7 @@ export class Speech {
         let axiosResp: AxiosResponse
         //while (httpResult === 429) {
         //try {
-        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.pipeline}/${filename}`) // can throw 429
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename) // can throw 429
         const sasUrl = await blobClient.generateSasUrl(options)
         let payload = {
             "contentUrls": [

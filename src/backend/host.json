@@ -13,14 +13,11 @@
     "version": "[3.3.0, 4.0.0)"
   },
   "extensions": {
-    "queues": {
-      "batchSize": 1
-    },
     "serviceBus": {
-      "prefetchCount": 1,
+      "prefetchCount": 10,
       "messageHandlerOptions": {
           "autoComplete": true,
-          "maxConcurrentCalls": 1,
+          "maxConcurrentCalls": 10,
           "maxAutoRenewDuration": "00:05:00"
       },
       "batchOptions": {

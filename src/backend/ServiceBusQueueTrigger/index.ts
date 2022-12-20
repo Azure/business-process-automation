@@ -11,7 +11,7 @@ const _ = require('lodash')
 const serviceBusQueueTrigger: AzureFunction = async function (context: Context, mySbMsg: any): Promise<void> {
 
 
-    context.log('ServiceBus queue trigger function processed message', mySbMsg);
+    //context.log('ServiceBus queue trigger function processed message', mySbMsg);
     if (mySbMsg?.type && mySbMsg.type === 'async transaction') {
         console.log('async transaction')
         if (mySbMsg?.aggregatedResults["speechToText"]?.location) {
@@ -80,12 +80,17 @@ const serviceBusQueueTrigger: AzureFunction = async function (context: Context, 
     else {
         let directoryName = ""
         let filename = ""
+        //let fullName = ""
         if(mySbMsg?.filename){
             directoryName = mySbMsg.pipeline
             filename = mySbMsg.fileName
+            //fullName = directoryName + '/' + filename
         } else{
-            filename = mySbMsg.subject.split("/")[mySbMsg.subject.split("/").length - 1]
-            directoryName = mySbMsg.subject.split("/")[6]
+            //filename = mySbMsg.subject.split("/")[mySbMsg.subject.split("/").length - 1]
+            filename = mySbMsg.subject.split("/documents/blobs/")[1]
+            directoryName = filename.split('/')[0]
+            //fullName = fullName.replace(directoryName+'/',"")
+        
             context.log(`Name of source doc : ${filename}`)
         }
         
@@ -126,7 +131,7 @@ const serviceBusQueueTrigger: AzureFunction = async function (context: Context, 
             out = await engine.processAsync(mySbMsg, mySbMsg.index, bpaConfig)
         } else{
             const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-            const myBuffer = await blob.getBuffer(directoryName + "/" + filename)
+            const myBuffer = await blob.getBuffer(filename)
             out = await engine.processFile(myBuffer, filename, bpaConfig)
         }
         
