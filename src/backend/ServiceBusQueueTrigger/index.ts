@@ -51,7 +51,7 @@ const serviceBusQueueTrigger: AzureFunction = async function (context: Context, 
                         mySbMsg.type = "text"
                         mySbMsg.index = index + 1
                         mySbMsg.data = result
-                        await db.create(mySbMsg)
+                        //await db.create(mySbMsg)
                     }
                 }
                 const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
