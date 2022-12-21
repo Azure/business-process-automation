@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - container
 
 env:
   AZURE_FUNCTIONAPP_NAME: bpatestjph13    # set this to your application's name
@@ -38,7 +38,11 @@ jobs:
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+<<<<<<< HEAD
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_ODSC }}
+=======
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP2_PUBLISH_PROFILE }}
+>>>>>>> aa5c005c69506c457a2bf74a146b2fa4e6b5162f
 
   build-and-deploy-python:
     runs-on: ubuntu-latest
@@ -64,4 +68,8 @@ jobs:
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME_PYTHON }}
         package: ${{ env.AZURE_FUNCTIONAPP_PYTHON_PACKAGE_PATH }}
+<<<<<<< HEAD
         publish-profile: ${{ secrets.AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE_ODSC }}
+=======
+        publish-profile: ${{ secrets.AZURE_HF_FUNCTIONAPP_PUBLISH_PROFILE }}
+>>>>>>> aa5c005c69506c457a2bf74a146b2fa4e6b5162f
