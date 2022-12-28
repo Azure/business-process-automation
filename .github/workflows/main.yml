@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - container
+      - main
 
 env:
   AZURE_FUNCTIONAPP_NAME: bpatestjph13    # set this to your application's name

@@ -1,0 +1,193 @@
+# Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+frontendClientReplicaCount: 1
+
+frontendClientImage:
+  repository: "bpafrontend-client"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+frontendClientService:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  hosts:
+    - host: kubernetes.docker.internal
+      paths:
+        - path: "/"
+          pathType: Prefix
+          backend:
+            service:
+              name: bpa-frontend-client
+              port:
+                number: 8080
+        - path: "/api"
+          pathType: Prefix
+          backend:
+            service:
+              name: bpa-frontend-server
+              port:
+                number: 8080
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+        
+
+frontendClientResources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+frontendClientAutoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  #####################################################################################################
+
+  # Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+frontendServerReplicaCount: 1
+
+frontendServerImage:
+  repository: "bpafrontend-server"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+frontendServerService:
+  type: ClusterIP
+  port: 8080
+  
+
+frontendServerResources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+frontendServerAutoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+frontendServerSecrets:
+  - name: COSMOS_DB_CONNECTION_STRING
+    value: "AccountEndpoint=https://bpatest02.documents.azure.com:443/;AccountKey=aBL64rQ76WjeHgPCHJAySc4NPJLoCYAXqB0E8ie001j3dOQAd8z78gR91Bj08CfBIKZz8amAF1TPACDbbZtfVQ==;"
+  - name: COSMOS_DB_DB
+    value: "bpatest02"
+  - name: COSMOS_DB_CONTAINER
+    value: "bpatest02"
+  - name: FUNCTIONS_WORKER_RUNTIME
+    value: "node"
+  - name: BLOB_STORAGE_CONNECTION_STRING
+    value: "DefaultEndpointsProtocol=https;AccountName=bpatest02;AccountKey=LBqEzgPBnRx00ro7jXFSyklPtgslMhiN2GVbzIeuq6IwyWNBCmvk0TGBEn73HHWlT71P4YvXkJGc+AStBWFqlQ==;EndpointSuffix=core.windows.net"
+  - name: COGSEARCH_APIKEY
+    value: "9yZttCjFAbf4a3Rh0XKHSeigwOyoWusOUSFzo0d6pGAzSeAMOI1w"
+  - name: COGSEARCH_URL
+    value: "https://bpatest02.search.windows.net"
+
+
+#####################################################################################################
+
+  # Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+backendReplicaCount: 1
+
+backendImage:
+  repository: "bpabackend"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+backendService:
+  type: ClusterIP
+  port: 8080
+  
+
+backendResources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+backendAutoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+backendSecrets:
+  - name: COSMOSDB_CONNECTION_STRING
+    value: ""

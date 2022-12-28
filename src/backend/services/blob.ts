@@ -78,9 +78,9 @@ export class Blob {
         return result
     }
 
-    public getLanguagePricing = (numDocuments : number) : number => {
-        return 25.0
-    }
+    // public getLanguagePricing = (numDocuments : number) : number => {
+    //     return 25.0
+    // }
 
     
 }
