@@ -134,20 +134,7 @@ frontendServerAutoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 frontendServerSecrets:
-  - name: COSMOS_DB_CONNECTION_STRING
-    value: "AccountEndpoint=https://bpatest02.documents.azure.com:443/;AccountKey=aBL64rQ76WjeHgPCHJAySc4NPJLoCYAXqB0E8ie001j3dOQAd8z78gR91Bj08CfBIKZz8amAF1TPACDbbZtfVQ==;"
-  - name: COSMOS_DB_DB
-    value: "bpatest02"
-  - name: COSMOS_DB_CONTAINER
-    value: "bpatest02"
-  - name: FUNCTIONS_WORKER_RUNTIME
-    value: "node"
-  - name: BLOB_STORAGE_CONNECTION_STRING
-    value: "DefaultEndpointsProtocol=https;AccountName=bpatest02;AccountKey=LBqEzgPBnRx00ro7jXFSyklPtgslMhiN2GVbzIeuq6IwyWNBCmvk0TGBEn73HHWlT71P4YvXkJGc+AStBWFqlQ==;EndpointSuffix=core.windows.net"
-  - name: COGSEARCH_APIKEY
-    value: "9yZttCjFAbf4a3Rh0XKHSeigwOyoWusOUSFzo0d6pGAzSeAMOI1w"
-  - name: COGSEARCH_URL
-    value: "https://bpatest02.search.windows.net"
+
 
 
 #####################################################################################################
@@ -189,5 +176,4 @@ backendAutoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 backendSecrets:
-  - name: COSMOSDB_CONNECTION_STRING
-    value: ""
+
