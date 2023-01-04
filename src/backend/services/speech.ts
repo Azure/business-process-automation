@@ -3,7 +3,7 @@ import { BpaServiceObject } from '../engine/types'
 import { BlobServiceClient, ContainerClient, BlockBlobClient, ContainerGenerateSasUrlOptions, ContainerSASPermissions } from "@azure/storage-blob"
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { CosmosDB } from "./cosmosdb";
+//import { CosmosDB } from "./cosmosdb";
 
 
 export class Speech {
@@ -11,14 +11,12 @@ export class Speech {
     private _client: sdk.SpeechConfig
     private _blobServiceClient: BlobServiceClient
     private _blobContainerClient: ContainerClient
-    private _cosmosDb: CosmosDB
 
     constructor(subscriptionKey: string, region: string, connectionString: string, containerName: string, cosmosConnectionString: string, cosmosDb: string, cosmosContainer: string) {
         this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
         this._client.setProfanity(sdk.ProfanityOption.Raw)
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
-        this._cosmosDb = new CosmosDB(cosmosConnectionString, cosmosDb, cosmosContainer)
     }
 
     private _delay = (ms: number) => {

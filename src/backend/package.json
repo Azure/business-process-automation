@@ -28,6 +28,8 @@
     "express": "^4.18.2",
     "lodash": "^4.17.21",
     "microsoft-cognitiveservices-speech-sdk": "^1.24.1",
+    "mongodb": "^4.13.0",
+    "parse-multipart": "^1.0.4",
     "pdf-lib": "^1.17.1",
     "uuidv4": "^6.2.13",
     "xml2js": "^0.4.23"

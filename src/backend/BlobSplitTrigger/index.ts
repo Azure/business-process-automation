@@ -1,7 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions"
-import { Blob } from "../services/blob"
+import { BlobStorage } from "../services/storage"
 
-const blob : Blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
+const blob : BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 
 const blobTrigger: AzureFunction = async function (context: Context, myBlob: Buffer): Promise<void> {
     try {

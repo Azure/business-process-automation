@@ -32,6 +32,13 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.frontendServerImage.repository }}:{{ .Values.frontendServerImage.tag | default .Chart.AppVersion }}"
+          env:
+            - name: USE_LOCAL_STORAGE
+              value: !!str {{ .Values.localStorage }}
+            - name: BACKEND_PORT
+              value: !!str {{ .Values.backendPort }}
+            - name: BACKEND_HOST
+              value: !!str {{ .Values.backendHost }}
           envFrom:
           - secretRef:
               name: "{{ .Chart.Name }}-frontend-server"

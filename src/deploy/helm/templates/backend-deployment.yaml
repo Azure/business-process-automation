@@ -27,15 +27,27 @@ spec:
       serviceAccountName: {{ include "helm.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes: 
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.backendImage.repository }}:{{ .Values.backendImage.tag | default .Chart.AppVersion }}"
+          env:
+            - name: USE_LOCAL_STORAGE
+              value: !!str {{ .Values.localStorage }}
+            - name: LOCAL_STORAGE_DIR
+              value: !!str {{ .Values.localStorageDir }}
           envFrom:
           - secretRef:
               name: "{{ .Chart.Name }}-backend"
           imagePullPolicy: {{ .Values.backendImage.pullPolicy }}
+          volumeMounts: 
+            - mountPath: "/mydata"
+              name: task-pv-storage
           ports:
             - name: http
               containerPort: 80

@@ -15,5 +15,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/AsyncCompletion/index.js"
+  "scriptFile": "../dist/DocumentTrigger/index.js"
 }
