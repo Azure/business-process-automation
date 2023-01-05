@@ -15,6 +15,7 @@ export abstract class DB {
         this._pipelinesLabel = "pipelines"
     }
 
+    public abstract count() : Promise<any>;
     public abstract create(data: any) : Promise<any>;
     public abstract getConfig() : Promise<any>;
     public abstract delete(id: string) : Promise<any>;
@@ -26,6 +27,20 @@ export class MongoDB extends DB {
     constructor(connectionString : string, dbName : string, containerName : string) {
         super(connectionString, dbName, containerName)
         this._mongoClient = new MongoClient(connectionString)
+    }
+
+    public count = async () : Promise<number> => {
+        try {
+            await this._mongoClient.connect()
+            const db = this._mongoClient.db(this._dbName)
+            const collection = db.collection(this._containerName)
+            return await collection.countDocuments()
+        } catch (err) {
+            console.log(err)
+        } finally{
+            this._mongoClient.close()
+        }
+        return -1
     }
 
     public create = async (data) : Promise<any> => {
@@ -99,6 +114,20 @@ export class CosmosDB extends DB {
     constructor(connectionString : string, dbName : string, containerName : string) {
         super(connectionString, dbName, containerName)
         
+    }
+
+    public count = async () : Promise<number> => {
+
+        const client = new CosmosClient(this._connectionString);
+        const database = client.database(this._dbName);
+        const container = database.container(this._containerName);
+        const out = await container.items.query('SELECT VALUE COUNT(1) FROM c', {maxItemCount: -1}).fetchAll();
+        
+        if(out?.resources.length > 0){
+            return out.resources[0]
+        } 
+
+        return 0
     }
 
     public create = async (data : any) : Promise<any> => {

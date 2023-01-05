@@ -12,6 +12,7 @@
   "dependencies": {
     "@azure/cosmos": "^3.15.1",
     "@azure/search-documents": "^11.3.0",
+    "@azure/service-bus": "^7.7.3",
     "@azure/storage-blob": "^12.9.0",
     "axios": "^0.26.1",
     "http-status-enum": "^1.0.2",
