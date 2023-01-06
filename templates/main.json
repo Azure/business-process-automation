@@ -751,7 +751,9 @@
         "BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
         "BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]",
         "COGSEARCH_APIKEY": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
-        "COGSEARCH_URL": "[parameters('cogSearchUrl')]"
+        "COGSEARCH_URL": "[parameters('cogSearchUrl')]",
+        "SERVICE_BUS_CONNECTION_STRING" : "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
+        "USE_LOCAL_STORAGE":"false"
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
