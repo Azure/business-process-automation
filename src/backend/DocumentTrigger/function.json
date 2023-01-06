@@ -15,5 +15,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/CustomSkill/index.js"
+  "scriptFile": "../dist/DocumentTrigger/index.js"
 }

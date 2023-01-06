@@ -1,10 +1,10 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { serviceCatalog } from "../engine/serviceCatalog"
 import { BpaConfiguration, BpaPipelines, BpaService } from "../engine/types"
-import { CosmosDB } from "../services/cosmosdb"
+import { CosmosDB } from "../services/db"
 const _ = require('lodash')
 
-const blobTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+const priceTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
     const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
     
@@ -23,7 +23,7 @@ const blobTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
         const pipelineName = req.query["pipeline"]
         
-        context.log(`Name of source doc : ${context.bindingData.blobTrigger}`)
+        context.log(`Name of source doc : ${context.bindingData.priceTrigger}`)
         
         const config : BpaPipelines = await db.getConfig()
         const bpaConfig: BpaConfiguration = {
@@ -81,4 +81,4 @@ const blobTrigger: AzureFunction = async function (context: Context, req: HttpRe
     }
 };
 
-export default blobTrigger;
+export default priceTrigger;

@@ -1,0 +1,28 @@
+{{- if .Values.frontendClientAutoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "helm.fullname" . }}-frontend-client
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "helm.fullname" . }}
+  minReplicas: {{ .Values.frontendClientAutoscaling.minReplicas }}
+  maxReplicas: {{ .Values.frontendClientAutoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.frontendClientAutoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.frontendClientAutoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.frontendClientAutoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.frontendClientAutoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
