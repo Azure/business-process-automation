@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "mySbMsg",
+      "type": "rabbitMQTrigger",
+      "direction": "in",
+      "queueName": "upload",
+      "connection": "AzureWebJobsRabbitMQ"
+    }
+  ],
+  "scriptFile": "../dist/RabbitMQTrigger/index.js"
+}

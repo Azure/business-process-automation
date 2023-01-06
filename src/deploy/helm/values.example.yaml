@@ -1,0 +1,280 @@
+# Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+frontendClientReplicaCount: 1
+
+frontendClientImage:
+  repository: "bpafrontend-client"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+frontendClientService:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  hosts:
+    - host: kubernetes.docker.internal
+      paths:
+        - path: "/"
+          pathType: Prefix
+          backend:
+            service:
+              name: bpa-frontend-client
+              port:
+                number: 8080
+        - path: "/api"
+          pathType: Prefix
+          backend:
+            service:
+              name: bpa-frontend-server
+              port:
+                number: 8080
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+        
+
+frontendClientResources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+frontendClientAutoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+volumes:
+  enabled: true
+
+volumeMounts:
+  enabled: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+  #####################################################################################################
+
+  # Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+frontendServerReplicaCount: 1
+
+frontendServerImage:
+  repository: "bpafrontend-server"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+frontendServerService:
+  type: ClusterIP
+  port: 8080
+  
+
+frontendServerResources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+frontendServerAutoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+localStorage: "false"
+backendPort: 8080
+backendHost: bpa-backend
+localStorageDir: ""
+
+
+frontendServerSecrets:
+  - name: MONGO_DB_CONNECTION_STRING
+    value: "mongodb+srv://..."
+  - name: MONGO_DB_CONTAINER
+    value: ""
+  - name: MONGO_DB_DB
+    value: ""
+  - name: COSMOS_DB_CONNECTION_STRING
+    value: "AccountEndpoint=..."
+  - name: COSMOS_DB_DB
+    value: ""
+  - name: COSMOS_DB_CONTAINER
+    value: ""
+  - name: FUNCTIONS_WORKER_RUNTIME
+    value: "node"
+  - name: BLOB_STORAGE_CONNECTION_STRING
+    value: "DefaultEndpointsProtocol=..."
+  - name: BLOB_STORAGE_CONTAINER
+    value: "documents"
+  - name: COGSEARCH_APIKEY
+    value: ""
+  - name: COGSEARCH_URL
+    value: ""
+
+
+
+#####################################################################################################
+
+  # Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+backendReplicaCount: 1
+
+backendImage:
+  repository: "bpabackend"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+backendService:
+  type: ClusterIP
+  port: 8080
+  
+
+backendResources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+backendAutoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+backendSecrets:
+  - name: MONGODB_CONNECTION_STRING
+    value: ""
+  - name: MONGODB_CONTAINER_NAME
+    value: ""
+  - name: MONGODB_DB_NAME
+    value: ""
+  - name: COSMOSDB_CONNECTION_STRING
+    value: ""
+  - name: COSMOSDB_CONTAINER_NAME
+    value: ""
+  - name: COSMOSDB_DB_NAME
+    value: ""
+  - name: FUNCTIONS_WORKER_RUNTIME
+    value: "node"
+  - name: AzureWebJobsStorage
+    value: ""
+  - name: COGSEARCH_APIKEY
+    value: ""
+  - name: COGSEARCH_URL
+    value: ""
+  - name: AzureWebJobsServiceBus
+    value: ""
+  - name: AzureWebJobsRabbitMQ
+    value: ""
+  - name: BLOB_STORAGE_ACCOUNT_NAME
+    value: ""
+  - name: BLOB_STORAGE_ACCOUNT_KEY
+    value: ""
+  - name: BLOB_STORAGE_CONTAINER
+    value: ""
+  - name: BLOB_STORAGE_SPLIT_CONTAINER
+    value: ""
+  - name: CONTENT_MODERATOR_ENDPOINT
+    value: ""
+  - name: CONTENT_MODERATOR_KEY
+    value: ""
+  - name: DOCUMENT_TRANSLATION_ENDPOINT
+    value: "nil"
+  - name: DOCUMENT_TRANSLATION_KEY
+    value: "nil"
+  - name: FORMREC_APIKEY
+    value: ""
+  - name: FORMREC_ENDPOINT
+    value: ""
+  - name: OCR_APIKEY
+    value: ""
+  - name: OCR_ENDPOINT
+    value: ""
+  - name: SPEECH_SUB_KEY
+    value: ""
+  - name: SPEECH_SUB_REGION
+    value: ""
+  - name: SPEECH_SUB_ENDPOINT
+    value: ""
+  - name: TRANSLATE_APIKEY
+    value: ""
+  - name: TRANSLATE_ENDPOINT
+    value: ""
+  - name: TRANSLATE_REGION
+    value: ""
+  - name: LANGUAGE_STUDIO_PREBUILT_ENDPOINT
+    value: ""
+  - name: LANGUAGE_STUDIO_PREBUILT_APIKEY
+    value: ""
+  - name: VIDEO_INDEXER_LOCATION
+    value: "nil"
+  - name: VIDEO_INDEXER_APIKEY
+    value: "nil"

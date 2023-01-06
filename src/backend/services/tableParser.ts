@@ -1,12 +1,12 @@
 import { BpaServiceObject } from "../engine/types";
-import { CosmosDB } from "../services/cosmosdb"
+import { DB } from "../services/db"
 
 
 export class TableParser {
 
-    private _db: CosmosDB
+    private _db: DB
 
-    constructor(cosmosDb: CosmosDB) {
+    constructor(cosmosDb: DB) {
         this._db = cosmosDb
     }
 

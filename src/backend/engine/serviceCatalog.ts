@@ -1,4 +1,4 @@
-import { CosmosDB } from "../services/cosmosdb"
+import { CosmosDB } from "../services/db"
 import { LanguageStudio } from "../services/language"
 import { Speech } from '../services/speech'
 import { Ocr } from "../services/ocr"
@@ -11,14 +11,14 @@ import { Preprocess } from "../services/preprocess"
 import { DocumentTranslation } from "../services/documentTranslation"
 import { AutoMlNer } from "../services/automlner"
 import { ChangeOutput } from "../services/changeOutput"
-import { Blob } from "../services/blob"
+import { BlobStorage } from "../services/storage"
 import { ContentModerator } from "../services/contentModerator"
 import { Xml } from "../services/xml"
 import { VideoIndexer } from "../services/videoIndexer"
 import { TableParser } from "../services/tableParser"
 
 const changeOutput = new ChangeOutput()
-const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
+const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
@@ -344,20 +344,6 @@ const ocrService : BpaService = {
     }
 }
 
-const viewService : BpaService = {
-    inputTypes: ["any"],
-    outputTypes: ["any"],
-    name: "view",
-    bpaServiceId: "abc123",
-    process: cosmosDb.view,
-    serviceSpecificConfig: {
-
-    },
-    serviceSpecificConfigDefaults: {
-
-    }
-}
-
 const extractSummary : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["text"],
@@ -554,7 +540,6 @@ const xmlToJsonService : BpaService = {
 export const serviceCatalog = {
     // "copy" : copyService,
     "ocrService" : ocrService, 
-    "viewService" : viewService,
     "extractSummary" : extractSummary,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
