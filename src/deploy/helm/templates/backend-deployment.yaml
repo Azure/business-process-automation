@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-backend
+  labels:
+    app: {{ include "helm.fullname" . }}-backend
+spec:
+  {{- if not .Values.backendAutoscaling.enabled }}
+  replicas: {{ .Values.backendReplicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "helm.fullname" . }}-backend
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "helm.fullname" . }}-backend
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes: 
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.backendImage.repository }}:{{ .Values.backendImage.tag | default .Chart.AppVersion }}"
+          env:
+            - name: USE_LOCAL_STORAGE
+              value: !!str {{ .Values.localStorage }}
+            - name: LOCAL_STORAGE_DIR
+              value: !!str {{ .Values.localStorageDir }}
+          envFrom:
+          - secretRef:
+              name: "{{ .Chart.Name }}-backend"
+          imagePullPolicy: {{ .Values.backendImage.pullPolicy }}
+          volumeMounts: 
+            - mountPath: "/mydata"
+              name: task-pv-storage
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.backendResources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

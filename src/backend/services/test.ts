@@ -1,4 +1,4 @@
-import { CosmosDB } from "../services/cosmosdb"
+import { CosmosDB } from "../services/db"
 import { LanguageStudio } from "../services/language"
 import { Speech } from '../services/speech'
 import { Ocr } from "../services/ocr"

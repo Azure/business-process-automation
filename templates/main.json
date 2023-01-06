@@ -42,10 +42,6 @@
       "type": "string",
       "defaultValue": "[format('https://{0}.search.windows.net', parameters('projectName'))]"
     },
-    // "formrecName": {
-    //   "type": "string",
-    //   "defaultValue": "[parameters('projectName')]"
-    // },
     "docTranslatorAccountName": {
       "type": "string",
       "defaultValue": "[format('doctranslator{0}', parameters('projectName'))]"
@@ -173,29 +169,27 @@
       "metadata": {
         "description": "Maximum throughput for the container"
       }
+    },
+    "serviceBusQueueName": {
+      "type": "string",
+      "defaultValue": "upload"
+    },
+    "eventSubName": {
+      "type": "string",
+      "defaultValue": "bpa",
+      "metadata": {
+        "description": "Provide a name for the Event Grid subscription."
+      }
+    },
+    "systemTopicName": {
+      "type": "string",
+      "defaultValue": "[parameters('projectName')]",
+      "metadata": {
+        "description": "Provide a name for the system topic."
+      }
     }
   },
   "variables": {
-    // "formrecDefaultVNetName": "frCSDefaultVNet9901",
-    // "formrecDefaultSubnetName": "frCSDefaultSubnet9901",
-    // "formrecDefaultAddressPrefix": "13.41.6.0/26",
-    // "formrecLocation": "eastus2",
-    // "formrecSku": "S0",
-    // "formrecTagValues": {},
-    // "formrecVnet": {},
-    // "formrecIpRules": [],
-    // "formrecVirtualNetworkType": "None",
-    // "formrecIdentity": {
-    //   "type": "None"
-    // },
-    // "formrecPrivateEndpoints": [],
-    // "formrecIsCommitmentPlanForDisconnectedContainerEnabled": false,
-    // "formrecCommitmentPlanForDisconnectedContainer": {
-    //   "current": {},
-    //   "hostingModel": "DisconnectedContainer",
-    //   "planType": "CustomInvoice",
-    //   "autoRenew": true
-    // },
     "storageAccountSkuName": "[if(equals(parameters('environmentType'), 'prod'), 'Standard_GRS', 'Standard_LRS')]",
     "accountName_var": "[toLower(parameters('accountName'))]",
     "consistencyPolicy": {
@@ -227,6 +221,55 @@
   },
   "resources": [
     {
+      "type": "Microsoft.ServiceBus/namespaces",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[parameters('projectName')]",
+      "location": "[parameters('primaryRegion')]",
+      "sku": {
+        "name": "Standard",
+        "tier": "Standard"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[format('{0}/{1}', parameters('projectName'), parameters('serviceBusQueueName'))]",
+      "properties": {
+        "lockDuration": "PT5M",
+        "maxSizeInMegabytes": 1024,
+        "requiresDuplicateDetection": true,
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
+        "deadLetteringOnMessageExpiration": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 3,
+        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+        "enablePartitioning": false,
+        "enableExpress": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/authorizationrules",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[format('{0}/mypolicy', parameters('projectName'))]",
+      "location": "[parameters('primaryRegion')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]"
+      ],
+      "properties": {
+        "rights": [
+          "Listen",
+          "Manage",
+          "Send"
+        ]
+      }
+    },
+
+    {
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2022-03-01",
       "name": "[parameters('docTranslatorAccountName')]",
@@ -243,173 +286,6 @@
         "publicNetworkAccess": "Enabled"
       }
     },
-    // {
-    //   "type": "Microsoft.Resources/deployments",
-    //   "apiVersion": "2017-05-10",
-    //   "name": "deployVnet",
-    //   "properties": {
-    //     "mode": "Incremental",
-    //     "template": {
-    //       "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    //       "contentVersion": "1.0.0.0",
-    //       "parameters": {},
-    //       "variables": {},
-    //       "resources": [
-    //         {
-    //           "type": "Microsoft.Network/virtualNetworks",
-    //           "apiVersion": "2020-04-01",
-    //           "name": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].name, variables('formrecDefaultVNetName'))]",
-    //           "location": "[variables('formrecLocation')]",
-    //           "properties": {
-    //             "addressSpace": {
-    //               "addressPrefixes": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].addressPrefixes, json(concat('[{\"', variables('formrecDefaultAddressPrefix'),'\"}]')))]"
-    //             },
-    //             "subnets": [
-    //               {
-    //                 "name": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].subnets.subnet.name, variables('formrecDefaultSubnetName'))]",
-    //                 "properties": {
-    //                   "serviceEndpoints": [
-    //                     {
-    //                       "service": "Microsoft.CognitiveServices",
-    //                       "locations": [
-    //                         "[variables('formrecLocation')]"
-    //                       ]
-    //                     }
-    //                   ],
-    //                   "addressPrefix": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), variables('formrecVnet')[copyIndex()].subnets.subnet.addressPrefix, variables('formrecDefaultAddressPrefix'))]"
-    //                 }
-    //               }
-    //             ]
-    //           }
-    //         }
-    //       ]
-    //     },
-    //     "parameters": {}
-    //   },
-    //   "condition": "[and(and(not(empty(variables('formrecVnet'))), equals(variables('formrecVnet')[copyIndex()].newOrExisting, 'new')), equals(variables('formrecVirtualNetworkType'), 'External'))]"
-    // },
-    // {
-    //   "apiVersion": "2021-04-30",
-    //   "name": "[parameters('formrecName')]",
-    //   "location": "[variables('formrecLocation')]",
-    //   "type": "Microsoft.CognitiveServices/accounts",
-    //   "kind": "FormRecognizer",
-    //   "tags": "[if(contains(variables('formrecTagValues'), 'Microsoft.CognitiveServices/accounts'), variables('formrecTagValues')['Microsoft.CognitiveServices/accounts'], json('{}'))]",
-    //   "sku": {
-    //     "name": "[variables('formrecSku')]"
-    //   },
-    //   "identity": "[variables('formrecIdentity')]",
-    //   "properties": {
-    //     "customSubDomainName": "[toLower(parameters('formrecName'))]",
-    //     "publicNetworkAccess": "[if(equals(variables('formrecVirtualNetworkType'), 'Internal'), 'Disabled', 'Enabled')]",
-    //     "networkAcls": {
-    //       "defaultAction": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), 'Deny', 'Allow')]",
-    //       "virtualNetworkRules": "[if(equals(variables('formrecVirtualNetworkType'), 'External'), json(concat('[{\"id\": \"', concat(subscription().id, '/resourceGroups/', variables('formrecVnet')[copyIndex()].resourceGroup, '/providers/Microsoft.Network/virtualNetworks/', variables('formrecVnet')[copyIndex()].name, '/subnets/', variables('formrecVnet')[copyIndex()].subnets.subnet.name), '\"}]')), json('[]'))]",
-    //       "ipRules": "[if(or(empty(variables('formrecIpRules')), empty(variables('formrecIpRules')[0].value)), json('[]'), variables('formrecIpRules'))]"
-    //     }
-    //   },
-    //   "resources": [
-    //     {
-    //       "type": "commitmentPlans",
-    //       "apiVersion": "2021-10-01",
-    //       "name": "DisconnectedContainer-FormRecognizer-1",
-    //       "properties": "[variables('formrecCommitmentPlanForDisconnectedContainer')]",
-    //       "condition": "[variables('formrecIsCommitmentPlanForDisconnectedContainerEnabled')]",
-    //       "dependsOn": [
-    //         "[parameters('formrecName')]"
-    //       ]
-    //     }
-    //   ],
-
-    //   "dependsOn": [
-    //     "[concat('Microsoft.Resources/deployments/', 'deployVnet')]"
-    //   ]
-    // },
-    // {
-    //   "apiVersion": "2017-05-10",
-    //   "name": "[concat('deployPrivateEndpoint-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name)]",
-    //   "type": "Microsoft.Resources/deployments",
-    //   "resourceGroup": "[variables('formrecPrivateEndpoints')[copyIndex()].resourceGroup.value.name]",
-    //   "subscriptionId": "[variables('formrecPrivateEndpoints')[copyIndex()].subscription.subscriptionId]",
-    //   "dependsOn": [
-    //     "[parameters('formrecName')]"
-    //   ],
-    //   "condition": "[equals(variables('formrecVirtualNetworkType'), 'Internal')]",
-    //   "copy": {
-    //     "name": "privateendpointscopy",
-    //     "count": "[length(variables('formrecPrivateEndpoints'))]"
-    //   },
-    //   "properties": {
-    //     "mode": "Incremental",
-    //     "template": {
-    //       "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    //       "contentVersion": "1.0.0.0",
-    //       "resources": [
-    //         {
-    //           "location": "[variables('formrecLocation')]",
-    //           "name": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name]",
-    //           "type": "Microsoft.Network/privateEndpoints",
-    //           "apiVersion": "2020-03-01",
-    //           "properties": {
-    //             "subnet": {
-    //               "id": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.properties.subnet.id]"
-    //             },
-    //             "privateLinkServiceConnections": [
-    //               {
-    //                 "name": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name]",
-    //                 "properties": {
-    //                   "privateLinkServiceId": "[concat(resourceGroup().id, '/providers/Microsoft.CognitiveServices/accounts/', parameters('formrecName'))]",
-    //                   "groupIds": "[variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.properties.privateLinkServiceConnections[0].properties.groupIds]"
-    //                 }
-    //               }
-    //             ]
-    //           },
-    //           "tags": {}
-    //         }
-    //       ]
-    //     }
-    //   }
-    // },
-    // {
-    //   "apiVersion": "2017-05-10",
-    //   "name": "[concat('deployDnsZoneGroup-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name)]",
-    //   "type": "Microsoft.Resources/deployments",
-    //   "resourceGroup": "[variables('formrecPrivateEndpoints')[copyIndex()].resourceGroup.value.name]",
-    //   "subscriptionId": "[variables('formrecPrivateEndpoints')[copyIndex()].subscription.subscriptionId]",
-    //   "dependsOn": [
-    //     "[concat('Microsoft.Resources/deployments/', concat('deployPrivateEndpoint-', variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name))]"
-    //   ],
-    //   "condition": "[equals(variables('formrecVirtualNetworkType'), 'Internal')]",
-    //   "copy": {
-    //     "name": "privateendpointdnscopy",
-    //     "count": "[length(variables('formrecPrivateEndpoints'))]"
-    //   },
-    //   "properties": {
-    //     "mode": "Incremental",
-    //     "template": {
-    //       "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    //       "contentVersion": "1.0.0.0",
-    //       "resources": [
-    //         {
-    //           "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-    //           "apiVersion": "2020-03-01",
-    //           "name": "[concat(variables('formrecPrivateEndpoints')[copyIndex()].privateEndpoint.name, '/', 'default')]",
-    //           "location": "[variables('formrecLocation')]",
-    //           "properties": {
-    //             "privateDnsZoneConfigs": [
-    //               {
-    //                 "name": "privatelink-cognitiveservices-azure-com",
-    //                 "properties": {
-    //                   "privateDnsZoneId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/privateDnsZones/privatelink.cognitiveservices.azure.com')]"
-    //                 }
-    //               }
-    //             ]
-    //           }
-    //         }
-    //       ]
-    //     }
-    //   }
-    // },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-08-01",
@@ -465,6 +341,42 @@
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.EventGrid/systemTopics",
+      "apiVersion": "2022-06-15",
+      "name": "[parameters('systemTopicName')]",
+      "location": "[parameters('primaryRegion')]",
+      "properties": {
+        "source": "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]",
+        "topicType": "Microsoft.Storage.StorageAccounts"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+      "apiVersion": "2022-06-15",
+      "name": "[format('{0}/{1}', parameters('systemTopicName'), parameters('eventSubName'))]",
+      "properties": {
+        "destination": {
+          "properties": {
+            "resourceId": "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]"
+          },
+          "endpointType": "ServiceBusQueue"
+        },
+        "filter": {
+          "includedEventTypes": [
+            "Microsoft.Storage.BlobCreated"
+          ],
+          "subjectBeginsWith": "/blobServices/default/containers/documents"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.EventGrid/systemTopics', parameters('systemTopicName'))]",
+        "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]"
       ]
     },
     {
@@ -581,20 +493,20 @@
       }
     },
     {
-        "apiVersion": "2021-04-01-Preview",
-        "name": "[parameters('cogSearchName')]",
-        "location": "[parameters('primaryRegion')]",
-        "type": "Microsoft.Search/searchServices",
-        "sku": {
-            "name": "standard"
-        },
-        "properties": {
-            "replicaCount": 1,
-            "partitionCount": 1,
-            "hostingMode": "Default"
-        },
-        "tags": {},
-        "dependsOn": []
+      "apiVersion": "2021-04-01-Preview",
+      "name": "[parameters('cogSearchName')]",
+      "location": "[parameters('primaryRegion')]",
+      "type": "Microsoft.Search/searchServices",
+      "sku": {
+        "name": "standard"
+      },
+      "properties": {
+        "replicaCount": 1,
+        "partitionCount": 1,
+        "hostingMode": "Default"
+      },
+      "tags": {},
+      "dependsOn": []
     },
     {
       "type": "Microsoft.Web/sites",
@@ -672,6 +584,10 @@
             {
               "name": "AzureWebJobsStorage",
               "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
+            },
+            {
+              "name": "AzureWebJobsServiceBus",
+              "value": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]"
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -834,8 +750,10 @@
         "BLOB_STORAGE_CONNECTION_STRING": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]",
         "BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
         "BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]",
-        "COGSEARCH_APIKEY" : "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
-        "COGSEARCH_URL" : "[parameters('cogSearchUrl')]"
+        "COGSEARCH_APIKEY": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
+        "COGSEARCH_URL": "[parameters('cogSearchUrl')]",
+        "SERVICE_BUS_CONNECTION_STRING" : "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
+        "USE_LOCAL_STORAGE":"false"
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
