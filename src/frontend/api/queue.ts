@@ -1,4 +1,4 @@
-const { ServiceBusClient } = require("@azure/service-bus");
+import { ServiceBusAdministrationClient, ServiceBusClient } from "@azure/service-bus"
 
 export class AzureServiceBus {
     constructor() {
@@ -7,11 +7,14 @@ export class AzureServiceBus {
 
     public status = async () => {
         const serviceBusClient = new ServiceBusClient(process.env.SERVICE_BUS_CONNECTION_STRING);
+        const serviceBusAdminClient = new ServiceBusAdministrationClient(process.env.SERVICE_BUS_CONNECTION_STRING)
         // If receiving from a subscription you can use the createReceiver(topicName, subscriptionName) overload
         const queueReceiver = serviceBusClient.createReceiver("upload");
 
         let queuedFiles = []
+        let queueProperties
         try {
+            queueProperties = await serviceBusAdminClient.getQueueRuntimeProperties("upload")
             // peeking messages does not lock or remove messages from a queue or subscription.
             // For locking and/or removal, look at the `receiveMessagesLoop` or `receiveMessagesStreaming` samples,
             // which cover using a receiver with a `receiveMode`.
@@ -20,9 +23,9 @@ export class AzureServiceBus {
             
             queuedFiles = peekedMessages.map((qf)=>{
                 if(qf?.body?.subject){
-                    return `${qf.body.subject}  STATE: ${qf.state}`  
+                    return {filename: qf.body.subject, state : qf.state, isAsync : false}
                 } else if(qf?.body?.filename){
-                    return `${qf.body.filename} ASYNC_TRANSACTION  STATE: ${qf.state}`
+                    return {filename: qf.body.filename, state : qf.state, isAsync : (qf.body.type === 'async transaction')}
                 } 
                 return "unknown message format"
                 
@@ -33,6 +36,6 @@ export class AzureServiceBus {
             await serviceBusClient.close();
         }
 
-        return queuedFiles
+        return { queueProperties : queueProperties, queuedFiles : queuedFiles}
     }
 }

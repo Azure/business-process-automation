@@ -7,7 +7,7 @@ const cogsearchLabel = "cogsearch"
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML","MP4"];
+    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
@@ -21,14 +21,19 @@ function Upload(props) {
 
     useEffect(() => {
         try {
-            setInterval(()=>{
+            axios.get(`/api/status`).then(value => {
+                if (value?.data) {
+                    setQueueStatus(value.data)
+                }
+            })
+            setInterval(() => {
                 axios.get(`/api/status`).then(value => {
-                    if(value?.data){
+                    if (value?.data) {
                         setQueueStatus(value.data)
                     }
                 })
-            }, 3000)
-            
+            }, 5000)
+
 
             axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
                 if (value?.data?.createSkill) {
@@ -41,7 +46,7 @@ function Upload(props) {
             axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
                 if (value?.data?.pipelines) {
                     const names = []
-                    for(const p of value.data.pipelines){
+                    for (const p of value.data.pipelines) {
                         names.push(p.name)
                     }
                     setPipelineNames(names)
@@ -93,27 +98,79 @@ function Upload(props) {
 
     const getContent = () => {
         let count = 0
-        if(queueStatus && queueStatus.count){
+        if (queueStatus && queueStatus.count) {
             count = queueStatus.count
         }
-        return `Total Document Count: ${count}`
+        return `Total Document Count In Database: ${count}`
     }
 
+    const tableCellStyle = { backgroundColor: "white", borderStyle: "solid", borderWidth: "1px", textAlign: "left" }
+
     const getQueuedFiles = () => {
-        if(queueStatus && queueStatus.messages){
-            if(queueStatus.messages.length > 0){
-                return(
-                    <ul>
-                        {queueStatus.messages.map(m => <li>{m}</li>)}
-                    </ul>
+        if (queueStatus && queueStatus.messages.queuedFiles) {
+            if (queueStatus.messages.queuedFiles.length > 0) {
+                return (
+                    <table>
+                        <tr>
+                            <td style={tableCellStyle}>Filename</td>
+                            <td style={tableCellStyle}>State</td>
+                            <td style={tableCellStyle}>Is Async Transaction</td>
+                        </tr>
+                        {queueStatus.messages.queuedFiles.map(f => {
+                            return (
+                                <tr>
+                                    <td style={tableCellStyle}>{f.filename}</td>
+                                    <td style={tableCellStyle}>{f.state}</td>
+                                    <td style={tableCellStyle}>{f.isAsync.toString()}</td>
+                                </tr>
+                            )
+                        })}
+
+
+                    </table>
                 )
-            } else{
-                return(
-                    <Text weight="semibold" content="Empty" style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} />
-                )
+                // <ul>
+                //     {queueStatus.messages.queuedFiles.map(m => {
+                //         if (m?.filename) {
+                //             return (<>1</>)
+                //         } else {
+                //             return (<>2</>)
+                //         }
+                //     })}
+
+                // </ul>
+                //)
             }
-            
+
+
+
         }
+    }
+
+    const getQueueStatus = () => {
+        if (queueStatus?.messages?.queueProperties) {
+            return (
+                <table style={{ marginBottom: "30px" }}>
+                    <tr>
+                        <td style={tableCellStyle}>Active</td>
+                        <td style={tableCellStyle}>Scheduled</td>
+                        <td style={tableCellStyle}>Dead Letter</td>
+                        <td style={tableCellStyle}>Transfer</td>
+                        <td style={tableCellStyle}>Transfer Dead-Letter</td>
+                    </tr>
+                    <tr>
+                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.activeMessageCount}</td>
+                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.scheduledMessageCount}</td>
+                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.deadLetterMessageCount}</td>
+                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.transferMessageCount}</td>
+                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.transferDeadLetterMessageCount}</td>
+                    </tr>
+
+                </table>
+                // <Text weight="semibold" content="Empty" style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} />
+            )
+        }
+
     }
 
     return (
@@ -127,13 +184,15 @@ function Upload(props) {
                 label="Output"
                 items={pipelineNames}
                 onChange={onDropDownChange}
-                style={{paddingBottom : "40px"}}
+                style={{ paddingBottom: "40px" }}
             />
-           
+
             <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
             <Checkbox onClick={onCogSearchClick} checked={isCogSearch} style={{ paddingTop: "20px", marginBottom: "20px" }} label="Create a Cognitive Search Data Source with the output of this document.  Sending more than one document while enabled will generate errors once the Data Source exists." />
             <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} />
-            <Text weight="semibold" content="Queued Files Remaining To Be Processed: " style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} />
+            {/* <Text weight="semibold" content="Queued Files Remaining To Be Processed: " style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} /> */}
+
+            {getQueueStatus()}
             {getQueuedFiles()}
         </div>
     )
