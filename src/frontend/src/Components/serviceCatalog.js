@@ -24,6 +24,21 @@ import wav from '../images/wav.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "simplifyInvoice": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "prebuiltInvoice"
+        ],
+        "outputTypes": [
+            "simpleInvoice"
+        ],
+        "image": invoice,
+        "label": "Convert the Invoice Output to a Simpler Format",
+        "name": "simplifyInvoice",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "tableParser": {
         "bpaServiceId": "abc123",
         "inputTypes": [
