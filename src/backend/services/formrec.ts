@@ -26,10 +26,10 @@ export class FormRec {
         for(const document of input.aggregatedResults.invoice.documents){
             for(const fieldKey of Object.keys(document.fields)){
                 const newObject = document.fields[fieldKey]
-                invoiceEntities[fieldKey+"-content"] = newObject.content
-                invoiceEntities[fieldKey+"-kind"] = newObject.kind
-                invoiceEntities[fieldKey+"-confidence"] = newObject.confidence
-                invoiceEntities[fieldKey+"-value"] = newObject.value
+                invoiceEntities[fieldKey+"Content"] = newObject.content
+                invoiceEntities[fieldKey+"Kind"] = newObject.kind
+                invoiceEntities[fieldKey+"Confidence"] = newObject.confidence
+                invoiceEntities[fieldKey+"Value"] = newObject.value
             }
         }
         const label = "simplifyInvoice"
