@@ -39,6 +39,20 @@ const tableParser = new TableParser(cosmosDb)
 //     return 0
 // }
 
+const simplifyInvoiceService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["invoice"],
+    outputTypes: ["simpleInvoice"],
+    name: "simplifyInvoice",
+    process: formrec.simplifyInvoice,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const tableParserService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["customFormRec","layout","generalDocument"],
@@ -539,6 +553,7 @@ const xmlToJsonService : BpaService = {
 
 export const serviceCatalog = {
     // "copy" : copyService,
+    "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
     "extractSummary" : extractSummary,
     "sttService" : sttService,

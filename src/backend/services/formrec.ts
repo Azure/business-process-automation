@@ -6,8 +6,8 @@ import { PrebuiltDocumentModel } from "./prebuilt/prebuilt-document";
 import { PrebuiltIdDocumentModel } from "./prebuilt/prebuilt-idDocument";
 import { PrebuiltReceiptModel } from "./prebuilt/prebuilt-receipt";
 import { PrebuiltTaxUsW2Model } from "./prebuilt/prebuilt-tax.us.w2";
-
 import { BpaServiceObject } from "../engine/types";
+const _ = require('lodash')
 
 export class FormRec {
 
@@ -20,43 +20,31 @@ export class FormRec {
         )
     }
     
+    public simplifyInvoice = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
-    // public layout = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
-    //     const poller : AnalysisPoller<LayoutResult> = await this._client.beginExtractLayout(input.data)
-    //     const layoutResult : LayoutResult = await poller.pollUntilDone()
-    //     const results = input.aggregatedResults
-    //     results["layout"] = layoutResult
-    //     input.resultsIndexes.push({index : index, name : "layout", type : "layout"})
-    //     return {
-    //         data : layoutResult,
-    //         type : "layout",
-    //         filename: input.filename,
-    //         pipeline: input.pipeline,
-    //         bpaId : input.bpaId,
-    //         label : input.label,
-    //         aggregatedResults : results,
-    //         resultsIndexes : input.resultsIndexes
-    //     }
-    // }
+        const invoiceEntities = []
+        for(const document of input.aggregatedResults.invoice.documents){
+            for(const fieldKey of Object.keys(document.fields)){
+                const newObject = document.fields[fieldKey]
+                invoiceEntities.push({key: fieldKey, kind: newObject.kind, confidence: newObject.confidence, content: newObject.content, value : newObject.value})
+            }
+        }
+        const label = "simplifyInvoice"
+        const results = input.aggregatedResults
+        results[label] = invoiceEntities
+        input.resultsIndexes.push({index : index, name : label, type : label})
+        return {
+            data : invoiceEntities,
+            type : label,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            bpaId : input.bpaId,
+            label : label,
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
+        }
 
-
-    // public generalDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
-    //     const poller : AnalysisPoller<GeneralDocumentResult> = await this._client.beginExtractGeneralDocument(input.data)
-    //     const result : GeneralDocumentResult = await poller.pollUntilDone()
-    //     const results = input.aggregatedResults
-    //     results["generalDocument"] = result
-    //     input.resultsIndexes.push({index : index, name : "generalDocument", type : "generalDocument"})
-    //     return {
-    //         data : result,
-    //         type : "generalDocument",
-    //         filename: input.filename,
-    //         pipeline: input.pipeline,
-    //         bpaId : input.bpaId,
-    //         label : input.label,
-    //         aggregatedResults : results,
-    //         resultsIndexes : input.resultsIndexes
-    //     }
-    // }
+    }
 
     public generalDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocument(input, PrebuiltDocumentModel, "generalDocument", index)
