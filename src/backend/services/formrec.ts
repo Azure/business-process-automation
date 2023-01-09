@@ -22,11 +22,14 @@ export class FormRec {
     
     public simplifyInvoice = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
-        const invoiceEntities = []
+        const invoiceEntities = {}
         for(const document of input.aggregatedResults.invoice.documents){
             for(const fieldKey of Object.keys(document.fields)){
                 const newObject = document.fields[fieldKey]
-                invoiceEntities.push({key: fieldKey, kind: newObject.kind, confidence: newObject.confidence, content: newObject.content, value : newObject.value})
+                invoiceEntities[fieldKey+"-content"] = newObject.content
+                invoiceEntities[fieldKey+"-kind"] = newObject.kind
+                invoiceEntities[fieldKey+"-confidence"] = newObject.confidence
+                invoiceEntities[fieldKey+"-value"] = newObject.value
             }
         }
         const label = "simplifyInvoice"
