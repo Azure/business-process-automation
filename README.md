@@ -236,9 +236,9 @@ Update the three "value" fields below:
   Save updates  
   
 6. Similarly, update your local deploy.yml file within the same directory
-  1. Open the file C:\Users\<UserName>\business-process-automation\templates\deploy.yml
-  2. Update the field AZURE_FUNCTIONAPP_NAME with the name of your ResourceGroup  
-  **Note**: *You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components*
+    1. Open the file C:\Users\<UserName>\business-process-automation\templates\deploy.yml
+    2. Update the field AZURE_FUNCTIONAPP_NAME with the name of your Resource Group  
+    **Note**: *You will later use this file to create a GitHub workflow, kicking off configuration of your Resource Group pipeline components*
   ![](images/updateDeploy_yml.png)  
 
   
@@ -287,13 +287,12 @@ Open the "huggingface" function app and in the "overview" tab there will be a bu
 ## 6. Create Github Action to your Function Apps, deploying your front and back end resources
 1. Navigate to "actions" tab  
 2. Select "new workflow"
-3. Select set up workflow yourself
+3. Select "set up workflow yourself"
   ![](images/set_up_workflow_v3.png)
 4. This will take you to the editor for the main.yml file. 
-Delete all of the contents within the main.yml file. Copy all of the contents from your deploy.yml file from your **local** directory.  
-(C:\Users\[UserName]\business-process-automation\templates\main.json) into the body.  
+Delete all of the contents within the main.yml file. Copy all of the contents from your deploy.yml file from your **local** directory (C:\Users\[UserName]\business-process-automation\templates\deploy.yml) into the body of the editor (see below).  
 ![](images/deploy_yml.png)
-Finally, paste that selection into the editor window.
+
 5. Run the workflow and select commit new file  
   **Note**: *Once you've run your workflow once, you'll want to delete previous workflow runs to prevent buildup of old workflows.*  
     - Select "Start Commit"
