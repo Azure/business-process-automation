@@ -59,14 +59,14 @@ function Upload(props) {
         }
     }, [rerender])
 
-    const onCogSearchClick = async (event) => {
-        try {
-            await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
-        } catch (err) {
-            console.log(err)
-        }
-        setRerender(rerender + 1)
-    }
+    // const onCogSearchClick = async (event) => {
+    //     try {
+    //         await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    //     setRerender(rerender + 1)
+    // }
 
     const onDropDownChange = (event, selected) => {
         setSelectedPipelineName(selected.value)
