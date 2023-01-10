@@ -30,7 +30,7 @@ export class OpenAI {
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
 
         const openAiInput = {
-            "prompt" : input.data + " Summarize the text.",
+            "prompt" : input.data + "\n\n Tl;dr:",
             "max_tokens" : 256
         }
 
