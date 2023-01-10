@@ -3,7 +3,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { Text, Dropdown } from '@fluentui/react-northstar';
 import axios from 'axios'
 
-const cogsearchLabel = "cogsearch"
+//const cogsearchLabel = "cogsearch"
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
@@ -57,7 +57,7 @@ function Upload(props) {
         } catch (err) {
             console.log(err)
         }
-    }, [rerender])
+    }, [])
 
     // const onCogSearchClick = async (event) => {
     //     try {
