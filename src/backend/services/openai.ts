@@ -39,7 +39,7 @@ export class OpenAI {
         results["openaiSummarize"] = out.data
         input.resultsIndexes.push({index : index, name : "openaiSummarize", type : "openaiSummarize"})
         const result : BpaServiceObject = {
-            data : out.data,
+            data : out.data.slice(0,3500),
             type : 'openaiSummarize',
             label : 'openaiSummarize',
             bpaId : input.bpaId,
