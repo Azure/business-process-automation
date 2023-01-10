@@ -20,10 +20,26 @@ import taxw2 from '../images/taxw2.svg'
 import businesscard from '../images/businesscard.svg'
 import storage from '../images/storage.svg'
 import wav from '../images/wav.svg'
+import openai from '../images/openai.svg'
 
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "openai": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "openaiSummarize"
+        ],
+        "image": openai,
+        "label": "OpenAI (Summarize Text)",
+        "name": "openaiSummarize",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "simplifyInvoice": {
         "bpaServiceId": "abc123",
         "inputTypes": [

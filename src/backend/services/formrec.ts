@@ -81,7 +81,59 @@ export class FormRec {
         return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
     } 
 
+    public generalDocumentAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltDocumentModel, "generalDocument", index)
+    }
+
+    public layoutAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltLayoutModel, "layout", index)
+    }
+
+    public prebuiltInvoiceAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltInvoiceModel, "invoice", index)
+    }
+
+    public prebuiltBusinessCardAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltBusinessCardModel, "businessCard", index)
+    }
+
+    public prebuiltIdentityAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltIdDocumentModel, "identity", index)
+    }
+
+    public prebuiltReceiptAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltReceiptModel, "receipt", index)
+    }
+
+    public prebuiltTaxW2Async = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltTaxUsW2Model, "taxw2", index)
+    }
+
+    public customFormrecAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
+    } 
+
+    
+
     private _analyzeDocument = async (input : BpaServiceObject, modelId : any, label : string, index : number) : Promise<BpaServiceObject> => {
+        const poller : AnalysisPoller<AnalyzeResult<AnalyzedDocument>> = await this._client.beginAnalyzeDocument(modelId, input.data)
+        const result : AnalyzeResult<AnalyzedDocument> = await poller.pollUntilDone()
+        const results = input.aggregatedResults
+        results[label] = result
+        input.resultsIndexes.push({index : index, name : label, type : label})
+        return {
+            data : result,
+            type : label,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            bpaId : input.bpaId,
+            label : label,
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
+        }
+    }
+
+    private _analyzeDocumentAsync = async (input : BpaServiceObject, modelId : any, label : string, index : number) : Promise<BpaServiceObject> => {
         const poller : AnalysisPoller<AnalyzeResult<AnalyzedDocument>> = await this._client.beginAnalyzeDocument(modelId, input.data)
         const result : AnalyzeResult<AnalyzedDocument> = await poller.pollUntilDone()
         const results = input.aggregatedResults

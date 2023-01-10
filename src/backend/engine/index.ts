@@ -48,21 +48,12 @@ export class BpaEngine {
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
                 if (currentInput.type === 'async transaction') {
-                    // const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
-                    // const sender = serviceBusClient.createSender("upload")
                     delete currentInput.data
                     delete currentInput.aggregatedResults.buffer
 
                     currentInput.stages = config.stages
                     currentInput.index = stageIndex
                     await mq.sendMessage(currentInput)
-                    // const messages = [
-                    //     { body: currentInput }
-                    // ]
-   
-                    // await sender.sendMessages(messages)
-                    // await sender.close()
-                    // await serviceBusClient.close()
                     break
                 }
             }

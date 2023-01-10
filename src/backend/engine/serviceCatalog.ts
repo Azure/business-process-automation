@@ -16,6 +16,7 @@ import { ContentModerator } from "../services/contentModerator"
 import { Xml } from "../services/xml"
 import { VideoIndexer } from "../services/videoIndexer"
 import { TableParser } from "../services/tableParser"
+import { OpenAI } from "../services/openai"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -34,10 +35,25 @@ const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDP
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
+const openaiSummarize = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
 
 // const noCharge = (documents : number) : number =>{
 //     return 0
 // }
+
+const openaiSummarizeService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["openaiSummarize"],
+    name: "openaiSummarize",
+    process: openaiSummarize.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const simplifyInvoiceService : BpaService = {
     bpaServiceId : "abc123",
@@ -587,6 +603,7 @@ export const serviceCatalog = {
     "contentModeratorImage" : contentModeratorImageService,
     "xmlToJson" : xmlToJsonService,
     "videoIndexer" : videoIndexerService,
-    "tableParser" : tableParserService
+    "tableParser" : tableParserService,
+    "openaiSummarize" : openaiSummarizeService
 }
 
