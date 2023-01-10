@@ -39,7 +39,7 @@ export class OpenAI {
         results["openaiSummarize"] = out.data
         input.resultsIndexes.push({index : index, name : "openaiSummarize", type : "openaiSummarize"})
         const result : BpaServiceObject = {
-            data : out.data.slice(0,3500),
+            data : out.data,
             type : 'openaiSummarize',
             label : 'openaiSummarize',
             bpaId : input.bpaId,
@@ -74,10 +74,10 @@ export class OpenAI {
 
         const out = await axios.post(url, openAiInput, config)
         const results = input.aggregatedResults
-        results["openaiSummarize"] = out.data
+        results["openaiGeneric"] = out.data
         input.resultsIndexes.push({index : index, name : "openaiGeneric", type : "openaiGeneric"})
         const result : BpaServiceObject = {
-            data : out.data.slice(0,3500),
+            data : out.data,
             type : 'openaiGeneric',
             label : 'openaiGeneric',
             bpaId : input.bpaId,
