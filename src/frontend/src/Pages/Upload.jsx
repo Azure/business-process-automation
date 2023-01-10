@@ -35,13 +35,13 @@ function Upload(props) {
             }, 5000)
 
 
-            axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
-                if (value?.data?.createSkill) {
-                    setIsCogSearch(value.data.createSkill)
-                } else {
-                    setIsCogSearch(false)
-                }
-            })
+            // axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
+            //     if (value?.data?.createSkill) {
+            //         setIsCogSearch(value.data.createSkill)
+            //     } else {
+            //         setIsCogSearch(false)
+            //     }
+            // })
 
             axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
                 if (value?.data?.pipelines) {
