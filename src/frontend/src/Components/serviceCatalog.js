@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "openaiGeneric": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "openaiGeneric"
+        ],
+        "image": openai,
+        "label": "OpenAI (Generic)",
+        "name": "openaiGeneric",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "openai": {
         "bpaServiceId": "abc123",
         "inputTypes": [
