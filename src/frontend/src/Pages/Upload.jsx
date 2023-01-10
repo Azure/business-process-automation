@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileUploader } from "react-drag-drop-files";
-import { Text, Checkbox, Dropdown } from '@fluentui/react-northstar';
+import { Text, Dropdown } from '@fluentui/react-northstar';
 import axios from 'axios'
 
 const cogsearchLabel = "cogsearch"
