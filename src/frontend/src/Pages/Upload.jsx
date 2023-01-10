@@ -12,8 +12,8 @@ function Upload(props) {
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
     const [showFail, setShowFail] = useState(false);
-    const [isCogSearch, setIsCogSearch] = useState(false)
-    const [rerender, setRerender] = useState(0)
+    //const [isCogSearch, setIsCogSearch] = useState(false)
+    //const [rerender, setRerender] = useState(0)
     const [pipelineNames, setPipelineNames] = useState([])
     const [selectedPipelineName, setSelectedPipelineName] = useState("")
     const [queueStatus, setQueueStatus] = useState(null)
