@@ -35,18 +35,32 @@ const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDP
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
-const openaiSummarize = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
+const openai = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
 
 // const noCharge = (documents : number) : number =>{
 //     return 0
 // }
+
+const openaiGenericService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["openaiGeneric"],
+    name: "openaiGeneric",
+    process: openai.processGeneric,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const openaiSummarizeService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["text"],
     outputTypes: ["openaiSummarize"],
     name: "openaiSummarize",
-    process: openaiSummarize.process,
+    process: openai.process,
     serviceSpecificConfig: {
         
     },
@@ -604,6 +618,7 @@ export const serviceCatalog = {
     "xmlToJson" : xmlToJsonService,
     "videoIndexer" : videoIndexerService,
     "tableParser" : tableParserService,
-    "openaiSummarize" : openaiSummarizeService
+    "openaiSummarize" : openaiSummarizeService,
+    "openaiGeneric" : openaiGenericService
 }
 
