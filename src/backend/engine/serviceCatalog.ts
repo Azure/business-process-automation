@@ -259,11 +259,111 @@ const layoutBatch : BpaService = {
     }
 }
 
+const generalDocumentBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["generalDocument"],
+    name: "generalDocumentBatch",
+    process: formrec.generalDocumentAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltBusinessCardBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltBusinessCard"],
+    name: "prebuiltBusinessCardBatch",
+    process: formrec.prebuiltBusinessCardAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+
+const prebuiltIdentityBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltIdentity"],
+    name: "prebuiltIdentityBatch",
+    process: formrec.prebuiltIdentityAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltInvoiceBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltInvoice"],
+    name: "prebuiltInvoiceBatch",
+    process: formrec.prebuiltInvoiceAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltReceiptBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltReceipt"],
+    name: "prebuiltReceiptBatch",
+    process: formrec.prebuiltReceiptAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltTaxW2Batch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltTaxW2"],
+    name: "prebuiltTaxW2Batch",
+    process: formrec.prebuiltTaxW2Async,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+
+const customFormRecBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["customFormRec"],
+    name: "customFormRecBatch",
+    process: formrec.customFormrecAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const generalDocument : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["generalDocument"],
-    name: "generalDocument",
+    name: "generalDocumentBatch",
     process: formrec.generalDocument,
     serviceSpecificConfig: {
         
@@ -277,7 +377,7 @@ const prebuiltBusinessCard : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltBusinessCard"],
-    name: "prebuiltBusinessCard",
+    name: "prebuiltBusinessCardBatch",
     process: formrec.prebuiltBusinessCard,
     serviceSpecificConfig: {
         
@@ -292,7 +392,7 @@ const prebuiltIdentity : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltIdentity"],
-    name: "prebuiltIdentity",
+    name: "prebuiltIdentityBatch",
     process: formrec.prebuiltIdentity,
     serviceSpecificConfig: {
         
@@ -306,7 +406,7 @@ const prebuiltInvoice : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltInvoice"],
-    name: "prebuiltInvoice",
+    name: "prebuiltInvoiceBatch",
     process: formrec.prebuiltInvoice,
     serviceSpecificConfig: {
         
@@ -320,7 +420,7 @@ const prebuiltReceipt : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltReceipt"],
-    name: "prebuiltReceipt",
+    name: "prebuiltReceiptBatch",
     process: formrec.prebuiltReceipt,
     serviceSpecificConfig: {
         
@@ -334,7 +434,7 @@ const prebuiltTaxW2 : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltTaxW2"],
-    name: "prebuiltTaxW2",
+    name: "prebuiltTaxW2Batch",
     process: formrec.prebuiltTaxW2,
     serviceSpecificConfig: {
         
@@ -349,7 +449,7 @@ const customFormRec : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["customFormRec"],
-    name: "customFormRec",
+    name: "customFormRecBatch",
     process: formrec.customFormrec,
     serviceSpecificConfig: {
         
@@ -602,9 +702,8 @@ export const serviceCatalog = {
     "extractSummary" : extractSummary,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
-    "layout" : layout,
-    "layoutBatch" : layoutBatch,
     "translate" : translateService,
+    "layout" : layout,
     "generalDocument" : generalDocument,
     "prebuiltBusinessCard" : prebuiltBusinessCard,
     "prebuiltIdentity" : prebuiltIdentity,
@@ -612,6 +711,14 @@ export const serviceCatalog = {
     "prebuiltReceipt" : prebuiltReceipt,
     "prebuiltTaxW2" : prebuiltTaxW2,
     "customFormRec" : customFormRec,
+    "layoutBatch" : layoutBatch,
+    "generalDocumentBatch" : generalDocumentBatch,
+    "prebuiltBusinessCardBatch" : prebuiltBusinessCardBatch,
+    "prebuiltIdentityBatch" : prebuiltIdentityBatch,
+    "prebuiltInvoiceBatch" : prebuiltInvoiceBatch,
+    "prebuiltReceiptBatch" : prebuiltReceiptBatch,
+    "prebuiltTaxW2Batch" : prebuiltTaxW2Batch,
+    "customFormRecBatch" : customFormRecBatch,
     "analyzeSentiment" : analyzeSentiment,
     "extractKeyPhrases" : extractKeyPhrases,
     "multiCategoryClassify" : multiCategoryClassify,
