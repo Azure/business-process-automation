@@ -218,7 +218,7 @@ const translateService : BpaService = {
 
 const testService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["test"],
     name: "test",
     process: test.process,
@@ -233,7 +233,7 @@ const testService : BpaService = {
 
 const layout : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["layout"],
     name: "layout",
     process: formrec.layout,
@@ -245,9 +245,23 @@ const layout : BpaService = {
     }
 }
 
+const layoutBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["layout"],
+    name: "layoutBatch",
+    process: formrec.layoutAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const generalDocument : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["generalDocument"],
     name: "generalDocument",
     process: formrec.generalDocument,
@@ -261,7 +275,7 @@ const generalDocument : BpaService = {
 
 const prebuiltBusinessCard : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltBusinessCard"],
     name: "prebuiltBusinessCard",
     process: formrec.prebuiltBusinessCard,
@@ -276,7 +290,7 @@ const prebuiltBusinessCard : BpaService = {
 
 const prebuiltIdentity : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltIdentity"],
     name: "prebuiltIdentity",
     process: formrec.prebuiltIdentity,
@@ -290,7 +304,7 @@ const prebuiltIdentity : BpaService = {
 
 const prebuiltInvoice : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltInvoice"],
     name: "prebuiltInvoice",
     process: formrec.prebuiltInvoice,
@@ -304,7 +318,7 @@ const prebuiltInvoice : BpaService = {
 
 const prebuiltReceipt : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltReceipt"],
     name: "prebuiltReceipt",
     process: formrec.prebuiltReceipt,
@@ -318,7 +332,7 @@ const prebuiltReceipt : BpaService = {
 
 const prebuiltTaxW2 : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltTaxW2"],
     name: "prebuiltTaxW2",
     process: formrec.prebuiltTaxW2,
@@ -333,7 +347,7 @@ const prebuiltTaxW2 : BpaService = {
 
 const customFormRec : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["customFormRec"],
     name: "customFormRec",
     process: formrec.customFormrec,
@@ -589,6 +603,7 @@ export const serviceCatalog = {
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
     "layout" : layout,
+    "layoutBatch" : layoutBatch,
     "translate" : translateService,
     "generalDocument" : generalDocument,
     "prebuiltBusinessCard" : prebuiltBusinessCard,

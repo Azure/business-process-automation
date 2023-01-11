@@ -19,9 +19,17 @@ export abstract class DB {
     public abstract create(data) : Promise<any>;
     public abstract view(input : BpaServiceObject) : Promise<BpaServiceObject>
     public abstract getConfig() : Promise<BpaPipelines>
+    public abstract getByID (id : string) : Promise<any>
+    public abstract deleteByID (id : string) : Promise<any>
 }
 
 export class MongoDB extends DB {
+    public getByID(id: string): Promise<any> {
+        throw new Error("Method not implemented.")
+    }
+    public deleteByID(id: string): Promise<any> {
+        throw new Error("Method not implemented.")
+    }
     private _mongoClient : MongoClient
 
     constructor(connectionString : string, dbName : string, containerName : string) {
@@ -102,6 +110,32 @@ export class CosmosDB extends DB {
             const database = client.database(this._dbName);
             const container = database.container(this._containerName);
             const item = await container.item(this._pipelinesLabel).read()
+            return item.resource
+        } catch(err){
+            console.log(err)
+        }
+        return null
+    }
+
+    public getByID = async (id : string) : Promise<any> => {
+        try{
+            const client = new CosmosClient(this._connectionString);
+            const database = client.database(this._dbName);
+            const container = database.container(this._containerName);
+            const item = await container.item(id).read()
+            return item.resource
+        } catch(err){
+            console.log(err)
+        }
+        return null
+    }
+
+    public deleteByID = async (id : string) : Promise<any> => {
+        try{
+            const client = new CosmosClient(this._connectionString);
+            const database = client.database(this._dbName);
+            const container = database.container(this._containerName);
+            const item = await container.item(id).delete();
             return item.resource
         } catch(err){
             console.log(err)

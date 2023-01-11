@@ -7,17 +7,25 @@ import { PrebuiltIdDocumentModel } from "./prebuilt/prebuilt-idDocument";
 import { PrebuiltReceiptModel } from "./prebuilt/prebuilt-receipt";
 import { PrebuiltTaxUsW2Model } from "./prebuilt/prebuilt-tax.us.w2";
 import { BpaServiceObject } from "../engine/types";
+import { DB } from "./db";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import MessageQueue from "./messageQueue";
+
 const _ = require('lodash')
 
 export class FormRec {
 
     private _client : DocumentAnalysisClient
+    private _apikey : string
+    private _endpoint : string
 
     constructor(endpoint: string, apikey: string) {
         this._client = new DocumentAnalysisClient(
             endpoint,
             new AzureKeyCredential(apikey)
         )
+        this._apikey = apikey
+        this._endpoint = endpoint
     }
     
     public simplifyInvoice = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
@@ -113,6 +121,47 @@ export class FormRec {
         return this._analyzeDocumentAsync(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
     } 
 
+    public processAsync = async (mySbMsg: any, db: DB, mq: MessageQueue): Promise<void> => {
+
+        
+        const axiosParams: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": this._apikey
+            }
+        }
+        let httpResult = 200
+        let axiosGetResp: AxiosResponse
+
+        axiosGetResp = await axios.get(mySbMsg.aggregatedResults[mySbMsg.label].location, axiosParams)
+        httpResult = axiosGetResp.status
+        if ((axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed') || (httpResult <= 200 && httpResult >= 299)) {
+            mySbMsg.type = 'async failed'
+            mySbMsg.data = axiosGetResp.data
+            await db.create(mySbMsg)
+            throw new Error(`failed : ${JSON.stringify(axiosGetResp.data)}`)
+        } else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'succeeded') {
+            mySbMsg.type = 'async completion'
+            mySbMsg.aggregatedResults[mySbMsg.label] = axiosGetResp.data.analyzeResult
+            mySbMsg.resultsIndexes.push({ index: mySbMsg.index, name: mySbMsg.label, type: mySbMsg.label })
+            mySbMsg.type = mySbMsg.label
+            mySbMsg.index = mySbMsg.index + 1
+            mySbMsg.data = axiosGetResp.data.analyzeResult
+            
+            const dbout = await db.create(mySbMsg)
+            mySbMsg.dbId = dbout.id
+            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            mySbMsg.data = dbout.id
+
+            await mq.sendMessage(mySbMsg)
+        } else {
+            console.log('do nothing')
+            await mq.scheduleMessage(mySbMsg, 10000)
+        }
+
+
+    }
+
     
 
     private _analyzeDocument = async (input : BpaServiceObject, modelId : any, label : string, index : number) : Promise<BpaServiceObject> => {
@@ -135,19 +184,20 @@ export class FormRec {
 
     private _analyzeDocumentAsync = async (input : BpaServiceObject, modelId : any, label : string, index : number) : Promise<BpaServiceObject> => {
         const poller : AnalysisPoller<AnalyzeResult<AnalyzedDocument>> = await this._client.beginAnalyzeDocument(modelId, input.data)
-        const result : AnalyzeResult<AnalyzedDocument> = await poller.pollUntilDone()
-        const results = input.aggregatedResults
-        results[label] = result
-        input.resultsIndexes.push({index : index, name : label, type : label})
+        input.aggregatedResults[label] = {
+            location: JSON.parse(poller.toString())["operationLocation"],
+            filename: input.filename
+        }
+
         return {
-            data : result,
-            type : label,
+            index: index,
+            type: "async transaction",
+            label: label,
             filename: input.filename,
             pipeline: input.pipeline,
-            bpaId : input.bpaId,
-            label : label,
-            aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
+            bpaId: input.bpaId,
+            aggregatedResults: input.aggregatedResults,
+            resultsIndexes: input.resultsIndexes
         }
     }
 

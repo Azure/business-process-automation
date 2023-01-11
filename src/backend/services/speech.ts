@@ -206,6 +206,12 @@ export class Speech {
                     mySbMsg.data = result
                 }
             }
+
+            const dbout = await db.create(mySbMsg)
+            mySbMsg.dbId = dbout.id
+            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            mySbMsg.data = dbout.id
+
             await mq.sendMessage(mySbMsg)
         } else {
             console.log('do nothing')

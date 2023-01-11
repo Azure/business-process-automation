@@ -24,10 +24,15 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             mySbMsg?.aggregatedResults["taxw2"]?.location ||
             mySbMsg?.aggregatedResults["customFormRec"]?.location) {
             const fr = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY)
-            //fr.generalDocumentAsync()
+            await fr.processAsync(mySbMsg, db, mq)
         }
     }
     else {
+        if(mySbMsg.dbId){
+            await db.deleteByID(mySbMsg.dbId)
+            delete mySbMsg.dbId
+        }
+        
         let directoryName = ""
         let filename = ""
         if (mySbMsg?.filename) {
@@ -70,7 +75,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         const engine = new BpaEngine()
         let out: any
         if (mySbMsg?.index) {
-            out = await engine.processAsync(mySbMsg, mySbMsg.index, bpaConfig, mq)
+            out = await engine.processAsync(mySbMsg, mySbMsg.index, bpaConfig, mq, db)
         } else {
             let blob = null
             if (process.env.USE_LOCAL_STORAGE === 'true') {
@@ -79,7 +84,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                 blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
             }
             const myBuffer = await blob.getBuffer(filename)
-            out = await engine.processFile(myBuffer, filename, bpaConfig, mq)
+            out = await engine.processFile(myBuffer, filename, bpaConfig, mq, db)
         }
 
 

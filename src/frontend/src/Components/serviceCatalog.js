@@ -136,7 +136,7 @@ export const sc = {
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Content Moderator' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "bmp","jpg","tiff","gif"
+            "bmp","jpg","tiff","tif","gif"
         ],
         "outputTypes": [
             "contentModeratorImage"
@@ -366,7 +366,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "layout"
@@ -374,6 +374,23 @@ export const sc = {
         "image": layoutLogo,
         "label": "Form Recognizer Layout Service",
         "name": "layout",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getFormRecReadPricing
+    },
+    "layoutBatch": {
+        "defaultTier" : "S0 Read Pages",
+        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf","tiff","tif","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "layout"
+        ],
+        "image": layoutLogo,
+        "label": "Form Recognizer Layout Service (Batch Mode)",
+        "name": "layoutBatch",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getFormRecReadPricing
@@ -468,7 +485,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "generalDocument"
@@ -485,7 +502,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltInvoice"
@@ -502,7 +519,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltBusinessCard"
@@ -519,7 +536,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltIdentity"
@@ -536,7 +553,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltReceipt"
@@ -553,7 +570,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "prebuiltTaxW2"
@@ -570,7 +587,7 @@ export const sc = {
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "pdf","tiff","gif","jpg","jpeg"
+            "pdf","tiff","tif","gif","jpg","jpeg"
         ],
         "outputTypes": [
             "customFormRec"
