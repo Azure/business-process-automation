@@ -363,7 +363,7 @@ const generalDocument : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["generalDocument"],
-    name: "generalDocumentBatch",
+    name: "generalDocument",
     process: formrec.generalDocument,
     serviceSpecificConfig: {
         
@@ -377,7 +377,7 @@ const prebuiltBusinessCard : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltBusinessCard"],
-    name: "prebuiltBusinessCardBatch",
+    name: "prebuiltBusinessCard",
     process: formrec.prebuiltBusinessCard,
     serviceSpecificConfig: {
         
@@ -392,7 +392,7 @@ const prebuiltIdentity : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltIdentity"],
-    name: "prebuiltIdentityBatch",
+    name: "prebuiltIdentity",
     process: formrec.prebuiltIdentity,
     serviceSpecificConfig: {
         
@@ -406,7 +406,7 @@ const prebuiltInvoice : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltInvoice"],
-    name: "prebuiltInvoiceBatch",
+    name: "prebuiltInvoice",
     process: formrec.prebuiltInvoice,
     serviceSpecificConfig: {
         
@@ -420,7 +420,7 @@ const prebuiltReceipt : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltReceipt"],
-    name: "prebuiltReceiptBatch",
+    name: "prebuiltReceipt",
     process: formrec.prebuiltReceipt,
     serviceSpecificConfig: {
         
@@ -434,7 +434,7 @@ const prebuiltTaxW2 : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltTaxW2"],
-    name: "prebuiltTaxW2Batch",
+    name: "prebuiltTaxW2",
     process: formrec.prebuiltTaxW2,
     serviceSpecificConfig: {
         
@@ -449,7 +449,7 @@ const customFormRec : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["customFormRec"],
-    name: "customFormRecBatch",
+    name: "customFormRec",
     process: formrec.customFormrec,
     serviceSpecificConfig: {
         
