@@ -31,7 +31,9 @@ export class FormRec {
     public simplifyInvoice = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
         const invoiceEntities = {}
+        let content = ""
         for(const document of input.aggregatedResults.invoice.documents){
+            content += input.aggregatedResults.invoice.content
             for(const fieldKey of Object.keys(document.fields)){
                 const newObject = document.fields[fieldKey]
                 invoiceEntities[fieldKey+"Content"] = newObject.content
@@ -40,9 +42,25 @@ export class FormRec {
                 invoiceEntities[fieldKey+"Value"] = newObject.value
             }
         }
+        const invoiceKVP : any = {}
+        for(const kvp of input.aggregatedResults.invoice.keyValuePairs){
+            try{
+                const key = kvp.key.content
+                const value = kvp.value.content
+                const confidence = kvp.confidence
+    
+                if(invoiceKVP[key]){
+                    invoiceKVP[key].push(value)
+                } else {
+                    invoiceKVP[key] = [value]
+                }
+            } catch(error){
+
+            }
+        }
         const label = "simplifyInvoice"
         const results = input.aggregatedResults
-        results[label] = invoiceEntities
+        results[label] = { fields : invoiceEntities, keyValuePairs : invoiceKVP, content : content }
         input.resultsIndexes.push({index : index, name : label, type : label})
         return {
             data : invoiceEntities,
