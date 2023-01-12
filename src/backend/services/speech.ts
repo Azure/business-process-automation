@@ -3,6 +3,8 @@ import { BpaServiceObject } from '../engine/types'
 import { BlobServiceClient, ContainerClient, BlockBlobClient, ContainerGenerateSasUrlOptions, ContainerSASPermissions } from "@azure/storage-blob"
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { DB } from "./db";
+import MessageQueue from "./messageQueue";
 //import { CosmosDB } from "./cosmosdb";
 
 
@@ -164,6 +166,63 @@ export class Speech {
             }
         })
     }
+
+    public processAsync = async (mySbMsg: any, db: DB, mq: MessageQueue): Promise<void> => {
+
+        const axiosParams: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
+            }
+        }
+        let httpResult = 200
+        let axiosGetResp: AxiosResponse
+
+        axiosGetResp = await axios.get(mySbMsg.aggregatedResults["speechToText"].location, axiosParams)
+        httpResult = axiosGetResp.status
+        if ((axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed') || (httpResult <= 200 && httpResult >= 299)) {
+            mySbMsg.type = 'async failed'
+            mySbMsg.data = axiosGetResp.data
+            await db.create(mySbMsg)
+            throw new Error(`failed : ${JSON.stringify(axiosGetResp.data)}`)
+        } else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
+            mySbMsg.type = 'async completion'
+            let axiosGetResp2: AxiosResponse
+
+            axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
+            httpResult = axiosGetResp2.status
+            for (const value of axiosGetResp2.data.values) {
+                if (value.kind === 'Transcription') {
+                    const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
+                    let result = ""
+                    for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
+                        result += " " + combined.display
+                    }
+                    let index = mySbMsg.index
+                    mySbMsg.aggregatedResults["speechToText"] = result
+                    mySbMsg.resultsIndexes.push({ index: index, name: "speechToText", type: "text" })
+                    mySbMsg.type = "text"
+                    mySbMsg.index = index + 1
+                    mySbMsg.data = result
+                }
+            }
+
+            const dbout = await db.create(mySbMsg)
+            mySbMsg.dbId = dbout.id
+            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            mySbMsg.data = dbout.id
+
+            await mq.sendMessage(mySbMsg)
+        } else {
+            console.log('do nothing')
+            await mq.scheduleMessage(mySbMsg, 10000)
+        }
+
+
+    }
+
+
+
 
 
 }

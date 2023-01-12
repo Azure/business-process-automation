@@ -1,5 +1,6 @@
 import { BpaConfiguration, BpaStage, BpaServiceObject } from "./types"
 import MessageQueue from "../services/messageQueue"
+import { DB } from "../services/db"
 const _ = require('lodash')
 
 export class BpaEngine {
@@ -8,13 +9,13 @@ export class BpaEngine {
 
     }
 
-    public processAsync = async (serviceObject: BpaServiceObject, stageIndex: number, config: BpaConfiguration, mq : MessageQueue): Promise<BpaServiceObject> => {
+    public processAsync = async (serviceObject: BpaServiceObject, stageIndex: number, config: BpaConfiguration, mq : MessageQueue, db : DB): Promise<BpaServiceObject> => {
 
-        return this._process(serviceObject, config, stageIndex, mq)
+        return this._process(serviceObject, config, stageIndex, mq, db)
 
     }
 
-    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration, mq : MessageQueue): Promise<BpaServiceObject> => {
+    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration, mq : MessageQueue, db : DB): Promise<BpaServiceObject> => {
 
         let currentInput: BpaServiceObject = {
             label: "first",
@@ -30,11 +31,11 @@ export class BpaEngine {
         console.log(this._getFileType(fileName))
 
         let stageIndex = 1
-        return this._process(currentInput, config, stageIndex, mq)
+        return this._process(currentInput, config, stageIndex, mq, db)
 
     }
 
-    private _process = async (currentInput: BpaServiceObject, config: BpaConfiguration, stageIndex: number, mq : MessageQueue) => {
+    private _process = async (currentInput: BpaServiceObject, config: BpaConfiguration, stageIndex: number, mq : MessageQueue, db: DB) => {
         for (let i = stageIndex; i < config.stages.length + 1; i++) {
             const stage = config.stages[i - 1]
             //for (const stage of config.stages) {
@@ -48,21 +49,20 @@ export class BpaEngine {
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
                 if (currentInput.type === 'async transaction') {
-                    // const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
-                    // const sender = serviceBusClient.createSender("upload")
-                    delete currentInput.data
                     delete currentInput.aggregatedResults.buffer
+                    const dbout = await db.create(currentInput)
+
+                    delete currentInput.data
+
+                    currentInput.dbId = dbout.id
+                    currentInput.aggregatedResults = dbout.id
+                    currentInput.data = dbout.id
 
                     currentInput.stages = config.stages
                     currentInput.index = stageIndex
+
+                    
                     await mq.sendMessage(currentInput)
-                    // const messages = [
-                    //     { body: currentInput }
-                    // ]
-   
-                    // await sender.sendMessages(messages)
-                    // await sender.close()
-                    // await serviceBusClient.close()
                     break
                 }
             }
