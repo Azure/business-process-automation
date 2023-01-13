@@ -44,10 +44,10 @@ export class FormRec {
                     }
                 } else {
                     const newObject = document.fields[fieldKey]
-                    invoiceEntities[fieldKey+"Content"] = newObject.content
-                    invoiceEntities[fieldKey+"Kind"] = newObject.kind
-                    invoiceEntities[fieldKey+"Confidence"] = newObject.confidence
-                    invoiceEntities[fieldKey+"Value"] = newObject.value
+                    invoiceEntities[fieldKey] = newObject.content
+                    // invoiceEntities[fieldKey+"Kind"] = newObject.kind
+                    // invoiceEntities[fieldKey+"Confidence"] = newObject.confidence
+                    // invoiceEntities[fieldKey+"Value"] = newObject.value
                 }
                 
             }
