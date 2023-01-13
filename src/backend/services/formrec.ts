@@ -39,7 +39,7 @@ export class FormRec {
                 if(fieldKey === 'items'){
                     for(const item of document.fields.items.values){
                         for(const p of Object.keys(item.properties)){
-                            items[p] = item.properties[p].value
+                            items[p] = item.properties[p].content
                         }
                     }
                 } else {
@@ -70,7 +70,7 @@ export class FormRec {
         }
         const label = "simplifyInvoice"
         const results = input.aggregatedResults
-        results[label] = { fields : invoiceEntities, keyValuePairs : invoiceKVP, content : content }
+        results[label] = { fields : invoiceEntities, keyValuePairs : invoiceKVP, items : items, content : content }
         input.resultsIndexes.push({index : index, name : label, type : label})
         return {
             data : invoiceEntities,
