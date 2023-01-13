@@ -1,5 +1,6 @@
 # Business Process Automation Accelerator
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fbpasource.blob.core.windows.net%2Fsource%2Foneclick.json%3Fsp%3Dr%26st%3D2023-01-13T19%3A06%3A41Z%26se%3D2023-12-02T03%3A06%3A41Z%26spr%3Dhttps%26sv%3D2021-06-08%26sr%3Db%26sig%3D3ZRh4qvIkllqDp4k988e%252FVAVFpm6wHHGjNzxxAzH92g%253D)
 
 ## Overview
 
