@@ -35,14 +35,15 @@ const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDP
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
-const openai = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
+const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
+const openaiSimilarity = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SIMILARITY)
 
 const openaiEmbeddingsService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["text"],
     outputTypes: ["openaiEmbeddings"],
     name: "openaiEmbeddings",
-    process: openai.processEmbeddings,
+    process: openaiSimilarity.processEmbeddings,
     serviceSpecificConfig: {
         
     },
@@ -56,7 +57,7 @@ const openaiGenericService : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["openaiGeneric"],
     name: "openaiGeneric",
-    process: openai.processGeneric,
+    process: openaiText.processGeneric,
     serviceSpecificConfig: {
         
     },
@@ -70,7 +71,7 @@ const openaiSummarizeService : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["openaiSummarize"],
     name: "openaiSummarize",
-    process: openai.process,
+    process: openaiText.process,
     serviceSpecificConfig: {
         
     },
