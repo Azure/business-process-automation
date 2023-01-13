@@ -37,9 +37,19 @@ const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.e
 const tableParser = new TableParser(cosmosDb)
 const openai = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
 
-// const noCharge = (documents : number) : number =>{
-//     return 0
-// }
+const openaiEmbeddingsService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["openaiEmbeddings"],
+    name: "openaiEmbeddings",
+    process: openai.processEmbeddings,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const openaiGenericService : BpaService = {
     bpaServiceId : "abc123",
@@ -741,6 +751,7 @@ export const serviceCatalog = {
     "videoIndexer" : videoIndexerService,
     "tableParser" : tableParserService,
     "openaiSummarize" : openaiSummarizeService,
-    "openaiGeneric" : openaiGenericService
+    "openaiGeneric" : openaiGenericService,
+    "openaiEmbeddings" : openaiEmbeddingsService
 }
 
