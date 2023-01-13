@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - vector
+      - vector2
 
 env:
   AZURE_FUNCTIONAPP_NAME: bpatest01    # set this to your application's name
