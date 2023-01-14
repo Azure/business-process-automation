@@ -12,12 +12,12 @@
     "projectName": {
       "type": "string"
     },
-    "repositoryToken": {
-      "type": "string"
-    },
-    "repositoryUrl": {
-      "type": "string"
-    },
+    // "repositoryToken": {
+    //   "type": "string"
+    // },
+    // "repositoryUrl": {
+    //   "type": "string"
+    // },
     "blobContainerName": {
       "type": "string",
       "defaultValue": "documents"
@@ -730,17 +730,18 @@
       "sku": {
         "name": "Standard",
         "tier": "Standard"
-      },
-      "properties": {
-        "provider": "GitHub",
-        "repositoryUrl": "[parameters('repositoryUrl')]",
-        "repositoryToken": "[parameters('repositoryToken')]",
-        "branch": "[parameters('branch')]",
-        "buildProperties": {
-          "apiLocation": "src/frontend/api",
-          "appLocation": "src/frontend"
-        }
       }
+      // ,
+      // "properties": {
+      //   "provider": "GitHub",
+      //   "repositoryUrl": "[parameters('repositoryUrl')]",
+      //   "repositoryToken": "[parameters('repositoryToken')]",
+      //   "branch": "[parameters('branch')]",
+      //   "buildProperties": {
+      //     "apiLocation": "src/frontend/api",
+      //     "appLocation": "src/frontend"
+      //   }
+      // }
     },
     {
       "type": "Microsoft.Web/staticSites/config",
@@ -748,6 +749,8 @@
       "name": "[format('{0}/{1}', parameters('webAppName'), 'appsettings')]",
       "kind": "staticWebAppSettings",
       "properties": {
+        "appZipUrl" : "https://bpasource.blob.core.windows.net/source/app.zip?sp=r&st=2023-01-14T00:16:11Z&se=2023-12-01T08:16:11Z&spr=https&sv=2021-06-08&sr=b&sig=%2BIKE4BjRslzbVnmrjFDcmTzEq%2FwUgHMxY9%2Bo5Es737Y%3D",
+        "apiZipUrl" : "https://bpasource.blob.core.windows.net/source/api.zip?sp=r&st=2023-01-14T00:15:43Z&se=2023-12-01T08:15:43Z&spr=https&sv=2021-06-08&sr=b&sig=eAqIJtAx6tneCM%2Bfod9oNWPgkZ0i8sV57ePAScgbbkw%3D",
         "COSMOS_DB_CONNECTION_STRING": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]",
         "COSMOS_DB_DB": "[parameters('cosmosDbName')]",
         "COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
