@@ -10,7 +10,9 @@ export default function Stages(props) {
 
     useEffect(() => {
         try {
-            axios.get('/api/config?id=pipelines').then(value => setPipelines(value.data.pipelines))
+            axios.get('/api/config?id=pipelines').then(value => {
+                setPipelines(value.data.pipelines)
+            })
         } catch (err) {
             console.log(err)
         }

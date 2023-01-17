@@ -3,7 +3,9 @@ import { BpaServiceObject } from '../engine/types'
 import { BlobServiceClient, ContainerClient, BlockBlobClient, ContainerGenerateSasUrlOptions, ContainerSASPermissions } from "@azure/storage-blob"
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { CosmosDB } from "./cosmosdb";
+import { DB } from "./db";
+import MessageQueue from "./messageQueue";
+//import { CosmosDB } from "./cosmosdb";
 
 
 export class Speech {
@@ -11,14 +13,12 @@ export class Speech {
     private _client: sdk.SpeechConfig
     private _blobServiceClient: BlobServiceClient
     private _blobContainerClient: ContainerClient
-    private _cosmosDb: CosmosDB
 
     constructor(subscriptionKey: string, region: string, connectionString: string, containerName: string, cosmosConnectionString: string, cosmosDb: string, cosmosContainer: string) {
         this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
         this._client.setProfanity(sdk.ProfanityOption.Raw)
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
-        this._cosmosDb = new CosmosDB(cosmosConnectionString, cosmosDb, cosmosContainer)
     }
 
     private _delay = (ms: number) => {
@@ -37,50 +37,50 @@ export class Speech {
 
         let httpResult = 429
         let axiosResp: AxiosResponse
-        while (httpResult === 429) {
-            try {
-                const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename) // can throw 429
-                const sasUrl = await blobClient.generateSasUrl(options)
-                let payload = {
-                    "contentUrls": [
-                        sasUrl
-                    ],
-                    "properties": {
-                        "wordLevelTimestampsEnabled": true
-                    },
-                    "locale": "en-US",
-                    "displayName": "Transcription of file using default model for en-US"
-                }
-                if (input?.serviceSpecificConfig?.to) {
-                    payload = {
-                        "contentUrls": [
-                            sasUrl
-                        ],
-                        "properties": {
-                            "wordLevelTimestampsEnabled": true
-                        },
-                        "locale": input.serviceSpecificConfig.to,
-                        "displayName": "Transcription of file using default model for en-US"
-                    }
-                }
-                const axiosParams: AxiosRequestConfig = {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
-                    }
-                }
-                axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
-                httpResult = axiosResp.status
-            } catch (err) {
-                if (err.response.status === 429) {
-                    httpResult = err.response.status
-                    console.log('429.1')
-                    await this._delay(5000)
-                } else {
-                    throw new Error(err)
-                }
+        //while (httpResult === 429) {
+        //try {
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename) // can throw 429
+        const sasUrl = await blobClient.generateSasUrl(options)
+        let payload = {
+            "contentUrls": [
+                sasUrl
+            ],
+            "properties": {
+                "wordLevelTimestampsEnabled": true
+            },
+            "locale": "en-US",
+            "displayName": "Transcription of file using default model for en-US"
+        }
+        if (input?.serviceSpecificConfig?.to) {
+            payload = {
+                "contentUrls": [
+                    sasUrl
+                ],
+                "properties": {
+                    "wordLevelTimestampsEnabled": true
+                },
+                "locale": input.serviceSpecificConfig.to,
+                "displayName": "Transcription of file using default model for en-US"
             }
         }
+        const axiosParams: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
+            }
+        }
+        axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
+        httpResult = axiosResp.status
+        // } catch (err) {
+        //     if (err.response.status === 429) {
+        //         httpResult = err.response.status
+        //         console.log('429.1')
+        //         await this._delay(5000)
+        //     } else {
+        //         throw new Error(err)
+        //     }
+        // }
+        //}
         input.aggregatedResults["speechToText"] = {
             location: axiosResp.headers.location,
             stage: "stt",
@@ -166,6 +166,63 @@ export class Speech {
             }
         })
     }
+
+    public processAsync = async (mySbMsg: any, db: DB, mq: MessageQueue): Promise<void> => {
+
+        const axiosParams: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
+            }
+        }
+        let httpResult = 200
+        let axiosGetResp: AxiosResponse
+
+        axiosGetResp = await axios.get(mySbMsg.aggregatedResults["speechToText"].location, axiosParams)
+        httpResult = axiosGetResp.status
+        if ((axiosGetResp?.data?.status && axiosGetResp.data.status === 'Failed') || (httpResult <= 200 && httpResult >= 299)) {
+            mySbMsg.type = 'async failed'
+            mySbMsg.data = axiosGetResp.data
+            await db.create(mySbMsg)
+            throw new Error(`failed : ${JSON.stringify(axiosGetResp.data)}`)
+        } else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'Succeeded' && axiosGetResp?.data?.links?.files) {
+            mySbMsg.type = 'async completion'
+            let axiosGetResp2: AxiosResponse
+
+            axiosGetResp2 = await axios.get(axiosGetResp.data.links.files, axiosParams)
+            httpResult = axiosGetResp2.status
+            for (const value of axiosGetResp2.data.values) {
+                if (value.kind === 'Transcription') {
+                    const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
+                    let result = ""
+                    for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
+                        result += " " + combined.display
+                    }
+                    let index = mySbMsg.index
+                    mySbMsg.aggregatedResults["speechToText"] = result
+                    mySbMsg.resultsIndexes.push({ index: index, name: "speechToText", type: "text" })
+                    mySbMsg.type = "text"
+                    mySbMsg.index = index + 1
+                    mySbMsg.data = result
+                }
+            }
+
+            const dbout = await db.create(mySbMsg)
+            mySbMsg.dbId = dbout.id
+            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            mySbMsg.data = dbout.id
+
+            await mq.sendMessage(mySbMsg)
+        } else {
+            console.log('do nothing')
+            await mq.scheduleMessage(mySbMsg, 10000)
+        }
+
+
+    }
+
+
+
 
 
 }

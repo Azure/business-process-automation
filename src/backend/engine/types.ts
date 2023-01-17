@@ -29,15 +29,16 @@ export interface ResultsIndex {
 }
 
 export interface BpaServiceObject {
-    data ?: any,
-    filename : string,
-    pipeline : string,
-    type : string,
-    label : string,
+    data ?: any
+    filename : string
+    pipeline : string
+    type : string
+    label : string
     bpaId : string
     aggregatedResults : any
     resultsIndexes ?: ResultsIndex[]
     serviceSpecificConfig ?: any
     stages ?: any
     index ?: number
+    dbId ?: string
 }

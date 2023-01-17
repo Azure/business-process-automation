@@ -1,4 +1,4 @@
-import { CosmosDB } from "../services/cosmosdb"
+import { CosmosDB } from "../services/db"
 import { LanguageStudio } from "../services/language"
 import { Speech } from '../services/speech'
 import { Ocr } from "../services/ocr"
@@ -11,14 +11,15 @@ import { Preprocess } from "../services/preprocess"
 import { DocumentTranslation } from "../services/documentTranslation"
 import { AutoMlNer } from "../services/automlner"
 import { ChangeOutput } from "../services/changeOutput"
-import { Blob } from "../services/blob"
+import { BlobStorage } from "../services/storage"
 import { ContentModerator } from "../services/contentModerator"
 import { Xml } from "../services/xml"
 import { VideoIndexer } from "../services/videoIndexer"
 import { TableParser } from "../services/tableParser"
+import { OpenAI } from "../services/openai"
 
 const changeOutput = new ChangeOutput()
-const blob = new Blob(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
+const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
@@ -34,10 +35,66 @@ const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDP
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
+const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
+const openaiSimilarity = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SIMILARITY)
 
-// const noCharge = (documents : number) : number =>{
-//     return 0
-// }
+
+
+const openaiEmbeddingsService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["openaiEmbeddings"],
+    name: "openaiEmbeddings",
+    process: openaiSimilarity.processEmbeddings,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const openaiGenericService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["openaiGeneric"],
+    name: "openaiGeneric",
+    process: openaiText.processGeneric,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const openaiSummarizeService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text"],
+    outputTypes: ["openaiSummarize"],
+    name: "openaiSummarize",
+    process: openaiText.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const simplifyInvoiceService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["invoice"],
+    outputTypes: ["simpleInvoice"],
+    name: "simplifyInvoice",
+    process: formrec.simplifyInvoice,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const tableParserService : BpaService = {
     bpaServiceId : "abc123",
@@ -174,7 +231,7 @@ const translateService : BpaService = {
 
 const testService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["test"],
     name: "test",
     process: test.process,
@@ -189,7 +246,7 @@ const testService : BpaService = {
 
 const layout : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["layout"],
     name: "layout",
     process: formrec.layout,
@@ -201,9 +258,123 @@ const layout : BpaService = {
     }
 }
 
+const layoutBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["layout"],
+    name: "layoutBatch",
+    process: formrec.layoutAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const generalDocumentBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["generalDocument"],
+    name: "generalDocumentBatch",
+    process: formrec.generalDocumentAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltBusinessCardBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltBusinessCard"],
+    name: "prebuiltBusinessCardBatch",
+    process: formrec.prebuiltBusinessCardAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+
+const prebuiltIdentityBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltIdentity"],
+    name: "prebuiltIdentityBatch",
+    process: formrec.prebuiltIdentityAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltInvoiceBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltInvoice"],
+    name: "prebuiltInvoiceBatch",
+    process: formrec.prebuiltInvoiceAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltReceiptBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltReceipt"],
+    name: "prebuiltReceiptBatch",
+    process: formrec.prebuiltReceiptAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const prebuiltTaxW2Batch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["prebuiltTaxW2"],
+    name: "prebuiltTaxW2Batch",
+    process: formrec.prebuiltTaxW2Async,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+
+const customFormRecBatch : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
+    outputTypes: ["customFormRec"],
+    name: "customFormRecBatch",
+    process: formrec.customFormrecAsync,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const generalDocument : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["generalDocument"],
     name: "generalDocument",
     process: formrec.generalDocument,
@@ -217,7 +388,7 @@ const generalDocument : BpaService = {
 
 const prebuiltBusinessCard : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltBusinessCard"],
     name: "prebuiltBusinessCard",
     process: formrec.prebuiltBusinessCard,
@@ -232,7 +403,7 @@ const prebuiltBusinessCard : BpaService = {
 
 const prebuiltIdentity : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltIdentity"],
     name: "prebuiltIdentity",
     process: formrec.prebuiltIdentity,
@@ -246,7 +417,7 @@ const prebuiltIdentity : BpaService = {
 
 const prebuiltInvoice : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltInvoice"],
     name: "prebuiltInvoice",
     process: formrec.prebuiltInvoice,
@@ -260,7 +431,7 @@ const prebuiltInvoice : BpaService = {
 
 const prebuiltReceipt : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltReceipt"],
     name: "prebuiltReceipt",
     process: formrec.prebuiltReceipt,
@@ -274,7 +445,7 @@ const prebuiltReceipt : BpaService = {
 
 const prebuiltTaxW2 : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["prebuiltTaxW2"],
     name: "prebuiltTaxW2",
     process: formrec.prebuiltTaxW2,
@@ -289,7 +460,7 @@ const prebuiltTaxW2 : BpaService = {
 
 const customFormRec : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg","png","jpeg"],
+    inputTypes: ["pdf","jpg","png","tiff","tif","jpeg"],
     outputTypes: ["customFormRec"],
     name: "customFormRec",
     process: formrec.customFormrec,
@@ -336,20 +507,6 @@ const ocrService : BpaService = {
     outputTypes: ["text"],
     name: "ocr",
     process: ocr.process,
-    serviceSpecificConfig: {
-
-    },
-    serviceSpecificConfigDefaults: {
-
-    }
-}
-
-const viewService : BpaService = {
-    inputTypes: ["any"],
-    outputTypes: ["any"],
-    name: "view",
-    bpaServiceId: "abc123",
-    process: cosmosDb.view,
     serviceSpecificConfig: {
 
     },
@@ -553,13 +710,13 @@ const xmlToJsonService : BpaService = {
 
 export const serviceCatalog = {
     // "copy" : copyService,
+    "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
-    "viewService" : viewService,
     "extractSummary" : extractSummary,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
-    "layout" : layout,
     "translate" : translateService,
+    "layout" : layout,
     "generalDocument" : generalDocument,
     "prebuiltBusinessCard" : prebuiltBusinessCard,
     "prebuiltIdentity" : prebuiltIdentity,
@@ -567,6 +724,14 @@ export const serviceCatalog = {
     "prebuiltReceipt" : prebuiltReceipt,
     "prebuiltTaxW2" : prebuiltTaxW2,
     "customFormRec" : customFormRec,
+    "layoutBatch" : layoutBatch,
+    "generalDocumentBatch" : generalDocumentBatch,
+    "prebuiltBusinessCardBatch" : prebuiltBusinessCardBatch,
+    "prebuiltIdentityBatch" : prebuiltIdentityBatch,
+    "prebuiltInvoiceBatch" : prebuiltInvoiceBatch,
+    "prebuiltReceiptBatch" : prebuiltReceiptBatch,
+    "prebuiltTaxW2Batch" : prebuiltTaxW2Batch,
+    "customFormRecBatch" : customFormRecBatch,
     "analyzeSentiment" : analyzeSentiment,
     "extractKeyPhrases" : extractKeyPhrases,
     "multiCategoryClassify" : multiCategoryClassify,
@@ -587,6 +752,9 @@ export const serviceCatalog = {
     "contentModeratorImage" : contentModeratorImageService,
     "xmlToJson" : xmlToJsonService,
     "videoIndexer" : videoIndexerService,
-    "tableParser" : tableParserService
+    "tableParser" : tableParserService,
+    "openaiSummarize" : openaiSummarizeService,
+    "openaiGeneric" : openaiGenericService,
+    "openaiEmbeddings" : openaiEmbeddingsService
 }
 

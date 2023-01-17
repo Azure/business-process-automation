@@ -7,7 +7,7 @@ export default function OptionCard(props) {
         <Card elevated style={{ margin: "20px", minWidth:"100px", maxWidth:"150px", height: "220px", padding: "0px", backgroundColor: "white" }} onClick={() => props.onClickHandler(props.option)}>
             
             <Card.Preview fitted>
-                <Image
+                <Image 
                     fluid
                     src={props.option.image }
                 />

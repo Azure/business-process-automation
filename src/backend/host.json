@@ -13,8 +13,26 @@
     "version": "[3.3.0, 4.0.0)"
   },
   "extensions": {
-    "queues": {
-      "batchSize": 32
+    "rabbitMQ": {
+      "prefetchCount": 2,
+      "autoComplete" : true
+    },
+    "serviceBus": {
+      "prefetchCount": 2,
+      "messageHandlerOptions": {
+        "autoComplete": true,
+        "maxConcurrentCalls": 2,
+        "maxAutoRenewDuration": "00:05:00"
+      },
+      "batchOptions": {
+        "maxMessageCount": 1,
+        "operationTimeout": "00:01:00",
+        "autoComplete": true
+      }
     }
+  },
+  "concurrency": {
+    "dynamicConcurrencyEnabled": true,
+    "snapshotPersistenceEnabled": true
   }
 }

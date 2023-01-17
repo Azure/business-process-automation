@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-frontend-server
+  labels:
+    app: {{ include "helm.fullname" . }}-frontend-server
+spec:
+  {{- if not .Values.frontendServerAutoscaling.enabled }}
+  replicas: {{ .Values.frontendServerReplicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "helm.fullname" . }}-frontend-server
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "helm.fullname" . }}-frontend-server
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.frontendServerImage.repository }}:{{ .Values.frontendServerImage.tag | default .Chart.AppVersion }}"
+          env:
+            - name: USE_LOCAL_STORAGE
+              value: !!str {{ .Values.localStorage }}
+            - name: BACKEND_PORT
+              value: !!str {{ .Values.backendPort }}
+            - name: BACKEND_HOST
+              value: !!str {{ .Values.backendHost }}
+          envFrom:
+          - secretRef:
+              name: "{{ .Chart.Name }}-frontend-server"
+          imagePullPolicy: {{ .Values.frontendServerImage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.frontendServerResources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
