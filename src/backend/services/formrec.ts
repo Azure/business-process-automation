@@ -31,16 +31,18 @@ export class FormRec {
     public simplifyInvoice = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
         const invoiceEntities = {}
-        const items = {}
+        const items = []
         let content = ""
         for(const document of input.aggregatedResults.invoice.documents){
             content += input.aggregatedResults.invoice.content
             for(const fieldKey of Object.keys(document.fields)){
                 if(fieldKey === 'items'){
                     for(const item of document.fields.items.values){
+                        let _item : any = {}
                         for(const p of Object.keys(item.properties)){
-                            items[p] = item.properties[p].content
+                            _item[p] = item.properties[p].content
                         }
+                        items.push(_item)
                     }
                 } else {
                     const newObject = document.fields[fieldKey]
