@@ -1,5 +1,4 @@
 import OptionCard from "../Components/OptionCard"
-import _ from 'lodash'
 import { Text } from '@fluentui/react-northstar';
 import { ArrowRightIcon } from '@fluentui/react-icons-northstar'
 
