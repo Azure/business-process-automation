@@ -8,6 +8,15 @@ import { DB } from "./db"
 import { Speech } from "./speech"
 import { FormRec } from "./formrec"
 const _ = require('lodash')
+import { RedisSimilarity } from "./redis";
+
+let redis : RedisSimilarity
+
+if(process.env.STORE_IN_REDIS === 'true'){
+    redis = new RedisSimilarity(process.env.REDIS_URL,process.env.REDIS_PW)
+    redis.connect()
+    redis.createIndex("myindex", "4096")
+}
 
 export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue, db: DB) => {
     if (mySbMsg?.type && mySbMsg.type === 'async transaction') {
@@ -88,8 +97,13 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         }
 
 
+
         if (out['type'] !== 'async transaction') {
-            await db.view(out)
+            const newObject = await db.view(out)
+            if(newObject?.id && (process.env.STORE_IN_REDIS === 'true') && newObject.aggregatedResults.openaiEmbeddings){
+                await redis.set(newObject.filename, newObject, newObject.aggregatedResults.openaiEmbeddings.data[0].embedding)
+            }
+
         }
     }
 

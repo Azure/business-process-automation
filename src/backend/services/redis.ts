@@ -4,9 +4,10 @@ export class RedisSimilarity  {
 
     private _client
 
-    constructor(connectionString : string) {
+    constructor(connectionString : string, password : string) {
         this._client = createClient({
-            url: connectionString
+            url: connectionString,
+            password: password
           }); 
     }
 

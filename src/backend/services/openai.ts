@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { BpaServiceObject } from "../engine/types";
-import { RedisSimilarity } from "./redis";
+
 
 export class OpenAI {
 
-    private _redis : RedisSimilarity
+
     private _endpoint: string
     private _apikey: string
     private _deploymentId: string
@@ -13,9 +13,7 @@ export class OpenAI {
         this._apikey = apikey
         this._endpoint = endpoint
         this._deploymentId = deploymentId
-        if(process.env.STORE_IN_REDIS === 'true'){
-            this._redis = new RedisSimilarity(process.env.REDIS_URL)
-        }
+        
         
     }
 
@@ -129,9 +127,7 @@ export class OpenAI {
                 resultsIndexes: input.resultsIndexes
             }
             
-            if(process.env.STORE_IN_REDIS === 'true'){
-                await this._redis.set(input.filename, result, out.data)
-            }
+            
             return result
         } catch (err) {
             console.log(err)
