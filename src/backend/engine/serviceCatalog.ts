@@ -726,6 +726,7 @@ export const serviceCatalog = {
     // "copy" : copyService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
+    "ocrBatchService" : ocrBatchService,
     "extractSummary" : extractSummary,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
