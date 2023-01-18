@@ -15,7 +15,12 @@ let redis : RedisSimilarity
 if(process.env.STORE_IN_REDIS === 'true'){
     redis = new RedisSimilarity(process.env.REDIS_URL,process.env.REDIS_PW)
     redis.connect()
-    redis.createIndex("myindex", "4096")
+    try{
+        redis.createIndex("myindex", "4096")
+    } catch(err){
+        
+    }
+    
 }
 
 export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue, db: DB) => {
