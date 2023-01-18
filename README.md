@@ -2,6 +2,15 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fdev%2Ftemplates%2Foneclick.json)
 
+
+## Deploy Button is new!!
+
+1.)  Fork this to your git repo
+2.)  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
+3.)  You need to name your project something unique.  It is highly recommended to avoid using dashes or even uppercase letters.  Stick to lowercase alpha-numerics.
+4.)  Click the "Deploy to Azure" button and fill in only the first three parameters:  Project Name, Token, Forked Github URL.
+5.)  The first time, it is likely that you will have a problem installing the Cognitive Services Multi-Service instance.  It requires that you agree to terms of use and you cannot do this within a template.  The solution is to create an instance, and delete it.  You will then be able to run the full template.  Instructions for creating this are lower in the readme.
+
 ## Overview
 
 This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even Hugging Face state-of-the-art models, into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a CosmosDB.
