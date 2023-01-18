@@ -1,34 +1,63 @@
-import { createClient } from 'redis';
+import { createClient, SchemaFieldTypes, VectorAlgorithms } from 'redis';
 
-export class RedisSimilarity  {
+export class RedisSimilarity {
 
     private _client
 
-    constructor(connectionString : string, password : string) {
+    constructor(connectionString: string, password: string) {
         this._client = createClient({
             url: connectionString,
             password: password
-          }); 
+        });
     }
 
     public connect = async () => {
         await this._client.connect()
     }
 
-    public createIndex = async (indexName : string, dimension : string) => {
-        await this._client.sendCommand(['FT.CREATE',indexName,'ON',' JSON ','SCHEMA','$.embeddings','as','embeddings','VECTOR','FLAT','6',' TYPE','FLOAT32',' DIM',dimension,'DISTANCE_METRIC','L2']);
+    public disconnect = async () => {
+        await this._client.disconnect()
     }
 
-    public set = async (id: string, document: any, embeddings : any) => {
-        const data = {
-            id : id,
-            document : document,
-            embeddings : embeddings
+    public createIndex = async (indexName: string, dimension: number) => {
+        //await this._client.sendCommand(['FT.CREATE',indexName,'ON',' JSON ','SCHEMA','$.embeddings','as','embeddings','VECTOR','FLAT','6',' TYPE','FLOAT32',' DIM',dimension,'DISTANCE_METRIC','L2']);
+        let out
+        try {
+            out = await this._client.ft.create(indexName, {
+                v: {
+                    type: SchemaFieldTypes.VECTOR,
+                    ALGORITHM: VectorAlgorithms.HNSW,
+                    TYPE: 'FLOAT32',
+                    DIM: dimension,
+                    DISTANCE_METRIC: 'COSINE'
+                }
+            }, {
+                ON: 'HASH'
+            });
+        } catch (e) {
+            if (e.message === 'Index already exists') {
+                console.log('Index exists already, skipped creation.');
+            }
         }
-        await this._client.sendCommand(['JSON.SET', id ,'$',JSON.stringify(data)]);
+        return out
     }
 
-    public query = async (indexName : string, embeddings : any, numResults : string) => {
-        await this._client.sendCommand(['FT.SEARCH', indexName,`"*=>[KNN ${numResults} @embeddings $BLOB]"`,'PARAMS','2','BLOB',  'DIALECT', '2']);
+    public set = async (id: string, document: any, embeddings: any) => {
+        await this._client.hSet(document.id, {v : this._float32Buffer(embeddings)})
+    }
+
+    public query = async (indexName: string, embeddings: any, numResults: string) => {
+        return await this._client.ft.search(indexName, `*=>[KNN ${numResults} @v $BLOB AS dist]`, {
+            PARAMS: {
+                BLOB: this._float32Buffer(embeddings)
+            },
+            SORTBY: 'dist',
+            DIALECT: 2,
+            RETURN: ['dist']
+        });
+    }
+
+    private _float32Buffer = (arr) => {
+        return Buffer.from(new Float32Array(arr).buffer);
     }
 }
