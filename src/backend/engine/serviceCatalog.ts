@@ -506,7 +506,21 @@ const ocrService : BpaService = {
     inputTypes: ["pdf","jpg"],
     outputTypes: ["text"],
     name: "ocr",
-    process: ocr.process,
+    process: formrec.readDocument,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["text"],
+    name: "ocrBatch",
+    process: formrec.readDocumentAsync,
     serviceSpecificConfig: {
 
     },

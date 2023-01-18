@@ -342,6 +342,24 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing
     },
+    "ocrBatchService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Batch Mode)",
+        "name": "ocrBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
     "translateService": {
         "defaultTier" : "S1 Characters",
         "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],

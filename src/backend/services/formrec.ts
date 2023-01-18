@@ -6,6 +6,7 @@ import { PrebuiltDocumentModel } from "./prebuilt/prebuilt-document";
 import { PrebuiltIdDocumentModel } from "./prebuilt/prebuilt-idDocument";
 import { PrebuiltReceiptModel } from "./prebuilt/prebuilt-receipt";
 import { PrebuiltTaxUsW2Model } from "./prebuilt/prebuilt-tax.us.w2";
+import { PrebuiltReadModel } from "./prebuilt/prebuilt-read";
 import { BpaServiceObject } from "../engine/types";
 import { DB } from "./db";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
@@ -87,6 +88,10 @@ export class FormRec {
 
     }
 
+    public readDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocument(input, PrebuiltReadModel, "ocr", index)
+    }
+
     public generalDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocument(input, PrebuiltDocumentModel, "generalDocument", index)
     }
@@ -118,6 +123,10 @@ export class FormRec {
     public customFormrec = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
     } 
+
+    public readDocumentAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltReadModel, "ocr", index)
+    }
 
     public generalDocumentAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocumentAsync(input, PrebuiltDocumentModel, "generalDocument", index)
