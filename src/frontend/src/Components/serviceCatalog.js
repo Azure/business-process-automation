@@ -70,6 +70,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
+    "ocrToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocr"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Convert OCR to Text",
+        "name": "ocrToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "tableParser": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -333,7 +348,7 @@ export const sc = {
             "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
-            "text"
+            "ocr"
         ],
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service",
@@ -351,7 +366,7 @@ export const sc = {
             "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
-            "text"
+            "ocr"
         ],
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service (Batch Mode)",

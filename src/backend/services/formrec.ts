@@ -88,6 +88,31 @@ export class FormRec {
 
     }
 
+    public ocrToText = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        let outString = ""
+        for (const page of input.data.pages) {
+            for (const line of page.lines) {
+                outString += " " + line.text
+            }
+        }
+
+        const label = "ocrToText"
+        const results = input.aggregatedResults
+        results[label] = outString.replace('[A-Za-z0-9 *!$%&()?<>{}]+', '')
+        input.resultsIndexes.push({index : index, name : label, type : "text"})
+
+        return {
+            data : outString.replace('[A-Za-z0-9 *!$%&()?<>{}]+', ''),
+            type : "text",
+            filename: input.filename,
+            pipeline: input.pipeline,
+            bpaId : input.bpaId,
+            label : label,
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
+        }
+    }
+
     public readDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocument(input, PrebuiltReadModel, "ocr", index)
     }
