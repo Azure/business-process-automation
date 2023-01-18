@@ -5,11 +5,11 @@
 
 ## Deploy Button is new!!
 
-1.)  Fork this to your git repo
-2.)  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
-3.)  You need to name your project something unique.  It is highly recommended to avoid using dashes or even uppercase letters.  Stick to lowercase alpha-numerics.
-4.)  Click the "Deploy to Azure" button and fill in only the first three parameters:  Project Name, Token, Forked Github URL.
-5.)  The first time, it is likely that you will have a problem installing the Cognitive Services Multi-Service instance.  It requires that you agree to terms of use and you cannot do this within a template.  The solution is to create an instance, and delete it.  You will then be able to run the full template.  Instructions for creating this are lower in the readme.
+1.  Fork this to your git repo
+2.  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
+3.  You need to name your project something unique.  It is highly recommended to avoid using dashes or even uppercase letters.  Stick to lowercase alpha-numerics.
+4.  Click the "Deploy to Azure" button and fill in only the first three parameters:  Project Name, Token, Forked Github URL.
+5.  The first time, it is likely that you will have a problem installing the Cognitive Services Multi-Service instance.  It requires that you agree to terms of use and you cannot do this within a template.  The solution is to create an instance, and delete it.  You will then be able to run the full template.  Instructions for creating this are lower in the readme.
 
 ## Overview
 
