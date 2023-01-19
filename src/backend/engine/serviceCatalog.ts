@@ -82,6 +82,20 @@ const openaiSummarizeService : BpaService = {
     }
 }
 
+const ocrToTextService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocr"],
+    outputTypes: ["text"],
+    name: "ocrToText",
+    process: formrec.ocrToText,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const simplifyInvoiceService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["invoice"],
@@ -504,9 +518,23 @@ const sttBatchService : BpaService = {
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg"],
-    outputTypes: ["text"],
+    outputTypes: ["ocr"],
     name: "ocr",
-    process: ocr.process,
+    process: formrec.readDocument,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocr"],
+    name: "ocrBatch",
+    process: formrec.readDocumentAsync,
     serviceSpecificConfig: {
 
     },
@@ -712,6 +740,8 @@ export const serviceCatalog = {
     // "copy" : copyService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
+    "ocrBatchService" : ocrBatchService,
+    "ocrToText" : ocrToTextService,
     "extractSummary" : extractSummary,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,

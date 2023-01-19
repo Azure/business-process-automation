@@ -85,6 +85,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
+    "ocrToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocr"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Convert OCR to Text",
+        "name": "ocrToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "tableParser": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -348,11 +363,29 @@ export const sc = {
             "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
-            "text"
+            "ocr"
         ],
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service",
         "name": "ocr",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
+    "ocrBatchService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "ocr"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Batch Mode)",
+        "name": "ocrBatch",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing
