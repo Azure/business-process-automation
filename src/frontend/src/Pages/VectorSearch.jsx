@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Text, Button, Input } from '@fluentui/react-northstar';
+import { JSONTree } from "react-json-tree";
 
 export default function ViewInsights(props) {
 
@@ -34,21 +35,41 @@ export default function ViewInsights(props) {
                         {/* <img className="card-img-top" src={pdf} alt={pdf}></img> */}
                         <div className="card-body">
                             <h6 className="title-style">{d.document.filename}</h6>
-                            <div style={{ textAlign: "left" }}>
+                            {/* <div style={{ textAlign: "left" }}>
                                 {d.document.aggregatedResults.ocr}
-                            </div>
+                            </div> */}
                             {/* <div style={{ textAlign: "left" }}>
                                 {renderPills()}
-                            </div>
+                        </div> */}
                             <div className="json-tree">
-                                <JSONTree data={props.data} theme={theme} shouldExpandNode={() => false} />
-                            </div> */}
+                                <JSONTree data={d.document} theme={theme} shouldExpandNode={() => false} />
+                            </div> 
                         </div>
                     </div>
                 )
             })
         }
     }
+
+    const theme = {
+        base00: 'white',
+        base01: 'white',
+        base02: 'white',
+        base03: 'white',
+        base04: 'white',
+        base05: 'white',
+        base06: 'white',
+        base07: 'white',
+        base08: 'white',
+        base09: 'white',
+        base0A: 'white',
+        base0B: 'white',
+        base0C: 'white',
+        base0D: 'white',
+        base0E: 'white',
+        base0F: 'white'
+    };
+
 
     const style = { display: "flex", flexFlow: "column", fontWeight: "500", margin: "20px" }
     return (
