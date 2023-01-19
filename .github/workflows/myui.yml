@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - redis
-      - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
