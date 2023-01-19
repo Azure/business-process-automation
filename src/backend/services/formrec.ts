@@ -6,6 +6,7 @@ import { PrebuiltDocumentModel } from "./prebuilt/prebuilt-document";
 import { PrebuiltIdDocumentModel } from "./prebuilt/prebuilt-idDocument";
 import { PrebuiltReceiptModel } from "./prebuilt/prebuilt-receipt";
 import { PrebuiltTaxUsW2Model } from "./prebuilt/prebuilt-tax.us.w2";
+import { PrebuiltReadModel } from "./prebuilt/prebuilt-read";
 import { BpaServiceObject } from "../engine/types";
 import { DB } from "./db";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
@@ -31,16 +32,18 @@ export class FormRec {
     public simplifyInvoice = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
 
         const invoiceEntities = {}
-        const items = {}
+        const items = []
         let content = ""
         for(const document of input.aggregatedResults.invoice.documents){
             content += input.aggregatedResults.invoice.content
             for(const fieldKey of Object.keys(document.fields)){
                 if(fieldKey === 'items'){
                     for(const item of document.fields.items.values){
+                        let _item : any = {}
                         for(const p of Object.keys(item.properties)){
-                            items[p] = item.properties[p].content
+                            _item[p] = item.properties[p].content
                         }
+                        items.push(_item)
                     }
                 } else {
                     const newObject = document.fields[fieldKey]
@@ -85,6 +88,35 @@ export class FormRec {
 
     }
 
+    public ocrToText = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        let outString = ""
+        for (const page of input.data.pages) {
+            for (const line of page.lines) {
+                outString += " " + line.content
+            }
+        }
+
+        const label = "ocrToText"
+        const results = input.aggregatedResults
+        results[label] = outString.replace('[A-Za-z0-9 *!$%&()?<>{}]+', '')
+        input.resultsIndexes.push({index : index, name : label, type : "text"})
+
+        return {
+            data : outString.replace('[A-Za-z0-9 *!$%&()?<>{}]+', ''),
+            type : "text",
+            filename: input.filename,
+            pipeline: input.pipeline,
+            bpaId : input.bpaId,
+            label : label,
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
+        }
+    }
+
+    public readDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocument(input, PrebuiltReadModel, "ocr", index)
+    }
+
     public generalDocument = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocument(input, PrebuiltDocumentModel, "generalDocument", index)
     }
@@ -116,6 +148,10 @@ export class FormRec {
     public customFormrec = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
     } 
+
+    public readDocumentAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        return this._analyzeDocumentAsync(input, PrebuiltReadModel, "ocr", index)
+    }
 
     public generalDocumentAsync = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
         return this._analyzeDocumentAsync(input, PrebuiltDocumentModel, "generalDocument", index)

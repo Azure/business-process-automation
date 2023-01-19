@@ -86,6 +86,7 @@ export default function Stages(props) {
             for (const p of currentPipelines.data.pipelines) {
                 if (p.name === props.selectedPipelineName) {
                     p.stages = stages.slice(1, stages.length)
+                    p.firstStage = stages[0]
                     break;
                 }
             }

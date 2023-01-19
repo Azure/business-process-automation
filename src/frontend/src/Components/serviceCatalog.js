@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "openaiEmbeddings": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "openaiEmbeddings"
+        ],
+        "image": openai,
+        "label": "OpenAI (Embeddings)",
+        "name": "openaiEmbeddings",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "openaiGeneric": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -66,6 +81,21 @@ export const sc = {
         "image": invoice,
         "label": "Convert the Invoice Output to a Simpler Format",
         "name": "simplifyInvoice",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+    "ocrToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocr"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Convert OCR to Text",
+        "name": "ocrToText",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
@@ -333,11 +363,29 @@ export const sc = {
             "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
-            "text"
+            "ocr"
         ],
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service",
         "name": "ocr",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
+    "ocrBatchService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "ocr"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Batch Mode)",
+        "name": "ocrBatch",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing

@@ -20,7 +20,7 @@ import { OpenAI } from "../services/openai"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
+//const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
 const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER,process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
@@ -35,8 +35,8 @@ const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDP
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
-const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
-const openaiSimilarity = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SIMILARITY)
+const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
+const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 
 
 
@@ -45,7 +45,7 @@ const openaiEmbeddingsService : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["openaiEmbeddings"],
     name: "openaiEmbeddings",
-    process: openaiSimilarity.processEmbeddings,
+    process: openaiSearchDoc.processEmbeddings,
     serviceSpecificConfig: {
         
     },
@@ -74,6 +74,20 @@ const openaiSummarizeService : BpaService = {
     outputTypes: ["openaiSummarize"],
     name: "openaiSummarize",
     process: openaiText.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrToTextService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocr"],
+    outputTypes: ["text"],
+    name: "ocrToText",
+    process: formrec.ocrToText,
     serviceSpecificConfig: {
         
     },
@@ -504,9 +518,23 @@ const sttBatchService : BpaService = {
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg"],
-    outputTypes: ["text"],
+    outputTypes: ["ocr"],
     name: "ocr",
-    process: ocr.process,
+    process: formrec.readDocument,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocr"],
+    name: "ocrBatch",
+    process: formrec.readDocumentAsync,
     serviceSpecificConfig: {
 
     },
@@ -712,6 +740,8 @@ export const serviceCatalog = {
     // "copy" : copyService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
+    "ocrBatchService" : ocrBatchService,
+    "ocrToText" : ocrToTextService,
     "extractSummary" : extractSummary,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,

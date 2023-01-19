@@ -111,29 +111,28 @@ export class LanguageStudio {
             extractSummaryActions: [{ modelVersion: "latest" }]
         };
 
-        let out = ""
-        const summaryResults =  await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults", true, index)
-        for(const page of summaryResults.data){
-            for(const result of page.extractSummaryResults[0].results){
-                for(const sentence of result.sentences){
-                    out += " " + sentence.text
-                }
-            }
-        }
+        return await this._recognize(input, actions, 'extractSummary', 'extractSummary', "extractSummaryResults", true, index)
+        // for(const page of summaryResults.data){
+        //     for(const result of page.extractSummaryResults[0].results){
+        //         for(const sentence of result.sentences){
+        //             out += " " + sentence.text
+        //         }
+        //     }
+        // }
 
-        const results = input.aggregatedResults
-        results["extractSummary"] = out
-        input.resultsIndexes.push({index : index, name : "extractSummary", type : "extractSummary"})
-        return {
-            data : out,
-            type : "text",
-            filename: input.filename,
-            pipeline: input.pipeline,
-            bpaId : input.bpaId,
-            label : "extractSummary",
-            aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
-        }
+        // const results = input.aggregatedResults
+        // results["extractSummary"] = out
+        // input.resultsIndexes.push({index : index, name : "extractSummary", type : "extractSummary"})
+        // return {
+        //     data : out,
+        //     type : "text",
+        //     filename: input.filename,
+        //     pipeline: input.pipeline,
+        //     bpaId : input.bpaId,
+        //     label : "extractSummary",
+        //     aggregatedResults : results,
+        //     resultsIndexes : input.resultsIndexes
+        // }
     }
 
     public recognizeCustomEntities = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {

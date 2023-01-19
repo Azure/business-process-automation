@@ -7,6 +7,7 @@ import { Breadcrumb } from '@fluentui/react-northstar';
 import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import SelectPipeline from '../Components/SelectPipeline';
 import ViewInsights from './ViewInsights';
+import VectorSearch from './VectorSearch';
 //import Search from '../Components/searchComponents/pages/Search/Search'
 //import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
 //import { searchHtml } from './searchHtml'
@@ -68,6 +69,12 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
+            case 'VECTOR_SEARCH':
+                setSelectedMenuItem('VECTOR_SEARCH')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'OpenAI Vector Search', key: 'VECTOR_SEARCH' })
+                setBreadCrumbItems(breadCrumbItems)
+                break
             default:
                 break;
         }
@@ -84,7 +91,9 @@ export default function Content(props) {
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
             case 'VIEW_INSIGHTS':
-                return (<ViewInsights /> )
+                return (<ViewInsights />)
+            case 'VECTOR_SEARCH':
+                return (<VectorSearch />)
 
             default:
                 return (<Home />)
@@ -157,6 +166,21 @@ export default function Content(props) {
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
                         Sample Search Application
+                    </Breadcrumb.Item>
+                </>)
+
+            case 'VECTOR_SEARCH':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        Vector Search Application
                     </Breadcrumb.Item>
                 </>)
 

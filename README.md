@@ -2,6 +2,36 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fdev%2Ftemplates%2Foneclick.json)
 
+## Vector Search is new!!  February 19, 2023
+
+1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
+2. In Azure - Create a Azure Enterprise Redis Cache.  It MUST be Enterprise to have the vector search capabilities.  Collect the endpoint and password.
+3. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.
+4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
+5. Create a new pipeline for processing your documents or audio.  Example, pdf->ocr->ocrToText->openAiEmbeddings
+6. Drop in some documents in that pipeline.
+7. Go to Vector Search Application in the UI.  
+```
+    "OPENAI_KEY" : "",
+    "OPENAI_REGION" : "southcentralus",
+    "OPENAI_ENDPOINT" : "https://yourservice.openai.azure.com/",
+    "OPENAI_DEPLOYMENT_TEXT" : "bpatesttext",
+    "OPENAI_DEPLOYMENT_SEARCH_DOC" : "bpatestsearchdoc",
+    "OPENAI_DEPLOYMENT_SEARCH_QUERY" : "bpatestsearchquery",
+    "REDIS_URL" : "rediss://yourService.eastus.redisenterprise.cache.azure.net:10000",
+    "REDIS_PW" : "",
+    "STORE_IN_REDIS" : "true",
+    "WEBSITE_RUN_FROM_PACKAGE" : "https://bpasource.blob.core.windows.net/source/bpavectorsearch.zip?sv=2020-04-08&st=2023-01-19T17%3A44%3A33Z&se=2023-12-21T17%3A44%3A00Z&sr=b&sp=r&sig=HDbM%2F20ToHBMBw%2FF9bJL%2FWBX2BznWgp%2Bxv3VfzjPEjA%3D"
+```
+
+## Deploy Button is new!!  February 15, 2022
+
+1.  Fork this to your git repo
+2.  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
+3.  You need to name your project something unique.  It is highly recommended to avoid using dashes or even uppercase letters.  Stick to lowercase alpha-numerics.
+4.  Click the "Deploy to Azure" button and fill in only the first three parameters:  Project Name, Token, Forked Github URL.
+5.  The first time, it is likely that you will have a problem installing the Cognitive Services Multi-Service instance.  It requires that you agree to terms of use and you cannot do this within a template.  The solution is to create an instance, and delete it.  You will then be able to run the full template.  Instructions for creating this are lower in the readme.
+
 ## Overview
 
 This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even Hugging Face state-of-the-art models, into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a CosmosDB.
