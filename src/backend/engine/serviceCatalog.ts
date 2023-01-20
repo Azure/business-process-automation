@@ -683,7 +683,7 @@ const singleCategoryClassifyBatch : BpaService = {
 const healthCareServiceBatch : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["healthCareResults"],
-    name: "healthCareServiceBatch",
+    name: "healthCareBatch",
     bpaServiceId: "abc123",
     process: language.healthCareAsync,
     serviceSpecificConfig: {
