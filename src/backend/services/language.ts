@@ -152,11 +152,18 @@ export class LanguageStudio {
             throw new Error(`failed : ${JSON.stringify(axiosGetResp.data)}`)
         } else if (axiosGetResp?.data?.status && axiosGetResp.data.status === 'succeeded') {
             mySbMsg.type = 'async completion'
-            mySbMsg.aggregatedResults[mySbMsg.label] = axiosGetResp.data.tasks
+            if(mySbMsg.label === 'healthCare'){
+                mySbMsg.aggregatedResults[mySbMsg.label] = axiosGetResp.data
+                mySbMsg.data = axiosGetResp.data
+            } else{
+                mySbMsg.aggregatedResults[mySbMsg.label] = axiosGetResp.data.tasks
+                mySbMsg.data = axiosGetResp.data.tasks
+            }
+            
             mySbMsg.resultsIndexes.push({ index: mySbMsg.index, name: mySbMsg.label, type: mySbMsg.label })
             mySbMsg.type = mySbMsg.label
             mySbMsg.index = mySbMsg.index + 1
-            mySbMsg.data = axiosGetResp.data.tasks
+           
 
             const dbout = await db.create(mySbMsg)
             mySbMsg.dbId = dbout.id

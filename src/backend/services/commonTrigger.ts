@@ -40,6 +40,8 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             mySbMsg?.aggregatedResults["singleCategoryClassify"]?.location) {
             const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
             await language.processAsync(mySbMsg, db, mq)
+        } else {
+            throw new Error("async transaction not recognized" + mySbMsg.filename)
         }
     }
     else {
