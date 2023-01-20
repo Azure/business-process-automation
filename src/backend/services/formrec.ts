@@ -92,7 +92,7 @@ export class FormRec {
         let outString = ""
         for (const page of input.data.pages) {
             for (const line of page.lines) {
-                outString += " " + line.text
+                outString += " " + line.content
             }
         }
 

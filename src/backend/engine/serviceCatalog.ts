@@ -543,9 +543,160 @@ const ocrBatchService : BpaService = {
     }
 }
 
+const summaryToText : BpaService = {
+    inputTypes: ["extractSummary"],
+    outputTypes: ["text"],
+    name: "summaryToText",
+    bpaServiceId: "abc123",
+    process: language.summaryToText,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const extractSummaryBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["extractSummary"],
+    name: "extractSummaryBatch",
+    bpaServiceId: "abc123",
+    process: language.extractSummaryAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const analyzeSentimentBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["analyzeSentiment"],
+    name: "analyzeSentimentBatch",
+    bpaServiceId: "abc123",
+    process: language.analyzeSentimentAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const extractKeyPhrasesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["extractKeyPhrases"],
+    name: "extractKeyPhrasesBatch",
+    bpaServiceId: "abc123",
+    process: language.extractKeyPhrasesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+const multiCategoryClassifyBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["multiCategoryClassify"],
+    name: "multiCategoryClassifyBatch",
+    bpaServiceId: "abc123",
+    process: language.multiCategoryClassifyAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+const recognizeCustomEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizeCustomEntities"],
+    name: "recognizeCustomEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizeCustomEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+const recognizeEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizeEntities"],
+    name: "recognizeEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizeEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const recognizeLinkedEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizeLinkedEntities"],
+    name: "recognizeLinkedEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizeLinkedEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const recognizePiiEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizePiiEntities"],
+    name: "recognizePiiEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizePiiEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const singleCategoryClassifyBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["singleCategoryClassify"],
+    name: "singleCategoryClassifyBatch",
+    bpaServiceId: "abc123",
+    process: language.singleCategoryClassifyAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const healthCareServiceBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["healthCareResults"],
+    name: "healthCareServiceBatch",
+    bpaServiceId: "abc123",
+    process: language.healthCareAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const extractSummary : BpaService = {
     inputTypes: ["text"],
-    outputTypes: ["text"],
+    outputTypes: ["extractSummary"],
     name: "extractSummary",
     bpaServiceId: "abc123",
     process: language.extractSummary,
@@ -743,6 +894,24 @@ export const serviceCatalog = {
     "ocrBatchService" : ocrBatchService,
     "ocrToText" : ocrToTextService,
     "extractSummary" : extractSummary,
+    "analyzeSentiment" : analyzeSentiment,
+    "extractKeyPhrases" : extractKeyPhrases,
+    "multiCategoryClassify" : multiCategoryClassify,
+    "recognizeCustomEntities" : recognizeCustomEntities,
+    "recognizeEntities" : recognizeEntities,
+    "recognizeLinkedEntities" : recognizeLinkedEntities,
+    "recognizePiiEntities" : recognizePiiEntities,
+    "singleCategoryClassify" : singleCategoryClassify,
+    "extractSummaryBatch" : extractSummaryBatch,
+    "analyzeSentimentBatch" : analyzeSentimentBatch,
+    "extractKeyPhrasesBatch" : extractKeyPhrasesBatch,
+    "multiCategoryClassifyBatch" : multiCategoryClassifyBatch,
+    "recognizeCustomEntitiesBatch" : recognizeCustomEntitiesBatch,
+    "recognizeEntitiesBatch" : recognizeEntitiesBatch,
+    "recognizeLinkedEntitiesBatch" : recognizeLinkedEntitiesBatch,
+    "recognizePiiEntitiesBatch" : recognizePiiEntitiesBatch,
+    "singleCategoryClassifyBatch" : singleCategoryClassifyBatch,
+    "summaryToText" : summaryToText,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
     "translate" : translateService,
@@ -762,18 +931,12 @@ export const serviceCatalog = {
     "prebuiltReceiptBatch" : prebuiltReceiptBatch,
     "prebuiltTaxW2Batch" : prebuiltTaxW2Batch,
     "customFormRecBatch" : customFormRecBatch,
-    "analyzeSentiment" : analyzeSentiment,
-    "extractKeyPhrases" : extractKeyPhrases,
-    "multiCategoryClassify" : multiCategoryClassify,
-    "recognizeCustomEntities" : recognizeCustomEntities,
-    "recognizeEntities" : recognizeEntities,
-    "recognizeLinkedEntities" : recognizeLinkedEntities,
-    "recognizePiiEntities" : recognizePiiEntities,
-    "singleCategoryClassify" : singleCategoryClassify,
+    
     "huggingFaceNER" : huggingFaceNER,
     "preprocess" : preprocessService,
     "testService" : testService,
     "healthCare" : healthCareService,
+    "healthCareBatch" : healthCareServiceBatch,
     "documentTranslation" : documentTranslationService,
     "automlNer" : automlNerService,
     "changeOutput" : changeOutputService,

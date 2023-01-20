@@ -7,6 +7,7 @@ import MessageQueue from "../services/messageQueue";
 import { DB } from "./db"
 import { Speech } from "./speech"
 import { FormRec } from "./formrec"
+import { LanguageStudio } from "./language"
 const _ = require('lodash')
 
 export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue, db: DB) => {
@@ -26,6 +27,18 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             mySbMsg?.aggregatedResults["ocr"]?.location) {
             const fr = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY)
             await fr.processAsync(mySbMsg, db, mq)
+        }
+        else if (mySbMsg?.aggregatedResults["extractSummary"]?.location ||
+            mySbMsg?.aggregatedResults["analyzeSentiment"]?.location ||
+            mySbMsg?.aggregatedResults["extractKeyPhrases"]?.location ||
+            mySbMsg?.aggregatedResults["multiCategoryClassify"]?.location ||
+            mySbMsg?.aggregatedResults["recognizeCustomEntities"]?.location ||
+            mySbMsg?.aggregatedResults["recognizeEntities"]?.location ||
+            mySbMsg?.aggregatedResults["recognizeLinkedEntities"]?.location ||
+            mySbMsg?.aggregatedResults["recognizePiiEntities"]?.location ||
+            mySbMsg?.aggregatedResults["singleCategoryClassify"]?.location) {
+            const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
+            await language.processAsync(mySbMsg, db, mq)
         }
     }
     else {
