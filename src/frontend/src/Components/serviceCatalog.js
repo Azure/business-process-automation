@@ -1063,7 +1063,7 @@ export const sc = {
             "text"
         ],
         "outputTypes": [
-            "healthCareResults"
+            "healthCare"
         ],
         "image": customClassification,
         "label": "Health Care API",
@@ -1072,19 +1072,19 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getHealthLanguagePricing
     },
-    "healthCare": {
-        "defaultTier" : "Standard Health Text Records",
+    "healthCareBatch": {
+        "defaultTier" : "Standard Health Text Records (Batch Mode)",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
         "bpaServiceId": "abc123",
         "inputTypes": [
             "text"
         ],
         "outputTypes": [
-            "healthCareResults"
+            "healthCare"
         ],
         "image": customClassification,
         "label": "Health Care API",
-        "name": "healthCare",
+        "name": "healthCareBatch",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getHealthLanguagePricing
