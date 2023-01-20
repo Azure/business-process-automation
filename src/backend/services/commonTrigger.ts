@@ -36,6 +36,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             mySbMsg?.aggregatedResults["recognizeEntities"]?.location ||
             mySbMsg?.aggregatedResults["recognizeLinkedEntities"]?.location ||
             mySbMsg?.aggregatedResults["recognizePiiEntities"]?.location ||
+            mySbMsg?.aggregatedResults["healthCare"]?.location ||
             mySbMsg?.aggregatedResults["singleCategoryClassify"]?.location) {
             const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
             await language.processAsync(mySbMsg, db, mq)
