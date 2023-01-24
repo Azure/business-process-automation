@@ -15,6 +15,8 @@ export class Speech {
 
     constructor(subscriptionKey: string, region: string, connectionString: string, containerName: string, cosmosConnectionString: string, cosmosDb: string, cosmosContainer: string) {
         this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
+        //const url : URL = new URL(process.env.SPEECH_SUB_ENDPOINT)
+        //this._client = sdk.SpeechConfig.fromHost(url, subscriptionKey)
         this._client.setProfanity(sdk.ProfanityOption.Raw)
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);

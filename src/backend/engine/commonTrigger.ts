@@ -1,13 +1,13 @@
 import { Context } from "@azure/functions"
 import { BlobStorage, LocalStorage } from "../services/storage"
-import { BpaEngine } from "../engine"
-import { serviceCatalog } from "../engine/serviceCatalog"
-import { BpaConfiguration, BpaPipelines } from "../engine/types"
+import { BpaEngine } from "."
+import { serviceCatalog } from "./serviceCatalog"
+import { BpaConfiguration, BpaPipelines } from "./types"
 import MessageQueue from "../services/messageQueue";
-import { DB } from "./db"
-import { Speech } from "./speech"
-import { FormRec } from "./formrec"
-import { LanguageStudio } from "./language"
+import { DB } from "../services/db"
+import { Speech } from "../services/speech"
+import { FormRec } from "../services/formrec"
+import { LanguageStudio } from "../services/language"
 const _ = require('lodash')
 
 export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue, db: DB) => {
