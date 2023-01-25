@@ -85,6 +85,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
+    "ocrContainerToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocrContainer"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Convert OCR to Text (Container Version)",
+        "name": "ocrContainerToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "tableParser": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -353,6 +368,24 @@ export const sc = {
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service",
         "name": "ocr",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
+    "ocrContainerService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "ocrContainer"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Container Version)",
+        "name": "ocrContainer",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing

@@ -96,6 +96,20 @@ const ocrToTextService : BpaService = {
     }
 }
 
+const ocrContainerToTextService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocrContainer"],
+    outputTypes: ["text"],
+    name: "ocrContainerToText",
+    process: formrec.ocrContainerToText,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const simplifyInvoiceService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["invoice"],
@@ -515,6 +529,20 @@ const sttBatchService : BpaService = {
     }
 }
 
+const ocrContainerService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocrContainer"],
+    name: "ocrContainer",
+    process: formrec.readContainer,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg"],
@@ -891,8 +919,10 @@ export const serviceCatalog = {
     // "copy" : copyService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
+    "ocrContainerService" : ocrContainerService, 
     "ocrBatchService" : ocrBatchService,
     "ocrToText" : ocrToTextService,
+    "ocrContainerToText" : ocrContainerToTextService,
     "extractSummary" : extractSummary,
     "analyzeSentiment" : analyzeSentiment,
     "extractKeyPhrases" : extractKeyPhrases,
