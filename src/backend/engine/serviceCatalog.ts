@@ -20,11 +20,11 @@ import { OpenAI } from "../services/openai"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
+//const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
 const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER,process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
-const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY)
+const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY, process.env.FORMREC_CONTAINER_READ_ENDPOINT)
 const translate = new Translate(process.env.TRANSLATE_ENDPOINT, process.env.TRANSLATE_APIKEY, process.env.TRANSLATE_REGION)
 const huggingface = new HuggingFace(process.env.HUGGINGFACE_ENDPOINT)
 const preprocess = new Preprocess(process.env.HUGGINGFACE_ENDPOINT)
@@ -529,6 +529,20 @@ const sttBatchService : BpaService = {
     }
 }
 
+const ocrContainerBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocrContainer"],
+    name: "ocrContainerBatch",
+    process: formrec.readContainerAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const ocrContainerService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg"],
@@ -920,6 +934,7 @@ export const serviceCatalog = {
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
     "ocrContainerService" : ocrContainerService, 
+    "ocrContainerBatchService" : ocrContainerBatchService, 
     "ocrBatchService" : ocrBatchService,
     "ocrToText" : ocrToTextService,
     "ocrContainerToText" : ocrContainerToTextService,

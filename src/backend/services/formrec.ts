@@ -19,14 +19,16 @@ export class FormRec {
     private _client: DocumentAnalysisClient
     private _apikey: string
     private _endpoint: string
+    private _containerReadEndpoint : string
 
-    constructor(endpoint: string, apikey: string) {
+    constructor(endpoint: string, apikey: string, containerReadEndpoint ?: string) {
         this._client = new DocumentAnalysisClient(
             endpoint,
             new AzureKeyCredential(apikey)
         )
         this._apikey = apikey
         this._endpoint = endpoint
+        this._containerReadEndpoint = containerReadEndpoint
     }
     private _delay = (ms: number) => {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -34,7 +36,7 @@ export class FormRec {
 
     public readContainer = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
-        const url = `${this._endpoint}/vision/v3.2/read/analyze`
+        const url = `${this._containerReadEndpoint}/vision/v3.2/read/analyze`
         const headers: AxiosRequestConfig = {
             headers: {
                 "accept": "*/*",
@@ -72,6 +74,33 @@ export class FormRec {
 
     }
 
+    public readContainerAsync = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        const url = `${this._containerReadEndpoint}/vision/v3.2/read/analyze`
+        const headers: AxiosRequestConfig = {
+            headers: {
+                "accept": "*/*",
+                "Content-Type": "application/pdf"
+            }
+        }
+        const out = await axios.post(url, input.data, headers)
+        const label = "ocrContainer"
+        input.aggregatedResults[label] = {
+            location: out.headers['operation-location'],
+            filename: input.filename
+        }
+        return {
+            index: index,
+            type: "async transaction",
+            label: label,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            bpaId: input.bpaId,
+            aggregatedResults: input.aggregatedResults,
+            resultsIndexes: input.resultsIndexes
+        }
+    }
+
 
     public simplifyInvoice = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
@@ -92,9 +121,6 @@ export class FormRec {
                 } else {
                     const newObject = document.fields[fieldKey]
                     invoiceEntities[fieldKey] = newObject.content
-                    // invoiceEntities[fieldKey+"Kind"] = newObject.kind
-                    // invoiceEntities[fieldKey+"Confidence"] = newObject.confidence
-                    // invoiceEntities[fieldKey+"Value"] = newObject.value
                 }
 
             }
@@ -291,11 +317,7 @@ export class FormRec {
             console.log('do nothing')
             await mq.scheduleMessage(mySbMsg, 10000)
         }
-
-
     }
-
-
 
     private _analyzeDocument = async (input: BpaServiceObject, modelId: any, label: string, index: number): Promise<BpaServiceObject> => {
         const poller: AnalysisPoller<AnalyzeResult<AnalyzedDocument>> = await this._client.beginAnalyzeDocument(modelId, input.data)

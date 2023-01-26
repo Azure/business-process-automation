@@ -24,6 +24,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             mySbMsg?.aggregatedResults["receipt"]?.location ||
             mySbMsg?.aggregatedResults["taxw2"]?.location ||
             mySbMsg?.aggregatedResults["customFormRec"]?.location ||
+            mySbMsg?.aggregatedResults["ocrContainer"]?.location ||
             mySbMsg?.aggregatedResults["ocr"]?.location) {
             const fr = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY)
             await fr.processAsync(mySbMsg, db, mq)

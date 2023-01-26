@@ -27,10 +27,6 @@ spec:
       serviceAccountName: {{ include "helm.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      volumes: 
-        - name: task-pv-storage
-          persistentVolumeClaim:
-            claimName: task-pv-claim
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -45,9 +41,6 @@ spec:
           - secretRef:
               name: "{{ .Chart.Name }}-backend"
           imagePullPolicy: {{ .Values.backendImage.pullPolicy }}
-          volumeMounts: 
-            - mountPath: "/mydata"
-              name: task-pv-storage
           ports:
             - name: http
               containerPort: 80
