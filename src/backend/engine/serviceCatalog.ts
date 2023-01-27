@@ -1,7 +1,6 @@
 import { CosmosDB } from "../services/db"
 import { LanguageStudio } from "../services/language"
 import { Speech } from '../services/speech'
-import { Ocr } from "../services/ocr"
 import { BpaService } from "./types"
 import { FormRec } from "../services/formrec"
 import { Translate } from "../services/translate"
@@ -20,7 +19,6 @@ import { OpenAI } from "../services/openai"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-//const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
 const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER,process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
@@ -928,6 +926,8 @@ const xmlToJsonService : BpaService = {
 
     }
 }
+
+
 
 export const serviceCatalog = {
     // "copy" : copyService,

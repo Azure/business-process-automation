@@ -35,7 +35,7 @@ export class FormRec {
     }
 
     public readContainer = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-
+        console.log("read api 3.2 from container")
         const url = `${this._containerReadEndpoint}/vision/v3.2/read/analyze`
         const headers: AxiosRequestConfig = {
             headers: {
@@ -75,7 +75,7 @@ export class FormRec {
     }
 
     public readContainerAsync = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-
+        console.log("read api 3.2 from container (batch mode)")
         const url = `${this._containerReadEndpoint}/vision/v3.2/read/analyze`
         const headers: AxiosRequestConfig = {
             headers: {
