@@ -67,8 +67,13 @@ export class OpenAI {
             const truncatedString = input.data.slice(0, 3500)
     
             const openAiInput = {
-                "prompt": `Text: ${truncatedString} \n\n\n\n ${input.serviceSpecificConfig.prompt}`,
-                "max_tokens": Number.parseInt(input.serviceSpecificConfig.maxTokens)
+                "prompt": `${input.serviceSpecificConfig.prompt.replace("${document}",truncatedString)}`,
+                "max_tokens": Number.parseInt(input.serviceSpecificConfig.maxTokens),
+                "temperature": 0.7,
+                "top_p": 1,
+                "frequency_penalty":0,
+                "presence_penalty":0,
+                "stop": null
             }
     
             const out = await axios.post(url, openAiInput, config)
