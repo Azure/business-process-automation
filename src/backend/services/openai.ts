@@ -52,40 +52,44 @@ export class OpenAI {
 
     public processGeneric = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
-
-        const headers = {
-            'api-key': this._apikey,
-            'Content-Type': 'application/json'
+        try{
+            const headers = {
+                'api-key': this._apikey,
+                'Content-Type': 'application/json'
+            }
+    
+            const config: AxiosRequestConfig = {
+                headers: headers
+            }
+    
+            let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
+    
+            const truncatedString = input.data.slice(0, 3500)
+    
+            const openAiInput = {
+                "prompt": `${truncatedString} \n : ${input.serviceSpecificConfig.prompt}`,
+                "max_tokens": Number.parseInt(input.serviceSpecificConfig.maxTokens)
+            }
+    
+            const out = await axios.post(url, openAiInput, config)
+            const results = input.aggregatedResults
+            results["openaiGeneric"] = out.data
+            input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiGeneric" })
+            const result: BpaServiceObject = {
+                data: out.data,
+                type: 'openaiGeneric',
+                label: 'openaiGeneric',
+                bpaId: input.bpaId,
+                filename: input.filename,
+                pipeline: input.pipeline,
+                aggregatedResults: results,
+                resultsIndexes: input.resultsIndexes
+            }
+            return result
+        } catch(err){
+            console.log(err)
         }
-
-        const config: AxiosRequestConfig = {
-            headers: headers
-        }
-
-        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
-
-        const truncatedString = input.data.slice(0, 3500)
-
-        const openAiInput = {
-            "prompt": `${truncatedString} \n : ${input.serviceSpecificConfig.prompt}`,
-            "max_tokens": Number.parseInt(input.serviceSpecificConfig.maxTokens)
-        }
-
-        const out = await axios.post(url, openAiInput, config)
-        const results = input.aggregatedResults
-        results["openaiGeneric"] = out.data
-        input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiGeneric" })
-        const result: BpaServiceObject = {
-            data: out.data,
-            type: 'openaiGeneric',
-            label: 'openaiGeneric',
-            bpaId: input.bpaId,
-            filename: input.filename,
-            pipeline: input.pipeline,
-            aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
-        }
-        return result
+        return null
     }
 
     public processEmbeddings = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
