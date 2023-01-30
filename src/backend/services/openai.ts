@@ -67,7 +67,7 @@ export class OpenAI {
             const truncatedString = input.data.slice(0, 3500)
     
             const openAiInput = {
-                "prompt": `${truncatedString} \n : ${input.serviceSpecificConfig.prompt}`,
+                "prompt": `Text: ${truncatedString} \n\n\n\n ${input.serviceSpecificConfig.prompt}`,
                 "max_tokens": Number.parseInt(input.serviceSpecificConfig.maxTokens)
             }
     
