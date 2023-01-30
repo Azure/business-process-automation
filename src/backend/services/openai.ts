@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { BpaServiceObject } from "../engine/types";
-//import { Client } from "redis-om"
 
 export class OpenAI {
 
