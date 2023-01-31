@@ -39,13 +39,7 @@
     "WEBSITE_RUN_FROM_PACKAGE" : "https://bpasource.blob.core.windows.net/source/bpavectorsearch.zip?sv=2020-04-08&st=2023-01-19T17%3A44%3A33Z&se=2023-12-21T17%3A44%3A00Z&sr=b&sp=r&sig=HDbM%2F20ToHBMBw%2FF9bJL%2FWBX2BznWgp%2Bxv3VfzjPEjA%3D"
 ```
 
-## Deploy Button is new!!  February 15, 2022
-=======
->>>>>>> 573a3859da9f284031fc4564a96e4ffc14b37d02
-
-
-## Deploy Button is new!!
->>>>>>> main
+## Deploy Button is new!!  January 15, 2022
 
 1.  Fork this to your git repo
 2.  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
