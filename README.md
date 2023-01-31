@@ -1,6 +1,7 @@
 # Business Process Automation Accelerator
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
+<<<<<<< HEAD
 
 ## Add OpenAI Completions To Your Pipeline!!  January 31, 2023
 1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
@@ -41,6 +42,8 @@
 ```
 
 ## Deploy Button is new!!  February 15, 2022
+=======
+>>>>>>> 573a3859da9f284031fc4564a96e4ffc14b37d02
 
 
 ## Deploy Button is new!!
