@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-sttbatch
+  labels:
+    app: {{ include "helm.fullname" . }}-sttbatch
+spec:
+  {{- if not .Values.sttBatchAutoscaling.enabled }}
+  replicas: {{ .Values.sttBatchReplicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "helm.fullname" . }}-sttbatch
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "helm.fullname" . }}-sttbatch
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      - configMap:
+          name: {{ include "helm.fullname" . }}-sttbatch
+        name: application-config
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.sttBatchImage.repository }}:{{ .Values.sttBatchImage.tag | default .Chart.AppVersion }}"
+          command: ["run-batch-client", "-m","APISERVER"] 
+          volumeMounts:
+          - name: application-config
+            mountPath: /usr/local/batch/input
+            readOnly: true
+          envFrom:
+          - secretRef:
+              name: "{{ .Chart.Name }}-sttbatch"
+          imagePullPolicy: {{ .Values.sttBatchImage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /status
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /ready
+          #     port: http
+          resources:
+            {{- toYaml .Values.sttBatchResources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

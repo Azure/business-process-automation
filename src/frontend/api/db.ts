@@ -185,4 +185,17 @@ export class CosmosDB extends DB {
         }
         return null
     }
+
+    public getAll = async (pipeline: string) : Promise<any> => {
+        try{
+            const client = new CosmosClient(this._connectionString);
+            const database = client.database(this._dbName);
+            const container = database.container(this._containerName);
+            const items = await container.items.query(`SELECT * FROM c WHERE c.pipeline = '${pipeline}'`).fetchAll()
+            return items.resources
+        } catch(err){
+            console.log(err)
+        }
+        return null
+    }
 }

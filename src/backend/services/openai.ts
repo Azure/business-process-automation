@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { BpaServiceObject } from "../engine/types";
-//import { Client } from "redis-om"
 
 export class OpenAI {
 
@@ -66,10 +65,8 @@ export class OpenAI {
 
         const truncatedString = input.data.slice(0, 3500)
 
-        const openAiInput = {
-            "prompt": `${truncatedString} \n : ${input.serviceSpecificConfig.prompt}`,
-            "max_tokens": Number.parseInt(input.serviceSpecificConfig.maxTokens)
-        }
+        let openAiInput = JSON.parse(input.serviceSpecificConfig)
+        openAiInput.prompt = openAiInput.prompt.replace("${document}", truncatedString)
 
         const out = await axios.post(url, openAiInput, config)
         const results = input.aggregatedResults
@@ -86,45 +83,44 @@ export class OpenAI {
             resultsIndexes: input.resultsIndexes
         }
         return result
+
     }
 
     public processEmbeddings = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
-        try {
-            const headers = {
-                'api-key': this._apikey,
-                'Content-Type': 'application/json'
-            }
 
-            const config: AxiosRequestConfig = {
-                headers: headers
-            }
-
-            let url = `${this._endpoint}openai/deployments/${this._deploymentId}/embeddings?api-version=2022-12-01`
-
-            const truncatedString = input.data.slice(0, 2000)
-
-            const openAiInput = {
-                "input": truncatedString
-            }
-
-            const out = await axios.post(url, openAiInput, config)
-            const results = input.aggregatedResults
-            results["openaiEmbeddings"] = out.data
-            input.resultsIndexes.push({ index: index, name: "openaiEmbeddings", type: "openaiEmbeddings" })
-            const result: BpaServiceObject = {
-                data: out.data,
-                type: 'openaiEmbeddings',
-                label: 'openaiEmbeddings',
-                bpaId: input.bpaId,
-                filename: input.filename,
-                pipeline: input.pipeline,
-                aggregatedResults: results,
-                resultsIndexes: input.resultsIndexes
-            }
-            return result
-        } catch (err) {
-            console.log(err)
+        const headers = {
+            'api-key': this._apikey,
+            'Content-Type': 'application/json'
         }
+
+        const config: AxiosRequestConfig = {
+            headers: headers
+        }
+
+        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/embeddings?api-version=2022-12-01`
+
+        const truncatedString = input.data.slice(0, 2000)
+
+        const openAiInput = {
+            "input": truncatedString
+        }
+
+        const out = await axios.post(url, openAiInput, config)
+        const results = input.aggregatedResults
+        results["openaiEmbeddings"] = out.data
+        input.resultsIndexes.push({ index: index, name: "openaiEmbeddings", type: "openaiEmbeddings" })
+        const result: BpaServiceObject = {
+            data: out.data,
+            type: 'openaiEmbeddings',
+            label: 'openaiEmbeddings',
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            aggregatedResults: results,
+            resultsIndexes: input.resultsIndexes
+        }
+        return result
+
     }
 }

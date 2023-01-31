@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "helm.fullname" . }}-sttbatch"
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.sttBatchService.type }}
+  ports:
+    - port: {{ .Values.sttBatchService.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "helm.fullname" . }}-sttbatch

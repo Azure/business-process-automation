@@ -1,7 +1,6 @@
 import { CosmosDB } from "../services/db"
 import { LanguageStudio } from "../services/language"
 import { Speech } from '../services/speech'
-import { Ocr } from "../services/ocr"
 import { BpaService } from "./types"
 import { FormRec } from "../services/formrec"
 import { Translate } from "../services/translate"
@@ -20,11 +19,10 @@ import { OpenAI } from "../services/openai"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-const ocr = new Ocr(process.env.OCR_ENDPOINT,process.env.OCR_APIKEY)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
 const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER,process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
-const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY)
+const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY, process.env.FORMREC_CONTAINER_READ_ENDPOINT)
 const translate = new Translate(process.env.TRANSLATE_ENDPOINT, process.env.TRANSLATE_APIKEY, process.env.TRANSLATE_REGION)
 const huggingface = new HuggingFace(process.env.HUGGINGFACE_ENDPOINT)
 const preprocess = new Preprocess(process.env.HUGGINGFACE_ENDPOINT)
@@ -35,7 +33,7 @@ const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDP
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
-const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT)
+const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
 const openaiSimilarity = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SIMILARITY)
 
 
@@ -74,6 +72,34 @@ const openaiSummarizeService : BpaService = {
     outputTypes: ["openaiSummarize"],
     name: "openaiSummarize",
     process: openaiText.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrToTextService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocr"],
+    outputTypes: ["text"],
+    name: "ocrToText",
+    process: formrec.ocrToText,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrContainerToTextService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocrContainer"],
+    outputTypes: ["text"],
+    name: "ocrContainerToText",
+    process: formrec.ocrContainerToText,
     serviceSpecificConfig: {
         
     },
@@ -501,12 +527,205 @@ const sttBatchService : BpaService = {
     }
 }
 
+const ocrContainerBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocrContainer"],
+    name: "ocrContainerBatch",
+    process: formrec.readContainerAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrContainerService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocrContainer"],
+    name: "ocrContainer",
+    process: formrec.readContainer,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf","jpg"],
-    outputTypes: ["text"],
+    outputTypes: ["ocr"],
     name: "ocr",
-    process: ocr.process,
+    process: formrec.readDocument,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const ocrBatchService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf","jpg"],
+    outputTypes: ["ocr"],
+    name: "ocrBatch",
+    process: formrec.readDocumentAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const summaryToText : BpaService = {
+    inputTypes: ["extractSummary"],
+    outputTypes: ["text"],
+    name: "summaryToText",
+    bpaServiceId: "abc123",
+    process: language.summaryToText,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const extractSummaryBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["extractSummary"],
+    name: "extractSummaryBatch",
+    bpaServiceId: "abc123",
+    process: language.extractSummaryAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const analyzeSentimentBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["analyzeSentiment"],
+    name: "analyzeSentimentBatch",
+    bpaServiceId: "abc123",
+    process: language.analyzeSentimentAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const extractKeyPhrasesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["extractKeyPhrases"],
+    name: "extractKeyPhrasesBatch",
+    bpaServiceId: "abc123",
+    process: language.extractKeyPhrasesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+const multiCategoryClassifyBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["multiCategoryClassify"],
+    name: "multiCategoryClassifyBatch",
+    bpaServiceId: "abc123",
+    process: language.multiCategoryClassifyAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+const recognizeCustomEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizeCustomEntities"],
+    name: "recognizeCustomEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizeCustomEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+const recognizeEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizeEntities"],
+    name: "recognizeEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizeEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const recognizeLinkedEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizeLinkedEntities"],
+    name: "recognizeLinkedEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizeLinkedEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const recognizePiiEntitiesBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["recognizePiiEntities"],
+    name: "recognizePiiEntitiesBatch",
+    bpaServiceId: "abc123",
+    process: language.recognizePiiEntitiesAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const singleCategoryClassifyBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["singleCategoryClassify"],
+    name: "singleCategoryClassifyBatch",
+    bpaServiceId: "abc123",
+    process: language.singleCategoryClassifyAsync,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const healthCareServiceBatch : BpaService = {
+    inputTypes: ["text"],
+    outputTypes: ["healthCareResults"],
+    name: "healthCareBatch",
+    bpaServiceId: "abc123",
+    process: language.healthCareAsync,
     serviceSpecificConfig: {
 
     },
@@ -517,7 +736,7 @@ const ocrService : BpaService = {
 
 const extractSummary : BpaService = {
     inputTypes: ["text"],
-    outputTypes: ["text"],
+    outputTypes: ["extractSummary"],
     name: "extractSummary",
     bpaServiceId: "abc123",
     process: language.extractSummary,
@@ -708,11 +927,36 @@ const xmlToJsonService : BpaService = {
     }
 }
 
+
+
 export const serviceCatalog = {
     // "copy" : copyService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
+    "ocrContainerService" : ocrContainerService, 
+    "ocrContainerBatchService" : ocrContainerBatchService, 
+    "ocrBatchService" : ocrBatchService,
+    "ocrToText" : ocrToTextService,
+    "ocrContainerToText" : ocrContainerToTextService,
     "extractSummary" : extractSummary,
+    "analyzeSentiment" : analyzeSentiment,
+    "extractKeyPhrases" : extractKeyPhrases,
+    "multiCategoryClassify" : multiCategoryClassify,
+    "recognizeCustomEntities" : recognizeCustomEntities,
+    "recognizeEntities" : recognizeEntities,
+    "recognizeLinkedEntities" : recognizeLinkedEntities,
+    "recognizePiiEntities" : recognizePiiEntities,
+    "singleCategoryClassify" : singleCategoryClassify,
+    "extractSummaryBatch" : extractSummaryBatch,
+    "analyzeSentimentBatch" : analyzeSentimentBatch,
+    "extractKeyPhrasesBatch" : extractKeyPhrasesBatch,
+    "multiCategoryClassifyBatch" : multiCategoryClassifyBatch,
+    "recognizeCustomEntitiesBatch" : recognizeCustomEntitiesBatch,
+    "recognizeEntitiesBatch" : recognizeEntitiesBatch,
+    "recognizeLinkedEntitiesBatch" : recognizeLinkedEntitiesBatch,
+    "recognizePiiEntitiesBatch" : recognizePiiEntitiesBatch,
+    "singleCategoryClassifyBatch" : singleCategoryClassifyBatch,
+    "summaryToText" : summaryToText,
     "sttService" : sttService,
     "sttBatchService" : sttBatchService,
     "translate" : translateService,
@@ -732,18 +976,12 @@ export const serviceCatalog = {
     "prebuiltReceiptBatch" : prebuiltReceiptBatch,
     "prebuiltTaxW2Batch" : prebuiltTaxW2Batch,
     "customFormRecBatch" : customFormRecBatch,
-    "analyzeSentiment" : analyzeSentiment,
-    "extractKeyPhrases" : extractKeyPhrases,
-    "multiCategoryClassify" : multiCategoryClassify,
-    "recognizeCustomEntities" : recognizeCustomEntities,
-    "recognizeEntities" : recognizeEntities,
-    "recognizeLinkedEntities" : recognizeLinkedEntities,
-    "recognizePiiEntities" : recognizePiiEntities,
-    "singleCategoryClassify" : singleCategoryClassify,
+    
     "huggingFaceNER" : huggingFaceNER,
     "preprocess" : preprocessService,
     "testService" : testService,
     "healthCare" : healthCareService,
+    "healthCareBatch" : healthCareServiceBatch,
     "documentTranslation" : documentTranslationService,
     "automlNer" : automlNerService,
     "changeOutput" : changeOutputService,

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-sttbatch
+  labels:
+    app: {{ include "helm.fullname" . }}-sttbatch
+data:
+  config.yaml: |
+    MyContainer1:
+      concurrency: 1
+      host: bpa-stt
+      port: 5000

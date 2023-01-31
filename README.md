@@ -2,8 +2,44 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
+## Add OpenAI Completions To Your Pipeline!!  January 31, 2023
+1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
+2. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.
+4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
+5. Create a new pipeline for processing your documents or audio.  Example, pdf->ocr->ocrToText->openAIGeneric. 
+6. Drop in some documents in that pipeline.
+7. Go to Vector Search Application in the UI.  
+```
+    "OPENAI_KEY" : "",
+    "OPENAI_REGION" : "southcentralus",
+    "OPENAI_ENDPOINT" : "https://yourservice.openai.azure.com/",
+    "OPENAI_DEPLOYMENT_TEXT" : "bpatesttext",
+    "WEBSITE_RUN_FROM_PACKAGE" : "https://bpasource.blob.core.windows.net/source/bpavectorsearch.zip?sv=2020-04-08&st=2023-01-19T17%3A44%3A33Z&se=2023-12-21T17%3A44%3A00Z&sr=b&sp=r&sig=HDbM%2F20ToHBMBw%2FF9bJL%2FWBX2BznWgp%2Bxv3VfzjPEjA%3D"
+```
 
-## Deploy Button is new!!
+## Vector Search is new!!  January 19, 2023
+
+1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
+2. In Azure - Create a Azure Enterprise Redis Cache.  It MUST be Enterprise to have the vector search capabilities.  Collect the endpoint and password.
+3. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.
+4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
+5. Create a new pipeline for processing your documents or audio.  Example, pdf->ocr->ocrToText->openAiEmbeddings
+6. Drop in some documents in that pipeline.
+7. Go to Vector Search Application in the UI.  
+```
+    "OPENAI_KEY" : "",
+    "OPENAI_REGION" : "southcentralus",
+    "OPENAI_ENDPOINT" : "https://yourservice.openai.azure.com/",
+    "OPENAI_DEPLOYMENT_TEXT" : "bpatesttext",
+    "OPENAI_DEPLOYMENT_SEARCH_DOC" : "bpatestsearchdoc",
+    "OPENAI_DEPLOYMENT_SEARCH_QUERY" : "bpatestsearchquery",
+    "REDIS_URL" : "rediss://yourService.eastus.redisenterprise.cache.azure.net:10000",
+    "REDIS_PW" : "",
+    "STORE_IN_REDIS" : "true",
+    "WEBSITE_RUN_FROM_PACKAGE" : "https://bpasource.blob.core.windows.net/source/bpavectorsearch.zip?sv=2020-04-08&st=2023-01-19T17%3A44%3A33Z&se=2023-12-21T17%3A44%3A00Z&sr=b&sp=r&sig=HDbM%2F20ToHBMBw%2FF9bJL%2FWBX2BznWgp%2Bxv3VfzjPEjA%3D"
+```
+
+## Deploy Button is new!!  January 15, 2022
 
 1.  Fork this to your git repo
 2.  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
