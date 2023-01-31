@@ -3,7 +3,6 @@
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
 ## Add OpenAI Completions To Your Pipeline!!  January 31, 2023
-
 1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
 2. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.
 4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
@@ -19,6 +18,7 @@
 ```
 
 ## Vector Search is new!!  January 19, 2023
+>>>>>>> 776d335b30ec89468cc2cb14183086f16cddd9cd
 
 1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
 2. In Azure - Create a Azure Enterprise Redis Cache.  It MUST be Enterprise to have the vector search capabilities.  Collect the endpoint and password.
@@ -41,6 +41,10 @@
 ```
 
 ## Deploy Button is new!!  February 15, 2022
+
+
+## Deploy Button is new!!
+>>>>>>> main
 
 1.  Fork this to your git repo
 2.  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
