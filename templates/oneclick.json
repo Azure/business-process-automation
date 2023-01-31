@@ -579,7 +579,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https%3A%2F%2Fbpasource.blob.core.windows.net%2Fsource%2Fbackendv0.2.zip%3Fsv%3D2020-04-08%26st%3D2023-01-31T13%253A56%253A14Z%26se%3D2024-01-02T13%253A56%253A00Z%26sr%3Db%26sp%3Dr%26sig%3DBlIP5YUHdxz56tx%252FvJm%252BnZHyEaQSIdjA6toYTm%252FWI%252B4%253D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv0.2.zip?sv=2020-04-08&st=2023-01-31T13%3A56%3A14Z&se=2024-01-02T13%3A56%3A00Z&sr=b&sp=r&sig=BlIP5YUHdxz56tx%2FvJm%2BnZHyEaQSIdjA6toYTm%2FWI%2B4%3D"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",

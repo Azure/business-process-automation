@@ -239,21 +239,7 @@ export const sc = {
     //     "serviceSpecificConfig": {},
     //     "serviceSpecificConfigDefaults": {}
     // },
-    "changeOutput": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "any"
-        ],
-        "outputTypes": [
-            "any"
-        ],
-        "image": summarize,
-        "label": "Change Output",
-        "name": "changeOutput",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
+   
     "automlNer": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -383,6 +369,9 @@ export const sc = {
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service",
         "name": "ocr",
+        "category": "OCR",
+        "container" : false,
+        "batchMode" : false,
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing
@@ -401,6 +390,9 @@ export const sc = {
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service (Container Version)",
         "name": "ocrContainer",
+        "category": "OCR",
+        "container" : true,
+        "batchMode" : false,
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing
@@ -1219,5 +1211,20 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getDocumentTranslatorPricing
-    }
+    },
+    "changeOutput": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "any"
+        ],
+        "outputTypes": [
+            "any"
+        ],
+        "image": summarize,
+        "label": "Change Output",
+        "name": "changeOutput",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
 }
