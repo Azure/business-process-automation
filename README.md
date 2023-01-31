@@ -2,7 +2,7 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
-## Add OpenAI Completions To Your Pipeline!!  February 31, 2023
+## Add OpenAI Completions To Your Pipeline!!  January 31, 2023
 
 1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
 2. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.
