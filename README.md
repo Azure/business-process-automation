@@ -2,6 +2,7 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fdev%2Ftemplates%2Foneclick.json)
 
+<<<<<<< HEAD
 ## Vector Search is new!!  February 19, 2023
 
 1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
@@ -25,6 +26,10 @@
 ```
 
 ## Deploy Button is new!!  February 15, 2022
+=======
+
+## Deploy Button is new!!
+>>>>>>> main
 
 1.  Fork this to your git repo
 2.  Get a 'workflow' level, classic, personal token from you Github Account.  Instructions for this are lower in the readme.
