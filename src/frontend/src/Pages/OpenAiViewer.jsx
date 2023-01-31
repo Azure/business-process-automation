@@ -1,13 +1,13 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, Checkbox } from '@fluentui/react-northstar';
+import { Text, Dropdown } from '@fluentui/react-northstar';
 import { JSONTree } from 'react-json-tree';
 
 export default function OpenAiViewer(props) {
 
     const [pipelines, setPipelines] = useState([])
     const [selectedPipeline, setSelectedPipeline] = useState({ name: "no pipeline selected" })
-    const [pipelineSearchDone, setpipelineSearchDone] = useState(false)
+    //const [pipelineSearchDone, setpipelineSearchDone] = useState(false)
     const [documents, setDocuments] = useState([])
 
     const theme = {
@@ -40,7 +40,7 @@ export default function OpenAiViewer(props) {
 
             }
         }).catch(err => {
-            setpipelineSearchDone(true)
+            //setpipelineSearchDone(true)
             console.log(err)
         })
     }, [])
@@ -50,7 +50,7 @@ export default function OpenAiViewer(props) {
             axios.get(`/api/dbdocumentsbypipeline?pipeline=${selectedPipeline.name}`).then(_docs => {
                 setDocuments(_docs.data)
             }).catch(err => {
-                setpipelineSearchDone(true)
+                //setpipelineSearchDone(true)
                 console.log(err)
             })
         }
