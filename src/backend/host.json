@@ -14,25 +14,25 @@
   },
   "extensions": {
     "rabbitMQ": {
-      "prefetchCount": 2,
+      "prefetchCount": 1,
       "autoComplete" : true
     },
     "serviceBus": {
-      "prefetchCount": 2,
+      "prefetchCount": 10,
       "messageHandlerOptions": {
         "autoComplete": true,
-        "maxConcurrentCalls": 2,
+        "maxConcurrentCalls": 10,
         "maxAutoRenewDuration": "00:05:00"
       },
       "batchOptions": {
         "maxMessageCount": 1,
         "operationTimeout": "00:01:00",
-        "autoComplete": true
+        "autoComplete": true 
       }
     }
   },
   "concurrency": {
-    "dynamicConcurrencyEnabled": true,
-    "snapshotPersistenceEnabled": true
+    "dynamicConcurrencyEnabled": false,
+    "snapshotPersistenceEnabled": false
   }
 }

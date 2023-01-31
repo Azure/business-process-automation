@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "openaiEmbeddings": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "openaiEmbeddings"
+        ],
+        "image": openai,
+        "label": "OpenAI (Embeddings)",
+        "name": "openaiEmbeddings",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "openaiGeneric": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -66,6 +81,36 @@ export const sc = {
         "image": invoice,
         "label": "Convert the Invoice Output to a Simpler Format",
         "name": "simplifyInvoice",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+    "ocrToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocr"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Convert OCR to Text",
+        "name": "ocrToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+    "ocrContainerToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocrContainer"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": ocr,
+        "label": "Convert OCR to Text (Container Version)",
+        "name": "ocrContainerToText",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
@@ -333,11 +378,65 @@ export const sc = {
             "tiff","gif","jpg","jpeg"
         ],
         "outputTypes": [
-            "text"
+            "ocr"
         ],
         "image": ocr,
         "label": "Optical Character Recognition (OCR) Service",
         "name": "ocr",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
+    "ocrContainerService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "ocrContainer"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Container Version)",
+        "name": "ocrContainer",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
+    "ocrContainerBatchService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "ocrContainer"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Container Version) (Batch Mode)",
+        "name": "ocrContainerBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getOcrPricing
+    },
+    "ocrBatchService": {
+        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "defaultTier" : "S1 Transactions",
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf",
+            "tiff","gif","jpg","jpeg"
+        ],
+        "outputTypes": [
+            "ocr"
+        ],
+        "image": ocr,
+        "label": "Optical Character Recognition (OCR) Service (Batch Mode)",
+        "name": "ocrBatch",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getOcrPricing
@@ -395,6 +494,23 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getFormRecReadPricing
     },
+    "summaryToText": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "inputTypes": [
+            "extractSummary"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": summarize,
+        "label": "Convert Summary To Plain Text",
+        "name": "summaryToText",
+        "bpaServiceId": "abc123",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
     "extractSummary": {
         "defaultTier" : "Standard Text Records",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
@@ -402,11 +518,45 @@ export const sc = {
             "text"
         ],
         "outputTypes": [
-            "text"
+            "extractSummary"
         ],
         "image": summarize,
         "label": "Language Studio Text Summarization",
         "name": "extractSummary",
+        "bpaServiceId": "abc123",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
+    "extractSummaryBatch": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "extractSummary"
+        ],
+        "image": summarize,
+        "label": "Language Studio Text Summarization (Batch Mode)",
+        "name": "extractSummaryBatch",
+        "bpaServiceId": "abc123",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
+    "recognizeEntitiesBatch": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "recognizeEntities"
+        ],
+        "image": ner,
+        "label": "Language Studio Named Entity Recognition (Batch Mode)",
+        "name": "recognizeEntitiesBatch",
         "bpaServiceId": "abc123",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
@@ -822,6 +972,125 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getCustomLanguagePricing
     },
+    "recognizePiiEntitiesBatch": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "recognizePiiEntities"
+        ],
+        "image": pii,
+        "label": "Language Studio PII Model (Batch Mode)",
+        "name": "recognizePiiEntitiesBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
+    "extractKeyPhrasesBatch": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "extractKeyPhrases"
+        ],
+        "image": keyphrase,
+        "label": "Language Studio Key Phrases Model (Batch Mode)",
+        "name": "extractKeyPhrasesBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
+    "recognizeLinkedEntitiesBatch": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "recognizeLinkedEntities"
+        ],
+        "image": linkedEntities,
+        "label": "Language Studio Linked Entities Model (Batch Mode)",
+        "name": "recognizeLinkedEntitiesBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
+    "analyzeSentimentBatch": {
+        "defaultTier" : "Standard Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "analyzeSentiment"
+        ],
+        "image": sentiment,
+        "label": "Language Studio Sentiment Model (Batch Mode)",
+        "name": "analyzeSentimentBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getLanguagePricing
+    },
+    "recognizeCustomEntitiesBatch": {
+        "defaultTier" : "Standard Custom Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "recognizeCustomEntities"
+        ],
+        "image": customNER,
+        "label": "Language Studio Custom NER Model (Batch Mode)",
+        "name": "recognizeCustomEntitiesBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getCustomLanguagePricing
+    },
+    "singleCategoryClassifyBatch": {
+        "defaultTier" : "Standard Custom Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "singleCategoryClassify"
+        ],
+        "image": customNER,
+        "label": "Language Studio Classify Single Class Model (Batch Mode)",
+        "name": "singleCategoryClassifyBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getCustomLanguagePricing
+    },
+    "multiCategoryClassifyBatch": {
+        "defaultTier" : "Standard Custom Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "multiCategoryClassify"
+        ],
+        "image": customClassification,
+        "label": "Language Studio Classify Mulitiple Classes Model (Batch Mode)",
+        "name": "multiCategoryClassifyBatch",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getCustomLanguagePricing
+    },
     "huggingFaceNER": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -865,6 +1134,23 @@ export const sc = {
         "image": customClassification,
         "label": "Health Care API",
         "name": "healthCare",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : getHealthLanguagePricing
+    },
+    "healthCareBatch": {
+        "defaultTier" : "Standard Health Text Records",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "healthCareResults"
+        ],
+        "image": customClassification,
+        "label": "Health Care API (Batch Mode)",
+        "name": "healthCareBatch",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getHealthLanguagePricing

@@ -1,3 +1,3 @@
-docker build --tag bpabackend:latest ..\backend
-docker build --tag bpafrontend-client:latest ..\frontend
-docker build --tag bpafrontend-server:latest ..\frontend\api
+docker build --no-cache --tag bpabackend:v0.1 ..\backend
+docker build --no-cache --tag bpafrontend-client:v0.1 ..\frontend
+docker build --no-cache --tag bpafrontend-server:v0.1 ..\frontend\api
