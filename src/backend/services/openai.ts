@@ -65,7 +65,7 @@ export class OpenAI {
 
         const truncatedString = input.data.slice(0, 3500)
 
-        let openAiInput = JSON.parse(input.serviceSpecificConfig)
+        let openAiInput = JSON.parse(input.serviceSpecificConfig.prompt)
         openAiInput.prompt = openAiInput.prompt.replace("${document}", truncatedString)
 
         const out = await axios.post(url, openAiInput, config)
