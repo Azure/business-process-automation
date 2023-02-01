@@ -8,13 +8,12 @@
 4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
 5. Create a new pipeline for processing your documents or audio.  Example, pdf->ocr->ocrToText->openAIGeneric. 
 6. Drop in some documents in that pipeline.
-7. Go to Vector Search Application in the UI.  
+7. Go to OpenAI Viewer in the UI.  
 ```
     "OPENAI_KEY" : "",
     "OPENAI_REGION" : "southcentralus",
     "OPENAI_ENDPOINT" : "https://yourservice.openai.azure.com/",
-    "OPENAI_DEPLOYMENT_TEXT" : "bpatesttext",
-    "WEBSITE_RUN_FROM_PACKAGE" : "https://bpasource.blob.core.windows.net/source/bpavectorsearch.zip?sv=2020-04-08&st=2023-01-19T17%3A44%3A33Z&se=2023-12-21T17%3A44%3A00Z&sr=b&sp=r&sig=HDbM%2F20ToHBMBw%2FF9bJL%2FWBX2BznWgp%2Bxv3VfzjPEjA%3D"
+    "OPENAI_DEPLOYMENT_TEXT" : "name of your text model deployment",
 ```
 
 ## Vector Search is new!!  January 19, 2023
