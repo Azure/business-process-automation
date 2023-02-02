@@ -2,6 +2,23 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
+
+## New!! Integrate OpenAI into Cog Search!  January 31, 2023
+1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
+2. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.
+4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
+5. In the Configuration for the Static Web Application, add the Application Settings
+6. Create a new pipeline to OCR your pdfs.
+7. Drop in some documents in that pipeline.
+8. Ingest those PDF's into Cognitive Search 
+9. Go to Sample Search Application in the UI.  
+10. Toggle 'OpenAI Answers'
+```
+    "OPENAI_KEY" : "",
+    "OPENAI_ENDPOINT" : "https://yourservice.openai.azure.com/",
+    "OPENAI_DEPLOYMENT_TEXT" : "name of your text model deployment",
+```
+
 ## Add OpenAI Completions To Your Pipeline!!  January 31, 2023
 1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
 2. In Azure - Create an OpenAI instance (south central us has the most models).  Create three deployments:  text, searchdoc, searchquery.

@@ -65,14 +65,14 @@ export default function Results(props) {
     if (props.useTableSearch) {
       return (
         <div key={result.id}>
-        <TableResult
-          searchables={props.searchables}
-          document={result.filename.split('/')[result.filename.split('/').length - 1]}
-          data={result}
-          facets={getDocumentFacets(result, Object.keys(props.facets), props.filterCollections)}
-        />
+          <TableResult
+            searchables={props.searchables}
+            document={result.filename.split('/')[result.filename.split('/').length - 1]}
+            data={result}
+            facets={getDocumentFacets(result, Object.keys(props.facets), props.filterCollections)}
+          />
 
-      </div>);
+        </div>);
 
     } else {
       return (
@@ -89,16 +89,31 @@ export default function Results(props) {
 
   });
 
-  let answers = props.answers.map((result) => {
-    return <div className="card answer">
-      <div className="card-body" style={{ textAlign: 'left' }}>
-        <div style={{ fontWeight: 'bold' }}>
-          Answer:
+  // let answers = props.answers.map((result) => {
+  //   return <div className="card answer">
+  //     <div className="card-body" style={{ textAlign: 'left' }}>
+  //       <div style={{ fontWeight: 'bold' }}>
+  //         Answer:
+  //       </div>
+  //       {result.text}
+  //     </div>
+  //   </div>
+  // });
+
+  let openAiAnswer = () => {
+    if (props.useOpenAiAnswer) {
+      return (<div className="card answer">
+        <div className="card-body" style={{ textAlign: 'left' }}>
+          <div style={{ fontWeight: 'bold' }}>
+            OpenAI Answer:
+          </div>
+          {props.openAiAnswer}
         </div>
-        {result.text}
       </div>
-    </div>
-  });
+      );
+    }
+  }
+
 
   let beginDocNumber = Math.min(props.skip + 1, props.count);
   let endDocNumber = Math.min(props.skip + props.top, props.count);
@@ -107,7 +122,7 @@ export default function Results(props) {
     <div>
       <p className="results-info">Showing {beginDocNumber}-{endDocNumber} of {props.count.toLocaleString()} results</p>
       <div className="row">
-        {answers}
+        {openAiAnswer()}
         {results}
       </div>
     </div>
