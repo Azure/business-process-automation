@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Text, Dropdown, Checkbox } from '@fluentui/react-northstar';
 import Search from '../Components/searchComponents/pages/Search/Search'
+import { JSONTree } from 'react-json-tree';
 
 export default function ViewInsights(props) {
 

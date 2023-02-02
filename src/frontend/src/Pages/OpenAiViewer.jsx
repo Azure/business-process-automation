@@ -7,7 +7,6 @@ export default function OpenAiViewer(props) {
 
     const [pipelines, setPipelines] = useState([])
     const [selectedPipeline, setSelectedPipeline] = useState({ name: "no pipeline selected" })
-    //const [pipelineSearchDone, setpipelineSearchDone] = useState(false)
     const [documents, setDocuments] = useState([])
     const [selectedDocument, setSelectedDocument] = useState(null)
 
@@ -99,7 +98,7 @@ export default function OpenAiViewer(props) {
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
                             {(selectedDocument?.aggregatedResults?.openaiGeneric?.choices[0].text) ? selectedDocument.aggregatedResults.openaiGeneric.choices[0].text : ""}
                         </div>
-
+                        <JSONTree data={selectedDocument} theme={theme} shouldExpandNode={() => false} />
                     </div>
 
 
