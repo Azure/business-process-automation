@@ -65,16 +65,16 @@ export default function OpenAiViewer(props) {
         }
     }
 
-    const renderPaging = () => {
-        if (documents.length > 0) {
-            return (
-                <div>
-                    <div>&lt;&lt;&lt;</div>
+    // const renderPaging = () => {
+    //     if (documents.length > 0) {
+    //         return (
+    //             <div>
+    //                 <div>&lt;&lt;&lt;</div>
 
-                </div>
-            )
-        }
-    }
+    //             </div>
+    //         )
+    //     }
+    // }
 
     const onSelectedIndexChange = (value1, value) => {
         setSelectedDocument(documents[value.selectedIndex])
