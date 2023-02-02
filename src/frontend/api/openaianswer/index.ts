@@ -1,4 +1,4 @@
-import { SearchIndexClient, AzureKeyCredential } from "@azure/search-documents";
+//import { SearchIndexClient, AzureKeyCredential } from "@azure/search-documents";
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import axios, { AxiosRequestConfig } from "axios";
 
