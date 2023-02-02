@@ -23,7 +23,7 @@ export default function Search(props) {
   const [isError, setIsError] = useState(false)
   const [answers, setAnswers] = useState([])
   const [openAiAnswer, setOpenAiAnswer] = useState("")
-  const [openAiSummary, setOpenAiSummary] = useState("")
+  //const [openAiSummary, setOpenAiSummary] = useState("")
 
   let resultsPerPage = top;
 

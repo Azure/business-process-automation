@@ -89,16 +89,16 @@ export default function Results(props) {
 
   });
 
-  let answers = props.answers.map((result) => {
-    return <div className="card answer">
-      <div className="card-body" style={{ textAlign: 'left' }}>
-        <div style={{ fontWeight: 'bold' }}>
-          Answer:
-        </div>
-        {result.text}
-      </div>
-    </div>
-  });
+  // let answers = props.answers.map((result) => {
+  //   return <div className="card answer">
+  //     <div className="card-body" style={{ textAlign: 'left' }}>
+  //       <div style={{ fontWeight: 'bold' }}>
+  //         Answer:
+  //       </div>
+  //       {result.text}
+  //     </div>
+  //   </div>
+  // });
 
   let openAiAnswer = () => {
     if (props.useOpenAiAnswer) {
