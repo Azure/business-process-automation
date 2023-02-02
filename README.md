@@ -11,7 +11,6 @@
 7. Go to OpenAI Viewer in the UI.  
 ```
     "OPENAI_KEY" : "",
-    "OPENAI_REGION" : "southcentralus",
     "OPENAI_ENDPOINT" : "https://yourservice.openai.azure.com/",
     "OPENAI_DEPLOYMENT_TEXT" : "name of your text model deployment",
 ```
