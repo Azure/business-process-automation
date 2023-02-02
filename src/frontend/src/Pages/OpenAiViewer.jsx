@@ -78,24 +78,28 @@ export default function OpenAiViewer(props) {
     }
 
     const onSelectedIndexChange = (value1, value) => {
-        setSelectedDocument(value.items[value.selectedIndex])
+        setSelectedDocument(documents[value.selectedIndex])
     }
 
     const renderDocuments = () => {
         if (documents.length > 0) {
 
             return (
-                <div style={{ marginTop: "60px",display: "flex", flexFlow: "row", flexWrap: "wrap" }}>
-                    <div style={{ marginTop: "60px",display: "flex", flexFlow: "column", flexWrap: "wrap" }}>
+                <div style={{ marginTop: "40px", display: "flex", flexFlow: "row", flexWrap: "wrap", width: "100%" }}>
+                    <div style={{ display: "flex", flexFlow: "column", flexWrap: "wrap", width: "30%" }}>
                         <div style={{ marginBottom: "20px", borderBottom: "solid", paddingBottom: "10px" }} >
                             <Text content="Filenames" />
                         </div>
-                        <div style={{ width: "400px", height: "600px", overflow: "hidden", overflowY: "scroll" }} >
+                        <div style={{ height: "600px", overflow: "hidden", overflowY: "scroll" }} >
                             <List onSelectedIndexChange={onSelectedIndexChange} selectable items={documents.map(m => m.filename)} />
                         </div>
                     </div>
-                    <div>
-                        {(selectedDocument)? selectedDocument : "no document selected"}
+                    <div style={{ width: "70%", padding: "50px" }}>
+                        {(selectedDocument?.aggregatedResults?.ocr?.content) ? selectedDocument.aggregatedResults.ocr.content.slice(0,700)+"..." : ""}
+                        <div style={{marginTop:"20px", fontWeight : "bold"}}>
+                            {(selectedDocument?.aggregatedResults?.openaiGeneric?.choices[0].text) ? selectedDocument.aggregatedResults.openaiGeneric.choices[0].text : ""}
+                        </div>
+
                     </div>
 
 
@@ -107,7 +111,7 @@ export default function OpenAiViewer(props) {
 
     return (
         <div style={{ marginTop: "50px", marginBottom: "50px", display: "flex", flexFlow: "row", flexWrap: "wrap" }}>
-            <div style={{ display: "flex", flexFlow: "column", fontWeight: "500", margin: "20px" }}>
+            <div style={{ display: "flex", flexFlow: "column", fontWeight: "500" }}>
                 <Text style={{ marginBottom: "10px" }} content="Choose a Pipeline" />
                 <Dropdown
                     placeholder=""
@@ -117,9 +121,9 @@ export default function OpenAiViewer(props) {
                     defaultValue={selectedPipeline.name}
                     style={{ fontWeight: "400" }}
                 />
-                {renderDocuments()}
-            </div>
 
+            </div>
+            {renderDocuments()}
         </div >
     )
 }
