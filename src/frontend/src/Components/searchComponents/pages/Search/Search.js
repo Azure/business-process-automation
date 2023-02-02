@@ -22,6 +22,8 @@ export default function Search(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false)
   const [answers, setAnswers] = useState([])
+  const [openAiAnswer, setOpenAiAnswer] = useState("")
+  //const [openAiSummary, setOpenAiSummary] = useState("")
 
   let resultsPerPage = top;
 
@@ -72,6 +74,16 @@ export default function Search(props) {
         .then(response => {
           //console.log(JSON.stringify(response.data))
           if (response?.data?.results?.value) {
+            if(skip === 0 && props.useOpenAiAnswer && response.data.results.value.length > 0){
+              axios.post(`/api/openaianswer`, {
+                q : q,
+                document : response.data.results.value[0]
+              }).then(r => {
+                setOpenAiAnswer(r.data.out.text)
+              }).catch(e => {
+                console.log(e)
+              })
+            }
             setResults(response.data.results.value);
             if (response.data.results.value.length > 0 && response.data.results.value[0]?.type && response.data.results.value[0].type === 'table') {
               props.onSetTableAvailable(true)
@@ -150,7 +162,7 @@ export default function Search(props) {
   else {
     body = (
       <div className="col-md-9">
-        <Results useTableSearch={props.useTableSearch} tableSearchConfig={props.tableSearchConfig} filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
+        <Results openAiAnswer={openAiAnswer} useTableSearch={props.useTableSearch} useOpenAiAnswer={props.useOpenAiAnswer} tableSearchConfig={props.tableSearchConfig} filterCollections={props.index.collections} answers={answers} facets={facets} searchables={props.index.searchableFields} documents={results} top={top} skip={skip} count={resultCount}></Results>
         <Pager className="pager-style" currentPage={currentPage} resultCount={resultCount} resultsPerPage={resultsPerPage} setCurrentPage={updatePagination}></Pager>
       </div>
     )

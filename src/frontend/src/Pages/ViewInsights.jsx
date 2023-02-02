@@ -9,6 +9,7 @@ export default function ViewInsights(props) {
     const [selectedIndex, setSelectedIndex] = useState(null)
     const [indexSearchDone, setIndexSearchDone] = useState(false)
     const [useSemanticSearch, setUseSemanticSearch] = useState(false)
+    const [useOpenAiAnswer, setUseOpenAiAnswer] = useState(false)
     const [selectedSemanticConfig, setSelectedSemanticConfig] = useState("")
     const [useTableSearch, setUseTableSearch] = useState(false)
     const [tableSearchConfig, setTableSearchConfig] = useState("")
@@ -41,6 +42,10 @@ export default function ViewInsights(props) {
         if(value.checked && selectedIndex && selectedIndex.semanticConfigurations && selectedIndex.semanticConfigurations.length > 0){
             setSelectedSemanticConfig(selectedIndex.semanticConfigurations[0].name)
         }
+    }
+
+    const onOpenAiAnswer = (_, value) => {
+        setUseOpenAiAnswer(value.checked)
     }
 
     const onSemanticConfigChange = (_, value) => {
@@ -127,15 +132,17 @@ export default function ViewInsights(props) {
                     </div>
                     <div style={style}>
                         {renderTableSearch()}
-                        
                     </div>
                     <div style={style}>
                         {renderTableSearchConfig()}
                     </div>
+                    <div style={style}>
+                        <Checkbox onClick={onOpenAiAnswer} checked={useOpenAiAnswer} style={{marginBottom:"35px"}} label="OpenAI Summary and Answer" toggle />
+                    </div>
               </div>
                 
                 {/* <AppHeader/> */}
-                <Search index={selectedIndex} useSemanticSearch={useSemanticSearch} semanticConfig={selectedSemanticConfig} useTableSearch={useTableSearch} onSetTableAvailable={onSetTableAvailable} />
+                <Search index={selectedIndex} useSemanticSearch={useSemanticSearch} useOpenAiAnswer={useOpenAiAnswer} semanticConfig={selectedSemanticConfig} useTableSearch={useTableSearch} onSetTableAvailable={onSetTableAvailable} />
             </>
             )
     } else if (indexSearchDone){
