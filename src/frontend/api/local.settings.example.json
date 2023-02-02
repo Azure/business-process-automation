@@ -1,0 +1,24 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "MONGO_DB_CONNECTION_STRING" : "",
+    "MONGO_DB_CONTAINER" : "",
+    "MONGO_DB_DB" : "",
+    "SERVICE_BUS_CONNECTION_STRING" : "",
+    "BLOB_STORAGE_CONNECTION_STRING": "",
+    "BLOB_STORAGE_CONTAINER":"documents",
+    "COSMOS_DB_CONNECTION_STRING":"",
+    "COSMOS_DB_DB":"",
+    "COSMOS_DB_CONTAINER":"",
+    "COGSEARCH_APIKEY":"",
+    "COGSEARCH_URL":"",
+    "USE_LOCAL_STORAGE":"false",
+    "BACKEND_HOST":"localhost",
+    "BACKEND_PORT":"7074",
+    "OPENAI_KEY" : "",
+    "OPENAI_REGION" : "",
+    "OPENAI_ENDPOINT" : "",
+    "OPENAI_DEPLOYMENT_TEXT" : ""
+  }
+}
