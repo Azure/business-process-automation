@@ -34,7 +34,7 @@ const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const tableParser = new TableParser(cosmosDb)
 const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
-const openaiSimilarity = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SIMILARITY)
+const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 
 
 
@@ -43,7 +43,7 @@ const openaiEmbeddingsService : BpaService = {
     inputTypes: ["text"],
     outputTypes: ["openaiEmbeddings"],
     name: "openaiEmbeddings",
-    process: openaiSimilarity.processEmbeddings,
+    process: openaiSearchDoc.processEmbeddings,
     serviceSpecificConfig: {
         
     },

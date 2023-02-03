@@ -8,6 +8,7 @@ import { ChevronEndMediumIcon } from '@fluentui/react-icons-northstar'
 import SelectPipeline from '../Components/SelectPipeline';
 import ViewInsights from './ViewInsights';
 import OpenAiViewer from './OpenAiViewer';
+import VectorSearch from './VectorSearch';
 //import Search from '../Components/searchComponents/pages/Search/Search'
 //import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
 //import { searchHtml } from './searchHtml'
@@ -73,6 +74,11 @@ export default function Content(props) {
                 setSelectedMenuItem('OPENAI_VIEWER')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
                 breadCrumbItems.push({ text: 'OpenAI Viewer', key: 'OPENAI_VIEWER' })
+                break;
+            case 'VECTOR_SEARCH':
+                setSelectedMenuItem('VECTOR_SEARCH')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'OpenAI Vector Search', key: 'VECTOR_SEARCH' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
             default:
@@ -94,6 +100,8 @@ export default function Content(props) {
                 return (<ViewInsights />)
             case 'OPENAI_VIEWER':
                 return (<OpenAiViewer />)
+            case 'VECTOR_SEARCH':
+                return (<VectorSearch />)
 
             default:
                 return (<Home />)
@@ -184,6 +192,20 @@ export default function Content(props) {
                     </Breadcrumb.Item>
                 </>)
 
+            case 'VECTOR_SEARCH':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        Vector Search Application
+                    </Breadcrumb.Item>
+                </>)
 
             default:
                 return (<Home />)
