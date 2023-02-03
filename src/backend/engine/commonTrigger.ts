@@ -9,7 +9,7 @@ import { Speech } from "../services/speech"
 import { FormRec } from "../services/formrec"
 import { LanguageStudio } from "../services/language"
 const _ = require('lodash')
-import { RedisSimilarity } from "./redis";
+import { RedisSimilarity } from "../services/redis";
 
 let redis : RedisSimilarity
 

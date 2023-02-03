@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { BpaServiceObject } from "../engine/types";
 
 export class OpenAI {
@@ -106,6 +106,28 @@ export class OpenAI {
         const openAiInput = {
             "prompt": prompt,
             "max_tokens": maxTokens
+        }
+
+        const out = await axios.post(url, openAiInput, config)
+        return out.data
+    }
+
+    public getEmbeddings = async (text : string) : Promise<AxiosResponse<any, any>> => {
+        const headers = {
+            'api-key': this._apikey,
+            'Content-Type': 'application/json'
+        }
+
+        const config: AxiosRequestConfig = {
+            headers: headers
+        }
+
+        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/embeddings?api-version=2022-12-01`
+
+        const truncatedString = text.slice(0, 3500)
+
+        const openAiInput = {
+            "input": truncatedString
         }
 
         const out = await axios.post(url, openAiInput, config)
