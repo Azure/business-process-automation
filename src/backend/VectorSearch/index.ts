@@ -16,7 +16,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
         //get embeddings
         const embeddings = await openaiSearchQuery.getEmbeddings(query)
-        results = await redis.query("bpaindex", embeddings, '10')
+        results = await redis.query("bpaindex", embeddings.data[0].embedding, '10')
         const topDocument = await db.getByID(results.documents[0].id)
         const prompt = `${topDocument.aggregatedResults.ocrToText} \n \n Q: ${query} \n A:` 
         const oaiAnswer = await openaiText.generic(prompt, 200)
