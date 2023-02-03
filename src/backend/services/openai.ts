@@ -3,6 +3,7 @@ import { BpaServiceObject } from "../engine/types";
 
 export class OpenAI {
 
+
     private _endpoint: string
     private _apikey: string
     private _deploymentId: string
@@ -11,6 +12,8 @@ export class OpenAI {
         this._apikey = apikey
         this._endpoint = endpoint
         this._deploymentId = deploymentId
+
+
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
@@ -46,6 +49,7 @@ export class OpenAI {
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes
         }
+
         return result
     }
 
@@ -85,6 +89,27 @@ export class OpenAI {
         }
         return result
 
+    }
+
+    public generic = async (prompt : string, maxTokens : number): Promise<any> => {
+        const headers = {
+            'api-key': this._apikey,
+            'Content-Type': 'application/json'
+        }
+
+        const config: AxiosRequestConfig = {
+            headers: headers
+        }
+
+        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
+
+        const openAiInput = {
+            "prompt": prompt,
+            "max_tokens": maxTokens
+        }
+
+        const out = await axios.post(url, openAiInput, config)
+        return out.data
     }
 
     public processEmbeddings = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {

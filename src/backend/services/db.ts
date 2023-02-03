@@ -19,7 +19,7 @@ export abstract class DB {
     }
 
     public abstract create(data) : Promise<any>;
-    public abstract view(input : BpaServiceObject) : Promise<BpaServiceObject>
+    public abstract view(input : BpaServiceObject) : Promise<any>
     public abstract getConfig() : Promise<BpaPipelines>
     public abstract getByID (id : string) : Promise<any>
     public abstract deleteByID (id : string) : Promise<any>
@@ -155,9 +155,10 @@ export class CosmosDB extends DB {
         return null
     }
 
-    public view = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
-        await this.create(input)
-        return input
+    public view = async (input : BpaServiceObject) : Promise<any> => {
+        const newItem = await this.create(input)
+        
+        return newItem
     }
     
     public getConfig = async () : Promise<BpaPipelines> => {
