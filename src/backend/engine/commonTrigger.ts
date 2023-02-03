@@ -9,6 +9,22 @@ import { Speech } from "../services/speech"
 import { FormRec } from "../services/formrec"
 import { LanguageStudio } from "../services/language"
 const _ = require('lodash')
+import { RedisSimilarity } from "../services/redis";
+
+let redis : RedisSimilarity
+
+if(process.env.STORE_IN_REDIS === 'true'){
+    redis = new RedisSimilarity(process.env.REDIS_URL,process.env.REDIS_PW)
+    redis.connect().then((c)=>{
+        try{
+            redis.createIndex("bpaindex", 4096).then((idx)=>{
+                console.log('created new index')
+            })
+        } catch(err){
+            console.log(err)
+        }
+    })
+}
 
 export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue, db: DB) => {
     if (mySbMsg?.type && mySbMsg.type === 'async transaction') {
@@ -106,8 +122,14 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         }
 
 
+
         if (out['type'] !== 'async transaction') {
-            await db.view(out)
+            const newObject = await db.view(out)
+            if(newObject?.id && (process.env.STORE_IN_REDIS === 'true') && newObject?.aggregatedResults?.openaiEmbeddings){
+                await redis.set(newObject.id, newObject, newObject.aggregatedResults.openaiEmbeddings.data[0].embedding)
+            }
+
+            
         }
     }
 
