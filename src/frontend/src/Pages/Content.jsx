@@ -74,6 +74,7 @@ export default function Content(props) {
                 setSelectedMenuItem('OPENAI_VIEWER')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
                 breadCrumbItems.push({ text: 'OpenAI Viewer', key: 'OPENAI_VIEWER' })
+                break;
             case 'VECTOR_SEARCH':
                 setSelectedMenuItem('VECTOR_SEARCH')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
