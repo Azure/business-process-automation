@@ -42,9 +42,13 @@ export abstract class Storage {
     protected _splicePdf = async (myBlob: Buffer, from: number, to: number ): Promise<Buffer> => {
         let result : Buffer
         try{
+            console.log("SPLICING")
             const pdfDoc = await PDFDocument.load(myBlob) 
             const numberOfPages = pdfDoc.getPages().length;
+            console.log(numberOfPages)
             const subDocument = await PDFDocument.create();  
+            console.log(from < 1 ? 1 : from)
+            console.log(to > numberOfPages ? to : numberOfPages)
             const narray = range(from < 1 ? 1 : from, to > numberOfPages ? to : numberOfPages)
             const copiedPages = await subDocument.copyPages(pdfDoc, narray)
             for(const page of copiedPages){
