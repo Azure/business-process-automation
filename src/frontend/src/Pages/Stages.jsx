@@ -18,6 +18,7 @@ import VideoIndexerDialog from '../Components/Dialogs/VideoIndexerDialog';
 import ToTxtDialog from '../Components/Dialogs/ToTxtDialog';
 import Prices from '../Components/Prices/Prices'
 import OpenAiGenericDialog from '../Components/Dialogs/OpenAiGenericDialog';
+import SpliceDocument from '../Components/Dialogs/SpliceDocument';
 
 import { sc } from '../Components/serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
@@ -41,6 +42,7 @@ export default function Stages(props) {
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [hideOpenAiDialog, setHideOpenAiDialog] = useState(true)
     const [hideVideoIndexerDialog, setHideVideoIndexerDialog] = useState(true)
+    const [hideSpliceDocumentDialog, setHideSpliceDocumentDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
     //const [price, setPrice] = useState(0)
     // const [numDocuments, setNumDocuments] = useState(0)
@@ -178,6 +180,9 @@ export default function Stages(props) {
         } else if (event.name === 'openaiGeneric') {
             setCurrentOption(_.cloneDeep(event))
             setHideOpenAiDialog(false)
+        }else if (event.name === 'spliceDocument') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideSpliceDocumentDialog(false)
         }else {
             addItemToPipeline(event)
         }
@@ -220,6 +225,7 @@ export default function Stages(props) {
                 <ToTxtDialog hideDialog={hideToTxtDialog} setHideDialog={setHideToTxtDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <VideoIndexerDialog hideDialog={hideVideoIndexerDialog} setHideDialog={setHideVideoIndexerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <OpenAiGenericDialog hideDialog={hideOpenAiDialog} setHideDialog={setHideOpenAiDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <SpliceDocument hideDialog={hideSpliceDocumentDialog} setHideDialog={setHideSpliceDocumentDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}
             </>
         )
