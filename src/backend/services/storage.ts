@@ -45,7 +45,7 @@ export abstract class Storage {
             const pdfDoc = await PDFDocument.load(myBlob) 
             const numberOfPages = pdfDoc.getPages().length;
             const subDocument = await PDFDocument.create();  
-            const narray = range(1, to > numberOfPages ? to : numberOfPages)
+            const narray = range(from < 1 ? 1 : from, to > numberOfPages ? to : numberOfPages)
             const copiedPages = await subDocument.copyPages(pdfDoc, narray)
             for(const page of copiedPages){
                 subDocument.addPage(page);
