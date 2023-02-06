@@ -48,7 +48,7 @@ export abstract class Storage {
             console.log(numberOfPages)
             const subDocument = await PDFDocument.create();  
             console.log(from < 1 ? 1 : from)
-            console.log(to > numberOfPages ? to : numberOfPages)
+            console.log(to > numberOfPages ? numberOfPages : to)
             console.log(from)
             console.log(to)
             const narray = range(from < 1 ? 1 : from, to > numberOfPages ? numberOfPages : to)
