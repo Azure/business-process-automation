@@ -81,7 +81,6 @@
     "REDIS_URL" : "rediss://yourService.eastus.redisenterprise.cache.azure.net:10000",
     "REDIS_PW" : "",
     "STORE_IN_REDIS" : "true",
-    "WEBSITE_RUN_FROM_PACKAGE" : "https://bpasource.blob.core.windows.net/source/bpavectorsearch.zip?sv=2020-04-08&st=2023-01-19T17%3A44%3A33Z&se=2023-12-21T17%3A44%3A00Z&sr=b&sp=r&sig=HDbM%2F20ToHBMBw%2FF9bJL%2FWBX2BznWgp%2Bxv3VfzjPEjA%3D"
 ```
 
 ## Deploy Button is new!!  February 15, 2022
