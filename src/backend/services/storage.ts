@@ -1,9 +1,10 @@
-import { fstat, readFileSync, writeFileSync } from "fs"
+import { readFileSync } from "fs"
 import p from "path"
 import { BlobServiceClient, ContainerClient, BlockBlobClient, BlockBlobUploadResponse, BlobClient } from "@azure/storage-blob"
 import { BpaServiceObject } from "../engine/types";
 import { writeFile } from "fs/promises";
-const PDFDocument = require('pdf-lib').PDFDocument;
+import { range } from "lodash"
+import { PDFDocument } from "pdf-lib";
 
 
 export abstract class Storage {
@@ -17,6 +18,7 @@ export abstract class Storage {
     //public abstract conditionalCopy(input : BpaServiceObject) : Promise<BpaServiceObject>
     public abstract toTxt(input: BpaServiceObject): Promise<BpaServiceObject>
     public abstract split(myBlob: Buffer, filename: string, directoryName: string): Promise<void>
+    public abstract splicePdf(myBlob: Buffer, from: number, to: number): Promise<Buffer>
 
     protected _splitPdf = async (myBlob: Buffer): Promise<Buffer[]> => {
 
@@ -29,10 +31,34 @@ export abstract class Storage {
             // copy the page at current index
             const [copiedPage] = await subDocument.copyPages(pdfDoc, [i])
             subDocument.addPage(copiedPage);
-            const pdfBytes = await subDocument.save()
+            const pdfBytes : Buffer = Buffer.from(await subDocument.save())
             result.push(pdfBytes)
             console.log(`file-${i + 1}.pdf`)
             //await writePdfBytesToFile(`out/file-${i + 1}.pdf`, pdfBytes);
+        }
+        return result
+    }
+
+    protected _splicePdf = async (myBlob: Buffer, from: number, to: number ): Promise<Buffer> => {
+        let result : Buffer
+        try{
+            console.log("SPLICING")
+            const pdfDoc = await PDFDocument.load(myBlob) 
+            const numberOfPages = pdfDoc.getPages().length;
+            console.log(numberOfPages)
+            const subDocument = await PDFDocument.create();  
+            console.log(from < 1 ? 1 : from)
+            console.log(to > numberOfPages ? numberOfPages : to)
+            console.log(from)
+            console.log(to)
+            const narray = range(from < 1 ? 1 : from, to > numberOfPages ? numberOfPages : to)
+            const copiedPages = await subDocument.copyPages(pdfDoc, narray)
+            for(const page of copiedPages){
+                subDocument.addPage(page);
+            }
+            result = Buffer.from(await subDocument.save())
+        } catch(err){
+            console.log(err)
         }
         return result
     }
@@ -84,6 +110,11 @@ export class BlobStorage extends Storage {
         return await blobClient.downloadToBuffer()
     }
 
+    public splicePdf = async (myBlob: Buffer, from: number, to: number): Promise<Buffer> => {
+       return await this._splicePdf(myBlob, from, to)
+    }
+
+
     public split = async (myBlob: Buffer, filename: string, directoryName: string): Promise<void> => {
         const pages: Buffer[] = await this._splitPdf(myBlob)
         let index = 0
@@ -112,6 +143,14 @@ export class LocalStorage extends Storage {
         return input
     }
 
+
+    public splicePdf = async (myBlob: Buffer, from: number, to: number): Promise<Buffer> => {
+
+        return await this._splicePdf(myBlob, 0, 1)
+ 
+         
+     }
+
     public split = async (myBlob: Buffer, filename: string, directoryName: string): Promise<void> => {
         const pages: Buffer[] = await this._splitPdf(myBlob)
         let index = 0
@@ -121,6 +160,8 @@ export class LocalStorage extends Storage {
             index++
         }
     }
+
+
 
     public getBuffer = async (filename: string): Promise<Buffer> => {
         return readFileSync(p.join(this._localPath, filename))

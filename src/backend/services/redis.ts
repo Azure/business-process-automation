@@ -57,6 +57,10 @@ export class RedisSimilarity {
         });
     }
 
+    public flushall = async () => {
+        return await this._client.sendCommand(['FLUSHALL']);;
+    }
+
     private _float32Buffer = (arr) => {
         return Buffer.from(new Float32Array(arr).buffer);
     }

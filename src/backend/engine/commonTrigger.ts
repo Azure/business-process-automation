@@ -17,9 +17,11 @@ if(process.env.STORE_IN_REDIS === 'true'){
     redis = new RedisSimilarity(process.env.REDIS_URL,process.env.REDIS_PW)
     redis.connect().then((c)=>{
         try{
-            redis.createIndex("bpaindex", 4096).then((idx)=>{
-                console.log('created new index')
-            })
+            // redis.flushall().then(r => {
+                redis.createIndex("bpaindex", 4096).then((idx)=>{
+                    console.log('created new index')
+                })
+            //})
         } catch(err){
             console.log(err)
         }
