@@ -61,6 +61,10 @@ export class RedisSimilarity {
         return await this._client.sendCommand(['FLUSHALL']);;
     }
 
+    public getKeys = async () => {
+        return await this._client.sendCommand(['KEYS','*']);;
+    }
+
     private _float32Buffer = (arr) => {
         return Buffer.from(new Float32Array(arr).buffer);
     }
