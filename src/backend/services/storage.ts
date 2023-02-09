@@ -47,11 +47,11 @@ export abstract class Storage {
             const numberOfPages = pdfDoc.getPages().length;
             console.log(numberOfPages)
             const subDocument = await PDFDocument.create();  
-            console.log(from < 1 ? 1 : from)
+            console.log(from < 0 ? 0 : from)
             console.log(to > numberOfPages ? numberOfPages : to)
             console.log(from)
             console.log(to)
-            const narray = range(from < 1 ? 1 : from, to > numberOfPages ? numberOfPages : to)
+            const narray = range(from < 0 ? 0 : from, to > numberOfPages ? numberOfPages : to)
             const copiedPages = await subDocument.copyPages(pdfDoc, narray)
             for(const page of copiedPages){
                 subDocument.addPage(page);
