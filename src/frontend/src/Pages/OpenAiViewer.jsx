@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, List } from '@fluentui/react-northstar';
+import { Text, Dropdown } from '@fluentui/react-northstar';
 import { JSONTree } from 'react-json-tree';
 
 export default function OpenAiViewer(props) {
