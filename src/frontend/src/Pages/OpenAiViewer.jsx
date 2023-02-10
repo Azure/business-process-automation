@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Text, Dropdown, List } from '@fluentui/react-northstar';
+import { Text, Dropdown } from '@fluentui/react-northstar';
 import { JSONTree } from 'react-json-tree';
 
 export default function OpenAiViewer(props) {
@@ -76,8 +76,14 @@ export default function OpenAiViewer(props) {
     //     }
     // }
 
-    const onSelectedIndexChange = (value1, value) => {
-        setSelectedDocument(documents[value.selectedIndex])
+    const onSelectedIndexChange = (value) => {
+        const selectedFilename = value.currentTarget.innerHTML
+        for(const d of documents){
+            if(d.filename === selectedFilename.trim()){
+                setSelectedDocument(d)
+                break;
+            }
+        }
     }
 
     const renderDocuments = () => {
@@ -89,8 +95,12 @@ export default function OpenAiViewer(props) {
                         <div style={{ marginBottom: "20px", borderBottom: "solid", paddingBottom: "10px" }} >
                             <Text content="Filenames" />
                         </div>
-                        <div style={{ height: "600px", overflow: "hidden", overflowY: "scroll" }} >
-                            <List onSelectedIndexChange={onSelectedIndexChange} selectable items={documents.map(m => m.filename)} />
+                        <div style={{ height: "600px", overflow: "hidden", overflowY: "scroll", width:"100%" }} >
+                            <ul>
+                                {documents.map(m => {return (<div className="openaifilenames" onClick={onSelectedIndexChange} style={{paddingBottom : "20px"}}>{m.filename} </div>)})}
+
+                            </ul>
+                            {/* <List styles={{margin: "20px"}}onSelectedIndexChange={onSelectedIndexChange} selectable items={documents.map(m => {return {key:m.filename, header:m.filename, content: "\n"}})} /> */}
                         </div>
                     </div>
                     <div style={{ width: "70%", padding: "50px" }}>
