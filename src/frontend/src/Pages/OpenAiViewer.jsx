@@ -105,13 +105,15 @@ export default function OpenAiViewer(props) {
                     </div>
                     <div style={{ width: "70%", padding: "50px" }}>
                         {(selectedDocument?.aggregatedResults?.ocr?.content) ? selectedDocument.aggregatedResults.ocr.content.slice(0,700)+"..." : ""}
+                        {(selectedDocument?.aggregatedResults?.ocrToText) ? selectedDocument.aggregatedResults.ocrToText.slice(0,700)+"..." : ""}
+                        {(selectedDocument?.aggregatedResults?.speechToText) ? selectedDocument.aggregatedResults.speechToText.slice(0,700)+"..." : ""}
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
                             {(selectedDocument?.aggregatedResults?.openaiGeneric?.choices[0].text) ? selectedDocument.aggregatedResults.openaiGeneric.choices[0].text : ""}
                         </div>
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
                             {(selectedDocument?.aggregatedResults?.openaiSummarize?.choices[0].text) ? selectedDocument.aggregatedResults.openaiSummarize.choices[0].text : ""}
                         </div>
-                        <JSONTree data={selectedDocument} theme={theme} shouldExpandNode={() => false} />
+                        {(selectedDocument) ? <JSONTree data={selectedDocument} theme={theme} shouldExpandNode={() => false} /> : <></>}
                     </div>
 
 
