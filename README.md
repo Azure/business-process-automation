@@ -1,6 +1,14 @@
 # Business Process Automation Accelerator
 
+Without OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
+
+
+## New!! Deploy to Azure Button with OpenAI Deployment Automation
+1. Use the "Deploy to Azure" for initial deployment.  Instructions are below.
+
+With OpenAI
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
 
 
 ## New!! Integrate OpenAI into Cog Search!  January 31, 2023
