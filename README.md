@@ -1,11 +1,16 @@
 # Business Process Automation Accelerator
 
 
-## Without OpenAI
+### Without OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
-## With OpenAI
+### With OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
+
+### Deploy to Azure Instructions
+1. Get a Workflow Level Token:  [Create AND save personal access token](#3-create-and-save-personal-access-token)
+2. Fork the repository to a git account of which you are the Admin.
+3. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
 
 ## Vector Search is new!!  February 14, 2023
