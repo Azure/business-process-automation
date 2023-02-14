@@ -101,7 +101,7 @@ export default function Results(props) {
   // });
 
   let openAiAnswer = () => {
-    if (props.useOpenAiAnswer) {
+    if (props.useOpenAiAnswer && props.openAiAnswer.length > 0) {
       return (<div className="card answer">
         <div className="card-body" style={{ textAlign: 'left' }}>
           <div style={{ fontWeight: 'bold' }}>
