@@ -10,7 +10,8 @@
 ### Deploy to Azure Instructions
 1. Get a Workflow Level Token:  [Create AND save personal access token](#3-create-and-save-personal-access-token)
 2. Fork the repository to a git account of which you are the Admin.
-3. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
+3. Click on the "Deploy to Azure" Button.  If you do not have access to OpenAI, choose the first one.
+4. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
 
 ## Vector Search is new!!  February 14, 2023
