@@ -7,7 +7,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     if (req.method === "GET") {
         try {
             context.log('HTTP trigger function processed a request.');
-            const out = await axios.get(`https://${process.env.COSMOS_DB_CONTAINER}.azurewebsites.net/api/VectorSearch?query=${req.query.query}`)
+            const out = await axios.get(`https://${process.env.COSMOS_DB_CONTAINER}.azurewebsites.net/api/VectorSearch?query=${req.query.query}&pipeline=${req.query.pipeline}`)
             const documents = []
             for(const doc of out.data.documents){
                 console.log(doc)

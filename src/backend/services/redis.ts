@@ -30,7 +30,8 @@ export class RedisSimilarity {
                     TYPE: 'FLOAT32',
                     DIM: dimension,
                     DISTANCE_METRIC: 'COSINE'
-                }
+                },
+                pipeline : SchemaFieldTypes.TEXT
             }, {
                 ON: 'HASH'
             });
@@ -43,11 +44,11 @@ export class RedisSimilarity {
     }
 
     public set = async (id: string, document: any, embeddings: any) => {
-        await this._client.hSet(document.id, {v : this._float32Buffer(embeddings)})
+        await this._client.hSet(document.id, {v : this._float32Buffer(embeddings), pipeline: document.pipeline})
     }
 
-    public query = async (indexName: string, embeddings: any, numResults: string) => {
-        return await this._client.ft.search(indexName, `*=>[KNN ${numResults} @v $BLOB AS dist]`, {
+    public query = async (indexName: string, embeddings: any, numResults: string, pipeline: string) => {
+        return await this._client.ft.search(indexName, `(@pipeline:${pipeline} )=>[KNN ${numResults} @v $BLOB AS dist]`, {
             PARAMS: {
                 BLOB: this._float32Buffer(embeddings)
             },
