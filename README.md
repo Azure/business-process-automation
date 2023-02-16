@@ -7,26 +7,15 @@
 ### With OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
 
+### With OpenAI and Redis Enterprise (very expensive) for Vector Search
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoairedis.json)
+
+
 ### Deploy to Azure Instructions
 1. Get a Workflow Level Token:  [Create AND save personal access token](#3-create-and-save-personal-access-token)
 2. Fork the repository to a git account of which you are the Admin.
 3. Click on the "Deploy to Azure" Button.  If you do not have access to OpenAI, choose the first one.
 4. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
-
-
-## Vector Search is new!!  February 14, 2023
-
-1. Use the "Deploy to Azure" with OpenAI. 
-2. In Azure - Create a Azure Enterprise Redis Cache.  It MUST be Enterprise to have the vector search capabilities.  Collect the endpoint and password.
-4. In the Azure Function that you created (the one that does not say Huggingface), add the following Application Settings and fill them in from the services that you just created.
-5. Create a new pipeline for processing your documents or audio.  Example, pdf->ocr->ocrToText->openAiEmbeddings
-6. Drop in some documents in that pipeline.
-7. Go to Vector Search Application in the UI.  
-```
-    "REDIS_URL" : "rediss://yourService.eastus.redisenterprise.cache.azure.net:10000",
-    "REDIS_PW" : "",
-    "STORE_IN_REDIS" : "true",
-```
 
 
 ## Overview

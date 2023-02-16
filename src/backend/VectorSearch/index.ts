@@ -11,26 +11,43 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
     let results = null
     try {
         await redis.connect()
-        const query = req.query["query"]
+        const query = req.query.query
+        const pipeline = req.query.pipeline
         const openaiSearchQuery = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_QUERY)
         const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
         //get embeddings
         const embeddings = await openaiSearchQuery.getEmbeddings(query)
-        results = await redis.query("bpaindex", embeddings.data[0].embedding, '10')
-        console.log(JSON.stringify(embeddings))
-        console.log(JSON.stringify(embeddings))
-        const topDocument = await db.getByID(results.documents[0].id)
-        const prompt = `${topDocument.aggregatedResults.ocrToText} \n \n Q: ${query} \n A:` 
-        const oaiAnswer = await openaiText.generic(prompt, 200)
-        //openaiText.processGeneric()
-        context.res = {
-            status: 200,
-            body: {
-                documents: results.documents,
-                topDocument: topDocument,
-                oaiAnswer: oaiAnswer
+        results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
+        if (results.documents.length > 0) {
+            const topDocument = await db.getByID(results.documents[0].id)
+            let prompt = ""
+            if(topDocument?.aggregatedResults?.ocrToText){
+                prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+            } else if(topDocument?.aggregatedResults?.speechToText){
+                prompt = `${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+            }
+            const oaiAnswer = await openaiText.generic(prompt, 200)
+            context.res = {
+                status: 200,
+                body: {
+                    documents: results.documents,
+                    topDocument: topDocument,
+                    oaiAnswer: oaiAnswer
+                }
+            }
+        } else {
+            context.res = {
+                status: 200,
+                body: {
+                    documents: [],
+                    topDocument: null,
+                    oaiAnswer: null
+                }
             }
         }
+
+        //openaiText.processGeneric()
+
     } catch (err) {
         context.log(err)
         context.res = {

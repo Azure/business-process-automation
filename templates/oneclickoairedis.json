@@ -584,6 +584,45 @@
       }
     },
     {
+      "type": "Microsoft.Cache/redisEnterprise",
+      "apiVersion": "2022-01-01",
+      "name": "[parameters('openaiName')]",
+      "location": "East US 2",
+      "sku": {
+        "name": "Enterprise_E10",
+        "capacity": 2
+      },
+      "properties": {
+        "minimumTlsVersion": "1.2"
+      }
+    },
+    {
+      "type": "Microsoft.Cache/redisEnterprise/databases",
+      "apiVersion": "2022-01-01",
+      "name": "[concat(parameters('openaiName'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Cache/redisEnterprise', parameters('openaiName'))]"
+      ],
+      "properties": {
+        "clientProtocol": "Encrypted",
+        "port": 10000,
+        "clusteringPolicy": "EnterpriseCluster",
+        "evictionPolicy": "NoEviction",
+        "modules": [
+          {
+            "name": "RedisJSON"
+          },
+          {
+            "name": "RediSearch"
+          }
+        ],
+        "persistence": {
+          "aofEnabled": false,
+          "rdbEnabled": false
+        }
+      }
+    },
+    {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
       "name": "[parameters('functionAppNamePython')]",
@@ -775,6 +814,21 @@
             {
               "name": "FORMREC_ENDPOINT",
               "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+            },
+            {
+              "name": "STORE_IN_REDIS",
+              "value": "true"
+            },
+            {
+              "name": "REDIS_URL",
+              "value": "[format('rediss://{0}:{1}',reference(resourceId('Microsoft.Cache/redisEnterprise', parameters('openaiName'))).hostName,'10000')]"
+            },
+            {
+              "name": "REDIS_PW",
+              "value": "[listKeys(resourceId('Microsoft.Cache/redisEnterprise/databases', parameters('openaiName'), 'default'), '2022-01-01').primaryKey]"
+              //"value": "[listKeys(resourceId('Microsoft.Cache/Redis', parameters('openaiName')), '2022-01-01').key1]"
+              //"value" : "[listKeys(resourceId('Microsoft.Cache/redisEnterprise/databases/default', parameters('openaiName')), '2022-01-01').primaryKey)]"
+              //"value": "[listKeys(resourceId('Microsoft.Cache/redisEnterprise/databases', parameters('openaiName')), '2022-01-01').keys[0].value]"
             },
             {
               "name": "SPEECH_SUB_KEY",
