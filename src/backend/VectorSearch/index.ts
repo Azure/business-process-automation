@@ -20,7 +20,12 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
         if (results.documents.length > 0) {
             const topDocument = await db.getByID(results.documents[0].id)
-            const prompt = `${topDocument.aggregatedResults.ocrToText} \n \n Q: ${query} \n A:`
+            let prompt = ""
+            if(topDocument?.aggregatedResults?.ocrToText){
+                prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+            } else if(topDocument?.aggregatedResults?.speechToText){
+                prompt = `${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+            }
             const oaiAnswer = await openaiText.generic(prompt, 200)
             context.res = {
                 status: 200,
