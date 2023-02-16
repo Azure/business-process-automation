@@ -67,7 +67,9 @@ export default function ViewInsights(props) {
                         <div className="card-body">
                             <h6 className="title-style">{d.document.filename}</h6>
                             <div style={{ textAlign: "left" }}>
-                                {d.document.aggregatedResults.ocrToText}
+                                {(d?.document?.aggregatedResults?.ocrToText) ? d.document.aggregatedResults.ocrToText : ""}
+                                {(d?.document?.aggregatedResults?.ocr?.content) ? d.document.aggregatedResults.ocr.content : ""}
+                                {(d?.document?.aggregatedResults?.speechToText) ? d.document.aggregatedResults.speechToText : ""}
                             </div>
                             {/* <div style={{ textAlign: "left" }}>
                                 {renderPills()}
