@@ -7,7 +7,7 @@
 ### With OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
 
-### With OpenAI and Redis Enterprise (very expensive) for Vector Search
+### With OpenAI and Redis Enterprise (check pricing) for Vector Search
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoairedis.json)
 
 
@@ -16,6 +16,10 @@
 2. Fork the repository to a git account of which you are the Admin.
 3. Click on the "Deploy to Azure" Button.  If you do not have access to OpenAI, choose the first one.
 4. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
+
+
+# Deploy instructions below are only if you are doing development!!  If you are not adding features to BPA, use the "Deploy to Azure" buttons above.
+
 
 
 ## Overview
