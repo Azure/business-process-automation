@@ -962,7 +962,7 @@ const xmlToJsonService : BpaService = {
 
 export const serviceCatalog = {
     // "copy" : copyService,
-    "redactPdf" : redactPdf,
+    "redactPdf" : redactPdfService,
     "spliceDocument" : spliceDocumentService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
