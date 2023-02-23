@@ -25,7 +25,7 @@ export class RedactPdf {
         const label = "redactPdf"
 
         input.aggregatedResults[label] = {
-            outputLocation: "somewhere",
+            outputLocation: `/translated-documents/${input.filename}`,
             status: "success"
         }
         input.resultsIndexes.push({ index: index, name: label, type: "redactPdf" })
