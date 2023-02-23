@@ -38,7 +38,8 @@ const tableParser = new TableParser(cosmosDb)
 const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
 const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 const splicedDocument = new SpliceDocument(blob)
-const redactPdf = new RedactPdf()
+const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
+const redactPdf = new RedactPdf(blobTranslation)
 
 
 const redactPdfService : BpaService = {
