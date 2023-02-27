@@ -32,6 +32,7 @@
     "parse-multipart": "^1.0.4",
     "pdf-lib": "^1.17.1",
     "pdf-to-png-converter": "^2.7.1",
+    "pdfjs-dist": "^3.4.120",
     "redis": "^4.5.1",
     "uuidv4": "^6.2.13",
     "xml2js": "^0.4.23"
