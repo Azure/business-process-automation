@@ -75,6 +75,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             directoryName = mySbMsg.pipeline
             filename = mySbMsg.fileName
         } else {
+            context.log("about to split")
             filename = mySbMsg.subject.split("/documents/blobs/")[1]
             directoryName = filename.split('/')[0]
 

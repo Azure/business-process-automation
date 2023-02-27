@@ -13,6 +13,7 @@ const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg
         //db.deleteByID(mySbMsg.dbId)
     }
     
+    context.log("Entering mqTrigger")
     await mqTrigger(context, mySbMsg, mq, db)
 };
 
