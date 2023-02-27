@@ -114,6 +114,11 @@ export class BlobStorage extends Storage {
        return await this._splicePdf(myBlob, from, to)
     }
 
+    public upload = async (myBlob: Buffer, filename : string) : Promise<void> => {
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(p.join("translated-documents", filename))
+        const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(myBlob, myBlob.length)
+        console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
+    }
 
     public split = async (myBlob: Buffer, filename: string, directoryName: string): Promise<void> => {
         const pages: Buffer[] = await this._splitPdf(myBlob)

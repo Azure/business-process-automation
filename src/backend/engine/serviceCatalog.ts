@@ -17,6 +17,7 @@ import { VideoIndexer } from "../services/videoIndexer"
 import { TableParser } from "../services/tableParser"
 import { OpenAI } from "../services/openai"
 import { SpliceDocument } from "../services/spliceDocument"
+import { RedactPdf } from "../services/redactPdf"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -37,6 +38,23 @@ const tableParser = new TableParser(cosmosDb)
 const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
 const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 const splicedDocument = new SpliceDocument(blob)
+const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
+const redactPdf = new RedactPdf(blobTranslation)
+
+
+const redactPdfService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["recognizePiiEntities"],
+    outputTypes: ["redactPdf"],
+    name: "redactPdf",
+    process: redactPdf.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const spliceDocumentService : BpaService = {
     bpaServiceId : "abc123",
@@ -945,6 +963,7 @@ const xmlToJsonService : BpaService = {
 
 export const serviceCatalog = {
     // "copy" : copyService,
+    "redactPdf" : redactPdfService,
     "spliceDocument" : spliceDocumentService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 
