@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 //import pdf from '../../../images/pdf.svg'
 import { JSONTree } from 'react-json-tree';
 import { Pill, Dialog } from '@fluentui/react-northstar'
-import axios from 'axios'
 import './Result.css';
 
 export default function Result(props) {
@@ -54,9 +53,7 @@ export default function Result(props) {
                 let currentData = data
                 for (const i of s.split('/')) {
                     if (Array.isArray(currentData[i])) {
-                        for (const n of currentData[i]) {
-                            currentData = currentData[i][0]
-                        }
+                       currentData = currentData[i][0]
                     } else {
                         currentData = currentData[i]
                     }
@@ -97,7 +94,7 @@ export default function Result(props) {
 
     useEffect(()=> {
         setRedactedUrl(`/api/viewpdf?container=translated-documents&filename=${redactedDoc}`)
-    },redactedDoc)
+    },[redactedDoc])
 
     const renderPath = (data) => {
         if (data?.aggregatedResults?.redactPdf?.outputLocation) {
