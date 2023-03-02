@@ -9,6 +9,7 @@ export default function Result(props) {
     const [redactedDoc, setRedactedDoc] = useState(null)
     const [hideDialog, setHideDialog] = useState(true)
     const [redactedUrl, setRedactedUrl] = useState("")
+    const [hideOriginalDialog, setHideOriginalDialog] = useState(true)
 
     const getNextColor = (index) => {
         const colors = ['lightblue', 'pink', 'lightyellow', 'orange', 'violet', 'lightgreen']
@@ -17,6 +18,7 @@ export default function Result(props) {
 
     const onDialogCancel = () => {
         setHideDialog(true)
+        setHideOriginalDialog(true)
     }
 
 
@@ -88,8 +90,12 @@ export default function Result(props) {
 
 
     const onRedactedDoc = (value) => {
-        setRedactedDoc(value.currentTarget.innerText)
+        setRedactedDoc(value.currentTarget.innerText.slice(1))
         setHideDialog(false)
+    }
+
+    const onOriginalDoc = (value) => {
+        setHideOriginalDialog(false)
     }
 
     useEffect(()=> {
@@ -100,11 +106,20 @@ export default function Result(props) {
         if (data?.aggregatedResults?.redactPdf?.outputLocation) {
             return (
                 <>
+                <div>
                     Redacted Document : <span onClick={onRedactedDoc} style={{ color: "blue" }}>{data.aggregatedResults.redactPdf.outputLocation}</span>
+                </div>
+                <div>
+                    Original Document : <span onClick={onOriginalDoc} style={{ color: "blue" }}>{data.filename}</span>
+                </div>   
                 </>
             )
         }
 
+    }
+
+    const originalUrl = () => {
+        return `/api/viewpdf?container=documents&filename=${props.data.filename}`
     }
 
     return (
@@ -125,6 +140,24 @@ export default function Result(props) {
                 <div className="json-tree">
                     <JSONTree data={props.data} theme={theme} shouldExpandNode={() => false} />
                 </div>
+                <Dialog
+                    header="View PDF"
+                    content={
+                        <>
+                            <div style={{
+                                display: 'block', marginBottom: "10px"
+                            }}>
+                               
+                                <iframe title="myFrameOriginal" src={originalUrl()} height="600" width="800"></iframe>
+                            </div>
+                        </>}
+                    open={!hideOriginalDialog}
+                    cancelButton="Cancel"
+                    // confirmButton="Submit"
+                    // onConfirm={onDialogSave}
+                    onCancel={onDialogCancel}
+                    style={{ overflow: "visible", width:"1000px" }}
+                />
                 <Dialog
                     header="View PDF"
                     content={

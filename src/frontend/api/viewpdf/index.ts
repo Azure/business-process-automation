@@ -13,7 +13,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             if(req?.query?.container){
                 containerClient = blobServiceClient.getContainerClient(req.query.container);
             }
-            const blobClient = containerClient.getBlobClient(req.query.filename.slice(1))
+            const blobClient = containerClient.getBlobClient(req.query.filename)
             const blockBlobClient = blobClient.getBlockBlobClient()
             
             
