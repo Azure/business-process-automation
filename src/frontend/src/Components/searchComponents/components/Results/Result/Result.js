@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 //import pdf from '../../../images/pdf.svg'
 import { JSONTree } from 'react-json-tree';
-import { Pill } from '@fluentui/react-northstar'
-
+import { Pill, Dialog } from '@fluentui/react-northstar'
+import axios from 'axios'
 import './Result.css';
 
 export default function Result(props) {
 
+    const [redactedDoc, setRedactedDoc] = useState(null)
+    const [hideDialog, setHideDialog] = useState(true)
+    const [redactedUrl, setRedactedUrl] = useState("")
+
     const getNextColor = (index) => {
         const colors = ['lightblue', 'pink', 'lightyellow', 'orange', 'violet', 'lightgreen']
         return colors[index % (colors.length)]
+    }
+
+    const onDialogCancel = () => {
+        setHideDialog(true)
     }
 
 
@@ -19,15 +27,15 @@ export default function Result(props) {
                 Object.keys(props.facets).map((k, index) => {
                     return (
                         <div>
-                            {Object.keys(props.facets[k]).slice(0,50).map(f => {
-                               return(
+                            {Object.keys(props.facets[k]).slice(0, 50).map(f => {
+                                return (
                                     <Pill
                                         style={{ backgroundColor: getNextColor(index), color: "" }}
                                         content={`${f} (${props.facets[k][f]}) `}
                                         size="small"
                                     />
-                               )
-                             })} 
+                                )
+                            })}
                         </div>
                     )
                 })
@@ -45,7 +53,13 @@ export default function Result(props) {
             for (const s of searchables) {
                 let currentData = data
                 for (const i of s.split('/')) {
-                    currentData = currentData[i]
+                    if (Array.isArray(currentData[i])) {
+                        for (const n of currentData[i]) {
+                            currentData = currentData[i][0]
+                        }
+                    } else {
+                        currentData = currentData[i]
+                    }
                 }
                 out += currentData
             }
@@ -75,6 +89,27 @@ export default function Result(props) {
         base0F: 'white'
     };
 
+
+    const onRedactedDoc = (value) => {
+        setRedactedDoc(value.currentTarget.innerText)
+        setHideDialog(false)
+    }
+
+    useEffect(()=> {
+        setRedactedUrl(`/api/viewpdf?container=translated-documents&filename=${redactedDoc}`)
+    },redactedDoc)
+
+    const renderPath = (data) => {
+        if (data?.aggregatedResults?.redactPdf?.outputLocation) {
+            return (
+                <>
+                    Redacted Document : <span onClick={onRedactedDoc} style={{ color: "blue" }}>{data.aggregatedResults.redactPdf.outputLocation}</span>
+                </>
+            )
+        }
+
+    }
+
     return (
         <div className="card result" id={props.key}>
 
@@ -84,13 +119,36 @@ export default function Result(props) {
                 <div style={{ textAlign: "left" }}>
                     {getText(props.searchables, props.data) ? getText(props.searchables, props.data).substring(0, 1000) : ""}
                 </div>
+                <div style={{ textAlign: "left", marginTop: "20px", marginBottom: "20px" }}>
+                    {renderPath(props.data)}
+                </div>
                 <div style={{ textAlign: "left" }}>
                     {renderPills()}
                 </div>
                 <div className="json-tree">
                     <JSONTree data={props.data} theme={theme} shouldExpandNode={() => false} />
                 </div>
+                <Dialog
+                    header="View PDF"
+                    content={
+                        <>
+                            <div style={{
+                                display: 'block', marginBottom: "10px"
+                            }}>
+                               
+                                <iframe src={redactedUrl} height="600" width="800"></iframe>
+                            </div>
+                        </>}
+                    open={!hideDialog}
+                    cancelButton="Cancel"
+                    // confirmButton="Submit"
+                    // onConfirm={onDialogSave}
+                    onCancel={onDialogCancel}
+                    style={{ overflow: "visible", width:"1000px" }}
+                />
             </div>
         </div>
     );
+
+
 }

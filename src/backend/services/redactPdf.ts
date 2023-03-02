@@ -28,11 +28,12 @@ export class RedactPdf {
             outputLocation: `/translated-documents/${input.filename}`,
             status: "success"
         }
+        
         input.resultsIndexes.push({ index: index, name: label, type: "redactPdf" })
 
         return {
             data: {
-                outputLocation: "somewhere",
+                outputLocation: `/translated-documents/${input.filename}`,
                 status: "success"
             },
             index: index,
