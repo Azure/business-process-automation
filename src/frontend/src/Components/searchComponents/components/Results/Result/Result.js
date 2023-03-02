@@ -133,7 +133,7 @@ export default function Result(props) {
                                 display: 'block', marginBottom: "10px"
                             }}>
                                
-                                <iframe src={redactedUrl} height="600" width="800"></iframe>
+                                <iframe title="myFrame" src={redactedUrl} height="600" width="800"></iframe>
                             </div>
                         </>}
                     open={!hideDialog}
