@@ -9,7 +9,7 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjameshoff-msft%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
 ### With OpenAI
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjameshoff-msft%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
 
 ### With OpenAI and Redis Enterprise (check pricing) for Vector Search
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoairedis.json)
