@@ -105,7 +105,7 @@ function Upload(props) {
                 const body = new FormData();
                 body.append("file", file);
                 console.log("sending...")
-                const response = await fetch(`/api/documents?filename=${selectedPipelineName}/${file.name}&pipeline=${selectedPipelineName}&split=true`, {
+                const response = await fetch(`/api/splitdocuments?filename=${selectedPipelineName}/${file.name}&pipeline=${selectedPipelineName}`, {
                     method: "POST",
                     body
                 });

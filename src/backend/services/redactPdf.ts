@@ -13,6 +13,9 @@ export class RedactPdf {
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+        if(!input?.aggregatedResults?.buffer){
+            input.aggregatedResults.buffer = await this._blobService.getBuffer(input.filename)
+        }
         const pdfDoc = await PDFDocument.load(input.aggregatedResults.buffer)
         const pdfPage = pdfDoc.getPage(0)
         const ocrPageResults = input.aggregatedResults.ocr.pages[0]
@@ -28,7 +31,7 @@ export class RedactPdf {
             outputLocation: `/translated-documents/${input.filename}`,
             status: "success"
         }
-        
+
         input.resultsIndexes.push({ index: index, name: label, type: "redactPdf" })
 
         return {

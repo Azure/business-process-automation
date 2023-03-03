@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
+      "name": "storage",
+      "type": "blob",
+      "direction": "out",
+      "path": "%BLOB_STORAGE_SPLIT_CONTAINER%/{filename}",
+      "connection": "BLOB_STORAGE_CONNECTION_STRING"
+  }
+  ],
+  "scriptFile": "../dist/splitdocuments/index.js"
+}
