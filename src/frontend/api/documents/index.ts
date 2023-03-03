@@ -102,9 +102,15 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
             // Passed to Storage
             context.bindings.storage = parts[0]?.data;
+            let container = process.env.BLOB_STORAGE_CONTAINER
+            if(req?.query?.split){
+                if(req.query.split === 'true'){
+                    container = 'split'
+                }
+            }
 
             // returned to requestor
-            context.res.body = `${process.env.BLOB_STORAGE_CONTAINER}/${parts[0]?.filename}`;
+            context.res.body = `${container}/${parts[0]?.filename}`;
         } catch (err) {
             context.log.error(err.message);
             {
