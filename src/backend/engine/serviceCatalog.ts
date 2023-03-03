@@ -39,7 +39,7 @@ const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KE
 const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
-const redactPdf = new RedactPdf(blobTranslation)
+const redactPdf = new RedactPdf(blob, blobTranslation)
 
 
 const redactPdfService : BpaService = {
