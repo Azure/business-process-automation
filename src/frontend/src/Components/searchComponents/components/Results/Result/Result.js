@@ -114,6 +114,14 @@ export default function Result(props) {
                 </div>   
                 </>
             )
+        } else {
+            return (
+                <>
+                <div>
+                    Original Document : <span onClick={onOriginalDoc} style={{ color: "blue" }}>{data.filename}</span>
+                </div>   
+                </>
+            )
         }
 
     }
