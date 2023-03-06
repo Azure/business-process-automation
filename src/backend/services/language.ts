@@ -29,13 +29,14 @@ export class LanguageStudio {
     private _recognize = async (input: BpaServiceObject, actions: TextAnalyticsActions, type: string, label: string, analyzeType: boolean, index: number): Promise<BpaServiceObject> => {
         const client = new TextAnalyticsClient(this._endpoint, new AzureKeyCredential(this._apikey));
         let poller
+        if(input.data.length === 0){
+            input.data = "no data"
+        }
         if (analyzeType) {
             poller = await this._analyze(client, [input.data.length > 5000 ? input.data.substring(0, 5000) : input.data], actions);
         } else {
             poller = await this._healthCare(client, [input.data.length > 5000 ? input.data.substring(0, 5000) : input.data])
         }
-
-        const stuff = poller.toString
 
         poller.onProgress(() => {
             console.log(
@@ -74,14 +75,15 @@ export class LanguageStudio {
     private _recognizeAsync = async (input: BpaServiceObject, actions: TextAnalyticsActions, type: string, label: string, analyzeType: boolean, index: number): Promise<BpaServiceObject> => {
         const client = new TextAnalyticsClient(this._endpoint, new AzureKeyCredential(this._apikey));
         let poller
+        if(input.data.length === 0){
+            input.data = "no data"
+        }
         if (analyzeType) {
             poller = await this._analyze(client, [input.data.length > 125000 ? input.data.substring(0, 125000) : input.data], actions);
         } else {
             poller = await this._healthCare(client, [input.data.length > 125000 ? input.data.substring(0, 125000) : input.data])
         }
 
-        const myjsonstring = poller.toString()
-        const myjson = JSON.parse(myjsonstring)
         input.aggregatedResults[label] = {
             location: JSON.parse(poller.toString()).state.initialRawResponse.headers["operation-location"],
             filename: input.filename
