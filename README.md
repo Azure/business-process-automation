@@ -21,6 +21,8 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 3. Click on the "Deploy to Azure" Button.  If you do not have access to OpenAI, choose the first one.
 4. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
+Latest Backend : https://bpasource.blob.core.windows.net/source/backendv015.zip?sv=2020-04-08&st=2023-03-03T21%3A47%3A55Z&se=2023-11-21T21%3A47%3A00Z&sr=b&sp=r&sig=3rXVZCv%2BWvQ3TnMq33wsvQr4Gxvayt7%2FA3g%2BgQduKHw%3D
+
 
 # Deploy instructions below are only if you are doing development!!  If you are not adding features to BPA, use the "Deploy to Azure" buttons above.
 

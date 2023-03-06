@@ -9,14 +9,15 @@
     }
   },
   "parameters": {
-    "projectName": {
-      "type": "string"
-    },
     "repositoryToken": {
       "type": "string"
     },
     "repositoryUrl": {
       "type": "string"
+    },
+    "projectName": {
+      "type": "string",
+      "defaultValue": "[toLower(uniqueString(resourceGroup().id))]"
     },
     "openaiName": {
       "type": "string",
@@ -654,7 +655,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv0133.zip?sv=2020-04-08&st=2023-02-27T18%3A38%3A01Z&se=2023-12-27T18%3A38%3A00Z&sr=b&sp=r&sig=AdhiISbnrlaO5ZmDqtHWtRlgn27ko5DIGf4WSbYkwSg%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv015.zip?sv=2020-04-08&st=2023-03-03T21%3A47%3A55Z&se=2023-11-21T21%3A47%3A00Z&sr=b&sp=r&sig=3rXVZCv%2BWvQ3TnMq33wsvQr4Gxvayt7%2FA3g%2BgQduKHw%3D"
             },
             {
               "name": "OPENAI_KEY",
