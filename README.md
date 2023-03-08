@@ -6,7 +6,7 @@ This accelerator provides a no code Studio for users to quickly build complex, m
 
 And, optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource.
 
-OpenAI has been integrated to be added to document pipelines and also to be exploited for enhanced search capabilities.
+#### OpenAI has been integrated to be added to document pipelines and also to be exploited for enhanced search capabilities.
 1. Summarize a document
 2. Process document text with a customized prompt.  Designed to easily migrate prompt configurations from the Playground to your document pipeline.
 3. Integration of OpenAI Completion API to search results to generate a more specific answer.
