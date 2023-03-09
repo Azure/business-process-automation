@@ -18,6 +18,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 body: {
                     documents : documents,
                     oaiAnswer: out.data.oaiAnswer
+                },
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             }
         } catch (err) {``
