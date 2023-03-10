@@ -1,5 +1,25 @@
 # Business Process Automation Accelerator
 
+## Overview
+
+This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even Hugging Face state-of-the-art models, into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a CosmosDB.
+
+And, optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource.
+
+#### OpenAI has been integrated to be added to document pipelines and also to be exploited for enhanced search capabilities.
+1. Summarize a document
+2. Process document text with a customized prompt.  Designed to easily migrate prompt configurations from the Playground to your document pipeline.
+3. Integration of OpenAI Completion API to search results to generate a more specific answer.
+  
+<br/><br/> 
+![](images/high-level-architecture.png)  
+*High-level architecture*
+<br/><br/>
+  
+&ast;*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
+ 
+
+
 ##  Responsible AI Check Required On First Deployment
 Ensure that you have **accepted terms and conditions for Responsible AI**:  
 You must initiate the creation of a "Cognitive services multi-service account" from the Azure portal to review and acknowledge the terms and conditions by checking the checkmark.
@@ -19,28 +39,13 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 1. Get a Workflow Level Token:  [Create AND save personal access token](#3-create-and-save-personal-access-token)
 2. Fork the repository to a git account of which you are the Admin.
 3. Click on the "Deploy to Azure" Button.  If you do not have access to OpenAI, choose the first one.
-4. Only the Resource Group, Project Name, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
+4. Only the Resource Group, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
 Latest Backend : https://bpasource.blob.core.windows.net/source/backendv015.zip?sv=2020-04-08&st=2023-03-03T21%3A47%3A55Z&se=2023-11-21T21%3A47%3A00Z&sr=b&sp=r&sig=3rXVZCv%2BWvQ3TnMq33wsvQr4Gxvayt7%2FA3g%2BgQduKHw%3D
 
 
 # Deploy instructions below are only if you are doing development!!  If you are not adding features to BPA, use the "Deploy to Azure" buttons above.
 
-
-
-## Overview
-
-This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning, and even Hugging Face state-of-the-art models, into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a CosmosDB.
-
-And, optionally, the end-user can add a Cognitive Search Index, indexing each the output at each of stage of the pipeline, across all uploaded files. Index creation is handled entirely by the accelerator, where the end-user can access the index via their newly created Cognitive Search Index resource
-  
-<br/><br/> 
-![](images/high-level-architecture.png)  
-*High-level architecture*
-<br/><br/>
-  
-&ast;*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
- 
 ---
 
 ## Contents  
