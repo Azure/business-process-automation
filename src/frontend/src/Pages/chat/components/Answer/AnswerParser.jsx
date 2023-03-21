@@ -1,15 +1,10 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { getCitationFilePath } from "../../api";
 
-type HtmlParsedAnswer = {
-    answerHtml: string;
-    citations: string[];
-    followupQuestions: string[];
-};
 
-export function parseAnswerToHtml(answer: string, onCitationClicked: (citationFilePath: string) => void): HtmlParsedAnswer {
-    const citations: string[] = [];
-    const followupQuestions: string[] = [];
+export function parseAnswerToHtml(answer, onCitationClicked){
+    const citations = [];
+    const followupQuestions = [];
 
     // Extract any follow-up questions that might be in the answer
     let parsedAnswer = answer.replace(/<<([^>>]+)>>/g, (match, content) => {
@@ -22,11 +17,11 @@ export function parseAnswerToHtml(answer: string, onCitationClicked: (citationFi
 
     const parts = parsedAnswer.split(/\[([^\]]+)\]/g);
 
-    const fragments: string[] = parts.map((part, index) => {
+    const fragments = parts.map((part, index) => {
         if (index % 2 === 0) {
             return part;
         } else {
-            let citationIndex: number;
+            let citationIndex
             if (citations.indexOf(part) !== -1) {
                 citationIndex = citations.indexOf(part) + 1;
             } else {
@@ -37,7 +32,7 @@ export function parseAnswerToHtml(answer: string, onCitationClicked: (citationFi
             const path = getCitationFilePath(part);
 
             return renderToStaticMarkup(
-                <a className="supContainer" title={part} onClick={() => onCitationClicked(path)}>
+                <a href={{}} className="supContainer" title={part} onClick={() => onCitationClicked(path)}>
                     <sup>{citationIndex}</sup>
                 </a>
             );

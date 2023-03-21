@@ -4,7 +4,7 @@ import DOMPurify from "dompurify";
 
 import styles from "./Answer.module.css";
 
-import { AskResponse, getCitationFilePath } from "../../api";
+import { getCitationFilePath } from "../../api";
 import { parseAnswerToHtml } from "./AnswerParser";
 import { AnswerIcon } from "./AnswerIcon";
 
@@ -19,7 +19,7 @@ export const Answer = ({
     onFollowupQuestionClicked,
     showFollowupQuestions
 }) => {
-    const parsedAnswer = useMemo(() => parseAnswerToHtml(answer.answer, onCitationClicked), [answer]);
+    const parsedAnswer = useMemo(() => parseAnswerToHtml(answer.answer, onCitationClicked), [answer, onCitationClicked]);
 
     const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml);
 
@@ -60,7 +60,7 @@ export const Answer = ({
                         {parsedAnswer.citations.map((x, i) => {
                             const path = getCitationFilePath(x);
                             return (
-                                <a key={i} className={styles.citation} title={x} onClick={() => onCitationClicked(path)}>
+                                <a key={i} className={styles.citation} title={x} href={{}} onClick={() => onCitationClicked(path)}>
                                     {`${++i}. ${x}`}
                                 </a>
                             );
@@ -75,7 +75,7 @@ export const Answer = ({
                         <span className={styles.followupQuestionLearnMore}>Follow-up questions:</span>
                         {parsedAnswer.followupQuestions.map((x, i) => {
                             return (
-                                <a key={i} className={styles.followupQuestion} title={x} onClick={() => onFollowupQuestionClicked(x)}>
+                                <a key={i} href={{}} className={styles.followupQuestion} title={x} onClick={() => onFollowupQuestionClicked(x)}>
                                     {`${x}`}
                                 </a>
                             );

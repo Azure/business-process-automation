@@ -6,7 +6,7 @@ import styles from "./Chat.module.css";
 
 
 
-import { chatApi, Approaches, AskResponse, ChatRequest, ChatTurn } from "./api";
+import { chatApi } from "./api";
 import { Answer, AnswerError, AnswerLoading } from "./components/Answer";
 import { QuestionInput } from "./components/QuestionInput";
 import { ExampleList } from "./components/Example";

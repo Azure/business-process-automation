@@ -6,7 +6,7 @@ import axios from "axios"
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     if (req.method === "POST") {
         try{
-            const response = await axios.post("http://localhost:7072/api/chat", {
+            const response = await axios.post(`${process.env.HUGGINGFACE_ENDPOINT}/api/chat`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
