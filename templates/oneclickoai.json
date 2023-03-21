@@ -599,6 +599,10 @@
           "alwaysOn": true,
           "appSettings": [
             {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v001.zip?sv=2020-04-08&st=2023-03-21T17%3A26%3A55Z&se=2024-03-22T17%3A26%3A00Z&sr=b&sp=r&sig=xYubDMBThw1de6KBp5C0ftcU4U9d30nkiNQ%2Bf5Fus%2BQ%3D"
+            },  
+            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
             },
@@ -859,7 +863,8 @@
         "COGSEARCH_APIKEY": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
         "COGSEARCH_URL": "[parameters('cogSearchUrl')]",
         "SERVICE_BUS_CONNECTION_STRING": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
-        "USE_LOCAL_STORAGE": "false"
+        "USE_LOCAL_STORAGE": "false",
+        "HUGGINGFACE_ENDPOINT" : "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
       },
 
       "dependsOn": [
@@ -867,7 +872,8 @@
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
         "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Web/sites',  parameters('functionAppNamePython'))]"
       ]
     }
   ]

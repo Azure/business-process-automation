@@ -9,6 +9,7 @@ import SelectPipeline from '../Components/SelectPipeline';
 import ViewInsights from './ViewInsights';
 import OpenAiViewer from './OpenAiViewer';
 import VectorSearch from './VectorSearch';
+import CogSearch from './chat/Chat'
 //import Search from '../Components/searchComponents/pages/Search/Search'
 //import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
 //import { searchHtml } from './searchHtml'
@@ -70,6 +71,12 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
+            case 'COG_SEARCH':
+                setSelectedMenuItem('COG_SEARCH')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'Cognitive Search Demo', key: 'COG_SEARCH' })
+                setBreadCrumbItems(breadCrumbItems)
+                break
             case 'OPENAI_VIEWER':
                 setSelectedMenuItem('OPENAI_VIEWER')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
@@ -102,6 +109,8 @@ export default function Content(props) {
                 return (<OpenAiViewer />)
             case 'VECTOR_SEARCH':
                 return (<VectorSearch />)
+            case 'COG_SEARCH':
+                return (<CogSearch />)
 
             default:
                 return (<Home />)
@@ -174,6 +183,22 @@ export default function Content(props) {
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
                         Sample Search Application
+                    </Breadcrumb.Item>
+                </>)
+
+
+            case 'COG_SEARCH':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        Cognitive Search Demo
                     </Breadcrumb.Item>
                 </>)
 
