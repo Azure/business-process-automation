@@ -639,7 +639,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v001.zip?sv=2020-04-08&st=2023-03-21T17%3A26%3A55Z&se=2024-03-22T17%3A26%3A00Z&sr=b&sp=r&sig=xYubDMBThw1de6KBp5C0ftcU4U9d30nkiNQ%2Bf5Fus%2BQ%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/20230322135225.zip?sv=2020-04-08&st=2023-03-22T13%3A50%3A56Z&se=2024-04-25T13%3A50%3A00Z&sr=b&sp=r&sig=br7Wh8QVWSFPSFDAWW5tDJ5r49wTlxGqAgqC0X1P9jY%3D"
             },  
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -654,24 +654,56 @@
               "value": "~4"
             },
             {
-              "name": "BUILD_FLAGS",
-              "value": "UseExpressBuild"
-            },
-            {
-              "name": "ENABLE_ORYX_BUILD",
-              "value": "true"
-            },
-            {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "python"
             },
             {
-              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-              "value": "1"
+              "name": "AZURE_BLOB_STORAGE_ACCOUNT",
+              "value": "[parameters('projectName')]"
             },
             {
-              "name": "XDG_CACHE_HOME",
-              "value": "/tmp/.cache"
+              "name": "AZURE_BLOB_STORAGE_CONTAINER",
+              "value": "[parameters('blobContainerName')]"
+            },
+            {
+              "name": "AZURE_OPENAI_CHATGPT_DEPLOYMENT",
+              "value": "text-davinci-002"
+            },
+            {
+              "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
+              "value": "text-davinci-002"
+            },
+            {
+              "name": "AZURE_OPENAI_SERVICE",
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]"
+            },
+            {
+              "name": "AZURE_SEARCH_APIKEY",
+              "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+            },
+            {
+              "name": "AZURE_SEARCH_INDEX",
+              "value": "cosmosdb-index"
+            },
+                        {
+              "name": "AZURE_SEARCH_SERVICE",
+              "value": "[parameters('cogSearchUrl')]"
+            },
+                        {
+              "name": "KB_FIELDS_CATEGORY",
+              "value": "category"
+            },
+                        {
+              "name": "KB_FIELDS_CONTENT",
+              "value": "aggregatedResults.ocr"
+            },
+                        {
+              "name": "KB_FIELDS_SOURCEPAGE",
+              "value": "filename"
+            },
+                        {
+              "name": "OPENAI_API_KEY",
+              "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
             }
           ]
         }
