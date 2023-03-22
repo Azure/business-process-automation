@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Checkbox, Panel, DefaultButton, TextField, SpinButton } from "@fluentui/react";
 import { SparkleFilled } from "@fluentui/react-icons";
-
+import { Dropdown } from '@fluentui/react-northstar';
 import styles from "./Chat.module.css";
 
 
@@ -14,6 +14,8 @@ import { UserChatMessage } from "./components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "./components/AnalysisPanel";
 import { SettingsButton } from "./components/SettingsButton";
 import { ClearChatButton } from "./components/ClearChatButton";
+
+import axios from 'axios'
 
 // export const enum Approaches {
 //     RetrieveThenRead = "rtr",
@@ -42,6 +44,32 @@ const Chat = () => {
     const [selectedAnswer, setSelectedAnswer] = useState(0);
     const [answers, setAnswers] = useState([]);
 
+    const [indexes, setIndexes] = useState([])
+    const [selectedIndex, setSelectedIndex] = useState(null)
+    //const [indexSearchDone, setIndexSearchDone] = useState(false)
+
+    useEffect(()=>{
+        axios.get('/api/indexes').then(_indexes => {
+            if(_indexes?.data?.indexes){
+                //setIndexSearchDone(true)
+                setIndexes(_indexes.data.indexes)
+                setSelectedIndex(_indexes.data.indexes[0]) 
+            }
+        }).catch(err => {
+            //setIndexSearchDone(true)
+            console.log(err)
+        })
+    },[])
+
+
+    const onIndexChange = (_, value) => {
+        if(indexes && indexes.length > 0){
+            const _index = indexes.find(i => i.name === value.value)
+            setSelectedIndex(_index)
+        }
+        
+    }
+
     const makeApiRequest = (question => {
         lastQuestionRef.current = question;
 
@@ -62,12 +90,13 @@ const Chat = () => {
                     semanticRanker: useSemanticRanker,
                     semanticCaptions: useSemanticCaptions,
                     suggestFollowupQuestions: useSuggestFollowupQuestions
-                }
+                },
+                index : selectedIndex
             };
             chatApi(request).then(result => {
                 setAnswers([...answers, [question, result]]);
             })
-            
+
         } catch (e) {
             setError(e);
         } finally {
@@ -136,11 +165,24 @@ const Chat = () => {
 
     return (
         <div className={styles.container}>
+
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                 <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
+                <div>
+                    <Dropdown
+                        search
+                        placeholder="Select the Index"
+                        label="Output"
+                        items={indexes.map(sc => sc.name)}
+                        onChange={onIndexChange}
+
+                    />
+                </div>
+
             </div>
             <div className={styles.chatRoot}>
+
                 <div className={styles.chatContainer}>
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>

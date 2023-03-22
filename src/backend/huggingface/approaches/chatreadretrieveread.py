@@ -40,12 +40,29 @@ Question:
 Search query:
 """
 
-    def __init__(self, search_client: SearchClient, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str):
+    def __init__(self, search_client: SearchClient, chatgpt_deployment: str, gpt_deployment: str, sourcepage_field: str, content_field: str, index: any):
         self.search_client = search_client
         self.chatgpt_deployment = chatgpt_deployment
         self.gpt_deployment = gpt_deployment
         self.sourcepage_field = sourcepage_field
         self.content_field = content_field
+        self.index = index
+
+    def getText(self, searchables, doc):
+        if searchables == None:
+            return ""
+        if len(searchables) == 0:
+            return ""
+        out = ""
+        for s in searchables:
+            currentData = doc
+            for i in s.split('/'):
+                if  isinstance(currentData.get(i), list):
+                    currentData = currentData.get(i)[0]
+                else:
+                    currentData = currentData[i]
+            out = out + currentData
+        return out
 
     def run(self, history: list[dict], overrides: dict) -> any:
         use_semantic_captions = True if overrides.get("semantic_captions") else False
@@ -80,7 +97,7 @@ Search query:
         if use_semantic_captions:
             results = [doc[self.sourcepage_field] + ": " + nonewlines(" . ".join([c.text for c in doc['@search.captions']])) for doc in r]
         else:
-            results = [doc[self.sourcepage_field] + ": " + nonewlines(doc["aggregatedResults"]["ocrToText"]) for doc in r]
+            results = [doc[self.sourcepage_field] + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
         content = "\n".join(results)
 
         follow_up_questions_prompt = self.follow_up_questions_prompt_content if overrides.get("suggest_followup_questions") else ""

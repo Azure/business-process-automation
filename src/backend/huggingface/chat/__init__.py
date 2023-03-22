@@ -46,10 +46,10 @@ openai.api_version = "2022-12-01"
 openai.api_key = OPENAI_API_KEY
 
 # Set up clients for Cognitive Search and Storage
-search_client = SearchClient(
-    endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
-    index_name=AZURE_SEARCH_INDEX,
-    credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
+# search_client = SearchClient(
+#     endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
+#     index_name=AZURE_SEARCH_INDEX,
+#     credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
 blob_client = BlobServiceClient(
     account_url=f"https://{AZURE_BLOB_STORAGE_ACCOUNT}.blob.core.windows.net", 
     credential=azure_credential)
@@ -57,26 +57,33 @@ blob_container = blob_client.get_container_client(AZURE_BLOB_STORAGE_CONTAINER)
 
 # Various approaches to integrate GPT and external knowledge, most applications will use a single one of these patterns
 # or some derivative, here we include several for exploration purposes
-ask_approaches = {
-    "rtr": RetrieveThenReadApproach(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT),
-    "rrr": ReadRetrieveReadApproach(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT),
-    "rda": ReadDecomposeAsk(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
-}
+# ask_approaches = {
+#     "rtr": RetrieveThenReadApproach(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT),
+#     "rrr": ReadRetrieveReadApproach(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT),
+#     "rda": ReadDecomposeAsk(search_client, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
+# }
 
-chat_approaches = {
-    "rrr": ChatReadRetrieveReadApproach(search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
-}
+# chat_approaches = {
+#     "rrr": ChatReadRetrieveReadApproach(search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT)
+# }
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     print('Python HTTP trigger function processed a request.')
     out = {}
     try:
+        
         req_json = req.get_json()
         req_body = req_json.get("body")
-        approach = "rrr" #req_body.get("approach")
+
+        search_client = SearchClient(
+        endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
+        index_name=req_body.get("index").get("name"),
+        credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
+
+        approach = ChatReadRetrieveReadApproach(search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index")) #"rrr" #req_body.get("approach")
         try:
-            impl = chat_approaches.get(approach)
+            impl = approach #chat_approaches.get(approach)
             if not impl:
                 return ({"error": "unknown approach"}), 400
             r = impl.run(req_body.get("history"),req_body.get("overrides") or {})
