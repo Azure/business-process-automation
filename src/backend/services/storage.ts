@@ -76,27 +76,6 @@ export class BlobStorage extends Storage {
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
     }
 
-    // public copy = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
-    //     this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-    //     const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.filename)
-    //     const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
-
-    //     return input
-    // }
-
-    // public conditionalCopy = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
-    //     const key : string = input.serviceSpecificConfig["key"]
-    //     const value : RegExp  = new RegExp(input.serviceSpecificConfig["regexString"])
-
-    //     if(input.aggregatedResults[key].match(value)){
-    //         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-    //         const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.filename)
-    //         const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
-    //     }
-
-    //     return input
-    // }
-
     public toTxt = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
         const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.filename}.txt`)

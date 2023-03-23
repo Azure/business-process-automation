@@ -3,13 +3,14 @@ import { BlobStorage, LocalStorage } from "../services/storage"
 import { BpaEngine } from "."
 import { serviceCatalog } from "./serviceCatalog"
 import { BpaConfiguration, BpaPipelines } from "./types"
-import MessageQueue from "../services/messageQueue";
+import MessageQueue, { ServiceBusMQ } from "../services/messageQueue";
 import { DB } from "../services/db"
 import { Speech } from "../services/speech"
 import { FormRec } from "../services/formrec"
 import { LanguageStudio } from "../services/language"
 const _ = require('lodash')
 import { RedisSimilarity } from "../services/redis";
+import { TextSegmentation } from "../services/textSegmentation"
 
 let redis : RedisSimilarity
 
@@ -35,6 +36,9 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             if (mySbMsg?.aggregatedResults["speechToText"]?.location) {
                 const speech = new Speech(process.env.SPEECH_SUB_KEY, process.env.SPEECH_SUB_REGION, process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER, process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME);
                 await speech.processAsync(mySbMsg, db, mq)
+            // } else if(mySbMsg?.aggregatedResults["textSegmentation"]?.pending == "true"){
+            //     const textSegmentation = new TextSegmentation(new ServiceBusMQ())
+            //     await textSegmentation.processAsync(mySbMsg)
             } else if (mySbMsg?.aggregatedResults["generalDocument"]?.location ||
                 mySbMsg?.aggregatedResults["layout"]?.location ||
                 mySbMsg?.aggregatedResults["invoice"]?.location ||

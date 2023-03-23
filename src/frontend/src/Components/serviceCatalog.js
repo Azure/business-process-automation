@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "textSegmentation": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocr"
+        ],
+        "outputTypes": [
+            "textSegmentation"
+        ],
+        "image": pdf,
+        "label": "Convert OCR Output To Segmented Chunks",
+        "name": "textSegmentation",
+        "serviceSpecificConfig": { chunkSize : 1000 },
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "redactPdf": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -366,6 +381,21 @@ export const sc = {
         "image": pdf,
         "label": "PDF Document",
         "name": "pdf",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+    "txt": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": summarize,
+        "label": "TXT Document",
+        "name": "txt",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge

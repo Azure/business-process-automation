@@ -13,7 +13,6 @@ export class Preprocess {
         const body = {
             text : input.data
         }
-        console.log(JSON.stringify(body))
         const result = await axios.post(`${this._endpoint}/api/preprocess`, body)
         const results = input.aggregatedResults
         results["preprocess"] = result
@@ -25,6 +24,26 @@ export class Preprocess {
             filename: input.filename,
             pipeline: input.pipeline,
             type : "preprocess",
+            aggregatedResults : results,
+            resultsIndexes : input.resultsIndexes
+        }
+    }
+
+    public textSegmentation = async (input : BpaServiceObject, index : number) : Promise<BpaServiceObject> => {
+        const body = {
+            text : input.data
+        }
+        const result = await axios.post(`${this._endpoint}/api/textSegmentation`, body)
+        const results = input.aggregatedResults
+        results["textSegmentation"] = result
+        input.resultsIndexes.push({index : index, name : "textSegmentation", type : "segmtextSegmentationent"})
+        return {
+            data : result.data,
+            label : "textSegmentation",
+            bpaId : input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            type : "textSegmentation",
             aggregatedResults : results,
             resultsIndexes : input.resultsIndexes
         }

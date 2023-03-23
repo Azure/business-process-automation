@@ -18,6 +18,8 @@ import { TableParser } from "../services/tableParser"
 import { OpenAI } from "../services/openai"
 import { SpliceDocument } from "../services/spliceDocument"
 import { RedactPdf } from "../services/redactPdf"
+import { TextSegmentation } from "../services/textSegmentation"
+import { ServiceBusMQ } from "../services/messageQueue"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -40,7 +42,22 @@ const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPEN
 const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
 const redactPdf = new RedactPdf(blob, blobTranslation)
+const mq = new ServiceBusMQ()
+const textSegmentation = new TextSegmentation(blob)
 
+const textSegmentationService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocr"],
+    outputTypes: [],
+    name: "textSegmentation",
+    process: textSegmentation.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const redactPdfService : BpaService = {
     bpaServiceId : "abc123",
@@ -1010,7 +1027,6 @@ export const serviceCatalog = {
     "prebuiltReceiptBatch" : prebuiltReceiptBatch,
     "prebuiltTaxW2Batch" : prebuiltTaxW2Batch,
     "customFormRecBatch" : customFormRecBatch,
-    
     "huggingFaceNER" : huggingFaceNER,
     "preprocess" : preprocessService,
     "testService" : testService,
@@ -1027,6 +1043,7 @@ export const serviceCatalog = {
     "tableParser" : tableParserService,
     "openaiSummarize" : openaiSummarizeService,
     "openaiGeneric" : openaiGenericService,
-    "openaiEmbeddings" : openaiEmbeddingsService
+    "openaiEmbeddings" : openaiEmbeddingsService,
+    "textSegmentation" : textSegmentationService
 }
 
