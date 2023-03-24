@@ -6,11 +6,12 @@ export default function ToTxtDialog(props) {
 
     const [container, setContainer] = useState("")
     const [folder, setFolder] = useState("")
+    const [maxSegment, setMaxSegment] = useState("")
 
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { containerName : container, folderName : folder }
+        newOption.serviceSpecificConfig = { containerName : container, folderName : folder, maxSegment : maxSegment }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }
@@ -27,6 +28,10 @@ export default function ToTxtDialog(props) {
         setFolder(text.value)
     }
 
+    const onMaxSegmentChange = (event, text) => {
+        setMaxSegment(text.value)
+    }
+
     return (
         <Dialog
             header="Choose Container"
@@ -35,14 +40,18 @@ export default function ToTxtDialog(props) {
                     <div style={{
                             display: 'block', marginBottom: "10px"
                         }}>
-                        <Text content="Pipeline Name" style={{
+                        <Text content="Container Name" style={{
                             display: 'block', marginBottom: "10px"
                         }} />
                         <TextArea value={container} onChange={onContainerChange}/>
-                        <Text content="Pipeline Name" style={{
+                        <Text content="Folder Name" style={{
                             display: 'block', marginBottom: "10px"
                         }} />
                         <TextArea value={folder} onChange={onFolderChange}/>
+                        <Text content="Maximum Segment (number of tokens)" style={{
+                            display: 'block', marginBottom: "10px"
+                        }} />
+                        <TextArea value={maxSegment} onChange={onMaxSegmentChange}/>
                     </div>
                 </>}
             open={!props.hideDialog}
