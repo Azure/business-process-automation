@@ -26,7 +26,7 @@ export class TextSegmentation {
                 if (segment.length + line.content.length > maxSegment) {
                     input.aggregatedResults["textSegmentation"] = segment
                     await blob.toTxt({
-                        filename: `${folder}/${pageNumber}_${counter}_${input.filename}`,
+                        filename: `${folder}/${pageNumber}_${counter++}_${input.filename}`,
                         pipeline: input.pipeline,
                         type: "textSegmentation",
                         label: "textSegmentation",
