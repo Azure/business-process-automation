@@ -42,7 +42,6 @@ const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPEN
 const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
 const redactPdf = new RedactPdf(blob, blobTranslation)
-const mq = new ServiceBusMQ()
 const textSegmentation = new TextSegmentation(blob)
 
 const textSegmentationService : BpaService = {

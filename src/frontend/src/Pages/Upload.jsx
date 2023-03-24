@@ -3,7 +3,6 @@ import { FileUploader } from "react-drag-drop-files";
 import { Text, Dropdown } from '@fluentui/react-northstar';
 import axios from 'axios'
 
-//const cogsearchLabel = "cogsearch"
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
@@ -12,12 +11,9 @@ function Upload(props) {
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
     const [showFail, setShowFail] = useState(false);
-    //const [isCogSearch, setIsCogSearch] = useState(false)
-    //const [rerender, setRerender] = useState(0)
     const [pipelineNames, setPipelineNames] = useState([])
     const [selectedPipelineName, setSelectedPipelineName] = useState("")
     const [queueStatus, setQueueStatus] = useState(null)
-
 
     useEffect(() => {
         try {
@@ -35,14 +31,6 @@ function Upload(props) {
             }, 5000)
 
 
-            // axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
-            //     if (value?.data?.createSkill) {
-            //         setIsCogSearch(value.data.createSkill)
-            //     } else {
-            //         setIsCogSearch(false)
-            //     }
-            // })
-
             axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
                 if (value?.data?.pipelines) {
                     const names = []
@@ -58,15 +46,6 @@ function Upload(props) {
             console.log(err)
         }
     }, [])
-
-    // const onCogSearchClick = async (event) => {
-    //     try {
-    //         await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    //     setRerender(rerender + 1)
-    // }
 
     const onDropDownChange = (event, selected) => {
         setSelectedPipelineName(selected.value)
@@ -153,21 +132,7 @@ function Upload(props) {
 
                     </table>
                 )
-                // <ul>
-                //     {queueStatus.messages.queuedFiles.map(m => {
-                //         if (m?.filename) {
-                //             return (<>1</>)
-                //         } else {
-                //             return (<>2</>)
-                //         }
-                //     })}
-
-                // </ul>
-                //)
             }
-
-
-
         }
     }
 
@@ -191,7 +156,6 @@ function Upload(props) {
                     </tr>
 
                 </table>
-                // <Text weight="semibold" content="Empty" style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} />
             )
         }
 

@@ -33,7 +33,7 @@ export const sc = {
         "outputTypes": [
             "textSegmentation"
         ],
-        "image": pdf,
+        "image": summarize,
         "label": "Convert OCR Output To Segmented Chunks",
         "name": "textSegmentation",
         "serviceSpecificConfig": { chunkSize : 1000 },

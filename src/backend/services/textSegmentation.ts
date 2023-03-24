@@ -23,7 +23,7 @@ export class TextSegmentation {
                 if (segment.length + line.content.length > maxSegment) {
                     input.aggregatedResults["textSegmentation"] = segment
                     await this._blob.toTxt({
-                        filename: `mytempContainer/${input.filename}`,
+                        filename: `mytempcontainer/${input.filename}`,
                         pipeline: input.pipeline,
                         type: "textSegmentation",
                         label: "textSegmentation",
@@ -42,7 +42,7 @@ export class TextSegmentation {
         input.aggregatedResults["textSegmentation"] = { pageNumber: pageNumber, text: segment }
         input.resultsIndexes.push({ index: index, name: "textSegmentation", type: "textSegmentation" })
         await this._blob.toTxt({
-            filename: `mytempContainer/${input.filename}`,
+            filename: `mytempcontainer/${input.filename}`,
             pipeline: input.pipeline,
             type: "textSegmentation",
             label: "textSegmentation",

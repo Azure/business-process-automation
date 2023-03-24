@@ -5,11 +5,12 @@ import { Dialog, Text, TextArea } from '@fluentui/react-northstar';
 export default function ToTxtDialog(props) {
 
     const [container, setContainer] = useState("")
+    const [folder, setFolder] = useState("")
 
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { containerName : container }
+        newOption.serviceSpecificConfig = { containerName : container, folderName : folder }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }
@@ -18,8 +19,12 @@ export default function ToTxtDialog(props) {
         props.setHideDialog(true)
     }
 
-    const onDialogChange = (event, text) => {
+    const onContainerChange = (event, text) => {
         setContainer(text.value)
+    }
+
+    const onFolderChange = (event, text) => {
+        setFolder(text.value)
     }
 
     return (
@@ -30,10 +35,14 @@ export default function ToTxtDialog(props) {
                     <div style={{
                             display: 'block', marginBottom: "10px"
                         }}>
-                        <Text content="Container Name" style={{
+                        <Text content="Pipeline Name" style={{
                             display: 'block', marginBottom: "10px"
                         }} />
-                        <TextArea value={container} onChange={onDialogChange}/>
+                        <TextArea value={container} onChange={onContainerChange}/>
+                        <Text content="Pipeline Name" style={{
+                            display: 'block', marginBottom: "10px"
+                        }} />
+                        <TextArea value={folder} onChange={onFolderChange}/>
                     </div>
                 </>}
             open={!props.hideDialog}

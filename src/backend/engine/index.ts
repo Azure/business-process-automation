@@ -30,6 +30,12 @@ export class BpaEngine {
 
         console.log(this._getFileType(fileName))
 
+        if(this._getFileType(fileName).toLowerCase() === 'txt'){
+            currentInput.data = currentInput.data.toString()
+            currentInput.type = "text"
+            currentInput.aggregatedResults["text"] = currentInput.data.toString()
+        }
+
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex, mq, db)
 

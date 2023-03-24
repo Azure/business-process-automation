@@ -10,34 +10,11 @@ import ViewInsights from './ViewInsights';
 import OpenAiViewer from './OpenAiViewer';
 import VectorSearch from './VectorSearch';
 import CogSearch from './chat/Chat'
-//import Search from '../Components/searchComponents/pages/Search/Search'
-//import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
-//import { searchHtml } from './searchHtml'
-//const template = { __html: searchHtml };
 
 export default function Content(props) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState("HOME");
     const [breadCrumbItems, setBreadCrumbItems] = useState([])
-    //const [userInfo, setUserInfo] = useState();
-
-    // useEffect(() => {
-    //     getUserInfo().then(value => {
-    //         setUserInfo(value)
-    //     })
-    // }, [])
-
-    // const getUserInfo = async () => {
-    //     try {
-    //         const response = await fetch('/.auth/me');
-    //         const payload = await response.json();
-    //         const { clientPrincipal } = payload;
-    //         return clientPrincipal;
-    //     } catch (error) {
-    //         console.error('No profile could be found');
-    //         return undefined;
-    //     }
-    // }
 
     const onBreadcrumbHome = () => {
         setSelectedMenuItem("HOME")
@@ -237,20 +214,8 @@ export default function Content(props) {
         }
     }
 
-    // const provider = "aad"
-    // const redirect = window.location.pathname;
-    // const showUserInfo = () => {
-    //     if (userInfo) {
-    //         return (<div>{JSON.stringify(userInfo)}</div>)
-    //     }
-    // }
-
     return (
         <div className="content" >
-            {/* <a key={provider} href={`/.auth/login/aad?post_login_redirect_uri=${redirect}`}>
-                {provider}
-                {showUserInfo()}
-            </a> */}
             <div style={{ paddingLeft: "0px", paddingTop: "50px", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
                 {renderContent()}
