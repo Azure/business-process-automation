@@ -19,13 +19,14 @@ export class TextSegmentation {
         let segment = ""
         let pageNumber = 1
         let lastLine = ""
+        let counter = 0
         for (const page of input.data.pages) {
             pageNumber = page.pageNumber
             for (const line of page.lines) {
                 if (segment.length + line.content.length > maxSegment) {
                     input.aggregatedResults["textSegmentation"] = segment
                     await blob.toTxt({
-                        filename: `${folder}/${pageNumber}_${input.filename}`,
+                        filename: `${folder}/${pageNumber}_${counter}_${input.filename}`,
                         pipeline: input.pipeline,
                         type: "textSegmentation",
                         label: "textSegmentation",
