@@ -19,7 +19,6 @@ import { OpenAI } from "../services/openai"
 import { SpliceDocument } from "../services/spliceDocument"
 import { RedactPdf } from "../services/redactPdf"
 import { TextSegmentation } from "../services/textSegmentation"
-import { ServiceBusMQ } from "../services/messageQueue"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -42,7 +41,7 @@ const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPEN
 const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
 const redactPdf = new RedactPdf(blob, blobTranslation)
-const textSegmentation = new TextSegmentation(blob)
+const textSegmentation = new TextSegmentation()
 
 const textSegmentationService : BpaService = {
     bpaServiceId : "abc123",

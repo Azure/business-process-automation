@@ -3,14 +3,13 @@ import { BlobStorage, LocalStorage } from "../services/storage"
 import { BpaEngine } from "."
 import { serviceCatalog } from "./serviceCatalog"
 import { BpaConfiguration, BpaPipelines } from "./types"
-import MessageQueue, { ServiceBusMQ } from "../services/messageQueue";
+import MessageQueue from "../services/messageQueue";
 import { DB } from "../services/db"
 import { Speech } from "../services/speech"
 import { FormRec } from "../services/formrec"
 import { LanguageStudio } from "../services/language"
 const _ = require('lodash')
 import { RedisSimilarity } from "../services/redis";
-import { TextSegmentation } from "../services/textSegmentation"
 
 let redis : RedisSimilarity
 
@@ -80,7 +79,6 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                 directoryName = mySbMsg.pipeline
                 filename = mySbMsg.fileName
             } else {
-                context.log("about to split")
                 filename = mySbMsg.subject.split("/documents/blobs/")[1]
                 directoryName = filename.split('/')[0]
     
@@ -93,8 +91,11 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                 name: ""
             }
     
+            let found = false
             for (const pipeline of config.pipelines) {
                 if (pipeline.name === directoryName) {
+                    found = true
+                    bpaConfig.name = pipeline.name
                     for (const stage of pipeline.stages) {
                         for (const sc of Object.keys(serviceCatalog)) {
                             if (stage.name === serviceCatalog[sc].name) {
@@ -102,14 +103,13 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                                 const newStage = _.cloneDeep(serviceCatalog[sc])
                                 newStage.serviceSpecificConfig = stage.serviceSpecificConfig
                                 bpaConfig.stages.push({ service: newStage })
-                                bpaConfig.name = pipeline.name
                             }
                         }
                     }
                 }
             }
     
-            if (bpaConfig.stages.length === 0) {
+            if (!found) {
                 throw new Error("No Pipeline Found")
             }
     

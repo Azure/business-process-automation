@@ -67,7 +67,6 @@ export class BpaEngine {
                     currentInput.stages = config.stages
                     currentInput.index = stageIndex
 
-                    
                     await mq.sendMessage(currentInput)
                     break
                 }
