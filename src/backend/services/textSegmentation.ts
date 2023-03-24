@@ -45,7 +45,7 @@ export class TextSegmentation {
         input.aggregatedResults["textSegmentation"] = { pageNumber: pageNumber, text: segment }
         input.resultsIndexes.push({ index: index, name: "textSegmentation", type: "textSegmentation" })
         await blob.toTxt({
-            filename: `${folder}/${pageNumber}_${input.filename}`,
+            filename: `${folder}/${pageNumber}_${counter++}_${input.filename}`,
             pipeline: input.pipeline,
             type: "textSegmentation",
             label: "textSegmentation",
