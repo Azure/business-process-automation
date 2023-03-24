@@ -4,7 +4,7 @@ env:
   AZURE_FUNCTIONAPP_NAME: "myapp"    # set this to your application's name
   AZURE_FUNCTIONAPP_NAME_PYTHON: 'huggingface${{ secrets.BPA_PROJECTNAME }}'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/backend'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '18.x'                     # set this to the node version to use (supports 8.x, 10.x, 12.x)
+  NODE_VERSION: '18.4.0'                     # set this to the node version to use (supports 8.x, 10.x, 12.x)
   AZURE_FUNCTIONAPP_PYTHON_PACKAGE_PATH: './src/backend/huggingface'
   PYTHON_VERSION: '3.9'     
 
@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout GitHub Action'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup Node ${{ env.NODE_VERSION }} Environment
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ env.NODE_VERSION }}
 
