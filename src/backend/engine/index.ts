@@ -1,8 +1,10 @@
 import { BpaConfiguration, BpaStage, BpaServiceObject } from "./types"
 import MessageQueue from "../services/messageQueue"
 import { DB } from "../services/db"
+import { BlobStorage } from "../services/storage"
 const _ = require('lodash')
 
+const MAX_PDF_SIZE = 450000000
 export class BpaEngine {
 
     constructor() {
@@ -15,7 +17,7 @@ export class BpaEngine {
 
     }
 
-    public processFile = async (fileBuffer: Buffer, fileName: string, config: BpaConfiguration, mq : MessageQueue, db : DB): Promise<BpaServiceObject> => {
+    public processFile = async (blob : BlobStorage, fileBuffer: Buffer, fileName: string, config: BpaConfiguration, mq : MessageQueue, db : DB): Promise<BpaServiceObject> => {
 
         let currentInput: BpaServiceObject = {
             label: "first",
@@ -34,8 +36,17 @@ export class BpaEngine {
             currentInput.data = currentInput.data.toString()
             currentInput.type = "text"
             currentInput.aggregatedResults["text"] = currentInput.data.toString()
+        } else if(this._getFileType(fileName).toLowerCase() === 'pdf'){
+            if(fileBuffer.length > MAX_PDF_SIZE){
+                const newBuffers = await blob.splitPdfInParts(fileBuffer, fileBuffer.length/(MAX_PDF_SIZE*2))
+                let index = 0
+                for(const b of newBuffers)(
+                    await blob.upload(b, `${index++}_${fileName}`)
+                )
+                currentInput.label = "split"
+                return currentInput
+            }
         }
-
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex, mq, db)
 

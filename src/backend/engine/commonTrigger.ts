@@ -126,7 +126,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                     blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
                 }
                 const myBuffer = await blob.getBuffer(filename)
-                out = await engine.processFile(myBuffer, filename, bpaConfig, mq, db)
+                out = await engine.processFile(blob, myBuffer, filename, bpaConfig, mq, db)
             }
     
     
