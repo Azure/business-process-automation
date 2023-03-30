@@ -23,6 +23,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 body: parsedResponse
             }
         } catch(e){
+            context.res = {
+                body: {error : e}
+            }
             console.log(e)
         }
         
