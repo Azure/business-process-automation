@@ -42,7 +42,7 @@ export abstract class Storage {
     protected _splitPdfInParts = async (myBlob: Buffer, numberOfParts: number): Promise<Buffer[]> => {
         const pdfDoc = await PDFDocument.load(myBlob)
         const numberOfPages = pdfDoc.getPages().length;
-        const result: any[] = []
+        const result: Buffer[] = []
         let markers: number[] = []
         for (let n = 0; n < numberOfParts; n++) {
             markers.push(Math.round((n * numberOfPages) / numberOfParts))
@@ -58,7 +58,7 @@ export abstract class Storage {
                 subDocument.addPage(copiedPage);
             }
             const pdfBytes: Buffer = Buffer.from(await subDocument.save())
-            result.push({ part: n, buffer: pdfBytes })
+            result.push(pdfBytes)
             console.log(`file-${n}.pdf`)
             //await writePdfBytesToFile(`out/file-${i + 1}.pdf`, pdfBytes);
         }
@@ -96,11 +96,13 @@ export class BlobStorage extends Storage {
 
     private _blobServiceClient: BlobServiceClient
     private _blobContainerClient: ContainerClient
+    private _containerName : string
 
     constructor(connectionString: string, containerName: string) {
         super()
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
+        this._containerName = containerName;
     }
 
     public toTxt = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
@@ -121,7 +123,7 @@ export class BlobStorage extends Storage {
     }
 
     public upload = async (myBlob: Buffer, filename: string): Promise<void> => {
-        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(p.join("translated-documents", filename))
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename)
         const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(myBlob, myBlob.length)
         console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
     }

@@ -7,7 +7,6 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get",
         "post"
       ]
     },

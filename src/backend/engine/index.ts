@@ -4,7 +4,7 @@ import { DB } from "../services/db"
 import { BlobStorage } from "../services/storage"
 const _ = require('lodash')
 
-const MAX_PDF_SIZE = 450000000
+const MAX_PDF_SIZE = 10000000
 export class BpaEngine {
 
     constructor() {
@@ -38,13 +38,23 @@ export class BpaEngine {
             currentInput.aggregatedResults["text"] = currentInput.data.toString()
         } else if(this._getFileType(fileName).toLowerCase() === 'pdf'){
             if(fileBuffer.length > MAX_PDF_SIZE){
-                const newBuffers = await blob.splitPdfInParts(fileBuffer, fileBuffer.length/(MAX_PDF_SIZE*2))
+                const newBuffers = await blob.splitPdfInParts(fileBuffer, 2)
                 let index = 0
-                for(const b of newBuffers)(
-                    await blob.upload(b, `${index++}_${fileName}`)
-                )
-                currentInput.label = "split"
-                return currentInput
+                for(const b of newBuffers){
+                    const filePath = `${fileName.replace("/",`/_${index++}`)}`
+                    await blob.upload(b, filePath)
+                }
+                
+                return {
+                    label: "split file",
+                    pipeline: config.name,
+                    type: this._getFileType(fileName),
+                    filename: fileName,
+                    data: fileBuffer,
+                    bpaId: "1",
+                    aggregatedResults: { },
+                    resultsIndexes: []
+                }
             }
         }
         let stageIndex = 1
