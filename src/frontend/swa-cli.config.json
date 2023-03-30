@@ -3,7 +3,7 @@
   "configurations": {
     "frontend": {
       "appLocation": ".",
-      "apiLocation": "api",
+      "apiLocation": "http://localhost:7071",
       "outputLocation": "build",
       "appBuildCommand": "npm run build",
       "apiBuildCommand": "npm run build --if-present",
