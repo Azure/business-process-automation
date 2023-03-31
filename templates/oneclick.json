@@ -525,7 +525,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/huggingface/20230322135225.zip?sv=2020-04-08&st=2023-03-22T13%3A50%3A56Z&se=2024-04-25T13%3A50%3A00Z&sr=b&sp=r&sig=br7Wh8QVWSFPSFDAWW5tDJ5r49wTlxGqAgqC0X1P9jY%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v003.zip?sv=2020-04-08&st=2023-03-31T13%3A41%3A40Z&se=2024-02-22T14%3A41%3A00Z&sr=b&sp=r&sig=EBoJaQAA4BmRWkuMfvPGmCd3%2BFsnthBDeIVnK87LVDc%3D"
             },  
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -611,12 +611,12 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "clientAffinityEnabled": true,
         "siteConfig": {
-          "linuxFxVersion": "Node|18",
+          "linuxFxVersion": "Node|16",
           "alwaysOn": true,
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv015.zip?sv=2020-04-08&st=2023-03-03T21%3A47%3A55Z&se=2023-11-21T21%3A47%3A00Z&sr=b&sp=r&sig=3rXVZCv%2BWvQ3TnMq33wsvQr4Gxvayt7%2FA3g%2BgQduKHw%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv016.zip?sv=2020-04-08&st=2023-03-31T13%3A43%3A40Z&se=2024-03-20T13%3A43%3A00Z&sr=b&sp=r&sig=qd9l%2BIZ3M8yCmL9dR6%2Bo82%2FuvJywmHjvIO%2Bp%2BPogoSM%3D"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
