@@ -611,7 +611,7 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "clientAffinityEnabled": true,
         "siteConfig": {
-          "linuxFxVersion": "Node|18",
+          "linuxFxVersion": "Node|16",
           "alwaysOn": true,
           "appSettings": [
             {

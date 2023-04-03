@@ -42,6 +42,6 @@
     "@azure/functions": "^3.5.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
    }
 }
