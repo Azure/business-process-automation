@@ -50,7 +50,7 @@ export class TextSegmentation {
             type: "textSegmentation",
             label: "textSegmentation",
             bpaId: input.bpaId,
-            aggregatedResults: input.aggregatedResults,
+            aggregatedResults: {}, //input.aggregatedResults,
             data: segment,
             serviceSpecificConfig: { containerName: "documents" }
         })
