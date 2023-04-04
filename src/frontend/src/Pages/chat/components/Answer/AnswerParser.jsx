@@ -46,13 +46,13 @@ export function parseAnswerToHtml(answer, onCitationClicked) {
             followupQuestions
         };
 
-
     }
 
     return {
-        answerHtml: "",
+        answerHtml: "Search Failed:  Make sure that your index has a 'default' sementic configuration.",
         citations,
         followupQuestions
     };
+
 
 }

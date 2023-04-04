@@ -9,6 +9,33 @@ import { parseAnswerToHtml } from "./AnswerParser";
 import { AnswerIcon } from "./AnswerIcon";
 
 
+const renderButtons = (answer, onThoughtProcessClicked, onSupportingContentClicked) => {
+    if (answer) {
+        return (
+            <Stack horizontal horizontalAlign="space-between">
+                <AnswerIcon />
+                <div>
+                    <IconButton
+                        style={{ color: "black" }}
+                        iconProps={{ iconName: "Lightbulb" }}
+                        title="Show thought process"
+                        ariaLabel="Show thought process"
+                        onClick={() => onThoughtProcessClicked()}
+                        disabled={!answer.thoughts}
+                    />
+                    <IconButton
+                        style={{ color: "black" }}
+                        iconProps={{ iconName: "ClipboardList" }}
+                        title="Show supporting content"
+                        ariaLabel="Show supporting content"
+                        onClick={() => onSupportingContentClicked()}
+                        disabled={!answer.data_points.length}
+                    />
+                </div>
+            </Stack>
+        )
+    }
+}
 
 export const Answer = ({
     answer,
@@ -26,27 +53,7 @@ export const Answer = ({
     return (
         <Stack className={`${styles.answerContainer} ${isSelected && styles.selected}`} verticalAlign="space-between">
             <Stack.Item>
-                <Stack horizontal horizontalAlign="space-between">
-                    <AnswerIcon />
-                    <div>
-                        <IconButton
-                            style={{ color: "black" }}
-                            iconProps={{ iconName: "Lightbulb" }}
-                            title="Show thought process"
-                            ariaLabel="Show thought process"
-                            onClick={() => onThoughtProcessClicked()}
-                            disabled={!answer.thoughts}
-                        />
-                        <IconButton
-                            style={{ color: "black" }}
-                            iconProps={{ iconName: "ClipboardList" }}
-                            title="Show supporting content"
-                            ariaLabel="Show supporting content"
-                            onClick={() => onSupportingContentClicked()}
-                            disabled={!answer.data_points.length}
-                        />
-                    </div>
-                </Stack>
+                {renderButtons(answer, onThoughtProcessClicked, onSupportingContentClicked)}
             </Stack.Item>
 
             <Stack.Item grow>
