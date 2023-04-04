@@ -32,7 +32,7 @@ export class TextSegmentation {
                         label: "textSegmentation",
                         bpaId: input.bpaId,
                         aggregatedResults: {}, //input.aggregatedResults,
-                        data: "", //segment,
+                        data: segment,
                         serviceSpecificConfig: input.serviceSpecificConfig
                     })
                     segment = lastLine
@@ -51,7 +51,7 @@ export class TextSegmentation {
             label: "textSegmentation",
             bpaId: input.bpaId,
             aggregatedResults: {}, //input.aggregatedResults,
-            data: "", //segment,
+            data: segment,
             serviceSpecificConfig: { containerName: "documents" }
         })
         return {
@@ -62,7 +62,7 @@ export class TextSegmentation {
             pipeline: input.pipeline,
             type: "textSegmentation",
             aggregatedResults: {}, //input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes,
+            resultsIndexes: [], //input.resultsIndexes,
             index: index
         }
     }
