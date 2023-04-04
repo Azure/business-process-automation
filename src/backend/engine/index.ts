@@ -4,7 +4,6 @@ import { DB } from "../services/db"
 import { BlobStorage } from "../services/storage"
 const _ = require('lodash')
 
-const MAX_PDF_SIZE = 10000000
 export class BpaEngine {
 
     constructor() {
@@ -36,27 +35,28 @@ export class BpaEngine {
             currentInput.data = currentInput.data.toString()
             currentInput.type = "text"
             currentInput.aggregatedResults["text"] = currentInput.data.toString()
-        } else if(this._getFileType(fileName).toLowerCase() === 'pdf'){
-            if(fileBuffer.length > MAX_PDF_SIZE){
-                const newBuffers = await blob.splitPdfInParts(fileBuffer, 2)
-                let index = 0
-                for(const b of newBuffers){
-                    const filePath = `${fileName.replace("/",`/_${index++}`)}`
-                    await blob.upload(b, filePath)
-                }
-                
-                return {
-                    label: "split file",
-                    pipeline: config.name,
-                    type: this._getFileType(fileName),
-                    filename: fileName,
-                    data: fileBuffer,
-                    bpaId: "1",
-                    aggregatedResults: { },
-                    resultsIndexes: []
-                }
-            }
         }
+        // } else if(this._getFileType(fileName).toLowerCase() === 'pdf'){
+        //     if(fileBuffer.length > MAX_PDF_SIZE){
+        //         const newBuffers = await blob.splitPdfInParts(fileBuffer, 2)
+        //         let index = 0
+        //         for(const b of newBuffers){
+        //             const filePath = `${fileName.replace("/",`/_${index++}`)}`
+        //             await blob.upload(b, filePath)
+        //         }
+                
+        //         return {
+        //             label: "split file",
+        //             pipeline: config.name,
+        //             type: this._getFileType(fileName),
+        //             filename: fileName,
+        //             data: fileBuffer,
+        //             bpaId: "1",
+        //             aggregatedResults: { },
+        //             resultsIndexes: []
+        //         }
+        //     }
+        // }
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex, mq, db)
 
