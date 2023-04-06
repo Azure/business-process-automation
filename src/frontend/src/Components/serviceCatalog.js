@@ -632,24 +632,24 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getLanguagePricing
     },
-    "sttService": {
-        "defaultTier" : "Speech To Text",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "wav",
-            "mp3"
-        ],
-        "outputTypes": [
-            "stt"
-        ],
-        "image": tts,
-        "label": "Speech To Text Service",
-        "name": "stt",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getSpeechPricing
-    },
+    // "sttService": {
+    //     "defaultTier" : "Speech To Text",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "wav",
+    //         "mp3"
+    //     ],
+    //     "outputTypes": [
+    //         "stt"
+    //     ],
+    //     "image": tts,
+    //     "label": "Speech To Text Service",
+    //     "name": "stt",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getSpeechPricing
+    // },
     "sttBatchService": {
         "defaultTier" : "Speech To Text",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
