@@ -24,7 +24,7 @@ const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
-const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER,process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY, process.env.FORMREC_CONTAINER_READ_ENDPOINT)
 const translate = new Translate(process.env.TRANSLATE_ENDPOINT, process.env.TRANSLATE_APIKEY, process.env.TRANSLATE_REGION)
 const huggingface = new HuggingFace(process.env.HUGGINGFACE_ENDPOINT)
@@ -545,13 +545,12 @@ const customFormRec : BpaService = {
     }
 }
 
-
-const sttService : BpaService = {
+const sttToTextService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["wav","mp3"],
+    inputTypes: ["stt"],
     outputTypes: ["text"],
-    name: "stt",
-    process: speech.process,
+    name: "sttToText",
+    process: speech.sttToText,
     serviceSpecificConfig: {
 
     },
@@ -560,10 +559,25 @@ const sttService : BpaService = {
     }
 }
 
+
+// const sttService : BpaService = {
+//     bpaServiceId : "abc123",
+//     inputTypes: ["wav","mp3"],
+//     outputTypes: ["stt"],
+//     name: "stt",
+//     process: speech.process,
+//     serviceSpecificConfig: {
+
+//     },
+//     serviceSpecificConfigDefaults: {
+
+//     }
+// }
+
 const sttBatchService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["wav","mp3"],
-    outputTypes: ["text"],
+    outputTypes: ["stt"],
     name: "sttBatch",
     process: speech.processBatch,
     serviceSpecificConfig: {
@@ -1006,7 +1020,7 @@ export const serviceCatalog = {
     "recognizePiiEntitiesBatch" : recognizePiiEntitiesBatch,
     "singleCategoryClassifyBatch" : singleCategoryClassifyBatch,
     "summaryToText" : summaryToText,
-    "sttService" : sttService,
+    "sttToText" : sttToTextService,
     "sttBatchService" : sttBatchService,
     "translate" : translateService,
     "layout" : layout,

@@ -33,7 +33,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         if (mySbMsg?.type && mySbMsg.type === 'async transaction') {
             console.log('async transaction')
             if (mySbMsg?.aggregatedResults["speechToText"]?.location) {
-                const speech = new Speech(process.env.SPEECH_SUB_KEY, process.env.SPEECH_SUB_REGION, process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER, process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME);
+                const speech = new Speech(process.env.SPEECH_SUB_KEY, process.env.SPEECH_SUB_REGION, process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER);
                 await speech.processAsync(mySbMsg, db, mq)
             // } else if(mySbMsg?.aggregatedResults["textSegmentation"]?.pending == "true"){
             //     const textSegmentation = new TextSegmentation(new ServiceBusMQ())

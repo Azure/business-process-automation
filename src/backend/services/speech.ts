@@ -15,15 +15,40 @@ export class Speech {
 
     constructor(subscriptionKey: string, region: string, connectionString: string, containerName: string) {
         this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
-        //const url : URL = new URL(process.env.SPEECH_SUB_ENDPOINT)
-        //this._client = sdk.SpeechConfig.fromHost(url, subscriptionKey)
-        this._client.setProfanity(sdk.ProfanityOption.Raw)
+        this._client.setProperty("diarizationEnabled", "true")
+        this._client.setProperty("punctuationMode", "DictatedAndAutomatic")
+        this._client.requestWordLevelTimestamps()
+        this._client.setProfanity(sdk.ProfanityOption.Masked)
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
     }
 
     private _delay = (ms: number) => {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    public sttToText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        let out = ""
+        if(input.data && input.data[0]){
+            for(const r of input.data){
+                out += `channel : ${r.channel} speaker : ${r.speaker} text: ${r.nBest[0].display} `
+            }
+        }
+
+        const label = "sttToText"
+        input.aggregatedResults[label] = out
+        input.resultsIndexes.push({ index: index, name: label, type: label })
+
+        return {
+            type: "text",
+            label: label,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            bpaId: input.bpaId,
+            aggregatedResults: input.aggregatedResults,
+            resultsIndexes: input.resultsIndexes
+        }
     }
 
     public processBatch = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
@@ -105,15 +130,12 @@ export class Speech {
                 this._client.speechRecognitionLanguage = input.serviceSpecificConfig.to
             }
             let audioConfig = sdk.AudioConfig.fromWavFileInput(input.data)
-                    
-            audioConfig.setProperty("diarizationEnabled", "true")
-            audioConfig.setProperty("wordLevelTimestampsEnabled", "true")
-            audioConfig.setProperty("punctuationMode", "DictatedAndAutomatic")
-            audioConfig.setProperty("profanityFilterMode", "Masked")
 
+            //let conversation = sdk.Conversation.createConversationAsync(this._client, "myConversation");
             let speechRecognizer = new sdk.SpeechRecognizer(this._client, audioConfig);
 
-            let out = ""
+            let out = []
+            let out2 = []
             speechRecognizer.recognizing = (s, e) => {
                 //console.log(`RECOGNIZING: Text=${e.result.text}`);
             };
@@ -121,7 +143,8 @@ export class Speech {
             speechRecognizer.recognized = (s, e) => {
                 if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
                     //console.log(`RECOGNIZED: Text=${e.result.text}`);
-                    out += e.result.text + " "
+                    out.push(e.result)
+                    out2.push(e)
                 }
                 else if (e.result.reason == sdk.ResultReason.NoMatch) {
                     console.log("NOMATCH: Speech could not be recognized.");
@@ -149,7 +172,7 @@ export class Speech {
                     data: out,
                     label: "speechToText",
                     bpaId: input.bpaId,
-                    type: 'text',
+                    type: 'stt',
                     filename: input.filename,
                     pipeline: input.pipeline,
                     aggregatedResults: results,
@@ -190,14 +213,17 @@ export class Speech {
             for (const value of axiosGetResp2.data.values) {
                 if (value.kind === 'Transcription') {
                     const axiosGetResp3 = await axios.get(value.links.contentUrl, axiosParams)
-                    let result = ""
-                    for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
-                        result += " " + combined.display
+                    let result = []
+                    // for (const combined of axiosGetResp3.data.combinedRecognizedPhrases) {
+                    //     result += " " + combined.display
+                    // }
+                    for (const r of axiosGetResp3.data.recognizedPhrases) {
+                        result.push(r)
                     }
                     let index = mySbMsg.index
                     mySbMsg.aggregatedResults["speechToText"] = result
-                    mySbMsg.resultsIndexes.push({ index: index, name: "speechToText", type: "text" })
-                    mySbMsg.type = "text"
+                    mySbMsg.resultsIndexes.push({ index: index, name: "speechToText", type: "stt" })
+                    mySbMsg.type = "stt"
                     mySbMsg.index = index + 1
                     mySbMsg.data = result
                 }
