@@ -421,7 +421,8 @@ export const sc = {
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
-            "tiff","gif","jpg","jpeg"
+            "tiff","gif","jpg","jpeg",
+            "doc","docx","ppt"
         ],
         "outputTypes": [
             "ocr"
@@ -640,7 +641,7 @@ export const sc = {
             "mp3"
         ],
         "outputTypes": [
-            "text"
+            "stt"
         ],
         "image": tts,
         "label": "Speech To Text Service",
@@ -658,7 +659,7 @@ export const sc = {
             "mp3"
         ],
         "outputTypes": [
-            "text"
+            "stt"
         ],
         "image": tts,
         "label": "Speech To Text Service (Batch)",
@@ -666,6 +667,23 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : getSpeechPricing
+    },
+    "sttToTextService": {
+        "defaultTier" : "Speech To Text",
+        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "stt"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": tts,
+        "label": "STT To Text",
+        "name": "sttToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
     },
     "generalDocument": {
         "defaultTier" : "S0 Pre-built Pages",

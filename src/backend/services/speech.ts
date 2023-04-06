@@ -13,7 +13,7 @@ export class Speech {
     private _blobServiceClient: BlobServiceClient
     private _blobContainerClient: ContainerClient
 
-    constructor(subscriptionKey: string, region: string, connectionString: string, containerName: string, cosmosConnectionString: string, cosmosDb: string, cosmosContainer: string) {
+    constructor(subscriptionKey: string, region: string, connectionString: string, containerName: string) {
         this._client = sdk.SpeechConfig.fromSubscription(subscriptionKey, region)
         //const url : URL = new URL(process.env.SPEECH_SUB_ENDPOINT)
         //this._client = sdk.SpeechConfig.fromHost(url, subscriptionKey)
@@ -45,7 +45,10 @@ export class Speech {
                 sasUrl
             ],
             "properties": {
-                "wordLevelTimestampsEnabled": true
+                "diarizationEnabled": true,
+                "wordLevelTimestampsEnabled": true,
+                "punctuationMode": "DictatedAndAutomatic",
+                "profanityFilterMode": "Masked"
             },
             "locale": "en-US",
             "displayName": "Transcription of file using default model for en-US"
@@ -56,7 +59,10 @@ export class Speech {
                     sasUrl
                 ],
                 "properties": {
-                    "wordLevelTimestampsEnabled": true
+                    "diarizationEnabled": true,
+                    "wordLevelTimestampsEnabled": true,
+                    "punctuationMode": "DictatedAndAutomatic",
+                    "profanityFilterMode": "Masked"
                 },
                 "locale": input.serviceSpecificConfig.to,
                 "displayName": "Transcription of file using default model for en-US"
@@ -98,7 +104,13 @@ export class Speech {
             if (input?.serviceSpecificConfig?.to) {
                 this._client.speechRecognitionLanguage = input.serviceSpecificConfig.to
             }
-            let audioConfig = sdk.AudioConfig.fromWavFileInput(input.data);
+            let audioConfig = sdk.AudioConfig.fromWavFileInput(input.data)
+                    
+            audioConfig.setProperty("diarizationEnabled", "true")
+            audioConfig.setProperty("wordLevelTimestampsEnabled", "true")
+            audioConfig.setProperty("punctuationMode", "DictatedAndAutomatic")
+            audioConfig.setProperty("profanityFilterMode", "Masked")
+
             let speechRecognizer = new sdk.SpeechRecognizer(this._client, audioConfig);
 
             let out = ""
