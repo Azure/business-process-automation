@@ -590,7 +590,9 @@ const sttBatchService : BpaService = {
 
 const ocrContainerBatchService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocrContainer"],
     name: "ocrContainerBatch",
     process: formrec.readContainerAsync,
@@ -604,7 +606,9 @@ const ocrContainerBatchService : BpaService = {
 
 const ocrContainerService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocrContainer"],
     name: "ocrContainer",
     process: formrec.readContainer,
@@ -618,7 +622,9 @@ const ocrContainerService : BpaService = {
 
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocr"],
     name: "ocr",
     process: formrec.readDocument,
@@ -632,7 +638,9 @@ const ocrService : BpaService = {
 
 const ocrBatchService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocr"],
     name: "ocrBatch",
     process: formrec.readDocumentAsync,

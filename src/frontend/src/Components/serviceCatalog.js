@@ -422,7 +422,7 @@ export const sc = {
         "inputTypes": [
             "pdf",
             "tiff","gif","jpg","jpeg",
-            "doc","docx","ppt"
+            "doc","docx","ppt","pptx"
         ],
         "outputTypes": [
             "ocr"
@@ -443,7 +443,8 @@ export const sc = {
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
-            "tiff","gif","jpg","jpeg"
+            "tiff","gif","jpg","jpeg",
+            "doc","docx","ppt","pptx"
         ],
         "outputTypes": [
             "ocrContainer"
@@ -464,7 +465,8 @@ export const sc = {
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
-            "tiff","gif","jpg","jpeg"
+            "tiff","gif","jpg","jpeg",
+            "doc","docx","ppt","pptx"
         ],
         "outputTypes": [
             "ocrContainer"
@@ -482,7 +484,8 @@ export const sc = {
         "bpaServiceId": "abc123",
         "inputTypes": [
             "pdf",
-            "tiff","gif","jpg","jpeg"
+            "tiff","gif","jpg","jpeg",
+            "doc","docx","ppt","pptx"
         ],
         "outputTypes": [
             "ocr"
