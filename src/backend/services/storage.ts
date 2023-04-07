@@ -128,6 +128,11 @@ export class BlobStorage extends Storage {
         console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
     }
 
+    public delete = async (filename: string): Promise<void> => {
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename)
+        await blobClient.deleteIfExists()
+    }
+
     public split = async (myBlob: Buffer, filename: string, directoryName: string): Promise<void> => {
         const pages: Buffer[] = await this._splitPdf(myBlob)
         let index = 0
