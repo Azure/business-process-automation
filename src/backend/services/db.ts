@@ -22,17 +22,20 @@ export abstract class DB {
     public abstract create(data): Promise<any>;
     public abstract view(input: BpaServiceObject): Promise<any>
     public abstract getConfig(): Promise<BpaPipelines>
-    public abstract getByID(id: string): Promise<any>
+    public abstract getByID(id: string, pipeline: string): Promise<any>
     public abstract deleteByID(id: string): Promise<any>
 }
 
 export class BlobDB extends DB {
 
-    private _client: BlobStorage
+    //private _client: BlobStorage
+    private _configClient : BlobStorage
+    private _resultsClient : BlobStorage
 
     constructor(connectionString: string, dbName: string, containerName: string) {
         super(connectionString, dbName, containerName)
-        this._client = new BlobStorage(connectionString, containerName)
+        this._configClient = new BlobStorage(connectionString, 'config')
+        this._resultsClient = new BlobStorage(connectionString, 'results')
     }
 
     public connect = async () => {
@@ -41,28 +44,41 @@ export class BlobDB extends DB {
 
     public create = async (data: any): Promise<any> => {
 
-        const id = uuidv4()
-        await this._client.upload(Buffer.from(JSON.stringify(data)), `${id}.json`)
+        let id : string
+        if(data.id){
+            id = data.id
+        } else{
+            id = uuidv4()
+            data.id = id
+        }
+        
+        await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `${data.pipeline}/${id}.json`)
 
-        return
+        return data
     }
 
-    public view = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+    public view = async (input: any): Promise<BpaServiceObject> => {
 
-        const id = uuidv4()
-        await this._client.upload(Buffer.from(JSON.stringify(input)), `${id}.json`)
+        let id : string
+        if(input.id){
+            id = input.id
+        } else{
+            id = uuidv4()
+        }
+        await this._resultsClient.upload(Buffer.from(JSON.stringify(input)), `${input.pipeline}/${id}.json`)
 
         return input
     }
 
     public getConfig = async (): Promise<BpaPipelines> => {
-        return JSON.parse((await this._client.getBuffer(this._pipelinesLabel)).toString())
+
+        return JSON.parse((await this._configClient.getBuffer('pipelines.json')).toString())
     }
-    public getByID = async (id: string): Promise<any> => {
-        return JSON.parse((await this._client.getBuffer(id)).toString())
+    public getByID = async (id: string, pipeline: string): Promise<any> => {
+        return JSON.parse((await this._resultsClient.getBuffer(`${pipeline}/${id}.json`)).toString())
     }
     public deleteByID = async (id: string): Promise<any> => {
-        this._client.delete(id)
+        this._resultsClient.delete(id)
         return null
     }
 
@@ -105,7 +121,7 @@ export class Redis extends DB {
         }
         return null
     }
-    public getByID = async (id: string): Promise<any> => {
+    public getByID = async (id: string, pipeline: string): Promise<any> => {
         try {
             const out = await this._client.get(id)
 
@@ -212,7 +228,7 @@ export class CosmosDB extends DB {
 
     }
 
-    public getByID = async (id: string): Promise<any> => {
+    public getByID = async (id: string, pipeline: string): Promise<any> => {
 
         const client = new CosmosClient(this._connectionString);
         const database = client.database(this._dbName);
