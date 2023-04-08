@@ -8,8 +8,8 @@ const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg
     const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
     if(mySbMsg?.dbId){
         const data = await db.getByID(mySbMsg.dbId, mySbMsg.pipeline)
-        mySbMsg.data = data.data
-        mySbMsg.aggregatedResults = data.aggregatedResults
+        mySbMsg = data
+        //mySbMsg.aggregatedResults = data.aggregatedResults
         //db.deleteByID(mySbMsg.dbId)
     }
     
