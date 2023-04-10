@@ -16,7 +16,7 @@ export class ServiceBusMQ implements MessageQueue{
             const sender = serviceBusClient.createSender("upload")
             const messages : ServiceBusMessage[] = [
                 { 
-                    body: message,
+                    body: JSON.stringify(message),
                     contentType : "application/json",
                     timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
                 }
@@ -36,7 +36,11 @@ export class ServiceBusMQ implements MessageQueue{
         const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
         const sender = serviceBusClient.createSender("upload")
         const messages = [
-            { body: message }
+            { 
+                body: JSON.stringify(message),
+                contentType : "application/json",
+                timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
+            }
         ]
 
         var t = new Date();
