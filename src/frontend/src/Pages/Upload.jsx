@@ -110,29 +110,29 @@ function Upload(props) {
     const tableCellStyle = { backgroundColor: "white", borderStyle: "solid", borderWidth: "1px", textAlign: "left" }
 
     const getQueuedFiles = () => {
+        
         if (queueStatus && queueStatus.messages.queuedFiles) {
-            if (queueStatus.messages.queuedFiles.length > 0) {
-                return (
-                    <table>
-                        <tr>
-                            <td style={tableCellStyle}>Filename</td>
-                            <td style={tableCellStyle}>State</td>
-                            <td style={tableCellStyle}>Is Async Transaction</td>
-                        </tr>
-                        {queueStatus.messages.queuedFiles.map(f => {
-                            return (
-                                <tr>
-                                    <td style={tableCellStyle}>{f.filename}</td>
-                                    <td style={tableCellStyle}>{f.state}</td>
-                                    <td style={tableCellStyle}>{f.isAsync.toString()}</td>
-                                </tr>
-                            )
-                        })}
-
-
-                    </table>
-                )
-            }
+            console.log(JSON.stringify(queueStatus.messages))
+            // if (queueStatus.messages.queuedFiles.length > 0) {
+            //     return (
+            //         <table>
+            //             <tr>
+            //                 <td style={tableCellStyle}>Filename</td>
+            //                 <td style={tableCellStyle}>State</td>
+            //                 <td style={tableCellStyle}>Is Async Transaction</td>
+            //             </tr>
+            //             {queueStatus.messages.queuedFiles.map(f => {
+            //                 return (
+            //                     <tr>
+            //                         <td style={tableCellStyle}>{f.filename}</td>
+            //                         <td style={tableCellStyle}>{f.state}</td>
+            //                         <td style={tableCellStyle}>{f.isAsync.toString()}</td>
+            //                     </tr>
+            //                 )
+            //             })}
+            //         </table>
+            //     )
+            // }
         }
     }
 

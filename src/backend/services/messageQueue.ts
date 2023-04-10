@@ -1,4 +1,4 @@
-import { ServiceBusClient } from "@azure/service-bus"
+import { ServiceBusClient, ServiceBusMessage } from "@azure/service-bus"
 import amqplib from "amqplib"
 
 
@@ -14,8 +14,12 @@ export class ServiceBusMQ implements MessageQueue{
 
             const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
             const sender = serviceBusClient.createSender("upload")
-            const messages = [
-                { body: message }
+            const messages : ServiceBusMessage[] = [
+                { 
+                    body: message,
+                    contentType : "application/json",
+                    timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
+                }
             ]
     
             await sender.sendMessages(messages)

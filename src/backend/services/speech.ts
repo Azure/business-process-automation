@@ -239,8 +239,5 @@ export class Speech {
             console.log('do nothing')
             await mq.scheduleMessage({dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label}, 10000)
         }
-
-
     }
-
 }
