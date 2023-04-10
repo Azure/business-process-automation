@@ -172,10 +172,10 @@ export class LanguageStudio {
             mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
             mySbMsg.data = dbout.id
 
-            await mq.sendMessage(mySbMsg)
+            await mq.sendMessage({dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label})
         } else {
             console.log('do nothing')
-            await mq.scheduleMessage(mySbMsg, 10000)
+            await mq.scheduleMessage({dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label}, 10000)
         }
     }
 

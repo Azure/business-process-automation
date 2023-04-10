@@ -12,6 +12,10 @@ export class BlobStorage {
         this._containerName = containerName;
     }
 
+    public getAll = async (pipeline : string): Promise<Buffer[]> => {
+        return []
+    }
+
     public getBuffer = async (filename: string): Promise<Buffer> => {
         try{
             const blobClient: BlobClient = this._blobContainerClient.getBlobClient(filename)

@@ -173,9 +173,15 @@ export class BlobDB extends DB {
         }
        return out
     }
+
     public get = async (id: string): Promise<any> => {
         return JSON.parse((await this._resultsClient.getBuffer(`${id}.json`)).toString())
     }
+
+    public getAll = async (pipeline: string) : Promise<any[]> => {
+        return await this._resultsClient.getAll(pipeline)
+    }
+
     public delete = async (id: string): Promise<any> => {
         this._resultsClient.delete(id)
         return null

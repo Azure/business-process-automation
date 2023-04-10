@@ -9,8 +9,6 @@ const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg
     if(mySbMsg?.dbId){
         const data = await db.getByID(mySbMsg.dbId, mySbMsg.pipeline)
         mySbMsg = data
-        //mySbMsg.aggregatedResults = data.aggregatedResults
-        //db.deleteByID(mySbMsg.dbId)
     }
     
     context.log("Entering mqTrigger")

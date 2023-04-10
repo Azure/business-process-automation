@@ -77,7 +77,7 @@ export class BpaEngine {
                 currentInput = _.cloneDeep(currentOutput)
                 if (currentInput.type === 'async transaction') {
                     const dbout = await db.create(currentInput)
-                    await mq.sendMessage({dbId : dbout.id, pipeline : dbout.pipeline})
+                    await mq.sendMessage({dbId : dbout.id, pipeline : dbout.pipeline, label : dbout.label})
                     break
                 }
             }
