@@ -16,7 +16,7 @@ export class ServiceBusMQ implements MessageQueue{
             const sender = serviceBusClient.createSender("upload")
             const messages : ServiceBusMessage[] = [
                 { 
-                    body: JSON.stringify(message),
+                    body: message,
                     contentType : "application/json",
                     timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
                 }
@@ -37,7 +37,7 @@ export class ServiceBusMQ implements MessageQueue{
         const sender = serviceBusClient.createSender("upload")
         const messages = [
             { 
-                body: JSON.stringify(message),
+                body: message,
                 contentType : "application/json",
                 timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
             }
