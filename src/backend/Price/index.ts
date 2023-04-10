@@ -1,13 +1,13 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { serviceCatalog } from "../engine/serviceCatalog"
 import { BpaConfiguration, BpaPipelines, BpaService } from "../engine/types"
-import { CosmosDB } from "../services/db"
+import { BlobDB } from "../services/db"
 const _ = require('lodash')
 
 const priceTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
-    
+    //const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+    const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
     try {
         const documents = Number(req.query["documents"])
         const pagesPerDocument = Number(req.query["pagesPerDocument"])

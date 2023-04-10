@@ -110,7 +110,9 @@ function Upload(props) {
     const tableCellStyle = { backgroundColor: "white", borderStyle: "solid", borderWidth: "1px", textAlign: "left" }
 
     const getQueuedFiles = () => {
+        
         if (queueStatus && queueStatus.messages.queuedFiles) {
+            console.log(JSON.stringify(queueStatus.messages))
             if (queueStatus.messages.queuedFiles.length > 0) {
                 return (
                     <table>
@@ -118,18 +120,22 @@ function Upload(props) {
                             <td style={tableCellStyle}>Filename</td>
                             <td style={tableCellStyle}>State</td>
                             <td style={tableCellStyle}>Is Async Transaction</td>
+                            <td style={tableCellStyle}>Pipeline</td>
+                            <td style={tableCellStyle}>Type</td>
+                            <td style={tableCellStyle}>Label</td>
                         </tr>
                         {queueStatus.messages.queuedFiles.map(f => {
                             return (
                                 <tr>
                                     <td style={tableCellStyle}>{f.filename}</td>
-                                    <td style={tableCellStyle}>{f.state}</td>
-                                    <td style={tableCellStyle}>{f.isAsync.toString()}</td>
+                                    <td style={tableCellStyle}>{f.state ? f.state : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.isAsync ? f.isAsync.toString() : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.pipeline ? f.pipeline : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.type ? f.type : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.label ? f.label : "n/a"}</td>
                                 </tr>
                             )
                         })}
-
-
                     </table>
                 )
             }
