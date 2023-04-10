@@ -6,9 +6,11 @@ import { mqTrigger } from "../engine/commonTrigger";
 const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg: any): Promise<void> {
     const mq = new ServiceBusMQ()
     const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
+    const dbId = mySbMsg.dbId
     if(mySbMsg?.dbId){
         const data = await db.getByID(mySbMsg.dbId, mySbMsg.pipeline)
         mySbMsg = data
+        mySbMsg.dbId = dbId
     }
     
     context.log("Entering mqTrigger")
