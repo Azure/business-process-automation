@@ -17,7 +17,7 @@
     },
     "projectName": {
       "type": "string",
-      "defaultValue": "[toLower(uniqueString(resourceGroup().id))]"
+      "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
     },
     "openaiName": {
       "type": "string",
@@ -26,6 +26,14 @@
     "blobContainerName": {
       "type": "string",
       "defaultValue": "documents"
+    },
+    "blobConfigContainerName": {
+      "type": "string",
+      "defaultValue": "config"
+    },
+    "blobResultsContainerName": {
+      "type": "string",
+      "defaultValue": "results"
     },
     "blobSplitContainerName": {
       "type": "string",
@@ -324,6 +332,24 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobResultsContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobConfigContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-08-01",
       "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
@@ -584,6 +610,26 @@
         }
       }
     },
+        {
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "apiVersion": "2022-12-01",
+      "name": "[concat(parameters('openaiName'), '/chatgpt')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
+      ],
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "gpt-35-turbo",
+          "version": "0301"
+        },
+        "scaleSettings": {
+          "scaleType": "Standard"
+        }
+      }
+    },
     {
       "type": "Microsoft.Cache/redisEnterprise",
       "apiVersion": "2022-01-01",
@@ -638,6 +684,10 @@
           "alwaysOn": true,
           "appSettings": [
             {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v004.zip?sv=2020-04-08&st=2023-04-10T17%3A42%3A19Z&se=2024-02-20T18%3A42%3A00Z&sr=b&sp=r&sig=ll7OcVl620HRat9FwSquMNSiVICgihU2H03FYrXh9Ks%3D"
+            },  
+            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
             },
@@ -650,24 +700,56 @@
               "value": "~4"
             },
             {
-              "name": "BUILD_FLAGS",
-              "value": "UseExpressBuild"
-            },
-            {
-              "name": "ENABLE_ORYX_BUILD",
-              "value": "true"
-            },
-            {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "python"
             },
             {
-              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-              "value": "1"
+              "name": "AZURE_BLOB_STORAGE_ACCOUNT",
+              "value": "[parameters('projectName')]"
             },
             {
-              "name": "XDG_CACHE_HOME",
-              "value": "/tmp/.cache"
+              "name": "AZURE_BLOB_STORAGE_CONTAINER",
+              "value": "[parameters('blobContainerName')]"
+            },
+            {
+              "name": "AZURE_OPENAI_CHATGPT_DEPLOYMENT",
+              "value": "chatgpt"
+            },
+            {
+              "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
+              "value": "text-davinci-002"
+            },
+            {
+              "name": "AZURE_OPENAI_SERVICE",
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]"
+            },
+            {
+              "name": "AZURE_SEARCH_APIKEY",
+              "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+            },
+            {
+              "name": "AZURE_SEARCH_INDEX",
+              "value": "cosmosdb-index"
+            },
+                        {
+              "name": "AZURE_SEARCH_SERVICE",
+              "value": "[parameters('cogSearchUrl')]"
+            },
+                        {
+              "name": "KB_FIELDS_CATEGORY",
+              "value": "category"
+            },
+                        {
+              "name": "KB_FIELDS_CONTENT",
+              "value": "aggregatedResults.ocr"
+            },
+                        {
+              "name": "KB_FIELDS_SOURCEPAGE",
+              "value": "filename"
+            },
+                        {
+              "name": "OPENAI_API_KEY",
+              "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
             }
           ]
         }
@@ -680,7 +762,7 @@
     },
     {
       "type": "Microsoft.Web/sites",
-      "apiVersion": "2020-06-01",
+      "apiVersion": "2022-09-01",
       "name": "[parameters('functionAppName')]",
       "location": "[parameters('primaryRegion')]",
       "kind": "functionapp,linux",
@@ -689,12 +771,12 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "clientAffinityEnabled": true,
         "siteConfig": {
-          "linuxFxVersion": "Node|14",
+          "linuxFxVersion": "Node|16",
           "alwaysOn": true,
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv015.zip?sv=2020-04-08&st=2023-03-03T21%3A47%3A55Z&se=2023-11-21T21%3A47%3A00Z&sr=b&sp=r&sig=3rXVZCv%2BWvQ3TnMq33wsvQr4Gxvayt7%2FA3g%2BgQduKHw%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv018.zip?sv=2020-04-08&st=2023-04-10T23%3A40%3A23Z&se=2023-12-21T00%3A40%3A00Z&sr=b&sp=r&sig=Hb%2Fg4OkPlEIOUCDUiBJMIiQqcnXvEo3nNcHWYmCivss%3D"
             },
             {
               "name": "OPENAI_KEY",
@@ -913,7 +995,8 @@
         "COGSEARCH_APIKEY": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
         "COGSEARCH_URL": "[parameters('cogSearchUrl')]",
         "SERVICE_BUS_CONNECTION_STRING": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
-        "USE_LOCAL_STORAGE": "false"
+        "USE_LOCAL_STORAGE": "false",
+        "HUGGINGFACE_ENDPOINT" : "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
       },
 
       "dependsOn": [
@@ -921,7 +1004,8 @@
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
         "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Web/sites',  parameters('functionAppNamePython'))]"
       ]
     }
   ]

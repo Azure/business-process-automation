@@ -17,6 +17,11 @@ And, optionally, the end-user can add a Cognitive Search Index, indexing each th
 <br/><br/>
   
 &ast;*Note*: [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview) allows you to easily build [React](https://reactjs.org/) apps in minutes. Use this repo with the [React quickstart](https://docs.microsoft.com/azure/static-web-apps/getting-started?tabs=react) to build and customize a new static site and automate the deployment of a functional, and customizable, POC for text and language processing.  
+
+
+## Instructional Videos
+- [Deployment in Azure](https://bpasource.blob.core.windows.net/source/VideoSeries/Deploy.mp4?sv=2020-04-08&st=2023-03-10T15%3A54%3A39Z&se=2026-06-12T14%3A54%3A00Z&sr=b&sp=r&sig=chMcBfD%2Foc2E05Od8xNkbWprWxHIIc7ApDbVazk2%2BO8%3D)
+- [Create Your First Pipeline](https://bpasource.blob.core.windows.net/source/VideoSeries/first%20pipeline-20230310_122701-Meeting%20Recording.mp4?sv=2020-04-08&st=2023-03-10T17%3A51%3A01Z&se=2025-01-16T17%3A51%3A00Z&sr=b&sp=r&sig=Jz8PdJAWkLXnN3QqxEnXogRHtN55FC8emHZoic9TGEE%3D)
  
 
 

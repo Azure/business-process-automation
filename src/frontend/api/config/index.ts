@@ -1,18 +1,21 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { CosmosDB, MongoDB } from "../db";
+import { CosmosDB, MongoDB, BlobDB } from "../db";
 
-let db = null
-if(process.env.USE_LOCAL_STORAGE === 'true'){
-    db = new MongoDB(process.env.MONGO_DB_CONNECTION_STRING, process.env.MONGO_DB_DB, process.env.MONGO_DB_CONTAINER )
-} else{
-    db = new CosmosDB(process.env.COSMOS_DB_CONNECTION_STRING, process.env.COSMOS_DB_DB, process.env.COSMOS_DB_CONTAINER )
-}
+
+// let db = null
+// if(process.env.USE_LOCAL_STORAGE === 'true'){
+//     db = new MongoDB(process.env.MONGO_DB_CONNECTION_STRING, process.env.MONGO_DB_DB, process.env.MONGO_DB_CONTAINER )
+// } else{
+//     db = new CosmosDB(process.env.COSMOS_DB_CONNECTION_STRING, process.env.COSMOS_DB_DB, process.env.COSMOS_DB_CONTAINER )
+// }
+
+const db = new BlobDB(process.env.BLOB_STORAGE_CONNECTION_STRING, "", 'config')
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     if (req.method === "POST") {
         try {
             context.log('HTTP trigger function processed a request.');
-            const out = await db.create(req.body)
+            const out = await db.setConfig(req.body)
             context.res = {
                 body: out
             }

@@ -10,6 +10,8 @@ export default function ViewInsights(props) {
     const [indexSearchDone, setIndexSearchDone] = useState(false)
     const [useSemanticSearch, setUseSemanticSearch] = useState(false)
     const [useOpenAiAnswer, setUseOpenAiAnswer] = useState(false)
+    const [useMemory, setUseMemory] = useState(false)
+    const [useSecondary, setUseSecondary] = useState(false)
     const [selectedSemanticConfig, setSelectedSemanticConfig] = useState("")
     const [useTableSearch, setUseTableSearch] = useState(false)
     const [tableSearchConfig, setTableSearchConfig] = useState("")
@@ -46,6 +48,14 @@ export default function ViewInsights(props) {
 
     const onOpenAiAnswer = (_, value) => {
         setUseOpenAiAnswer(value.checked)
+    }
+
+    const onMemory = (_, value) => {
+        setUseMemory(value.checked)
+    }
+
+    const onSecondary = (_, value) => {
+        setUseSecondary(value.checked)
     }
 
     const onSemanticConfigChange = (_, value) => {
@@ -137,7 +147,9 @@ export default function ViewInsights(props) {
                         {renderTableSearchConfig()}
                     </div>
                     <div style={style}>
-                        <Checkbox onClick={onOpenAiAnswer} checked={useOpenAiAnswer} style={{marginBottom:"35px"}} label="OpenAI Summary and Answer" toggle />
+                        <Checkbox onClick={onOpenAiAnswer} checked={useOpenAiAnswer} style={{marginBottom:"10px"}} label="OpenAI and Answer" toggle />
+                        <Checkbox onClick={onMemory} checked={useMemory} style={{marginBottom:"10px"}} label="Use Memory" toggle />
+                        <Checkbox onClick={onSecondary} checked={useSecondary} style={{marginBottom:"35px"}} label="Include Secondary Documents" toggle />
                     </div>
               </div>
                 

@@ -1,4 +1,4 @@
-import { ServiceBusClient } from "@azure/service-bus"
+import { ServiceBusClient, ServiceBusMessage } from "@azure/service-bus"
 import amqplib from "amqplib"
 
 
@@ -10,22 +10,37 @@ export default abstract class MessageQueue {
 export class ServiceBusMQ implements MessageQueue{
 
     public async sendMessage(message: any): Promise<void> {
-        const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
-        const sender = serviceBusClient.createSender("upload")
-        const messages = [
-            { body: message }
-        ]
+        try{
 
-        await sender.sendMessages(messages)
-        await sender.close();
-        await serviceBusClient.close();
+            const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
+            const sender = serviceBusClient.createSender("upload")
+            const messages : ServiceBusMessage[] = [
+                { 
+                    body: message,
+                    contentType : "application/json",
+                    timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
+                }
+            ]
+    
+            await sender.sendMessages(messages)
+            await sender.close();
+            await serviceBusClient.close();
+
+        } catch(e){
+            console.log(e)
+        }
+
     }
 
     public async scheduleMessage(message : any, timeInMs : number): Promise<void> {
         const serviceBusClient = new ServiceBusClient(process.env.AzureWebJobsServiceBus);
         const sender = serviceBusClient.createSender("upload")
         const messages = [
-            { body: message }
+            { 
+                body: message,
+                contentType : "application/json",
+                timeToLive: 60 * 60 * 1000, // message expires in 60 minutes
+            }
         ]
 
         var t = new Date();

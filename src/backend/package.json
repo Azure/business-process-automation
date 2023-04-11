@@ -18,7 +18,7 @@
     "@azure/ms-rest-azure-js": "^2.1.0",
     "@azure/search-documents": "^11.3.1",
     "@azure/service-bus": "^7.7.3",
-    "@azure/storage-blob": "^12.12.0",
+    "@azure/storage-blob": "^12.13.0",
     "@fluentui/docs-components": "^0.63.1",
     "@types/amqplib": "^0.10.1",
     "@types/lodash": "^4.14.190",
@@ -27,7 +27,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
-    "microsoft-cognitiveservices-speech-sdk": "^1.24.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.27.0",
     "mongodb": "^4.13.0",
     "parse-multipart": "^1.0.4",
     "pdf-lib": "^1.17.1",
@@ -37,8 +37,11 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@azure/functions": "^3.2.0",
     "@types/node": "^18.11.9",
-    "typescript": "^4.9.3"
-  }
+    "typescript": "^4.9.3",
+    "@azure/functions": "^3.5.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+   }
 }

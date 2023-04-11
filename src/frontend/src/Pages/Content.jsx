@@ -9,34 +9,12 @@ import SelectPipeline from '../Components/SelectPipeline';
 import ViewInsights from './ViewInsights';
 import OpenAiViewer from './OpenAiViewer';
 import VectorSearch from './VectorSearch';
-//import Search from '../Components/searchComponents/pages/Search/Search'
-//import AppHeader from '../Components/searchComponents/components/AppHeader/AppHeader';
-//import { searchHtml } from './searchHtml'
-//const template = { __html: searchHtml };
+import CogSearch from './chat/Chat'
 
 export default function Content(props) {
 
     const [selectedMenuItem, setSelectedMenuItem] = useState("HOME");
     const [breadCrumbItems, setBreadCrumbItems] = useState([])
-    //const [userInfo, setUserInfo] = useState();
-
-    // useEffect(() => {
-    //     getUserInfo().then(value => {
-    //         setUserInfo(value)
-    //     })
-    // }, [])
-
-    // const getUserInfo = async () => {
-    //     try {
-    //         const response = await fetch('/.auth/me');
-    //         const payload = await response.json();
-    //         const { clientPrincipal } = payload;
-    //         return clientPrincipal;
-    //     } catch (error) {
-    //         console.error('No profile could be found');
-    //         return undefined;
-    //     }
-    // }
 
     const onBreadcrumbHome = () => {
         setSelectedMenuItem("HOME")
@@ -68,6 +46,12 @@ export default function Content(props) {
                 setSelectedMenuItem('VIEW_INSIGHTS')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
                 breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
+                setBreadCrumbItems(breadCrumbItems)
+                break
+            case 'COG_SEARCH':
+                setSelectedMenuItem('COG_SEARCH')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'Cognitive Search Demo', key: 'COG_SEARCH' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
             case 'OPENAI_VIEWER':
@@ -102,6 +86,8 @@ export default function Content(props) {
                 return (<OpenAiViewer />)
             case 'VECTOR_SEARCH':
                 return (<VectorSearch />)
+            case 'COG_SEARCH':
+                return (<CogSearch />)
 
             default:
                 return (<Home />)
@@ -177,6 +163,22 @@ export default function Content(props) {
                     </Breadcrumb.Item>
                 </>)
 
+
+            case 'COG_SEARCH':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        Cognitive Search Demo
+                    </Breadcrumb.Item>
+                </>)
+
             case 'OPENAI_VIEWER':
                 return (<>
                     <Breadcrumb >
@@ -212,20 +214,8 @@ export default function Content(props) {
         }
     }
 
-    // const provider = "aad"
-    // const redirect = window.location.pathname;
-    // const showUserInfo = () => {
-    //     if (userInfo) {
-    //         return (<div>{JSON.stringify(userInfo)}</div>)
-    //     }
-    // }
-
     return (
         <div className="content" >
-            {/* <a key={provider} href={`/.auth/login/aad?post_login_redirect_uri=${redirect}`}>
-                {provider}
-                {showUserInfo()}
-            </a> */}
             <div style={{ paddingLeft: "0px", paddingTop: "50px", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
                 {renderContent()}

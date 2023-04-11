@@ -14,7 +14,6 @@ import DocumentTranslationDialog from '../Components/Dialogs/DocumentTranslation
 import SpeechToTextDialog from '../Components/SpeechToText';
 import ChangeDataDialog from '../Components/Dialogs/ChangeDataDialog';
 import VideoIndexerDialog from '../Components/Dialogs/VideoIndexerDialog';
-//import CopyDialog from './CopyDialog';
 import ToTxtDialog from '../Components/Dialogs/ToTxtDialog';
 import Prices from '../Components/Prices/Prices'
 import OpenAiGenericDialog from '../Components/Dialogs/OpenAiGenericDialog';
@@ -153,7 +152,10 @@ export default function Stages(props) {
         } else if (event.name === 'totxt') {
             setCurrentOption(_.cloneDeep(event))
             setHideToTxtDialog(false)
-        } else if (event.name === 'changeOutput') {
+        } else if (event.name === 'textSegmentation') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideToTxtDialog(false)
+        }else if (event.name === 'changeOutput') {
             setCurrentOption(_.cloneDeep(event))
             setHideChangeDataDialog(false)
         } else if (event.name === 'stt' || event.name === 'sttBatch') {

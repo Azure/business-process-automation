@@ -31,7 +31,7 @@ export abstract class Storage {
             // copy the page at current index
             const [copiedPage] = await subDocument.copyPages(pdfDoc, [i])
             subDocument.addPage(copiedPage);
-            const pdfBytes : Buffer = Buffer.from(await subDocument.save())
+            const pdfBytes: Buffer = Buffer.from(await subDocument.save())
             result.push(pdfBytes)
             console.log(`file-${i + 1}.pdf`)
             //await writePdfBytesToFile(`out/file-${i + 1}.pdf`, pdfBytes);
@@ -39,25 +39,52 @@ export abstract class Storage {
         return result
     }
 
-    protected _splicePdf = async (myBlob: Buffer, from: number, to: number ): Promise<Buffer> => {
-        let result : Buffer
-        try{
+    protected _splitPdfInParts = async (myBlob: Buffer, numberOfParts: number): Promise<Buffer[]> => {
+        const pdfDoc = await PDFDocument.load(myBlob)
+        const numberOfPages = pdfDoc.getPages().length;
+        const result: Buffer[] = []
+        let markers: number[] = []
+        for (let n = 0; n < numberOfParts; n++) {
+            markers.push(Math.round((n * numberOfPages) / numberOfParts))
+        }
+        markers.push(numberOfPages)
+        for (let n = 0; n < numberOfParts; n++) {
+            // Create a new "sub" document
+            const subDocument = await PDFDocument.create();
+            for (let i = markers[n]; i < markers[n + 1]; i++) {
+                // copy the page at current index
+                const [copiedPage] = await subDocument.copyPages(pdfDoc, [i])
+                console.log(`page-${i}`)
+                subDocument.addPage(copiedPage);
+            }
+            const pdfBytes: Buffer = Buffer.from(await subDocument.save())
+            result.push(pdfBytes)
+            console.log(`file-${n}.pdf`)
+            //await writePdfBytesToFile(`out/file-${i + 1}.pdf`, pdfBytes);
+        }
+
+        return result
+    }
+
+    protected _splicePdf = async (myBlob: Buffer, from: number, to: number): Promise<Buffer> => {
+        let result: Buffer
+        try {
             console.log("SPLICING")
-            const pdfDoc = await PDFDocument.load(myBlob) 
+            const pdfDoc = await PDFDocument.load(myBlob)
             const numberOfPages = pdfDoc.getPages().length;
             console.log(numberOfPages)
-            const subDocument = await PDFDocument.create();  
+            const subDocument = await PDFDocument.create();
             console.log(from < 0 ? 0 : from)
             console.log(to > numberOfPages ? numberOfPages : to)
             console.log(from)
             console.log(to)
             const narray = range(from < 0 ? 0 : from, to > numberOfPages ? numberOfPages : to)
             const copiedPages = await subDocument.copyPages(pdfDoc, narray)
-            for(const page of copiedPages){
+            for (const page of copiedPages) {
                 subDocument.addPage(page);
             }
             result = Buffer.from(await subDocument.save())
-        } catch(err){
+        } catch (err) {
             console.log(err)
         }
         return result
@@ -69,33 +96,14 @@ export class BlobStorage extends Storage {
 
     private _blobServiceClient: BlobServiceClient
     private _blobContainerClient: ContainerClient
+    private _containerName : string
 
     constructor(connectionString: string, containerName: string) {
         super()
         this._blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         this._blobContainerClient = this._blobServiceClient.getContainerClient(containerName);
+        this._containerName = containerName;
     }
-
-    // public copy = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
-    //     this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-    //     const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.filename)
-    //     const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
-
-    //     return input
-    // }
-
-    // public conditionalCopy = async (input : BpaServiceObject) : Promise<BpaServiceObject> => {
-    //     const key : string = input.serviceSpecificConfig["key"]
-    //     const value : RegExp  = new RegExp(input.serviceSpecificConfig["regexString"])
-
-    //     if(input.aggregatedResults[key].match(value)){
-    //         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
-    //         const blobClient : BlockBlobClient = this._blobContainerClient.getBlockBlobClient(input.filename)
-    //         const uploadBlobResponse : BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
-    //     }
-
-    //     return input
-    // }
 
     public toTxt = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
         this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
@@ -111,13 +119,18 @@ export class BlobStorage extends Storage {
     }
 
     public splicePdf = async (myBlob: Buffer, from: number, to: number): Promise<Buffer> => {
-       return await this._splicePdf(myBlob, from, to)
+        return await this._splicePdf(myBlob, from, to)
     }
 
-    public upload = async (myBlob: Buffer, filename : string) : Promise<void> => {
-        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(p.join("translated-documents", filename))
+    public upload = async (myBlob: Buffer, filename: string): Promise<void> => {
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename)
         const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(myBlob, myBlob.length)
         console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
+    }
+
+    public delete = async (filename: string): Promise<void> => {
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(filename)
+        await blobClient.deleteIfExists()
     }
 
     public split = async (myBlob: Buffer, filename: string, directoryName: string): Promise<void> => {
@@ -131,6 +144,10 @@ export class BlobStorage extends Storage {
             index++
         }
 
+    }
+
+    public splitPdfInParts = async (myBlob: Buffer, numberOfParts: number): Promise<Buffer[]> => {
+        return await this._splitPdfInParts(myBlob, numberOfParts)
     }
 }
 
@@ -152,9 +169,9 @@ export class LocalStorage extends Storage {
     public splicePdf = async (myBlob: Buffer, from: number, to: number): Promise<Buffer> => {
 
         return await this._splicePdf(myBlob, 0, 1)
- 
-         
-     }
+
+
+    }
 
     public split = async (myBlob: Buffer, filename: string, directoryName: string): Promise<void> => {
         const pages: Buffer[] = await this._splitPdf(myBlob)

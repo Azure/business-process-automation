@@ -25,7 +25,7 @@ export class AzureServiceBus {
                 if(qf?.body?.subject){
                     return {filename: qf.body.subject, state : qf.state, isAsync : false}
                 } else if(qf?.body?.filename){
-                    return {filename: qf.body.filename, state : qf.state, isAsync : (qf.body.type === 'async transaction')}
+                    return {filename: qf.body.filename, pipeline: qf.body.pipeline, label: qf.body.label, type: qf.body.type, dbId : qf.body.dbId}
                 } 
                 return "unknown message format"
                 

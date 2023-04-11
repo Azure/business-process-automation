@@ -3,21 +3,17 @@ import { FileUploader } from "react-drag-drop-files";
 import { Text, Dropdown } from '@fluentui/react-northstar';
 import axios from 'axios'
 
-//const cogsearchLabel = "cogsearch"
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4", "TIF"];
+    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4", "TIF","PPT","TXT","DOC","DOCX","PPTX"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
     const [showFail, setShowFail] = useState(false);
-    //const [isCogSearch, setIsCogSearch] = useState(false)
-    //const [rerender, setRerender] = useState(0)
     const [pipelineNames, setPipelineNames] = useState([])
     const [selectedPipelineName, setSelectedPipelineName] = useState("")
     const [queueStatus, setQueueStatus] = useState(null)
-
 
     useEffect(() => {
         try {
@@ -35,14 +31,6 @@ function Upload(props) {
             }, 5000)
 
 
-            // axios.get(`/api/config?id=${cogsearchLabel}`).then(value => {
-            //     if (value?.data?.createSkill) {
-            //         setIsCogSearch(value.data.createSkill)
-            //     } else {
-            //         setIsCogSearch(false)
-            //     }
-            // })
-
             axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
                 if (value?.data?.pipelines) {
                     const names = []
@@ -58,15 +46,6 @@ function Upload(props) {
             console.log(err)
         }
     }, [])
-
-    // const onCogSearchClick = async (event) => {
-    //     try {
-    //         await axios.post('/api/config', { createSkill: !isCogSearch, id: cogsearchLabel })
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    //     setRerender(rerender + 1)
-    // }
 
     const onDropDownChange = (event, selected) => {
         setSelectedPipelineName(selected.value)
@@ -131,7 +110,9 @@ function Upload(props) {
     const tableCellStyle = { backgroundColor: "white", borderStyle: "solid", borderWidth: "1px", textAlign: "left" }
 
     const getQueuedFiles = () => {
+        
         if (queueStatus && queueStatus.messages.queuedFiles) {
+            console.log(JSON.stringify(queueStatus.messages))
             if (queueStatus.messages.queuedFiles.length > 0) {
                 return (
                     <table>
@@ -139,35 +120,25 @@ function Upload(props) {
                             <td style={tableCellStyle}>Filename</td>
                             <td style={tableCellStyle}>State</td>
                             <td style={tableCellStyle}>Is Async Transaction</td>
+                            <td style={tableCellStyle}>Pipeline</td>
+                            <td style={tableCellStyle}>Type</td>
+                            <td style={tableCellStyle}>Label</td>
                         </tr>
                         {queueStatus.messages.queuedFiles.map(f => {
                             return (
                                 <tr>
                                     <td style={tableCellStyle}>{f.filename}</td>
-                                    <td style={tableCellStyle}>{f.state}</td>
-                                    <td style={tableCellStyle}>{f.isAsync.toString()}</td>
+                                    <td style={tableCellStyle}>{f.state ? f.state : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.isAsync ? f.isAsync.toString() : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.pipeline ? f.pipeline : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.type ? f.type : "n/a"}</td>
+                                    <td style={tableCellStyle}>{f.label ? f.label : "n/a"}</td>
                                 </tr>
                             )
                         })}
-
-
                     </table>
                 )
-                // <ul>
-                //     {queueStatus.messages.queuedFiles.map(m => {
-                //         if (m?.filename) {
-                //             return (<>1</>)
-                //         } else {
-                //             return (<>2</>)
-                //         }
-                //     })}
-
-                // </ul>
-                //)
             }
-
-
-
         }
     }
 
@@ -191,7 +162,6 @@ function Upload(props) {
                     </tr>
 
                 </table>
-                // <Text weight="semibold" content="Empty" style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px" }} />
             )
         }
 

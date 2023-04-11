@@ -1,12 +1,12 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { CosmosDB } from "../services/db"
+import { BlobDB } from "../services/db"
 import { OpenAI } from "../services/openai"
 import { RedisSimilarity } from "../services/redis"
 const _ = require('lodash')
 
 const vectorSearchTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+    const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
     const redis = new RedisSimilarity(process.env.REDIS_URL, process.env.REDIS_PW)
     let results = null
     try {
@@ -19,7 +19,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         const embeddings = await openaiSearchQuery.getEmbeddings(query)
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
         if (results.documents.length > 0) {
-            const topDocument = await db.getByID(results.documents[0].id)
+            const topDocument = await db.getByID(results.documents[0].id, pipeline)
             let prompt = ""
             if(topDocument?.aggregatedResults?.ocrToText){
                 prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`

@@ -1,4 +1,4 @@
-import { DocumentAnalysisClient, AzureKeyCredential, AnalysisPoller, AnalyzedDocument, AnalyzeResult } from "@azure/ai-form-recognizer";
+import { DocumentAnalysisClient, AzureKeyCredential, AnalysisPoller, AnalyzedDocument, AnalyzeResult, AnalyzeDocumentOptions } from "@azure/ai-form-recognizer";
 import { PrebuiltBusinessCardModel } from "./prebuilt/prebuilt-businessCard";
 import { PrebuiltLayoutModel } from "./prebuilt/prebuilt-layout";
 import { PrebuiltInvoiceModel } from "./prebuilt/prebuilt-invoice";
@@ -11,6 +11,7 @@ import { BpaServiceObject } from "../engine/types";
 import { DB } from "./db";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import MessageQueue from "./messageQueue";
+import { OperationRequestOptions } from '@azure/core-client';
 
 const _ = require('lodash')
 
@@ -24,7 +25,7 @@ export class FormRec {
     constructor(endpoint: string, apikey: string, containerReadEndpoint ?: string) {
         this._client = new DocumentAnalysisClient(
             endpoint,
-            new AzureKeyCredential(apikey)
+            new AzureKeyCredential(apikey),
         )
         this._apikey = apikey
         this._endpoint = endpoint
@@ -37,6 +38,7 @@ export class FormRec {
     public readContainer = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
         console.log("read api 3.2 from container")
         const url = `${this._containerReadEndpoint}/vision/v3.2/read/analyze`
+
         const headers: AxiosRequestConfig = {
             headers: {
                 "accept": "*/*",
@@ -312,10 +314,10 @@ export class FormRec {
             mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
             mySbMsg.data = dbout.id
 
-            await mq.sendMessage(mySbMsg)
+            await mq.sendMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type})
         } else {
             console.log('do nothing')
-            await mq.scheduleMessage(mySbMsg, 10000)
+            await mq.scheduleMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type}, 10000)
         }
     }
 
@@ -338,6 +340,14 @@ export class FormRec {
     }
 
     private _analyzeDocumentAsync = async (input: BpaServiceObject, modelId: any, label: string, index: number): Promise<BpaServiceObject> => {
+        const requestOptions: OperationRequestOptions = {
+            customHeaders : {
+                "content-type" : "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            }
+        }
+        const options: AnalyzeDocumentOptions = {
+            requestOptions : requestOptions
+        }
         const poller: AnalysisPoller<AnalyzeResult<AnalyzedDocument>> = await this._client.beginAnalyzeDocument(modelId, input.data)
         input.aggregatedResults[label] = {
             location: JSON.parse(poller.toString())["operationLocation"],

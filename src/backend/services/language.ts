@@ -74,7 +74,7 @@ export class LanguageStudio {
 
     private _recognizeAsync = async (input: BpaServiceObject, actions: TextAnalyticsActions, type: string, label: string, analyzeType: boolean, index: number): Promise<BpaServiceObject> => {
         const client = new TextAnalyticsClient(this._endpoint, new AzureKeyCredential(this._apikey));
-        let poller
+        let poller: AnalyzeActionsPollerLike | AnalyzeHealthcareEntitiesPollerLike
         if(input.data.length === 0){
             input.data = "no data"
         }
@@ -84,8 +84,10 @@ export class LanguageStudio {
             poller = await this._healthCare(client, [input.data.length > 125000 ? input.data.substring(0, 125000) : input.data])
         }
 
+        const pollerString = poller.toString()
+
         input.aggregatedResults[label] = {
-            location: JSON.parse(poller.toString()).state.initialRawResponse.headers["operation-location"],
+            location: JSON.parse(poller.toString()).state.config.operationLocation,
             filename: input.filename
         }
 
@@ -172,10 +174,10 @@ export class LanguageStudio {
             mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
             mySbMsg.data = dbout.id
 
-            await mq.sendMessage(mySbMsg)
+            await mq.sendMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type})
         } else {
             console.log('do nothing')
-            await mq.scheduleMessage(mySbMsg, 10000)
+            await mq.scheduleMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type}, 10000)
         }
     }
 
