@@ -38,7 +38,7 @@ export class Speech {
 
         const label = "sttToText"
         input.aggregatedResults[label] = out
-        input.resultsIndexes.push({ index: index, name: label, type: label })
+        input.resultsIndexes.push({ index: index, name: label, type: "text" })
 
         return {
             data : out,
