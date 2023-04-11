@@ -17,7 +17,7 @@
     },
     "projectName": {
       "type": "string",
-      "defaultValue": "[toLower(uniqueString(resourceGroup().id))]"
+      "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
     },
     "blobContainerName": {
       "type": "string",
@@ -642,7 +642,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv017.zip?sv=2020-04-08&st=2023-04-10T17%3A38%3A49Z&se=2024-04-25T17%3A38%3A00Z&sr=b&sp=r&sig=pGwVzgIRKQVlWjFVJStz3ykTOIi2spJNBmS8TmFPwRE%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv018.zip?sv=2020-04-08&st=2023-04-10T23%3A40%3A23Z&se=2023-12-21T00%3A40%3A00Z&sr=b&sp=r&sig=Hb%2Fg4OkPlEIOUCDUiBJMIiQqcnXvEo3nNcHWYmCivss%3D"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
