@@ -33,8 +33,11 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         if (mySbMsg?.type && mySbMsg.type === 'async transaction') {
             console.log('async transaction')
             if (mySbMsg?.aggregatedResults["speechToText"]?.location) {
-                const speech = new Speech(process.env.SPEECH_SUB_KEY, process.env.SPEECH_SUB_REGION, process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER, process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME);
+                const speech = new Speech(process.env.SPEECH_SUB_KEY, process.env.SPEECH_SUB_REGION, process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER);
                 await speech.processAsync(mySbMsg, db, mq)
+            // } else if(mySbMsg?.aggregatedResults["textSegmentation"]?.pending == "true"){
+            //     const textSegmentation = new TextSegmentation(new ServiceBusMQ())
+            //     await textSegmentation.processAsync(mySbMsg)
             } else if (mySbMsg?.aggregatedResults["generalDocument"]?.location ||
                 mySbMsg?.aggregatedResults["layout"]?.location ||
                 mySbMsg?.aggregatedResults["invoice"]?.location ||
@@ -76,7 +79,6 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                 directoryName = mySbMsg.pipeline
                 filename = mySbMsg.fileName
             } else {
-                context.log("about to split")
                 filename = mySbMsg.subject.split("/documents/blobs/")[1]
                 directoryName = filename.split('/')[0]
     
@@ -89,8 +91,11 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                 name: ""
             }
     
+            let found = false
             for (const pipeline of config.pipelines) {
                 if (pipeline.name === directoryName) {
+                    found = true
+                    bpaConfig.name = pipeline.name
                     for (const stage of pipeline.stages) {
                         for (const sc of Object.keys(serviceCatalog)) {
                             if (stage.name === serviceCatalog[sc].name) {
@@ -98,14 +103,13 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                                 const newStage = _.cloneDeep(serviceCatalog[sc])
                                 newStage.serviceSpecificConfig = stage.serviceSpecificConfig
                                 bpaConfig.stages.push({ service: newStage })
-                                bpaConfig.name = pipeline.name
                             }
                         }
                     }
                 }
             }
     
-            if (bpaConfig.stages.length === 0) {
+            if (!found) {
                 throw new Error("No Pipeline Found")
             }
     
@@ -122,7 +126,7 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
                     blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
                 }
                 const myBuffer = await blob.getBuffer(filename)
-                out = await engine.processFile(myBuffer, filename, bpaConfig, mq, db)
+                out = await engine.processFile(blob, myBuffer, filename, bpaConfig, mq, db)
             }
     
     

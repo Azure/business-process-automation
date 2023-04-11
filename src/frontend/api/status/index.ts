@@ -14,7 +14,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     try {
         context.log('HTTP trigger function processed a request.');
 
-        const fileCount = await db.count()
+        const fileCount = 0//await db.count()
         const messages = await sb.status()
 
         context.res = {

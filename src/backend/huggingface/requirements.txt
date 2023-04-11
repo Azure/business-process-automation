@@ -4,6 +4,11 @@
 
 azure-functions
 -f https://download.pytorch.org/whl/torch_stable.html
-torch==1.11.0+cpu
+torch==1.11+cpu
 transformers
 nltk
+azure-identity==1.12.0
+langchain==0.0.78
+openai==0.26.4
+azure-search-documents==11.4.0b3
+azure-storage-blob==12.14.1

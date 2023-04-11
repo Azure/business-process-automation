@@ -1,4 +1,4 @@
-import { CosmosDB } from "../services/db"
+import { BlobDB } from "../services/db"
 import { LanguageStudio } from "../services/language"
 import { Speech } from '../services/speech'
 import { BpaService } from "./types"
@@ -18,12 +18,14 @@ import { TableParser } from "../services/tableParser"
 import { OpenAI } from "../services/openai"
 import { SpliceDocument } from "../services/spliceDocument"
 import { RedactPdf } from "../services/redactPdf"
+import { TextSegmentation } from "../services/textSegmentation"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+//const cosmosDb = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+const blobDb = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
 const language = new LanguageStudio(process.env.LANGUAGE_STUDIO_PREBUILT_ENDPOINT, process.env.LANGUAGE_STUDIO_PREBUILT_APIKEY)
-const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER,process.env.COSMOSDB_CONNECTION_STRING,process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+const speech = new Speech(process.env.SPEECH_SUB_KEY,process.env.SPEECH_SUB_REGION,process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
 const formrec = new FormRec(process.env.FORMREC_ENDPOINT, process.env.FORMREC_APIKEY, process.env.FORMREC_CONTAINER_READ_ENDPOINT)
 const translate = new Translate(process.env.TRANSLATE_ENDPOINT, process.env.TRANSLATE_APIKEY, process.env.TRANSLATE_REGION)
 const huggingface = new HuggingFace(process.env.HUGGINGFACE_ENDPOINT)
@@ -34,13 +36,27 @@ const test = new Test()
 const contentModerator = new ContentModerator(process.env.CONTENT_MODERATOR_ENDPOINT,process.env.CONTENT_MODERATOR_KEY)
 const xml = new Xml()
 const videoIndexer = new VideoIndexer(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
-const tableParser = new TableParser(cosmosDb)
+const tableParser = new TableParser(blobDb)
 const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
 const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
 const redactPdf = new RedactPdf(blob, blobTranslation)
+const textSegmentation = new TextSegmentation()
 
+const textSegmentationService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocr"],
+    outputTypes: [],
+    name: "textSegmentation",
+    process: textSegmentation.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const redactPdfService : BpaService = {
     bpaServiceId : "abc123",
@@ -530,13 +546,12 @@ const customFormRec : BpaService = {
     }
 }
 
-
-const sttService : BpaService = {
+const sttToTextService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["wav","mp3"],
+    inputTypes: ["stt"],
     outputTypes: ["text"],
-    name: "stt",
-    process: speech.process,
+    name: "sttToText",
+    process: speech.sttToText,
     serviceSpecificConfig: {
 
     },
@@ -545,10 +560,25 @@ const sttService : BpaService = {
     }
 }
 
+
+// const sttService : BpaService = {
+//     bpaServiceId : "abc123",
+//     inputTypes: ["wav","mp3"],
+//     outputTypes: ["stt"],
+//     name: "stt",
+//     process: speech.process,
+//     serviceSpecificConfig: {
+
+//     },
+//     serviceSpecificConfigDefaults: {
+
+//     }
+// }
+
 const sttBatchService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["wav","mp3"],
-    outputTypes: ["text"],
+    outputTypes: ["stt"],
     name: "sttBatch",
     process: speech.processBatch,
     serviceSpecificConfig: {
@@ -561,7 +591,9 @@ const sttBatchService : BpaService = {
 
 const ocrContainerBatchService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocrContainer"],
     name: "ocrContainerBatch",
     process: formrec.readContainerAsync,
@@ -575,7 +607,9 @@ const ocrContainerBatchService : BpaService = {
 
 const ocrContainerService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocrContainer"],
     name: "ocrContainer",
     process: formrec.readContainer,
@@ -589,7 +623,9 @@ const ocrContainerService : BpaService = {
 
 const ocrService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocr"],
     name: "ocr",
     process: formrec.readDocument,
@@ -603,7 +639,9 @@ const ocrService : BpaService = {
 
 const ocrBatchService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["pdf","jpg"],
+    inputTypes: ["pdf",
+    "tiff","gif","jpg","jpeg",
+    "doc","docx","ppt","pptx"],
     outputTypes: ["ocr"],
     name: "ocrBatch",
     process: formrec.readDocumentAsync,
@@ -991,7 +1029,7 @@ export const serviceCatalog = {
     "recognizePiiEntitiesBatch" : recognizePiiEntitiesBatch,
     "singleCategoryClassifyBatch" : singleCategoryClassifyBatch,
     "summaryToText" : summaryToText,
-    "sttService" : sttService,
+    "sttToText" : sttToTextService,
     "sttBatchService" : sttBatchService,
     "translate" : translateService,
     "layout" : layout,
@@ -1010,7 +1048,6 @@ export const serviceCatalog = {
     "prebuiltReceiptBatch" : prebuiltReceiptBatch,
     "prebuiltTaxW2Batch" : prebuiltTaxW2Batch,
     "customFormRecBatch" : customFormRecBatch,
-    
     "huggingFaceNER" : huggingFaceNER,
     "preprocess" : preprocessService,
     "testService" : testService,
@@ -1027,6 +1064,7 @@ export const serviceCatalog = {
     "tableParser" : tableParserService,
     "openaiSummarize" : openaiSummarizeService,
     "openaiGeneric" : openaiGenericService,
-    "openaiEmbeddings" : openaiEmbeddingsService
+    "openaiEmbeddings" : openaiEmbeddingsService,
+    "textSegmentation" : textSegmentationService
 }
 

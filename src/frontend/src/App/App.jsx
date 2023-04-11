@@ -3,6 +3,9 @@ import '../styles/update.css'
 import HeaderComponent from './HeaderComponent';
 import Content from '../Pages/Content';
 import { Provider, teamsTheme, mergeThemes } from '@fluentui/react-northstar'
+import { initializeIcons } from "@fluentui/react";
+
+initializeIcons()
 
 const theme = {
   componentVariables: {

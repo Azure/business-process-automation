@@ -90,22 +90,22 @@ export default function Result(props) {
     }
 
     const theme = {
-        base00: 'white',
-        base01: 'white',
-        base02: 'white',
-        base03: 'white',
-        base04: 'white',
-        base05: 'white',
-        base06: 'white',
-        base07: 'white',
-        base08: 'white',
-        base09: 'white',
-        base0A: 'white',
-        base0B: 'white',
-        base0C: 'white',
-        base0D: 'white',
-        base0E: 'white',
-        base0F: 'white'
+        base00: 'black',
+        base01: 'black',
+        base02: 'black',
+        base03: 'black',
+        base04: 'black',
+        base05: 'black',
+        base06: 'black',
+        base07: 'black',
+        base08: 'black',
+        base09: 'black',
+        base0A: 'black',
+        base0B: 'black',
+        base0C: 'black',
+        base0D: 'black',
+        base0E: 'black',
+        base0F: 'black'
     };
 
     return (

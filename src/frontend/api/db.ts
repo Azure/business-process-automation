@@ -1,5 +1,7 @@
 import { CosmosClient } from "@azure/cosmos"
 import { MongoClient } from 'mongodb'
+import { BlobStorage } from './storage'
+import { v4 as uuidv4 } from 'uuid';
 
 export abstract class DB {
 
@@ -107,6 +109,86 @@ export class MongoDB extends DB {
 
 
 }
+
+export class BlobDB extends DB {
+    
+
+
+    //private _client: BlobStorage
+    private _configClient : BlobStorage
+    private _resultsClient : BlobStorage
+
+    constructor(connectionString: string, dbName: string, containerName: string) {
+        super(connectionString, dbName, containerName)
+        this._configClient = new BlobStorage(connectionString, 'config')
+        this._resultsClient = new BlobStorage(connectionString, 'results')
+    }
+
+    public count = async (): Promise<any> => {
+        return {count : 5}
+    }
+
+    public create = async (data: any): Promise<any> => {
+
+        let id : string
+        if(data.id){
+            id = data.id
+        } else{
+            id = uuidv4()
+            data.id = id
+        }
+        
+        await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `${id}.json`)
+
+        return data
+    }
+
+    public setConfig = async (data: any): Promise<any> => {
+
+        let id : string
+        if(data.id){
+            id = data.id
+        } else{
+            id = uuidv4()
+            data.id = id
+        }
+        
+        await this._configClient.upload(Buffer.from(JSON.stringify(data)), `${id}.json`)
+
+        return data
+    }
+
+    public getConfig = async (): Promise<any> => {
+        let out : any
+        try{
+            const pipelines = await this._configClient.getBuffer('pipelines.json')
+            if(pipelines){
+                out = JSON.parse(pipelines.toString())
+            } else{
+                out = ""
+            }
+        } catch(e){
+            console.log(e)
+            out = ""
+        }
+       return out
+    }
+
+    public get = async (id: string): Promise<any> => {
+        return JSON.parse((await this._resultsClient.getBuffer(`${id}.json`)).toString())
+    }
+
+    public getAll = async (pipeline: string) : Promise<any[]> => {
+        return await this._resultsClient.getAll(pipeline)
+    }
+
+    public delete = async (id: string): Promise<any> => {
+        this._resultsClient.delete(id)
+        return null
+    }
+
+}
+
 
 
 export class CosmosDB extends DB {
