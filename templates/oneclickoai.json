@@ -17,7 +17,7 @@
     },
     "projectName": {
       "type": "string",
-      "defaultValue": "[toLower(uniqueString(resourceGroup().id))]"
+      "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
     },
     "openaiName": {
       "type": "string",
@@ -610,6 +610,26 @@
         }
       }
     },
+        {
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "apiVersion": "2022-12-01",
+      "name": "[concat(parameters('openaiName'), '/chatgpt')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
+      ],
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "gpt-35-turbo",
+          "version": "0301"
+        },
+        "scaleSettings": {
+          "scaleType": "Standard"
+        }
+      }
+    },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
@@ -626,7 +646,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v003.zip?sv=2020-04-08&st=2023-03-31T13%3A41%3A40Z&se=2024-02-22T14%3A41%3A00Z&sr=b&sp=r&sig=EBoJaQAA4BmRWkuMfvPGmCd3%2BFsnthBDeIVnK87LVDc%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v004.zip?sv=2020-04-08&st=2023-04-10T17%3A42%3A19Z&se=2024-02-20T18%3A42%3A00Z&sr=b&sp=r&sig=ll7OcVl620HRat9FwSquMNSiVICgihU2H03FYrXh9Ks%3D"
             },  
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -654,7 +674,7 @@
             },
             {
               "name": "AZURE_OPENAI_CHATGPT_DEPLOYMENT",
-              "value": "text-davinci-002"
+              "value": "chatgpt"
             },
             {
               "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
@@ -703,7 +723,7 @@
     },
     {
       "type": "Microsoft.Web/sites",
-      "apiVersion": "2020-06-01",
+      "apiVersion": "2022-09-01",
       "name": "[parameters('functionAppName')]",
       "location": "[parameters('primaryRegion')]",
       "kind": "functionapp,linux",
@@ -717,7 +737,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv016.zip?sv=2020-04-08&st=2023-03-31T13%3A43%3A40Z&se=2024-03-20T13%3A43%3A00Z&sr=b&sp=r&sig=qd9l%2BIZ3M8yCmL9dR6%2Bo82%2FuvJywmHjvIO%2Bp%2BPogoSM%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv018.zip?sv=2020-04-08&st=2023-04-10T23%3A40%3A23Z&se=2023-12-21T00%3A40%3A00Z&sr=b&sp=r&sig=Hb%2Fg4OkPlEIOUCDUiBJMIiQqcnXvEo3nNcHWYmCivss%3D"
             },
             {
               "name": "OPENAI_KEY",

@@ -15,10 +15,8 @@ export class RedactPdf {
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-        if (!input?.aggregatedResults?.buffer) {
-            input.aggregatedResults.buffer = await this._blobService.getBuffer(`${input.filename}`)
-        }
-        const pdfDoc = await PDFDocument.load(input.aggregatedResults.buffer)
+        const myBuffer : Buffer = Buffer.from(input.aggregatedResults.buffer.data as Uint8Array)
+        const pdfDoc = await PDFDocument.load(myBuffer)
         const pdfPage = pdfDoc.getPage(0)
         const ocrPageResults = input.aggregatedResults.ocr.pages[0]
         if (input?.aggregatedResults?.recognizePiiEntities?.entityRecognitionPiiTasks) { //batch mode has different json schema
