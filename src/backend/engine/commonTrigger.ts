@@ -68,10 +68,10 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
             }
         }
         else {
-            if(mySbMsg.dbId){
-                await db.deleteByID(mySbMsg.dbId)
-                delete mySbMsg.dbId
-            }
+            // if(mySbMsg.dbId){
+            //     await db.deleteByID(mySbMsg.dbId)
+            //     delete mySbMsg.dbId
+            // }
             
             let directoryName = ""
             let filename = ""

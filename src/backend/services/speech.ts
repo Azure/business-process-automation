@@ -41,6 +41,7 @@ export class Speech {
         input.resultsIndexes.push({ index: index, name: label, type: label })
 
         return {
+            data : out,
             type: "text",
             label: label,
             filename: input.filename,
