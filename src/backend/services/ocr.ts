@@ -29,7 +29,8 @@ export class Ocr {
             filename: input.filename,
             pipeline: input.pipeline,
             aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            id: input.id
         }
         return result
     }

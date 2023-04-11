@@ -54,7 +54,8 @@ export class RedactPdf {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 

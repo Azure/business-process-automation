@@ -42,7 +42,8 @@ export class ContentModerator {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
 
     }
@@ -73,7 +74,8 @@ export class ContentModerator {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
 
     }

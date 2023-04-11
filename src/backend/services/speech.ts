@@ -48,7 +48,8 @@ export class Speech {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -117,7 +118,8 @@ export class Speech {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -177,7 +179,8 @@ export class Speech {
                     filename: input.filename,
                     pipeline: input.pipeline,
                     aggregatedResults: results,
-                    resultsIndexes: input.resultsIndexes
+                    resultsIndexes: input.resultsIndexes,
+                    id: input.id
                 })
             };
 
@@ -231,14 +234,14 @@ export class Speech {
             }
 
             const dbout = await db.create(mySbMsg)
-            mySbMsg.dbId = dbout.id
-            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
-            mySbMsg.data = dbout.id
+            //mySbMsg.dbId = dbout.id
+            //mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            //mySbMsg.data = dbout.id
 
-            await mq.sendMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type})
+            await mq.sendMessage({filename: mySbMsg.filename, id : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type})
         } else {
             console.log('do nothing')
-            await mq.scheduleMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label}, 10000)
+            await mq.scheduleMessage({filename: mySbMsg.filename, id : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label}, 10000)
         }
     }
 }

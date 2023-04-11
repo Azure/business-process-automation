@@ -56,8 +56,9 @@ export class BpaEngine {
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
                 if (currentInput.type === 'async transaction') {
+                    delete currentInput.aggregatedResults.buffer
                     const dbout = await db.create(currentInput)
-                    await mq.sendMessage({filename: currentInput.filename, dbId : dbout.id, pipeline : dbout.pipeline, label : dbout.label, type : currentInput.type})
+                    await mq.sendMessage({filename: currentInput.filename, id : dbout.id, pipeline : dbout.pipeline, label : dbout.label, type : currentInput.type})
                     break
                 }
             }
@@ -67,8 +68,8 @@ export class BpaEngine {
             stageIndex++;
         }
 
-        delete currentInput.data
-        delete currentInput.aggregatedResults.buffer
+        // delete currentInput.data
+        // delete currentInput.aggregatedResults.buffer
 
         return currentInput
 

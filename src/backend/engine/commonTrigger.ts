@@ -132,7 +132,8 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
     
     
             if (out['type'] !== 'async transaction') {
-                const newObject = await db.view(out)
+                delete out.data
+                const newObject = await db.create(out)
                 if(newObject?.id && (process.env.STORE_IN_REDIS === 'true') && newObject?.aggregatedResults?.openaiEmbeddings){
                     await redis.set(newObject.id, newObject, newObject.aggregatedResults.openaiEmbeddings.data[0].embedding)
                 }

@@ -59,7 +59,8 @@ export class LanguageStudio {
             filename: input.filename,
             pipeline: input.pipeline,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
         return result
     }
@@ -87,7 +88,8 @@ export class LanguageStudio {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id : input.id
         }
     }
 
@@ -125,14 +127,14 @@ export class LanguageStudio {
 
 
             const dbout = await db.create(mySbMsg)
-            mySbMsg.dbId = dbout.id
-            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
-            mySbMsg.data = dbout.id
+            //mySbMsg.dbId = dbout.id
+            //mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            //mySbMsg.data = dbout.id
 
-            await mq.sendMessage({ filename: mySbMsg.filename, dbId: mySbMsg.id, pipeline: mySbMsg.pipeline, label: mySbMsg.label, type: mySbMsg.type })
+            await mq.sendMessage({ filename: mySbMsg.filename, id: mySbMsg.id, pipeline: mySbMsg.pipeline, label: mySbMsg.label, type: mySbMsg.type })
         } else {
             console.log('do nothing')
-            await mq.scheduleMessage({ filename: mySbMsg.filename, dbId: mySbMsg.id, pipeline: mySbMsg.pipeline, label: mySbMsg.label, type: mySbMsg.type }, 10000)
+            await mq.scheduleMessage({ filename: mySbMsg.filename, id: mySbMsg.id, pipeline: mySbMsg.pipeline, label: mySbMsg.label, type: mySbMsg.type }, 10000)
         }
     }
 
@@ -248,7 +250,8 @@ export class LanguageStudio {
             bpaId: input.bpaId,
             label: "summaryToText",
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
