@@ -15,7 +15,7 @@ export class RedactPdf {
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-        const myBuffer : Buffer = Buffer.from(input.aggregatedResults.buffer.data as Uint8Array)
+        const myBuffer : Buffer = Buffer.from(input.aggregatedResults.buffer)
         const pdfDoc = await PDFDocument.load(myBuffer)
         const pdfPage = pdfDoc.getPage(0)
         const ocrPageResults = input.aggregatedResults.ocr.pages[0]
