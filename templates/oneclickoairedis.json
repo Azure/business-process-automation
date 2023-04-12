@@ -596,7 +596,6 @@
       "name": "[concat(parameters('openaiName'), '/text-davinci-002')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
         "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
       ],
       "properties": {
@@ -616,8 +615,7 @@
       "name": "[concat(parameters('openaiName'), '/chatgpt')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-davinci-002')]"
       ],
       "properties": {
         "model": {
@@ -721,7 +719,7 @@
             },
             {
               "name": "AZURE_OPENAI_SERVICE",
-              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]"
+              "value": "[parameters('openaiName')]"
             },
             {
               "name": "AZURE_SEARCH_APIKEY",
@@ -733,7 +731,7 @@
             },
                         {
               "name": "AZURE_SEARCH_SERVICE",
-              "value": "[parameters('cogSearchUrl')]"
+              "value": "[parameters('cogSearchName')]"
             },
                         {
               "name": "KB_FIELDS_CATEGORY",
@@ -776,7 +774,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv019.zip?sv=2020-04-08&st=2023-04-12T14%3A15%3A25Z&se=2023-11-22T15%3A15%3A00Z&sr=b&sp=r&sig=m5qz3e3w8BUPYqSh6GEOjPEfOEqQZ3S9Ah1wj4F3Tsw%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv020.zip?sv=2020-04-08&st=2023-04-12T18%3A08%3A45Z&se=2023-11-30T19%3A08%3A00Z&sr=b&sp=r&sig=x06DjsqN2vRuZpCz%2BaGQJ22EJzlgPlX%2Bwcjh9Fi0S30%3D"
             },
             {
               "name": "OPENAI_KEY",

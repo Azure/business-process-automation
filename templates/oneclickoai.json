@@ -596,7 +596,6 @@
       "name": "[concat(parameters('openaiName'), '/text-davinci-002')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
         "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
       ],
       "properties": {
@@ -610,14 +609,13 @@
         }
       }
     },
-        {
+    {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
       "apiVersion": "2022-12-01",
       "name": "[concat(parameters('openaiName'), '/chatgpt')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-davinci-002')]"
       ],
       "properties": {
         "model": {
@@ -647,7 +645,7 @@
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
               "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v004.zip?sv=2020-04-08&st=2023-04-10T17%3A42%3A19Z&se=2024-02-20T18%3A42%3A00Z&sr=b&sp=r&sig=ll7OcVl620HRat9FwSquMNSiVICgihU2H03FYrXh9Ks%3D"
-            },  
+            },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
@@ -692,23 +690,23 @@
               "name": "AZURE_SEARCH_INDEX",
               "value": "cosmosdb-index"
             },
-                        {
+            {
               "name": "AZURE_SEARCH_SERVICE",
               "value": "[parameters('cogSearchName')]"
             },
-                        {
+            {
               "name": "KB_FIELDS_CATEGORY",
               "value": "category"
             },
-                        {
+            {
               "name": "KB_FIELDS_CONTENT",
               "value": "aggregatedResults.ocr"
             },
-                        {
+            {
               "name": "KB_FIELDS_SOURCEPAGE",
               "value": "filename"
             },
-                        {
+            {
               "name": "OPENAI_API_KEY",
               "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
             }
@@ -737,7 +735,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv019.zip?sv=2020-04-08&st=2023-04-12T14%3A15%3A25Z&se=2023-11-22T15%3A15%3A00Z&sr=b&sp=r&sig=m5qz3e3w8BUPYqSh6GEOjPEfOEqQZ3S9Ah1wj4F3Tsw%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv020.zip?sv=2020-04-08&st=2023-04-12T18%3A08%3A45Z&se=2023-11-30T19%3A08%3A00Z&sr=b&sp=r&sig=x06DjsqN2vRuZpCz%2BaGQJ22EJzlgPlX%2Bwcjh9Fi0S30%3D"
             },
             {
               "name": "OPENAI_KEY",
@@ -942,7 +940,7 @@
         "COGSEARCH_URL": "[parameters('cogSearchUrl')]",
         "SERVICE_BUS_CONNECTION_STRING": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
         "USE_LOCAL_STORAGE": "false",
-        "HUGGINGFACE_ENDPOINT" : "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+        "HUGGINGFACE_ENDPOINT": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
       },
 
       "dependsOn": [
