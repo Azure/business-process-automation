@@ -596,7 +596,6 @@
       "name": "[concat(parameters('openaiName'), '/text-davinci-002')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
         "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
       ],
       "properties": {
@@ -616,8 +615,7 @@
       "name": "[concat(parameters('openaiName'), '/chatgpt')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-davinci-002')]"
       ],
       "properties": {
         "model": {
