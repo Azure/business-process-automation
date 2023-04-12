@@ -59,7 +59,7 @@ export default function OpenAiViewer(props) {
     }, [selectedPipeline.name])
 
     useEffect(() => {
-        if (selectedPipeline?.name !== "no pipeline selected") {
+        if (selectedPipeline?.name !== "no pipeline selected" && selectedDocument) {
             axios.get(`/api/dbdocumentsbypipeline?pipeline=${selectedPipeline.name}&filename=${selectedDocument}`).then(_doc => {
                 setDocData(_doc.data)
             }).catch(err => {
