@@ -12,8 +12,13 @@ export class BlobStorage {
         this._containerName = containerName;
     }
 
-    public getAll = async (pipeline : string): Promise<Buffer[]> => {
-        return []
+    public getAll = async (pipeline : string): Promise<string[]> => {
+        const out = []
+        const blobsFlat = await this._blobContainerClient.listBlobsFlat({prefix: `${pipeline}/`})
+        for await (const blob of blobsFlat){
+            out.push(blob.name)
+        }
+        return out
     }
 
     public getBuffer = async (filename: string): Promise<Buffer> => {

@@ -95,12 +95,13 @@ const Chat = () => {
             };
             chatApi(request).then(result => {
                 setAnswers([...answers, [question, result]]);
+                setIsLoading(false);
             })
 
         } catch (e) {
             setError(e);
         } finally {
-            setIsLoading(false);
+            //setIsLoading(false);
         }
     });
 

@@ -11,19 +11,31 @@ if (process.env.USE_LOCAL_STORAGE === 'true') {
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    try {
-        const result = await db.getAll(req.query.pipeline)
-        context.res = {
-            body: result
+    if(req.query.pipeline && req.query.filename){
+        try {
+            const result = await db.getByFilename(req.query.filename)
+            context.res = {
+                body: result
+            }
+        } catch (err) {
+            context.log(err)
+            context.res = {
+                body: err
+            }
         }
-    } catch (err) {
-        context.log(err)
-        context.res = {
-            body: err
+    } else{
+        try {
+            const result = await db.getAll(req.query.pipeline)
+            context.res = {
+                body: result
+            }
+        } catch (err) {
+            context.log(err)
+            context.res = {
+                body: err
+            }
         }
     }
-
-
 };
 
 
