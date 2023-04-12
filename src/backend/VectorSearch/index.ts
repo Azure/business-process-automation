@@ -63,8 +63,9 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
 
     } catch (err) {
         context.log(err)
-        headers: { 'Content-Type': 'application/json' },
+        
         context.res = {
+            headers: { 'Content-Type': 'application/json' },
             status: 500,
             body: err.message
         }
