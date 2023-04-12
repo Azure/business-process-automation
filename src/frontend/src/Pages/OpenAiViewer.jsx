@@ -9,6 +9,7 @@ export default function OpenAiViewer(props) {
     const [selectedPipeline, setSelectedPipeline] = useState({ name: "no pipeline selected" })
     const [documents, setDocuments] = useState([])
     const [selectedDocument, setSelectedDocument] = useState(null)
+    const [docData, setDocData] = useState(null)
 
     const theme = {
         base00: 'black',
@@ -57,6 +58,18 @@ export default function OpenAiViewer(props) {
 
     }, [selectedPipeline])
 
+    useEffect(() => {
+        if (selectedPipeline?.name !== "no pipeline selected") {
+            axios.get(`/api/dbdocumentsbypipeline?pipeline=${selectedPipeline.name}&filename=${selectedDocument}`).then(_doc => {
+                setDocData(_doc.data)
+            }).catch(err => {
+                //setpipelineSearchDone(true)
+                console.log(err)
+            })
+        }
+
+    }, [selectedDocument])
+
     const onPipelineChange = async (_, value) => {
         for (const p of pipelines) {
             if (p.name === value.value) {
@@ -79,7 +92,7 @@ export default function OpenAiViewer(props) {
     const onSelectedIndexChange = (value) => {
         const selectedFilename = value.currentTarget.innerHTML
         for(const d of documents){
-            if(d.filename === selectedFilename.trim()){
+            if(d === selectedFilename.trim()){
                 setSelectedDocument(d)
                 break;
             }
@@ -97,23 +110,23 @@ export default function OpenAiViewer(props) {
                         </div>
                         <div style={{ height: "600px", overflow: "hidden", overflowY: "scroll", width:"100%" }} >
                             <ul>
-                                {documents.map(m => {return (<div className="openaifilenames" onClick={onSelectedIndexChange} style={{paddingBottom : "20px"}}>{m.filename} </div>)})}
+                                {documents.map(m => {return (<div className="openaifilenames" onClick={onSelectedIndexChange} style={{paddingBottom : "20px"}}>{m} </div>)})}
 
                             </ul>
                             {/* <List styles={{margin: "20px"}}onSelectedIndexChange={onSelectedIndexChange} selectable items={documents.map(m => {return {key:m.filename, header:m.filename, content: "\n"}})} /> */}
                         </div>
                     </div>
                     <div style={{ width: "70%", padding: "50px" }}>
-                        {(selectedDocument?.aggregatedResults?.ocr?.content) ? selectedDocument.aggregatedResults.ocr.content.slice(0,700)+"..." : ""}
-                        {(selectedDocument?.aggregatedResults?.ocrToText) ? selectedDocument.aggregatedResults.ocrToText.slice(0,700)+"..." : ""}
-                        {(selectedDocument?.aggregatedResults?.speechToText) ? selectedDocument.aggregatedResults.speechToText.slice(0,700)+"..." : ""}
+                        {(docData?.aggregatedResults?.ocr?.content) ? docData.aggregatedResults.ocr.content.slice(0,700)+"..." : ""}
+                        {(docData?.aggregatedResults?.ocrToText) ? docData.aggregatedResults.ocrToText.slice(0,700)+"..." : ""}
+                        {(docData?.aggregatedResults?.sttToText) ? docData.aggregatedResults.sttToText.slice(0,700)+"..." : ""}
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
-                            {(selectedDocument?.aggregatedResults?.openaiGeneric?.choices[0].text) ? selectedDocument.aggregatedResults.openaiGeneric.choices[0].text : ""}
+                            {(docData?.aggregatedResults?.openaiGeneric?.choices[0].text) ? docData.aggregatedResults.openaiGeneric.choices[0].text : ""}
                         </div>
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
-                            {(selectedDocument?.aggregatedResults?.openaiSummarize?.choices[0].text) ? selectedDocument.aggregatedResults.openaiSummarize.choices[0].text : ""}
+                            {(docData?.aggregatedResults?.openaiSummarize?.choices[0].text) ? docData.aggregatedResults.openaiSummarize.choices[0].text : ""}
                         </div>
-                        {(selectedDocument) ? <JSONTree data={selectedDocument} theme={theme} shouldExpandNode={() => false} /> : <></>}
+                        {(docData) ? <JSONTree data={docData} theme={theme} shouldExpandNode={() => false} /> : <></>}
                     </div>
 
 

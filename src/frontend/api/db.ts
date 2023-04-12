@@ -178,6 +178,10 @@ export class BlobDB extends DB {
         return JSON.parse((await this._resultsClient.getBuffer(`${id}.json`)).toString())
     }
 
+    public getByFilename = async (filename: string): Promise<any> => {
+        return JSON.parse((await this._resultsClient.getBuffer(filename)).toString())
+    }
+
     public getAll = async (pipeline: string) : Promise<any[]> => {
         return await this._resultsClient.getAll(pipeline)
     }
