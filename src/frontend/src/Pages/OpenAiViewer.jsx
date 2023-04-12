@@ -68,7 +68,7 @@ export default function OpenAiViewer(props) {
             })
         }
 
-    }, [selectedDocument])
+    }, [selectedDocument.name, selectedDocument])
 
     const onPipelineChange = async (_, value) => {
         for (const p of pipelines) {
