@@ -59,8 +59,6 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
             }
         }
 
-        //openaiText.processGeneric()
-
     } catch (err) {
         context.log(err)
         
