@@ -27,7 +27,8 @@ export class SpliceDocument {
             bpaId: input.bpaId,
             label: label,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 }

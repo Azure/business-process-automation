@@ -36,27 +36,7 @@ export class BpaEngine {
             currentInput.type = "text"
             currentInput.aggregatedResults["text"] = currentInput.data.toString()
         }
-        // } else if(this._getFileType(fileName).toLowerCase() === 'pdf'){
-        //     if(fileBuffer.length > MAX_PDF_SIZE){
-        //         const newBuffers = await blob.splitPdfInParts(fileBuffer, 2)
-        //         let index = 0
-        //         for(const b of newBuffers){
-        //             const filePath = `${fileName.replace("/",`/_${index++}`)}`
-        //             await blob.upload(b, filePath)
-        //         }
-                
-        //         return {
-        //             label: "split file",
-        //             pipeline: config.name,
-        //             type: this._getFileType(fileName),
-        //             filename: fileName,
-        //             data: fileBuffer,
-        //             bpaId: "1",
-        //             aggregatedResults: { },
-        //             resultsIndexes: []
-        //         }
-        //     }
-        // }
+
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex, mq, db)
 
@@ -76,8 +56,9 @@ export class BpaEngine {
                 console.log('exiting stage')
                 currentInput = _.cloneDeep(currentOutput)
                 if (currentInput.type === 'async transaction') {
+                    delete currentInput.aggregatedResults.buffer
                     const dbout = await db.create(currentInput)
-                    await mq.sendMessage({filename: currentInput.filename, dbId : dbout.id, pipeline : dbout.pipeline, label : dbout.label, type : currentInput.type})
+                    await mq.sendMessage({filename: currentInput.filename, id : dbout.id, pipeline : dbout.pipeline, label : dbout.label, type : currentInput.type})
                     break
                 }
             }
@@ -87,8 +68,8 @@ export class BpaEngine {
             stageIndex++;
         }
 
-        delete currentInput.data
-        delete currentInput.aggregatedResults.buffer
+        // delete currentInput.data
+        // delete currentInput.aggregatedResults.buffer
 
         return currentInput
 

@@ -70,7 +70,8 @@ export class FormRec {
             bpaId: input.bpaId,
             label: label,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
 
 
@@ -99,7 +100,8 @@ export class FormRec {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -155,7 +157,8 @@ export class FormRec {
             bpaId: input.bpaId,
             label: label,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
 
     }
@@ -181,7 +184,8 @@ export class FormRec {
             bpaId: input.bpaId,
             label: label,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -206,7 +210,8 @@ export class FormRec {
             bpaId: input.bpaId,
             label: label,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -310,14 +315,14 @@ export class FormRec {
             mySbMsg.data = axiosGetResp.data.analyzeResult
 
             const dbout = await db.create(mySbMsg)
-            mySbMsg.dbId = dbout.id
-            mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
-            mySbMsg.data = dbout.id
+            mySbMsg.id = dbout.id
+            //mySbMsg.aggregatedResults[mySbMsg.label] = dbout.id
+            //mySbMsg.data = dbout.id
 
-            await mq.sendMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type})
+            await mq.sendMessage({filename: mySbMsg.filename, id : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type})
         } else {
             console.log('do nothing')
-            await mq.scheduleMessage({filename: mySbMsg.filename, dbId : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type}, 10000)
+            await mq.scheduleMessage({filename: mySbMsg.filename, id : mySbMsg.id, pipeline : mySbMsg.pipeline, label : mySbMsg.label, type: mySbMsg.type}, 10000)
         }
     }
 
@@ -335,7 +340,8 @@ export class FormRec {
             bpaId: input.bpaId,
             label: label,
             aggregatedResults: results,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -362,7 +368,8 @@ export class FormRec {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
-            resultsIndexes: input.resultsIndexes
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
         }
     }
 

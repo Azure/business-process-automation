@@ -32,7 +32,8 @@ export class DocumentTranslation {
             pipeline: input.pipeline,
             type : input.type,
             aggregatedResults : input.aggregatedResults,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            id: input.id
         }
     }
 

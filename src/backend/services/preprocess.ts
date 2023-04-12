@@ -25,7 +25,8 @@ export class Preprocess {
             pipeline: input.pipeline,
             type : "preprocess",
             aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            id: input.id
         }
     }
 
@@ -45,7 +46,8 @@ export class Preprocess {
             pipeline: input.pipeline,
             type : "textSegmentation",
             aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            id: input.id
         }
     }
 

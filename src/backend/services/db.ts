@@ -20,7 +20,7 @@ export abstract class DB {
     }
 
     public abstract create(data): Promise<any>;
-    public abstract view(input: BpaServiceObject): Promise<any>
+    // public abstract view(input: BpaServiceObject): Promise<any>
     public abstract getConfig(): Promise<BpaPipelines>
     public abstract getByID(id: string, pipeline: string): Promise<any>
     public abstract deleteByID(id: string): Promise<any>
@@ -52,23 +52,25 @@ export class BlobDB extends DB {
             data.id = id
         }
         
+        delete data.aggregatedResults.buffer
+        
         await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `${data.pipeline}/${id}.json`)
 
         return data
     }
 
-    public view = async (input: any): Promise<BpaServiceObject> => {
+    // public view = async (input: any): Promise<BpaServiceObject> => {
 
-        let id : string
-        if(input.id){
-            id = input.id
-        } else{
-            id = uuidv4()
-        }
-        await this._resultsClient.upload(Buffer.from(JSON.stringify(input)), `${input.pipeline}/${id}.json`)
+    //     let id : string
+    //     if(input.id){
+    //         id = input.id
+    //     } else{
+    //         id = uuidv4()
+    //     }
+    //     await this._resultsClient.upload(Buffer.from(JSON.stringify(input)), `${input.pipeline}/${id}.json`)
 
-        return input
-    }
+    //     return input
+    // }
 
     public getConfig = async (): Promise<BpaPipelines> => {
 
