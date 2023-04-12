@@ -42,9 +42,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
                 body: {
-                    documents: results.documents,
-                    topDocument: topDocument.aggregatedResults.ocr.content,
-                    oaiAnswer: oaiAnswer
+                    documents: results.documents
                 }
             }
         } else {
