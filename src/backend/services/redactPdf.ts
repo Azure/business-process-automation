@@ -19,14 +19,14 @@ export class RedactPdf {
         const pdfDoc = await PDFDocument.load(myBuffer)
         const pdfPage = pdfDoc.getPage(0)
         const ocrPageResults = input.aggregatedResults.ocr.pages[0]
-        if (input?.aggregatedResults?.recognizePiiEntities?.entityRecognitionPiiTasks) { //batch mode has different json schema
-            const piiResults = input.aggregatedResults.recognizePiiEntities.entityRecognitionPiiTasks[0].results.documents[0]
+        if (input?.aggregatedResults?.recognizePiiEntities?.items) { //batch mode has different json schema
+            const piiResults = input.aggregatedResults.recognizePiiEntities.items[0].results.documents[0]
             const redacted = this._batchRedactPage(ocrPageResults, piiResults)
             const redactedPage: Buffer = await this._batchDrawRedactedPage(redacted, pdfPage, ocrPageResults, pdfDoc)
             const pdfWithPng: Buffer = await this._convertAndEmbed(redactedPage)
             await this._blobRedactedService.upload(pdfWithPng, input.filename)
         } else {
-            const piiResults = input.aggregatedResults.recognizePiiEntities[0].recognizePiiEntitiesResults[0]
+            const piiResults = input.aggregatedResults.recognizePiiEntities[0]
             const redacted = this._redactPage(ocrPageResults, piiResults)
             const redactedPage: Buffer = await this._drawRedactedPage(redacted, pdfPage, ocrPageResults, pdfDoc)
             const pdfWithPng: Buffer = await this._convertAndEmbed(redactedPage)
