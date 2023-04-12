@@ -37,12 +37,12 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
             const oaiAnswer = await openaiText.generic(prompt, 200)
             console.log(JSON.stringify(results.documents))
             console.log("############################################# LOGS ###############################################################")
-            console.log(JSON.stringify(topDocument))
+            console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
             context.res = {
                 status: 200,
                 body: {
                     documents: results.documents,
-                    topDocument: topDocument,
+                    topDocument: topDocument.aggregatedResults.ocr.content,
                     oaiAnswer: oaiAnswer
                 }
             }
