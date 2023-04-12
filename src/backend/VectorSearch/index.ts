@@ -40,6 +40,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
             console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
             context.res = {
                 status: 200,
+                headers: { 'Content-Type': 'application/json' },
                 body: {
                     documents: results.documents,
                     topDocument: topDocument.aggregatedResults.ocr.content,
@@ -49,6 +50,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         } else {
             context.res = {
                 status: 200,
+                headers: { 'Content-Type': 'application/json' },
                 body: {
                     documents: [],
                     topDocument: null,
@@ -61,6 +63,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
 
     } catch (err) {
         context.log(err)
+        headers: { 'Content-Type': 'application/json' },
         context.res = {
             status: 500,
             body: err.message
@@ -69,7 +72,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         await redis.disconnect()
     }
 
-    return results
+    //return results
 };
 
 export default vectorSearchTrigger;
