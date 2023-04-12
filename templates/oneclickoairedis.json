@@ -721,7 +721,7 @@
             },
             {
               "name": "AZURE_OPENAI_SERVICE",
-              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]"
+              "value": "[parameters('openaiName')]"
             },
             {
               "name": "AZURE_SEARCH_APIKEY",
@@ -733,7 +733,7 @@
             },
                         {
               "name": "AZURE_SEARCH_SERVICE",
-              "value": "[parameters('cogSearchUrl')]"
+              "value": "[parameters('cogSearchName')]"
             },
                         {
               "name": "KB_FIELDS_CATEGORY",
