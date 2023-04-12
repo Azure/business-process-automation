@@ -56,7 +56,7 @@ export default function OpenAiViewer(props) {
             })
         }
 
-    }, [selectedPipeline])
+    }, [selectedPipeline.name])
 
     useEffect(() => {
         if (selectedPipeline?.name !== "no pipeline selected") {
