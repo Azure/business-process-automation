@@ -6,7 +6,8 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get"
+        "get",
+        "post"
       ]
     },
     {
@@ -15,5 +16,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/VectorSearch/index.js"
+  "scriptFile": "../dist/HttpTriggerTest/index.js"
 }
