@@ -6,12 +6,10 @@ const _ = require('lodash')
 
 const vectorSearchTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    console.log("############################################################################################################")
     const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
     const redis = new RedisSimilarity(process.env.REDIS_URL, process.env.REDIS_PW)
     let results = null
     try {
-        console.log("############################################# CONNECT ###############################################################")
         await redis.connect()
         const query = req.query.query
         const pipeline = req.query.pipeline
@@ -19,52 +17,40 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
         //get embeddings
         const embeddings = await openaiSearchQuery.getEmbeddings(query)
-        
-        console.log("############################################# GET EMBEDDINGS ###############################################################")
-        console.log(JSON.stringify(embeddings).substring(0,100))
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
-        console.log("returning this " + JSON.stringify(results))
-        context.res = {
-            body : {
-                output : results
+        if (results.documents.length > 0) {
+            const topDocument = await db.getByID(results.documents[0].id, pipeline)
+            let prompt = "Answer the question using only the text coming after the <TEXT> field.  Keep the answers short and to the point.  If the answer does not exist within the text, say 'I don't know'. \n "
+            if(topDocument?.aggregatedResults?.ocrToText){
+                prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n `
+            } else if(topDocument?.aggregatedResults?.speechToText){
+                prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n `
+            } else if(topDocument?.aggregatedResults?.text){
+                prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.text.slice(0,3500)} \n \n `
+            }
+            const oaiAnswer = await openaiText.generic(prompt, 200)
+            console.log(JSON.stringify(results.documents))
+            console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
+            context.res = {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+                    documents: results.documents,
+                    topDocument: topDocument,
+                    oaiAnswer: oaiAnswer
+                }
+            }
+        } else {
+            context.res = {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+                    documents: [],
+                    topDocument: null,
+                    oaiAnswer: null
+                }
             }
         }
-        return
-        
-        // console.log(JSON.stringify(results))
-        // if (results.documents.length > 0) {
-        //     console.log("############################################# GET BY ID ###############################################################")
-        //     const topDocument = await db.getByID(results.documents[0].id, pipeline)
-        //     console.log(JSON.stringify(topDocument).substring(0,100))
-        //     let prompt = ""
-        //     if(topDocument?.aggregatedResults?.ocrToText){
-        //         console.log("############################################# TOP DOC ###############################################################")
-        //         prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`
-        //     } else if(topDocument?.aggregatedResults?.speechToText){
-        //         prompt = `${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n Q: ${query} \n A:`
-        //     }
-        //     const oaiAnswer = await openaiText.generic(prompt, 200)
-        //     console.log(JSON.stringify(results.documents))
-        //     console.log("############################################# LOGS ###############################################################")
-        //     console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
-        //     context.res = {
-        //         status: 200,
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: {
-        //             documents: results.documents
-        //         }
-        //     }
-        // } else {
-        //     context.res = {
-        //         status: 200,
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: {
-        //             documents: [],
-        //             topDocument: null,
-        //             oaiAnswer: null
-        //         }
-        //     }
-        // }
 
     } catch (err) {
         context.log(err)
@@ -78,7 +64,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         await redis.disconnect()
     }
 
-    //return results
+    return results
 };
 
 export default vectorSearchTrigger;

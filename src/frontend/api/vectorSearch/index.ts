@@ -1,23 +1,23 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import axios from "axios";
-import { CosmosDB } from "../db";
+import { BlobDB } from "../db";
 
-const db = new CosmosDB(process.env.COSMOS_DB_CONNECTION_STRING, process.env.COSMOS_DB_DB, process.env.COSMOS_DB_CONTAINER )
+const db = new BlobDB(process.env.BLOB_STORAGE_CONNECTION_STRING, '', 'results')
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     if (req.method === "GET") {
         try {
             context.log('HTTP trigger function processed a request.');
             const out = await axios.get(`https://${process.env.COSMOS_DB_CONTAINER}.azurewebsites.net/api/VectorSearch?query=${req.query.query}&pipeline=${req.query.pipeline}`)
             const documents = []
-            for(const doc of out.data.documents){
+            for(const doc of out.data.output.documents){
                 console.log(doc)
-                const document = await db.get(doc.id)
+                const document = await db.get(`${req.query.pipeline}/${doc.id}`)
                 documents.push({document: document, score : doc.value.dist})
             }
             context.res = {
                 body: {
                     documents : documents,
-                    oaiAnswer: out.data.oaiAnswer
+                    //oaiAnswer: out.data.oaiAnswer
                 },
                 headers: {
                     'Content-Type': 'application/json'
