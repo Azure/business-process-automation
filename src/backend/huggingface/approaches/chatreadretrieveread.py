@@ -61,10 +61,12 @@ Search query:
                     currentData = currentData.get(i)[0]
                 else:
                     currentData = currentData[i]
-            out = out + currentData
+                if isinstance(currentData, str):
+                    out = out + currentData
         return out
 
     def run(self, history: list[dict], overrides: dict) -> any:
+        print('here')
         use_semantic_captions = True if overrides.get("semantic_captions") else False
         top = overrides.get("top") or 3
         exclude_category = overrides.get("exclude_category") or None
@@ -97,7 +99,7 @@ Search query:
         if use_semantic_captions:
             results = [doc[self.sourcepage_field] + ": " + nonewlines(" . ".join([c.text for c in doc['@search.captions']])) for doc in r]
         else:
-            results = [doc[self.sourcepage_field] + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
+            results = [nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
         content = "\n".join(results)
 
         follow_up_questions_prompt = self.follow_up_questions_prompt_content if overrides.get("suggest_followup_questions") else ""
