@@ -19,43 +19,50 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
         //get embeddings
         const embeddings = await openaiSearchQuery.getEmbeddings(query)
+        
         console.log("############################################# GET EMBEDDINGS ###############################################################")
         console.log(JSON.stringify(embeddings).substring(0,100))
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
-        console.log(JSON.stringify(results))
-        if (results.documents.length > 0) {
-            console.log("############################################# GET BY ID ###############################################################")
-            const topDocument = await db.getByID(results.documents[0].id, pipeline)
-            console.log(JSON.stringify(topDocument).substring(0,100))
-            let prompt = ""
-            if(topDocument?.aggregatedResults?.ocrToText){
-                console.log("############################################# TOP DOC ###############################################################")
-                prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`
-            } else if(topDocument?.aggregatedResults?.speechToText){
-                prompt = `${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n Q: ${query} \n A:`
-            }
-            const oaiAnswer = await openaiText.generic(prompt, 200)
-            console.log(JSON.stringify(results.documents))
-            console.log("############################################# LOGS ###############################################################")
-            console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
-            context.res = {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    documents: results.documents
-                }
-            }
-        } else {
-            context.res = {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: {
-                    documents: [],
-                    topDocument: null,
-                    oaiAnswer: null
-                }
+        context.res = {
+            body : {
+                output : results
             }
         }
+        
+        // console.log(JSON.stringify(results))
+        // if (results.documents.length > 0) {
+        //     console.log("############################################# GET BY ID ###############################################################")
+        //     const topDocument = await db.getByID(results.documents[0].id, pipeline)
+        //     console.log(JSON.stringify(topDocument).substring(0,100))
+        //     let prompt = ""
+        //     if(topDocument?.aggregatedResults?.ocrToText){
+        //         console.log("############################################# TOP DOC ###############################################################")
+        //         prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+        //     } else if(topDocument?.aggregatedResults?.speechToText){
+        //         prompt = `${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+        //     }
+        //     const oaiAnswer = await openaiText.generic(prompt, 200)
+        //     console.log(JSON.stringify(results.documents))
+        //     console.log("############################################# LOGS ###############################################################")
+        //     console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
+        //     context.res = {
+        //         status: 200,
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: {
+        //             documents: results.documents
+        //         }
+        //     }
+        // } else {
+        //     context.res = {
+        //         status: 200,
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: {
+        //             documents: [],
+        //             topDocument: null,
+        //             oaiAnswer: null
+        //         }
+        //     }
+        // }
 
     } catch (err) {
         context.log(err)
