@@ -25,7 +25,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
         context.res = {
             body : {
-                output : results
+                output : "foo"
             }
         }
         
