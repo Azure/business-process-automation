@@ -29,8 +29,6 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
                 prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.text.slice(0,3500)} \n \n `
             }
             const oaiAnswer = await openaiText.generic(prompt, 200)
-            console.log(JSON.stringify(results.documents))
-            console.log(JSON.stringify(topDocument.aggregatedResults.ocr.content))
             context.res = {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
