@@ -116,7 +116,7 @@ Search query:
         # STEP 3: Generate a contextual and content specific answer using the search results and chat history
         completion = openai.Completion.create(
             engine=self.chatgpt_deployment, 
-            prompt=prompt, 
+            prompt=prompt[7000:], 
             temperature=overrides.get("temperature") or 0.7, 
             max_tokens=1024, 
             n=1, 
