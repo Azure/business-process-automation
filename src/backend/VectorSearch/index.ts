@@ -23,11 +23,13 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         console.log("############################################# GET EMBEDDINGS ###############################################################")
         console.log(JSON.stringify(embeddings).substring(0,100))
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
+        console.log("returning this " + JSON.stringify(results))
         context.res = {
             body : {
-                output : "foo"
+                output : results
             }
         }
+        return
         
         // console.log(JSON.stringify(results))
         // if (results.documents.length > 0) {
