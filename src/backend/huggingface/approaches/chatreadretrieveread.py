@@ -112,10 +112,12 @@ Search query:
         else:
             prompt = prompt_override.format(sources=content, chat_history=self.get_chat_history_as_text(history), follow_up_questions_prompt=follow_up_questions_prompt)
 
+        if len(prompt) > 7000:
+            prompt = prompt[:7000]
         # STEP 3: Generate a contextual and content specific answer using the search results and chat history
         completion = openai.Completion.create(
             engine=self.chatgpt_deployment, 
-            prompt=prompt[7000:], 
+            prompt=prompt[:7000], 
             temperature=overrides.get("temperature") or 0.7, 
             max_tokens=1024, 
             n=1, 
