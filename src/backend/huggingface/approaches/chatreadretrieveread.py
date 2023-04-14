@@ -64,6 +64,12 @@ Search query:
                 if isinstance(currentData, str):
                     out = out + currentData
         return out
+    
+    def sourceFile(self, doc):
+        if not hasattr(doc,self.sourcepage_field):
+            return "No Filename "
+        else:
+            return doc[self.sourcepage_field]
 
     def run(self, history: list[dict], overrides: dict) -> any:
         use_semantic_captions = True if overrides.get("semantic_captions") else False
@@ -98,7 +104,7 @@ Search query:
         if use_semantic_captions:
             results = [doc[self.sourcepage_field] + ": " + nonewlines(" . ".join([c.text for c in doc['@search.captions']])) for doc in r]
         else:
-            results = [doc[self.sourcepage_field] + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
+            results = [self.sourceFile(doc) + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
         content = "\n".join(results)
 
         follow_up_questions_prompt = self.follow_up_questions_prompt_content if overrides.get("suggest_followup_questions") else ""
