@@ -73,10 +73,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     out = {}
     try:
         
-        req_json = req.get_json()
-        req_body = req_json.get("body")
+        # req_json = req.get_json()
+        # req_body = req_json.get("body")
 
-        #req_body = req.get_json()
+        req_body = req.get_json()
 
         search_client = SearchClient(
         endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
