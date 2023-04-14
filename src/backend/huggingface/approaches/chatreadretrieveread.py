@@ -98,7 +98,7 @@ Search query:
         if use_semantic_captions:
             results = [doc[self.sourcepage_field] + ": " + nonewlines(" . ".join([c.text for c in doc['@search.captions']])) for doc in r]
         else:
-            results = [nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
+            results = [doc[self.sourcepage_field] + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
         content = "\n".join(results)
 
         follow_up_questions_prompt = self.follow_up_questions_prompt_content if overrides.get("suggest_followup_questions") else ""
