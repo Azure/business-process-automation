@@ -66,10 +66,12 @@ Search query:
         return out
     
     def sourceFile(self, doc):
-        if not hasattr(doc,self.sourcepage_field):
-            return "No Filename "
-        else:
+        if self.sourcepage_field in doc:
             return doc[self.sourcepage_field]
+        elif "content" in doc and self.sourcepage_field in doc["content"]:
+            return doc["content"][self.sourcepage_field]
+        else:
+            return "No Filename Found: "
 
     def run(self, history: list[dict], overrides: dict) -> any:
         use_semantic_captions = True if overrides.get("semantic_captions") else False
