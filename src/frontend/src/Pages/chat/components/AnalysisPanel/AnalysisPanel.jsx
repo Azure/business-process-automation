@@ -51,7 +51,7 @@ export const AnalysisPanel = ({ answer, activeTab, activeCitation, citationHeigh
                 headerText="Citation"
                 headerButtonProps={isDisabledCitationTab ? pivotItemDisabledStyle : undefined}
             >
-                <iframe title="Citation" src={activeCitation} width="100%" height={citationHeight} />
+                <iframe title="Citation" src={`/api/viewpdf?container=documents&filename=${activeCitation}`} width="100%" height={citationHeight} />
             </PivotItem>
         </Pivot>
     );
