@@ -67,6 +67,7 @@ export const Answer = ({
                         {parsedAnswer.citations.map((x, i) => {
                             const path = getCitationFilePath(x);
                             return (
+                                //eslint-disable-next-line
                                 <a key={i} className={styles.citation} title={x} onClick={() => onCitationClicked(path)}>
                                     {`${++i}. ${x}`}
                                 </a>
