@@ -62,5 +62,5 @@ export async function chatApi(options) {
 }
 
 export function getCitationFilePath(citation) {
-    return `/content/${citation}`;
+    return `${citation}`;
 }

@@ -44,7 +44,7 @@ export class RedisSimilarity {
     }
 
     public set = async (id: string, document: any, embeddings: any) => {
-        await this._client.hSet(document.id, {v : this._float32Buffer(embeddings), pipeline: document.pipeline})
+        await this._client.hSet(id, {v : this._float32Buffer(embeddings), pipeline: document.pipeline})
     }
 
     public query = async (indexName: string, embeddings: any, numResults: string, pipeline: string) => {
