@@ -25,6 +25,7 @@ AZURE_OPENAI_GPT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_GPT_DEPLOYMENT") or "
 AZURE_OPENAI_CHATGPT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_CHATGPT_DEPLOYMENT") or "chat"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
+DEV = os.environ.get("DEV") or "false"
 KB_FIELDS_CONTENT = os.environ.get("KB_FIELDS_CONTENT") or "content"
 KB_FIELDS_CATEGORY = os.environ.get("KB_FIELDS_CATEGORY") or "category"
 KB_FIELDS_SOURCEPAGE = "filename" #os.environ.get("KB_FIELDS_SOURCEPAGE") or "sourcepage"
@@ -73,8 +74,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     out = {}
     try:
         
-        req_json = req.get_json()
-        req_body = req_json.get("body")
+        if DEV == "false":
+            req_json = req.get_json()
+            req_body = req_json.get("body")
+        else : 
+            req_body = req.get_json()
 
         search_client = SearchClient(
         endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",

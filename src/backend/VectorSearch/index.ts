@@ -20,15 +20,18 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
         if (results.documents.length > 0) {
             const topDocument = await db.getByID(results.documents[0].id, pipeline)
-            let prompt = ""
+            let prompt = "Answer the question using only the text coming after the <TEXT> field.  Keep the answers short and to the point.  If the answer does not exist within the text, say 'I don't know'. \n "
             if(topDocument?.aggregatedResults?.ocrToText){
-                prompt = `${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+                prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.ocrToText.slice(0,3500)} \n \n `
             } else if(topDocument?.aggregatedResults?.speechToText){
-                prompt = `${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n Q: ${query} \n A:`
+                prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.speechToText.slice(0,3500)} \n \n `
+            } else if(topDocument?.aggregatedResults?.text){
+                prompt += `${query}\n <TEXT> ${topDocument.aggregatedResults.text.slice(0,3500)} \n \n `
             }
             const oaiAnswer = await openaiText.generic(prompt, 200)
             context.res = {
                 status: 200,
+                headers: { 'Content-Type': 'application/json' },
                 body: {
                     documents: results.documents,
                     topDocument: topDocument,
@@ -38,6 +41,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         } else {
             context.res = {
                 status: 200,
+                headers: { 'Content-Type': 'application/json' },
                 body: {
                     documents: [],
                     topDocument: null,
@@ -46,11 +50,11 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
             }
         }
 
-        //openaiText.processGeneric()
-
     } catch (err) {
         context.log(err)
+        
         context.res = {
+            headers: { 'Content-Type': 'application/json' },
             status: 500,
             body: err.message
         }

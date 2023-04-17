@@ -10,7 +10,7 @@ import { AnswerIcon } from "./AnswerIcon";
 
 
 const renderButtons = (answer, onThoughtProcessClicked, onSupportingContentClicked) => {
-    if (answer) {
+    if (answer && !answer?.error) {
         return (
             <Stack horizontal horizontalAlign="space-between">
                 <AnswerIcon />
@@ -67,7 +67,8 @@ export const Answer = ({
                         {parsedAnswer.citations.map((x, i) => {
                             const path = getCitationFilePath(x);
                             return (
-                                <a key={i} className={styles.citation} title={x} href={{}} onClick={() => onCitationClicked(path)}>
+                                //eslint-disable-next-line
+                                <a key={i} className={styles.citation} title={x} onClick={() => onCitationClicked(path)}>
                                     {`${++i}. ${x}`}
                                 </a>
                             );

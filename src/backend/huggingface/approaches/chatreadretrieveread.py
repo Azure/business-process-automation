@@ -9,7 +9,7 @@ from text import nonewlines
 # (answer) with that prompt.
 class ChatReadRetrieveReadApproach(Approach):
     prompt_prefix = """<|im_start|>system
-Assistant helps answer questions within a Porsche marketing document. Be brief in your answers.
+Assistant helps answer questions within text from documents. Be brief in your answers.
 Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question. 
 Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brakets to reference the source, e.g. [info1.txt]. Don't combine sources, list each source separately, e.g. [info1.txt][info2.pdf].
 {follow_up_questions_prompt}
@@ -61,8 +61,17 @@ Search query:
                     currentData = currentData.get(i)[0]
                 else:
                     currentData = currentData[i]
-            out = out + currentData
+                if isinstance(currentData, str):
+                    out = out + currentData
         return out
+    
+    def sourceFile(self, doc):
+        if self.sourcepage_field in doc:
+            return doc[self.sourcepage_field]
+        elif "content" in doc and self.sourcepage_field in doc["content"]:
+            return doc["content"][self.sourcepage_field]
+        else:
+            return "No Filename Found: "
 
     def run(self, history: list[dict], overrides: dict) -> any:
         use_semantic_captions = True if overrides.get("semantic_captions") else False
@@ -97,7 +106,7 @@ Search query:
         if use_semantic_captions:
             results = [doc[self.sourcepage_field] + ": " + nonewlines(" . ".join([c.text for c in doc['@search.captions']])) for doc in r]
         else:
-            results = [doc[self.sourcepage_field] + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
+            results = [self.sourceFile(doc) + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
         content = "\n".join(results)
 
         follow_up_questions_prompt = self.follow_up_questions_prompt_content if overrides.get("suggest_followup_questions") else ""
@@ -111,10 +120,12 @@ Search query:
         else:
             prompt = prompt_override.format(sources=content, chat_history=self.get_chat_history_as_text(history), follow_up_questions_prompt=follow_up_questions_prompt)
 
+        if len(prompt) > 7000:
+            prompt = prompt[:7000]
         # STEP 3: Generate a contextual and content specific answer using the search results and chat history
         completion = openai.Completion.create(
             engine=self.chatgpt_deployment, 
-            prompt=prompt, 
+            prompt=prompt[:7000], 
             temperature=overrides.get("temperature") or 0.7, 
             max_tokens=1024, 
             n=1, 
