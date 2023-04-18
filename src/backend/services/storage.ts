@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 import p from "path"
-import { BlobServiceClient, ContainerClient, BlockBlobClient, BlockBlobUploadResponse, BlobClient } from "@azure/storage-blob"
+import { BlobServiceClient, ContainerClient, BlockBlobClient, BlockBlobUploadResponse, BlobClient, ContainerSASPermissions, StorageSharedKeyCredential, ContainerGenerateSasUrlOptions } from "@azure/storage-blob"
 import { BpaServiceObject } from "../engine/types";
 import { writeFile } from "fs/promises";
 import { range } from "lodash"
@@ -38,6 +38,8 @@ export abstract class Storage {
         }
         return result
     }
+
+    
 
     protected _splitPdfInParts = async (myBlob: Buffer, numberOfParts: number): Promise<Buffer[]> => {
         const pdfDoc = await PDFDocument.load(myBlob)
@@ -111,6 +113,24 @@ export class BlobStorage extends Storage {
         const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
 
         return input
+    }
+
+    public getSasUrl = async (accountName: string, containerName: string, accountSharedSecret: string) => {
+
+        //  Creates a client to the BlobService using the connection string.
+        const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, new StorageSharedKeyCredential(accountName, accountSharedSecret))
+        //  Gets a reference to the container.
+        const blobContainerClient = blobServiceClient.getContainerClient(containerName);
+
+        const permissions: ContainerSASPermissions = ContainerSASPermissions.parse("rwl")
+
+        const options: ContainerGenerateSasUrlOptions = {
+            permissions: permissions,
+            expiresOn: new Date(new Date().valueOf() + (1000 * 60 * 60 * 24))
+        }
+
+        let url = await (await blobContainerClient.generateSasUrl(options)).split("?")[1]
+        return url
     }
 
     public getBuffer = async (filename: string): Promise<Buffer> => {
