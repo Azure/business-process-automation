@@ -17,15 +17,19 @@ from azure.core.credentials import AzureKeyCredential
 # Replace these with your own values, either in environment variables or directly here
 AZURE_BLOB_STORAGE_ACCOUNT = os.environ.get("AZURE_BLOB_STORAGE_ACCOUNT") or "mystorageaccount"
 AZURE_BLOB_STORAGE_CONTAINER = os.environ.get("AZURE_BLOB_STORAGE_CONTAINER") or "content"
+AZURE_BLOB_STORAGE_CONNECTION_STRING = os.environ.get("AzureWebJobsStorage") or "content"
 AZURE_SEARCH_SERVICE = os.environ.get("AZURE_SEARCH_SERVICE") or "gptkb"
 AZURE_SEARCH_INDEX = os.environ.get("AZURE_SEARCH_INDEX") or "gptkbindex"
 AZURE_SEARCH_APIKEY = os.environ.get("AZURE_SEARCH_APIKEY") or "stuff"
 AZURE_OPENAI_SERVICE = os.environ.get("AZURE_OPENAI_SERVICE") or "myopenai"
 AZURE_OPENAI_GPT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_GPT_DEPLOYMENT") or "davinci"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_CHATGPT_DEPLOYMENT") or "chat"
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") or "key"
+REDIS_PW = os.environ.get("REDIS_PW") or "pw"
+REDIS_URL = os.environ.get("REDIS_URL") or "no url"
 
 DEV = os.environ.get("DEV") or "false"
+
 KB_FIELDS_CONTENT = os.environ.get("KB_FIELDS_CONTENT") or "content"
 KB_FIELDS_CATEGORY = os.environ.get("KB_FIELDS_CATEGORY") or "category"
 KB_FIELDS_SOURCEPAGE = "filename" #os.environ.get("KB_FIELDS_SOURCEPAGE") or "sourcepage"
@@ -51,9 +55,7 @@ openai.api_key = OPENAI_API_KEY
 #     endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
 #     index_name=AZURE_SEARCH_INDEX,
 #     credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
-blob_client = BlobServiceClient(
-    account_url=f"https://{AZURE_BLOB_STORAGE_ACCOUNT}.blob.core.windows.net", 
-    credential=azure_credential)
+blob_client = BlobServiceClient.from_connection_string(AZURE_BLOB_STORAGE_CONNECTION_STRING)
 blob_container = blob_client.get_container_client(AZURE_BLOB_STORAGE_CONTAINER)
 
 # Various approaches to integrate GPT and external knowledge, most applications will use a single one of these patterns
@@ -74,18 +76,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     out = {}
     try:
         
+        
         if DEV == "false":
             req_json = req.get_json()
             req_body = req_json.get("body")
         else : 
             req_body = req.get_json()
 
+        index = ""
+        if "index" in req_body:
+            index = req_body.get("index").get("name")
+
+
         search_client = SearchClient(
         endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
-        index_name=req_body.get("index").get("name"),
+        index_name=index,
         credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
 
-        approach = ChatReadRetrieveReadApproach(search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index")) #"rrr" #req_body.get("approach")
+        approach = ChatReadRetrieveReadApproach(blob_client, search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index"), REDIS_URL, REDIS_PW) #"rrr" #req_body.get("approach")
         try:
             impl = approach #chat_approaches.get(approach)
             if not impl:

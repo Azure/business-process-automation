@@ -28,6 +28,7 @@ const Chat = () => {
     const [promptTemplate, setPromptTemplate] = useState("");
     const [retrieveCount, setRetrieveCount] = useState(3);
     const [useSemanticRanker, setUseSemanticRanker] = useState(true);
+    const [vectorSearchPipeline, setVectorSearchPipeline] = useState("");
     const [useSemanticCaptions, setUseSemanticCaptions] = useState(false);
     const [excludeCategory, setExcludeCategory] = useState("");
     const [useSuggestFollowupQuestions, setUseSuggestFollowupQuestions] = useState(false);
@@ -88,6 +89,7 @@ const Chat = () => {
                     excludeCategory: excludeCategory.length === 0 ? undefined : excludeCategory,
                     top: retrieveCount,
                     semanticRanker: useSemanticRanker,
+                    vectorSearchPipeline : vectorSearchPipeline,
                     semanticCaptions: useSemanticCaptions,
                     suggestFollowupQuestions: useSuggestFollowupQuestions
                 },
@@ -163,6 +165,10 @@ const Chat = () => {
 
         setSelectedAnswer(index);
     };
+
+    const onVectorSearchPipeline = (_ev, newValue) => {
+        setVectorSearchPipeline(newValue)
+    }
 
     return (
         <div className={styles.container}>
@@ -298,6 +304,7 @@ const Chat = () => {
                         label="Suggest follow-up questions"
                         onChange={onUseSuggestFollowupQuestionsChange}
                     />
+                    <TextField className={styles.chatSettingsSeparator} label="Vector Search Index" onChange={onVectorSearchPipeline} />
                 </Panel>
             </div>
         </div>
