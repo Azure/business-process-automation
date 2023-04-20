@@ -17,16 +17,16 @@ from azure.core.credentials import AzureKeyCredential
 # Replace these with your own values, either in environment variables or directly here
 AZURE_BLOB_STORAGE_ACCOUNT = os.environ.get("AZURE_BLOB_STORAGE_ACCOUNT") or "mystorageaccount"
 AZURE_BLOB_STORAGE_CONTAINER = os.environ.get("AZURE_BLOB_STORAGE_CONTAINER") or "content"
-AZURE_BLOB_STORAGE_CONNECTION_STRING = os.environ.get("AZURE_BLOB_STORAGE_CONNECTION_STRING") or "content"
+AZURE_BLOB_STORAGE_CONNECTION_STRING = os.environ.get("AzureWebJobsStorage") or "content"
 AZURE_SEARCH_SERVICE = os.environ.get("AZURE_SEARCH_SERVICE") or "gptkb"
 AZURE_SEARCH_INDEX = os.environ.get("AZURE_SEARCH_INDEX") or "gptkbindex"
 AZURE_SEARCH_APIKEY = os.environ.get("AZURE_SEARCH_APIKEY") or "stuff"
 AZURE_OPENAI_SERVICE = os.environ.get("AZURE_OPENAI_SERVICE") or "myopenai"
 AZURE_OPENAI_GPT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_GPT_DEPLOYMENT") or "davinci"
 AZURE_OPENAI_CHATGPT_DEPLOYMENT = os.environ.get("AZURE_OPENAI_CHATGPT_DEPLOYMENT") or "chat"
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-REDIS_PW = os.environ.get("REDIS_PW")
-REDIS_URL = os.environ.get("REDIS_URL")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") or "key"
+REDIS_PW = os.environ.get("REDIS_PW") or "pw"
+REDIS_URL = os.environ.get("REDIS_URL") or "no url"
 
 DEV = os.environ.get("DEV") or "false"
 
