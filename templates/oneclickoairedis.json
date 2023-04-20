@@ -609,7 +609,7 @@
         }
       }
     },
-        {
+    {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
       "apiVersion": "2022-12-01",
       "name": "[concat(parameters('openaiName'), '/chatgpt')]",
@@ -683,8 +683,8 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v006.zip?sv=2020-04-08&st=2023-04-17T13%3A10%3A13Z&se=2024-01-24T14%3A10%3A00Z&sr=b&sp=r&sig=Ih%2BTWPUqDBffD9AdrnAOtrMIlzP2OAKZhmB5FXgYWEM%3D"
-            },  
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v008.zip?sv=2020-04-08&st=2023-04-20T17%3A03%3A11Z&se=2023-12-28T18%3A03%3A00Z&sr=b&sp=r&sig=UIal6QGVMUbi%2FDtxc1NbTpNeWBJNnAKjoZMBfYkWn94%3D"
+            },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
@@ -729,25 +729,33 @@
               "name": "AZURE_SEARCH_INDEX",
               "value": "cosmosdb-index"
             },
-                        {
+            {
               "name": "AZURE_SEARCH_SERVICE",
               "value": "[parameters('cogSearchName')]"
             },
-                        {
+            {
               "name": "KB_FIELDS_CATEGORY",
               "value": "category"
             },
-                        {
+            {
               "name": "KB_FIELDS_CONTENT",
               "value": "aggregatedResults.ocr"
             },
-                        {
+            {
               "name": "KB_FIELDS_SOURCEPAGE",
               "value": "filename"
             },
-                        {
+            {
               "name": "OPENAI_API_KEY",
               "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
+            },
+            {
+              "name": "REDIS_URL",
+              "value": "[format('rediss://{0}:{1}',reference(resourceId('Microsoft.Cache/redisEnterprise', parameters('openaiName'))).hostName,'10000')]"
+            },
+            {
+              "name": "REDIS_PW",
+              "value": "[listKeys(resourceId('Microsoft.Cache/redisEnterprise/databases', parameters('openaiName'), 'default'), '2022-01-01').primaryKey]"
             }
           ]
         }
@@ -994,7 +1002,7 @@
         "COGSEARCH_URL": "[parameters('cogSearchUrl')]",
         "SERVICE_BUS_CONNECTION_STRING": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
         "USE_LOCAL_STORAGE": "false",
-        "HUGGINGFACE_ENDPOINT" : "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+        "HUGGINGFACE_ENDPOINT": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
       },
 
       "dependsOn": [
