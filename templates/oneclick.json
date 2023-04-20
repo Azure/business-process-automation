@@ -551,7 +551,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v006.zip?sv=2020-04-08&st=2023-04-17T13%3A10%3A13Z&se=2024-01-24T14%3A10%3A00Z&sr=b&sp=r&sig=Ih%2BTWPUqDBffD9AdrnAOtrMIlzP2OAKZhmB5FXgYWEM%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v007.zip?sv=2020-04-08&st=2023-04-20T14%3A17%3A40Z&se=2023-11-15T15%3A17%3A00Z&sr=b&sp=r&sig=MkIpxndLkDe%2BWutWk1LsWrEqqCGd%2Bl5VbcrXGeD4PH0%3D"
             },  
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
