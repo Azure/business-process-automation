@@ -76,15 +76,21 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     out = {}
     try:
         
+        
         if DEV == "false":
             req_json = req.get_json()
             req_body = req_json.get("body")
         else : 
             req_body = req.get_json()
 
+        index = ""
+        if "index" in req_body:
+            index = req_body.get("index").get("name")
+
+
         search_client = SearchClient(
         endpoint=f"https://{AZURE_SEARCH_SERVICE}.search.windows.net",
-        index_name=req_body.get("index").get("name"),
+        index_name=index,
         credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
 
         approach = ChatReadRetrieveReadApproach(blob_client, search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index"), REDIS_URL, REDIS_PW) #"rrr" #req_body.get("approach")
