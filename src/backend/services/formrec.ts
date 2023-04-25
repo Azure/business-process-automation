@@ -369,7 +369,6 @@ export class FormRec {
             "urlSource": await this._getUrl(input.filename)
         }
         const axiosResult = await axios.post(url, data, config)
-        console.log(JSON.stringify(axiosResult.data))
         input.aggregatedResults[label] = {
             location: axiosResult.headers["operation-location"],
             filename: input.filename

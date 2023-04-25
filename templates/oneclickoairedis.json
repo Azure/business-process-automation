@@ -782,7 +782,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv023.zip?sv=2020-04-08&st=2023-04-17T13%3A08%3A56Z&se=2024-01-24T14%3A08%3A00Z&sr=b&sp=r&sig=RXoIqQTi1ak48eJLU3iBSxa7FKSHwJpOoI2Pr3Bold0%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv026.zip?sv=2020-04-08&st=2023-04-25T12%3A58%3A58Z&se=2024-03-28T12%3A58%3A00Z&sr=b&sp=r&sig=GPWFc7l8OTS5yvTLoVn47Im%2FkpPg7czSt0Dt7PhKYuA%3D"
             },
             {
               "name": "OPENAI_KEY",
