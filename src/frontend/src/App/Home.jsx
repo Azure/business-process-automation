@@ -51,7 +51,7 @@ export default function Home(props) {
             |
             <Button id="VIEW_INSIGHTS" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Sample Search Application" />
             |
-            <Button id="COG_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Search Application" />
+            <Button id="COG_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Enterprise Search Demo" />
             {renderOAIOptions()}
 
             {/* </div> */}
