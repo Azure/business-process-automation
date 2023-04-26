@@ -101,32 +101,27 @@ export class TextSegmentation {
 
         const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
 
-        let segment = ""
-        let pageNumber = 1
-        let lastLine = ""
         let counter = 0
         for (const page of input.data.pages) {
-            pageNumber = page.pageNumber
+            let outText = ""
             if (page.lines) {
                 for (const line of page.lines) {
-                    segment += " " + line.content
-                    lastLine = line.content
+                    outText += " " + line.content
                 }
             } else if (page.words) {
                 for (const word of page.words) {
-                    segment += " " + word.content
-                    lastLine = word.content
+                    outText += " " + word.content
                 }
             }
-            input.aggregatedResults["textSegmentation"] = segment
+            input.aggregatedResults["textSegmentation"] = outText
             await blob.toTxt({
-                filename: `${folder}/${input.filename}_directory/${pageNumber}_${counter++}_${input.filename}`,
+                filename: `${folder}/${input.filename}_directory/${counter++}_${input.filename}`,
                 pipeline: input.pipeline,
                 type: "textSegmentation",
                 label: "textSegmentation",
                 bpaId: input.bpaId,
                 aggregatedResults: {}, //input.aggregatedResults,
-                data: segment,
+                data: outText,
                 serviceSpecificConfig: input.serviceSpecificConfig,
                 id: input.id
             })
