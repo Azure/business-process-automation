@@ -27,16 +27,20 @@ const display = (stages) => {
 
 export default function PipelinePreview(props) {
     const stages = []
-    if(props.firstStage){
-        stages.push(props.firstStage)
-    }
+
     
     if (props.stages && props.stages.length > 0) { 
+        if(props.firstStage){
+            stages.push(props.firstStage)
+        }
         for(const s of props.stages){
             stages.push(s)
         }
         return display(stages)
-    } else {
+    } else if (props.firstStage){
+        stages.push(props.firstStage)
+        return display(stages)
+    }else {
         return (<>
             <div  style={{ display: "flex", padding: "30px", flexWrap: "wrap", justifyContent: "center"}}>
                 <Text content="No configuration found"  />

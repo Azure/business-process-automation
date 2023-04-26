@@ -44,10 +44,24 @@ const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "transl
 const redactPdf = new RedactPdf(blob, blobTranslation)
 const textSegmentation = new TextSegmentation()
 
+const textSegmentationByPageService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["ocr"],
+    outputTypes: ["textSegmentation"],
+    name: "textSegmentationByPage",
+    process: textSegmentation.processByPage,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const textSegmentationService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["ocr"],
-    outputTypes: [],
+    outputTypes: ["textSegmentation"],
     name: "textSegmentation",
     process: textSegmentation.process,
     serviceSpecificConfig: {
@@ -1065,6 +1079,7 @@ export const serviceCatalog = {
     "openaiSummarize" : openaiSummarizeService,
     "openaiGeneric" : openaiGenericService,
     "openaiEmbeddings" : openaiEmbeddingsService,
-    "textSegmentation" : textSegmentationService
+    "textSegmentation" : textSegmentationService,
+    "textSegmentationByPage" : textSegmentationByPageService
 }
 
