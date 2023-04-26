@@ -14,6 +14,7 @@ import DocumentTranslationDialog from '../Components/Dialogs/DocumentTranslation
 import SpeechToTextDialog from '../Components/SpeechToText';
 import ChangeDataDialog from '../Components/Dialogs/ChangeDataDialog';
 import VideoIndexerDialog from '../Components/Dialogs/VideoIndexerDialog';
+import ToTxtByPageDialog from '../Components/Dialogs/ToTxtDialogByPage'
 import ToTxtDialog from '../Components/Dialogs/ToTxtDialog';
 import Prices from '../Components/Prices/Prices'
 import OpenAiGenericDialog from '../Components/Dialogs/OpenAiGenericDialog';
@@ -38,6 +39,7 @@ export default function Stages(props) {
     const [hideHuggingFaceDialog, setHideHuggingFaceDialog] = useState(true)
     const [hideChangeDataDialog, setHideChangeDataDialog] = useState(true)
     const [hideToTxtDialog, setHideToTxtDialog] = useState(true)
+    const [hideToTxtByPageDialog, setHideToTxtByPageDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [hideOpenAiDialog, setHideOpenAiDialog] = useState(true)
     const [hideVideoIndexerDialog, setHideVideoIndexerDialog] = useState(true)
@@ -59,27 +61,6 @@ export default function Stages(props) {
         getSC()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    // useEffect(() => {
-    //     setPrice(() => {
-    //         if (stages && stages.length > 0) {
-    //             let _price = 73 //cost of default service plan S1
-    //             let _pages = 0
-    //             if (stages[0].name === 'wav') { //best guess at audio to document conversion (1 hour = 30 pages)
-    //                 const _hours = numDocuments * ((minutesPerAudioFile) / 60)
-    //                 _pages = _hours * 30
-    //             } else {
-    //                 _pages = numDocuments * pagesPerDocument
-    //             }
-    //             for (const stage of stages) {
-    //                 _price += stage.getPrice(_pages)
-    //             }
-    //             return _price
-    //         }
-    //         return 0
-    //     })
-
-    // }, [stages, numDocuments, minutesPerAudioFile, pagesPerDocument])
 
     const onDone = async () => {
         try {
@@ -155,6 +136,9 @@ export default function Stages(props) {
         } else if (event.name === 'textSegmentation') {
             setCurrentOption(_.cloneDeep(event))
             setHideToTxtDialog(false)
+        }else if (event.name === 'textSegmentationByPage') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideToTxtByPageDialog(false)
         }else if (event.name === 'changeOutput') {
             setCurrentOption(_.cloneDeep(event))
             setHideChangeDataDialog(false)
@@ -225,6 +209,7 @@ export default function Stages(props) {
                 <SpeechToTextDialog hideDialog={hideSttDialog} setHideDialog={setHideSttDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ChangeDataDialog hideDialog={hideChangeDataDialog} setHideDialog={setHideChangeDataDialog} items={stages} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <ToTxtDialog hideDialog={hideToTxtDialog} setHideDialog={setHideToTxtDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <ToTxtByPageDialog hideDialog={hideToTxtByPageDialog} setHideDialog={setHideToTxtByPageDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <VideoIndexerDialog hideDialog={hideVideoIndexerDialog} setHideDialog={setHideVideoIndexerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <OpenAiGenericDialog hideDialog={hideOpenAiDialog} setHideDialog={setHideOpenAiDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <SpliceDocument hideDialog={hideSpliceDocumentDialog} setHideDialog={setHideSpliceDocumentDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />

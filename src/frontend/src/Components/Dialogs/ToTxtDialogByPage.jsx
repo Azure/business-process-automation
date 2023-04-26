@@ -5,14 +5,13 @@ import { Dialog, Text, TextArea } from '@fluentui/react-northstar';
 export default function ToTxtDialog(props) {
 
     // eslint-disable-next-line
-    const [container,_] = useState("documents")
+    const [container, _] = useState("documents")
     const [folder, setFolder] = useState("")
-    const [maxSegment, setMaxSegment] = useState("")
 
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { containerName : container, folderName : folder, maxSegment : maxSegment }
+        newOption.serviceSpecificConfig = { containerName : container, folderName : folder }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }
@@ -21,15 +20,11 @@ export default function ToTxtDialog(props) {
         props.setHideDialog(true)
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onFolderChange = (_, text) => {
+    // eslint-disable-next-line
+    const onFolderChange = ( ev, text) => {
         setFolder(text.value)
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onMaxSegmentChange = (_, text) => {
-        setMaxSegment(text.value)
-    }
 
     return (
         <Dialog
@@ -43,10 +38,6 @@ export default function ToTxtDialog(props) {
                             display: 'block', marginBottom: "10px"
                         }} />
                         <TextArea value={folder} onChange={onFolderChange} style={{lineHeight: "8px"}}/>
-                        <Text content="Maximum Segment (number of tokens)" style={{
-                            display: 'block', marginBottom: "10px"
-                        }} />
-                        <TextArea value={maxSegment} onChange={onMaxSegmentChange} style={{lineHeight: "8px"}}/>
                     </div>
                 </>}
             open={!props.hideDialog}

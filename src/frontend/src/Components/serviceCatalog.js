@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "textSegmentationByPage": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "ocr"
+        ],
+        "outputTypes": [
+            "textSegmentation"
+        ],
+        "image": summarize,
+        "label": "Convert OCR Output To Segmented Chunks (by page)",
+        "name": "textSegmentationByPage",
+        "serviceSpecificConfig": { },
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "textSegmentation": {
         "bpaServiceId": "abc123",
         "inputTypes": [
