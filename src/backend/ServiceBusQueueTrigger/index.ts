@@ -18,13 +18,13 @@ const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg
         context.log("Entering mqTrigger")
         await mqTrigger(context, mySbMsg, mq, db)
     } catch(err){
-        db.create(
+        db. create(
             {
                 error : err.toString(),
                 pipeline : "error"
             }
         )
-        
+
         throw err
     }
     

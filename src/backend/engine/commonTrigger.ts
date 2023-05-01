@@ -33,9 +33,6 @@ const processAsyncRequests = async (mySbMsg, db, mq) => {
     if (mySbMsg?.aggregatedResults["speechToText"]?.location) {
         const speech = new Speech(process.env.SPEECH_SUB_KEY, process.env.SPEECH_SUB_REGION, process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER);
         await speech.processAsync(mySbMsg, db, mq)
-        // } else if(mySbMsg?.aggregatedResults["textSegmentation"]?.pending == "true"){
-        //     const textSegmentation = new TextSegmentation(new ServiceBusMQ())
-        //     await textSegmentation.processAsync(mySbMsg)
     } else if (mySbMsg?.aggregatedResults["generalDocument"]?.location ||
         mySbMsg?.aggregatedResults["layout"]?.location ||
         mySbMsg?.aggregatedResults["invoice"]?.location ||

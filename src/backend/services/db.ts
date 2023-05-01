@@ -52,7 +52,9 @@ export class BlobDB extends DB {
             data.id = id
         }
         
-        delete data.aggregatedResults.buffer
+        if(data?.aggregatedResults?.buffer){
+            delete data.aggregatedResults.buffer
+        }
         
         await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `${data.pipeline}/${id}.json`)
 

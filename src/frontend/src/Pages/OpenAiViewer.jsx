@@ -34,6 +34,9 @@ export default function OpenAiViewer(props) {
         axios.get('/api/config?id=pipelines').then(_pipelines => {
             if (_pipelines) {
                 console.log('hello')
+                _pipelines.data.pipelines.push({
+                    name : "error"
+                })
                 setPipelines(_pipelines.data.pipelines)
                 // if (_pipelines.data.pipelines.length > 0) {
                 //     setSelectedPipeline(_pipelines.data.pipelines[0])
