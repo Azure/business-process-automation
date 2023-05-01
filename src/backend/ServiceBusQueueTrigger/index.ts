@@ -21,6 +21,7 @@ const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg
         db. create(
             {
                 error : err.toString(),
+                request : JSON.stringify(mySbMsg),
                 pipeline : "error"
             }
         )
