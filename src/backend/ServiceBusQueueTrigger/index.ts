@@ -7,15 +7,27 @@ import { BlobStorage } from "../services/storage";
 const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg: any): Promise<void> {
     const mq = new ServiceBusMQ()
     const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
-    if(!mySbMsg?.subject){
-        const data = await db.getByID(mySbMsg.id, mySbMsg.pipeline)
-        mySbMsg = data
-        const resultsBlob : BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, 'documents')
-        mySbMsg.aggregatedResults.buffer = await resultsBlob.getBuffer(mySbMsg.filename)
+    try{
+        if(!mySbMsg?.subject){
+            const data = await db.getByID(mySbMsg.id, mySbMsg.pipeline)
+            mySbMsg = data
+            const resultsBlob : BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, 'documents')
+            mySbMsg.aggregatedResults.buffer = await resultsBlob.getBuffer(mySbMsg.filename)
+        }
+        
+        context.log("Entering mqTrigger")
+        await mqTrigger(context, mySbMsg, mq, db)
+    } catch(err){
+        db.create(
+            {
+                error : err.toString(),
+                pipeline : "error"
+            }
+        )
+        
+        throw err
     }
     
-    context.log("Entering mqTrigger")
-    await mqTrigger(context, mySbMsg, mq, db)
 };
 
 export default serviceBusQueue;
