@@ -148,8 +148,8 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         await processAsyncRequests(mySbMsg, db, mq)
     }
     else {
-        const { bpaConfig, filename } = await getStages(mySbMsg, context, db)
-        const out = await processSyncRequests(mySbMsg, bpaConfig.stages, mq, db)
+        const stages = await getStages(mySbMsg, context, db)
+        const out = await processSyncRequests(mySbMsg, stages, mq, db)
 
         if (out['type'] !== 'async transaction') { /// Case where embeddings are pushed to redis
             await pushToRedis(out, db)
