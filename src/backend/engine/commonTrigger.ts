@@ -64,7 +64,7 @@ const processAsyncRequests = async (mySbMsg, db, mq) => {
     }
 }
 
-const getStages = async (mySbMsg, context, db) => {
+const getFileDirNames = (mySbMsg) => {
     let directoryName = ""
     let filename = ""
     if (mySbMsg?.filename) {
@@ -73,9 +73,13 @@ const getStages = async (mySbMsg, context, db) => {
     } else {
         filename = mySbMsg.subject.split("/documents/blobs/")[1]
         directoryName = filename.split('/')[0]
-
-        context.log(`Name of source doc : ${filename}`)
     }
+    return { filename: filename, directoryName: directoryName }
+}
+
+const getStages = async (mySbMsg, context, db) => {
+
+    const { filename, directoryName } = getFileDirNames(mySbMsg)
 
     const config: BpaPipelines = await db.getConfig()
     const bpaConfig: BpaConfiguration = {
@@ -106,8 +110,8 @@ const getStages = async (mySbMsg, context, db) => {
     }
 
     return {
-        bpaConfig : bpaConfig,
-        filename : filename
+        bpaConfig: bpaConfig,
+        filename: filename
     }
 }
 
@@ -144,8 +148,8 @@ export const mqTrigger = async (context: Context, mySbMsg: any, mq: MessageQueue
         await processAsyncRequests(mySbMsg, db, mq)
     }
     else {
-        const stages = await getStages(mySbMsg, context, db)
-        const out = await processSyncRequests(mySbMsg, stages, mq, db)
+        const { bpaConfig, filename } = await getStages(mySbMsg, context, db)
+        const out = await processSyncRequests(mySbMsg, bpaConfig.stages, mq, db)
 
         if (out['type'] !== 'async transaction') { /// Case where embeddings are pushed to redis
             await pushToRedis(out, db)
