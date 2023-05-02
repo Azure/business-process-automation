@@ -48,7 +48,7 @@ export class BlobDB extends DB {
             delete data.aggregatedResults.buffer
         }
         
-        await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `${data.pipeline}/${data.filename}_${new Date().getTime()}.json`)
+        await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `error/${data.pipeline}/${data.filename}_${new Date().getTime()}.json`)
 
         return data
     }
