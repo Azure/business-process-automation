@@ -132,7 +132,13 @@ Search query:
                 del blobDocument["aggregatedResults"]["openaiEmbeddings"]
                 docs.append(blobDocument)
             
-            results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["text"]) for doc in docs]
+            results = ""
+            if hasattr(doc["aggregatedResults"],"text"):
+                results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["text"]) for doc in docs]
+            elif hasattr(doc["aggregatedResults"],"ocrToText"):
+                results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["ocrToText"]) for doc in docs]
+            else:
+                results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["sttToText"]) for doc in docs]
             content = "\n".join(results)
             print('here')
 

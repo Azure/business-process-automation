@@ -530,7 +530,8 @@
       "properties": {
         "replicaCount": 1,
         "partitionCount": 1,
-        "hostingMode": "Default"
+        "hostingMode": "Default",
+        "semanticSearch": "free"
       },
       "tags": {},
       "dependsOn": []
