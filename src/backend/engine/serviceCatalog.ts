@@ -591,7 +591,7 @@ const sttToTextService : BpaService = {
 
 const sttBatchService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["wav","mp3"],
+    inputTypes: ["wav","mp3","mp4"],
     outputTypes: ["stt"],
     name: "sttBatch",
     process: speech.processBatch,
