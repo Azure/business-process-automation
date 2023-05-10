@@ -99,13 +99,13 @@ function Upload(props) {
         }
     }
 
-    const getContent = () => {
-        let count = 0
-        if (queueStatus && queueStatus.count) {
-            count = queueStatus.count
-        }
-        return `Total Document Count In Database: ${count}`
-    }
+    // const getContent = () => {
+    //     let count = 0
+    //     if (queueStatus && queueStatus.count) {
+    //         count = queueStatus.count
+    //     }
+    //     return `Total Document Count In Database: ${count}`
+    // }
 
     const tableCellStyle = { backgroundColor: "white", borderStyle: "solid", borderWidth: "1px", textAlign: "left" }
 
@@ -200,7 +200,8 @@ function Upload(props) {
                     <FileUploader handleChange={handleSplitChange} name="file" types={fileTypes} />
                 </div>
             </div>
-            <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} />
+            {/* <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} /> */}
+            <Text weight="semibold" content="Request Queue" style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} />
             {getQueueStatus()}
             {getQueuedFiles()}
         </div>

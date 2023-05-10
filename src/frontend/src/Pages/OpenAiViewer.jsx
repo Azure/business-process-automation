@@ -33,7 +33,6 @@ export default function OpenAiViewer(props) {
     useEffect(() => {
         axios.get('/api/config?id=pipelines').then(_pipelines => {
             if (_pipelines) {
-                console.log('hello')
                 _pipelines.data.pipelines.push({
                     name : "error"
                 })
