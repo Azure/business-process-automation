@@ -136,7 +136,7 @@ export default function Stages(props) {
         } else if (event.name === 'textSegmentation') {
             setCurrentOption(_.cloneDeep(event))
             setHideToTxtDialog(false)
-        }else if (event.name === 'textSegmentationByPage') {
+        }else if (event.name === 'textSegmentationByPage' || event.name === 'splitPdf') {
             setCurrentOption(_.cloneDeep(event))
             setHideToTxtByPageDialog(false)
         }else if (event.name === 'changeOutput') {

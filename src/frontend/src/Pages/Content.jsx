@@ -57,7 +57,7 @@ export default function Content(props) {
             case 'OPENAI_VIEWER':
                 setSelectedMenuItem('OPENAI_VIEWER')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
-                breadCrumbItems.push({ text: 'OpenAI Viewer', key: 'OPENAI_VIEWER' })
+                breadCrumbItems.push({ text: 'Result Viewer', key: 'OPENAI_VIEWER' })
                 break;
             case 'VECTOR_SEARCH':
                 setSelectedMenuItem('VECTOR_SEARCH')
@@ -190,7 +190,7 @@ export default function Content(props) {
                         <ChevronEndMediumIcon />
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
-                        OpenAI Viewer
+                        Result Viewer
                     </Breadcrumb.Item>
                 </>)
 
@@ -216,9 +216,9 @@ export default function Content(props) {
 
     return (
         <div className="content" >
-            <div style={{ paddingLeft: "0px", paddingTop: "50px", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
+            <div style={{ paddingLeft: "0px", paddingTop: "50px", height: "100%" ,width: "80%", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
-                {renderContent()}
+                {renderContent()}           
             </div>
         </div>
     )
