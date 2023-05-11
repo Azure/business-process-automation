@@ -1291,22 +1291,6 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getDocumentTranslatorPricing
     },
-    "cogSearch": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-           
-        ],
-        "outputTypes": [
-           
-        ],
-        "image": customClassification,
-        "label": "Cognitive Search",
-        "name": "cogSearch",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getDocumentTranslatorPricing
-    },
     "staticWebApp": {
         "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
         "bpaServiceId": "abc123",

@@ -23,7 +23,7 @@ import axios from 'axios'
 //     ReadDecomposeAsk = "rda"
 // }
 
-const Chat = () => {
+const EnterpriseSearch = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
     const [promptTemplate, setPromptTemplate] = useState("");
     const [retrieveCount, setRetrieveCount] = useState(3);
@@ -333,4 +333,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default EnterpriseSearch;
