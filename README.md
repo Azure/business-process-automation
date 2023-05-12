@@ -11,7 +11,7 @@ This accelerator provides a no code Studio for users to quickly build complex, m
 ## Deploy to Azure Instructions
 
 ### Prerequisities
-1. **Github account (Admin)**
+1. Github account (Admin)
 2. Azure Resource Group (Owner)
 3. Ensure your subscription has **Microsoft.DocumentDB enabled**  
 To confirm/enable:  
@@ -39,7 +39,6 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 ### With OpenAI and Redis Enterprise (check pricing) for Vector Search
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoairedis.json)
 
-
 ## Document Ingestion Architecture
 Once you've created a high-level Resource Group, you'll fork this repository and importing helper libraries, taking advantage of Github Actions to deploy the set of Azure Cognitive Services and manage all of the new Azure module credentials, in the background, within your newly created pipeline. After pipeline deployment, a static webapp will be created with your newly customizable POC UI for building and triggering pipelines.
 
@@ -47,23 +46,5 @@ Once you've created a high-level Resource Group, you'll fork this repository and
 *Document Ingestion High-level technical architecture*  
 
 
-## Sample Pipeline  
-A simple example pipeline for a call center mining use case is below is illustrated below. For a general call center mining use case, the Business Process Accelerator could be used to deploy a pipeline ingesting, transcribing, (+optionally translating), summarizing, and analyzing the sentiment for each call.
-Resulting Pipeline Steps [AI Service Deployed]:  
-
-1.	Transcribe audio calls [Speech Service]  
-2.	Translate to another language (optional) [Speech Service]  
-3.	Store the transcribed and translated calls [CosmosDB]  
-4.	Apply suite of text analytics offerings (e.g. text summarization, sentiment analysis, call classification) [Language Service]  
-
-The resulting deployment pipeline leverages: 
-Azure Speech Service, Azure Language Service, Azure Cosmos DB, Azure Functions
-<br/><br/>
-![](images/sample_pipeline_call_center_mining.png)  
-*Sample BPA pipeline for call center mining*   
-
-Once the pipeline is completed – this process typically takes <1 min for smaller documents and simpler pipelines – the results are found in your newly created Azure Cosmos DB, where we can quickly inspect our results.
-<br/><br/>
-![](images/sample_output_call_center_mining.png.png)  
   
  
