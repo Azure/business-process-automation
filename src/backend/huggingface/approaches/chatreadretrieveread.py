@@ -87,23 +87,12 @@ Search query:
             return "No Filename Found: "
 
     def run(self, history: list[dict], overrides: dict) -> any:
+        q = history[-1]["user"]
         use_semantic_captions = True if overrides.get("semantic_captions") else False
         top = overrides.get("top") or 3
         exclude_category = overrides.get("exclude_category") or None
         filter = "category ne '{}'".format(exclude_category.replace("'", "''")) if exclude_category else None
 
-        # STEP 1: Generate an optimized keyword search query based on the chat history and the last question
-        prompt = self.query_prompt_template.format(chat_history=self.get_chat_history_as_text(history, include_last_turn=False), question=history[-1]["user"])
-        completion = openai.Completion.create(
-            engine=self.gpt_deployment, 
-            prompt=prompt, 
-            temperature=0.0, 
-            max_tokens=32, 
-            n=1, 
-            stop=["\n"])
-        q = completion.choices[0].text
-
-        # STEP 2: Retrieve relevant documents from the search index with the GPT optimized query
         if len(overrides.get("vector_search_pipeline")) > 2:
             headers = {
                 "api-key" : OPENAI_API_KEY,
@@ -111,7 +100,7 @@ Search query:
             }
 
             url =  "https://"+os.environ.get("AZURE_OPENAI_SERVICE")+".openai.azure.com/"+"openai/deployments/"+"text-search-curie-query-001"+"/embeddings?api-version=2022-12-01"
-            requestOut = requests.post(url, json = {'input' : q}, headers=headers)
+            requestOut = requests.post(url, json = {'input' : history[-1]["user"]}, headers=headers)
             output = json.loads(requestOut.text)
             embeddings = output["data"][0]["embedding"]
 
@@ -125,18 +114,33 @@ Search query:
 
             docs = []
             for doc in searchOut.docs:
-                print(doc.id)
                 blobOut = self.blob_client.get_blob_client("results", overrides.get("vector_search_pipeline") + "/" + doc.id + ".json")
                 blobDownload = blobOut.download_blob().content_as_text()
                 blobDocument = json.loads(blobDownload)
                 del blobDocument["aggregatedResults"]["openaiEmbeddings"]
                 docs.append(blobDocument)
             
-            results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["text"]) for doc in docs]
-            content = "\n".join(results)
-            print('here')
+            results = ""
+            if len(docs) > 0:
+                if "text" in docs[0]["aggregatedResults"]:
+                    results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["text"]) for doc in docs]
+                elif "ocrToText" in docs[0]["aggregatedResults"]:
+                    results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["ocrToText"]) for doc in docs]
+                else:
+                    results = [self.sourceFile(doc) + ": " + nonewlines(doc["aggregatedResults"]["sttToText"]) for doc in docs]
+                content = "\n".join(results)
 
         else:
+            # STEP 1: Generate an optimized keyword search query based on the chat history and the last question
+            prompt = self.query_prompt_template.format(chat_history=self.get_chat_history_as_text(history, include_last_turn=False), question=history[-1]["user"])
+            completion = openai.Completion.create(
+                engine=self.gpt_deployment, 
+                prompt=prompt, 
+                temperature=0.0, 
+                max_tokens=32, 
+                n=1, 
+                stop=["\n"])
+            q = completion.choices[0].text
 
             if overrides.get("semantic_ranker"):
                 r = self.search_client.search(q, 

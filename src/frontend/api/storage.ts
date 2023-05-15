@@ -12,13 +12,20 @@ export class BlobStorage {
         this._containerName = containerName;
     }
 
+    private compareDates = (a, b) : number => {
+        const date1 = new Date(a.properties.createdOn)
+        const date2 = new Date(b.properties.createdOn)
+        return date2.getTime() - date1.getTime()
+    }
+
     public getAll = async (pipeline : string): Promise<string[]> => {
-        const out = []
+        const tempOut = []
         const blobsFlat = await this._blobContainerClient.listBlobsFlat({prefix: `${pipeline}/`})
         for await (const blob of blobsFlat){
-            out.push(blob.name)
+            tempOut.push(blob)
         }
-        return out
+        const out = tempOut.sort(this.compareDates)
+        return out.map(a => a.name)
     }
 
     public getBuffer = async (filename: string): Promise<Buffer> => {

@@ -19,6 +19,7 @@ import { OpenAI } from "../services/openai"
 import { SpliceDocument } from "../services/spliceDocument"
 import { RedactPdf } from "../services/redactPdf"
 import { TextSegmentation } from "../services/textSegmentation"
+import { SplitPdf } from "../services/splitPdf"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -43,6 +44,21 @@ const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
 const redactPdf = new RedactPdf(blob, blobTranslation)
 const textSegmentation = new TextSegmentation()
+const splitPdf = new SplitPdf()
+
+const splitPdfService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["pdf"],
+    outputTypes: ["splitPdf"],
+    name: "splitPdf",
+    process: splitPdf.process,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const textSegmentationByPageService : BpaService = {
     bpaServiceId : "abc123",
@@ -591,7 +607,7 @@ const sttToTextService : BpaService = {
 
 const sttBatchService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["wav","mp3"],
+    inputTypes: ["wav","mp3","mp4"],
     outputTypes: ["stt"],
     name: "sttBatch",
     process: speech.processBatch,
@@ -1080,6 +1096,7 @@ export const serviceCatalog = {
     "openaiGeneric" : openaiGenericService,
     "openaiEmbeddings" : openaiEmbeddingsService,
     "textSegmentation" : textSegmentationService,
-    "textSegmentationByPage" : textSegmentationByPageService
+    "textSegmentationByPage" : textSegmentationByPageService,
+    "splitPdf" : splitPdfService
 }
 

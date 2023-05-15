@@ -6,7 +6,7 @@ import axios from 'axios'
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4", "TIF","PPT","TXT","DOC","DOCX","PPTX"];
+    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4", "TIF", "PPT", "TXT", "DOC", "DOCX", "PPTX"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);
@@ -75,42 +75,10 @@ function Upload(props) {
         }
     }
 
-    const handleSplitChange = async (file) => {
-        try {
-            if (file.name) {
-                console.log(`image : ${file}`)
-                setImage(file.name);
-                console.log(image, show, showFail)
-                const body = new FormData();
-                body.append("file", file);
-                console.log("sending...")
-                const response = await fetch(`/api/splitdocuments?filename=${selectedPipelineName}/${file.name}&pipeline=${selectedPipelineName}`, {
-                    method: "POST",
-                    body
-                });
-                setShow(true)
-                console.log(` response ${JSON.stringify(response.body)}`)
-            } else {
-                setShowFail(true)
-            }
-        } catch (err) {
-            console.log(err)
-            setShowFail(true)
-        }
-    }
-
-    const getContent = () => {
-        let count = 0
-        if (queueStatus && queueStatus.count) {
-            count = queueStatus.count
-        }
-        return `Total Document Count In Database: ${count}`
-    }
-
     const tableCellStyle = { backgroundColor: "white", borderStyle: "solid", borderWidth: "1px", textAlign: "left" }
 
     const getQueuedFiles = () => {
-        
+
         if (queueStatus && queueStatus.messages.queuedFiles) {
             console.log(JSON.stringify(queueStatus.messages))
             if (queueStatus.messages.queuedFiles.length > 0) {
@@ -145,23 +113,22 @@ function Upload(props) {
     const getQueueStatus = () => {
         if (queueStatus?.messages?.queueProperties) {
             return (
-                <table style={{ marginBottom: "30px" }}>
-                    <tr>
-                        <td style={tableCellStyle}>Active</td>
-                        <td style={tableCellStyle}>Scheduled</td>
-                        <td style={tableCellStyle}>Dead Letter</td>
-                        <td style={tableCellStyle}>Transfer</td>
-                        <td style={tableCellStyle}>Transfer Dead-Letter</td>
-                    </tr>
-                    <tr>
-                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.activeMessageCount}</td>
-                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.scheduledMessageCount}</td>
-                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.deadLetterMessageCount}</td>
-                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.transferMessageCount}</td>
-                        <td style={tableCellStyle}>{queueStatus.messages.queueProperties.transferDeadLetterMessageCount}</td>
-                    </tr>
+                <>
+                    <Text weight="semibold" content="Request Queue" style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} />
+                    <table style={{ marginBottom: "30px" }}>
+                        <tr>
+                            <td style={tableCellStyle}>Active</td>
+                            <td style={tableCellStyle}>Scheduled</td>
+                            <td style={tableCellStyle}>Failed</td>
+                        </tr>
+                        <tr>
+                            <td style={tableCellStyle}>{queueStatus.messages.queueProperties.activeMessageCount}</td>
+                            <td style={tableCellStyle}>{queueStatus.messages.queueProperties.scheduledMessageCount}</td>
+                            <td style={tableCellStyle}>{queueStatus.messages.queueProperties.deadLetterMessageCount}</td>
+                        </tr>
 
-                </table>
+                    </table>
+                </>
             )
         }
 
@@ -172,20 +139,20 @@ function Upload(props) {
             <Text weight="semibold" content="Upload a document to Blob Storage" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
             <p style={{ marginBottom: "20px" }} >Before any insights can be viewed by a pattern, one or more documents must be uploaded.  The documents will be copied to Blob Storage which will trigger a Function App to process them.  The processing can take some time and the insights will not appear immediately.</p>
             <div>
-                    <div style={{ marginBottom: "10px" }}>
-                        <Text weight="semibold" content="Select A Pipeline" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
-                    </div>
-                    <Dropdown
-                        search
-                        placeholder="Select the Pipeline"
-                        label="Output"
-                        items={pipelineNames}
-                        onChange={onDropDownChange}
-                        style={{ paddingBottom: "40px" }}
-                    />
+                <div style={{ marginBottom: "10px" }}>
+                    <Text weight="semibold" content="Select A Pipeline" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
                 </div>
+                <Dropdown
+                    search
+                    placeholder="Select the Pipeline"
+                    label="Output"
+                    items={pipelineNames}
+                    onChange={onDropDownChange}
+                    style={{ paddingBottom: "40px" }}
+                />
+            </div>
             <div style={{ display: "flex", flexDirection: "row" }}>
-                
+
 
                 <div style={{ marginRight: "30px" }}>
                     <div style={{ marginBottom: "10px" }}>
@@ -193,14 +160,9 @@ function Upload(props) {
                     </div>
                     <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
                 </div>
-                <div>
-                    <div style={{ marginBottom: "10px" }}>
-                        <Text weight="semibold" content="Split Document By Page And Process" style={{ fontSize: "15px", width: "100%" }} />
-                    </div>
-                    <FileUploader handleChange={handleSplitChange} name="file" types={fileTypes} />
-                </div>
             </div>
-            <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} />
+            {/* <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} /> */}
+
             {getQueueStatus()}
             {getQueuedFiles()}
         </div>

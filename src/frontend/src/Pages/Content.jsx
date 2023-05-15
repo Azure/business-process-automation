@@ -9,7 +9,8 @@ import SelectPipeline from '../Components/SelectPipeline';
 import ViewInsights from './ViewInsights';
 import OpenAiViewer from './OpenAiViewer';
 import VectorSearch from './VectorSearch';
-import CogSearch from './chat/Chat'
+import EnterpriseSearch from './chat/Chat'
+import CogSearch from './CogSearch';
 
 export default function Content(props) {
 
@@ -42,22 +43,28 @@ export default function Content(props) {
                 breadCrumbItems.push({ text: 'Upload Documents', key: 'UPLOAD_DOCUMENTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
+            case 'COG_SEARCH':
+                setSelectedMenuItem('COG_SEARCH')
+                breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
+                breadCrumbItems.push({ text: 'Upload Documents', key: 'COG_SEARCH' })
+                setBreadCrumbItems(breadCrumbItems)
+                break
             case 'VIEW_INSIGHTS':
                 setSelectedMenuItem('VIEW_INSIGHTS')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
                 breadCrumbItems.push({ text: 'View Insights', key: 'VIEW_INSIGHTS' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
-            case 'COG_SEARCH':
-                setSelectedMenuItem('COG_SEARCH')
+            case 'ENTERPRISE_SEARCH':
+                setSelectedMenuItem('ENTERPRISE_SEARCH')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
-                breadCrumbItems.push({ text: 'Cognitive Search Demo', key: 'COG_SEARCH' })
+                breadCrumbItems.push({ text: 'Cognitive Search Demo', key: 'ENTERPRISE_SEARCH' })
                 setBreadCrumbItems(breadCrumbItems)
                 break
             case 'OPENAI_VIEWER':
                 setSelectedMenuItem('OPENAI_VIEWER')
                 breadCrumbItems.push({ text: 'Home', key: 'home', onClick: onBreadcrumbHome })
-                breadCrumbItems.push({ text: 'OpenAI Viewer', key: 'OPENAI_VIEWER' })
+                breadCrumbItems.push({ text: 'Result Viewer', key: 'OPENAI_VIEWER' })
                 break;
             case 'VECTOR_SEARCH':
                 setSelectedMenuItem('VECTOR_SEARCH')
@@ -80,14 +87,16 @@ export default function Content(props) {
                 return (<SelectPipeline theme={props.theme} onSelectContent={onSelectContent} />)
             case 'UPLOAD_DOCUMENTS':
                 return (<Upload theme={props.theme} />)
+            case 'COG_SEARCH':
+                return (<CogSearch theme={props.theme} />)
             case 'VIEW_INSIGHTS':
                 return (<ViewInsights />)
             case 'OPENAI_VIEWER':
                 return (<OpenAiViewer />)
             case 'VECTOR_SEARCH':
                 return (<VectorSearch />)
-            case 'COG_SEARCH':
-                return (<CogSearch />)
+            case 'ENTERPRISE_SEARCH':
+                return (<EnterpriseSearch />)
 
             default:
                 return (<Home />)
@@ -147,6 +156,20 @@ export default function Content(props) {
                         Ingest Documents
                     </Breadcrumb.Item>
                 </>)
+            case 'COG_SEARCH':
+                return (<>
+                    <Breadcrumb >
+                        <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
+                            <Breadcrumb.Link href="" onClick={onBreadcrumbHome}>Home</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Breadcrumb.Divider>
+                        <ChevronEndMediumIcon />
+                    </Breadcrumb.Divider>
+                    <Breadcrumb.Item>
+                        Cognitive Search
+                    </Breadcrumb.Item>
+                </>)
 
             case 'VIEW_INSIGHTS':
                 return (<>
@@ -164,7 +187,7 @@ export default function Content(props) {
                 </>)
 
 
-            case 'COG_SEARCH':
+            case 'ENTERPRISE_SEARCH':
                 return (<>
                     <Breadcrumb >
                         <Breadcrumb.Item style={{ paddingLeft: "0px" }}>
@@ -190,7 +213,7 @@ export default function Content(props) {
                         <ChevronEndMediumIcon />
                     </Breadcrumb.Divider>
                     <Breadcrumb.Item>
-                        OpenAI Viewer
+                        Result Viewer
                     </Breadcrumb.Item>
                 </>)
 
@@ -216,7 +239,7 @@ export default function Content(props) {
 
     return (
         <div className="content" >
-            <div style={{ paddingLeft: "0px", paddingTop: "50px", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
+            <div style={{ paddingLeft: "0px", paddingTop: "50px", height: "100%", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
                 {renderBreadcrumb()}
                 {renderContent()}
             </div>
