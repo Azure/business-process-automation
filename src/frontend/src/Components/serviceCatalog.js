@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "splitPdf": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "pdf"
+        ],
+        "outputTypes": [
+            "splitPdf"
+        ],
+        "image": pdf,
+        "label": "Split PDF By Page",
+        "name": "splitPdf",
+        "serviceSpecificConfig": { },
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "textSegmentationByPage": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -160,38 +175,38 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
-    "ocrContainerToText": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "ocrContainer"
-        ],
-        "outputTypes": [
-            "text"
-        ],
-        "image": ocr,
-        "label": "Convert OCR to Text (Container Version)",
-        "name": "ocrContainerToText",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
-    "tableParser": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "customFormRec",
-            "layout",
-            "generalDocument"
-        ],
-        "outputTypes": [
-            "tableParser"
-        ],
-        "image": idcard,
-        "label": "Extract Table Information for Search",
-        "name": "tableParser",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
+    // "ocrContainerToText": {
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "ocrContainer"
+    //     ],
+    //     "outputTypes": [
+    //         "text"
+    //     ],
+    //     "image": ocr,
+    //     "label": "Convert OCR to Text (Container Version)",
+    //     "name": "ocrContainerToText",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : noCharge
+    // },
+    // "tableParser": {
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "customFormRec",
+    //         "layout",
+    //         "generalDocument"
+    //     ],
+    //     "outputTypes": [
+    //         "tableParser"
+    //     ],
+    //     "image": idcard,
+    //     "label": "Extract Table Information for Search",
+    //     "name": "tableParser",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : noCharge
+    // },
     "xmlToJson": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -207,35 +222,35 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
-    "videoIndexer": {
-        "defaultTier" : "Standard Transactions",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Video Indexer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "flv",
-            "mxf",
-            "gxf",
-            "mpg",
-            "wmv",
-            "asf",
-            "avi",
-            "mp4",
-            "wav",
-            "mov",
-            "isma",
-            "ismv",
-            "mkv"
-        ],
-        "outputTypes": [
-            "videoIndexer"
-        ],
-        "image": storage,
-        "label": "Video Indexer",
-        "name": "videoIndexer",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
+    // "videoIndexer": {
+    //     "defaultTier" : "Standard Transactions",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Video Indexer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "flv",
+    //         "mxf",
+    //         "gxf",
+    //         "mpg",
+    //         "wmv",
+    //         "asf",
+    //         "avi",
+    //         "mp4",
+    //         "wav",
+    //         "mov",
+    //         "isma",
+    //         "ismv",
+    //         "mkv"
+    //     ],
+    //     "outputTypes": [
+    //         "videoIndexer"
+    //     ],
+    //     "image": storage,
+    //     "label": "Video Indexer",
+    //     "name": "videoIndexer",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : noCharge
+    // },
     "contentModeratorImage": {
         "defaultTier" : "Standard Transactions",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Content Moderator' }],
@@ -329,32 +344,32 @@ export const sc = {
     //     "serviceSpecificConfig": { "to":"es"},
     //     "serviceSpecificConfigDefaults": {}
     // },
-    "video": {
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "start"
-        ],
-        "outputTypes": [
-            "flv",
-            "mxf",
-            "gxf",
-            "mpg",
-            "wmv",
-            "asf",
-            "avi",
-            "mp4",
-            "mov",
-            "isma",
-            "ismv",
-            "mkv"
-        ],
-        "image": layoutLogo,
-        "label": "Video",
-        "name": "video",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : noCharge
-    },
+    // "video": {
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "start"
+    //     ],
+    //     "outputTypes": [
+    //         "flv",
+    //         "mxf",
+    //         "gxf",
+    //         "mpg",
+    //         "wmv",
+    //         "asf",
+    //         "avi",
+    //         "mp4",
+    //         "mov",
+    //         "isma",
+    //         "ismv",
+    //         "mkv"
+    //     ],
+    //     "image": layoutLogo,
+    //     "label": "Video",
+    //     "name": "video",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : noCharge
+    // },
     "images": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -430,69 +445,69 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
-    "ocrService": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
-        "defaultTier" : "S1 Transactions",
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf",
-            "tiff","gif","jpg","jpeg",
-            "doc","docx","ppt","pptx"
-        ],
-        "outputTypes": [
-            "ocr"
-        ],
-        "image": ocr,
-        "label": "Optical Character Recognition (OCR) Service",
-        "name": "ocr",
-        "category": "OCR",
-        "container" : false,
-        "batchMode" : false,
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getOcrPricing
-    },
-    "ocrContainerService": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
-        "defaultTier" : "S1 Transactions",
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf",
-            "tiff","gif","jpg","jpeg",
-            "doc","docx","ppt","pptx"
-        ],
-        "outputTypes": [
-            "ocrContainer"
-        ],
-        "image": ocr,
-        "label": "Optical Character Recognition (OCR) Service (Container Version)",
-        "name": "ocrContainer",
-        "category": "OCR",
-        "container" : true,
-        "batchMode" : false,
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getOcrPricing
-    },
-    "ocrContainerBatchService": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
-        "defaultTier" : "S1 Transactions",
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf",
-            "tiff","gif","jpg","jpeg",
-            "doc","docx","ppt","pptx"
-        ],
-        "outputTypes": [
-            "ocrContainer"
-        ],
-        "image": ocr,
-        "label": "Optical Character Recognition (OCR) Service (Container Version) (Batch Mode)",
-        "name": "ocrContainerBatch",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getOcrPricing
-    },
+    // "ocrService": {
+    //     "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+    //     "defaultTier" : "S1 Transactions",
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf",
+    //         "tiff","gif","jpg","jpeg",
+    //         "doc","docx","ppt","pptx"
+    //     ],
+    //     "outputTypes": [
+    //         "ocr"
+    //     ],
+    //     "image": ocr,
+    //     "label": "Optical Character Recognition (OCR) Service",
+    //     "name": "ocr",
+    //     "category": "OCR",
+    //     "container" : false,
+    //     "batchMode" : false,
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getOcrPricing
+    // },
+    // "ocrContainerService": {
+    //     "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+    //     "defaultTier" : "S1 Transactions",
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf",
+    //         "tiff","gif","jpg","jpeg",
+    //         "doc","docx","ppt","pptx"
+    //     ],
+    //     "outputTypes": [
+    //         "ocrContainer"
+    //     ],
+    //     "image": ocr,
+    //     "label": "Optical Character Recognition (OCR) Service (Container Version)",
+    //     "name": "ocrContainer",
+    //     "category": "OCR",
+    //     "container" : true,
+    //     "batchMode" : false,
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getOcrPricing
+    // },
+    // "ocrContainerBatchService": {
+    //     "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+    //     "defaultTier" : "S1 Transactions",
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf",
+    //         "tiff","gif","jpg","jpeg",
+    //         "doc","docx","ppt","pptx"
+    //     ],
+    //     "outputTypes": [
+    //         "ocrContainer"
+    //     ],
+    //     "image": ocr,
+    //     "label": "Optical Character Recognition (OCR) Service (Container Version) (Batch Mode)",
+    //     "name": "ocrContainerBatch",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getOcrPricing
+    // },
     "ocrBatchService": {
         "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
         "defaultTier" : "S1 Transactions",
@@ -531,23 +546,23 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getTranslationPricing
     },
-    "layout": {
-        "defaultTier" : "S0 Read Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "layout"
-        ],
-        "image": layoutLogo,
-        "label": "Form Recognizer Layout Service",
-        "name": "layout",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecReadPricing
-    },
+    // "layout": {
+    //     "defaultTier" : "S0 Read Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "layout"
+    //     ],
+    //     "image": layoutLogo,
+    //     "label": "Form Recognizer Layout Service",
+    //     "name": "layout",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecReadPricing
+    // },
     "layoutBatch": {
         "defaultTier" : "S0 Read Pages",
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
@@ -582,23 +597,23 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getLanguagePricing
     },
-    "extractSummary": {
-        "defaultTier" : "Standard Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "extractSummary"
-        ],
-        "image": summarize,
-        "label": "Language Studio Text Summarization",
-        "name": "extractSummary",
-        "bpaServiceId": "abc123",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getLanguagePricing
-    },
+    // "extractSummary": {
+    //     "defaultTier" : "Standard Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "extractSummary"
+    //     ],
+    //     "image": summarize,
+    //     "label": "Language Studio Text Summarization",
+    //     "name": "extractSummary",
+    //     "bpaServiceId": "abc123",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getLanguagePricing
+    // },
     "extractSummaryBatch": {
         "defaultTier" : "Standard Text Records",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
@@ -633,23 +648,23 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getLanguagePricing
     },
-    "recognizeEntities": {
-        "defaultTier" : "Standard Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "recognizeEntities"
-        ],
-        "image": ner,
-        "label": "Language Studio Named Entity Recognition",
-        "name": "recognizeEntities",
-        "bpaServiceId": "abc123",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getLanguagePricing
-    },
+    // "recognizeEntities": {
+    //     "defaultTier" : "Standard Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "recognizeEntities"
+    //     ],
+    //     "image": ner,
+    //     "label": "Language Studio Named Entity Recognition",
+    //     "name": "recognizeEntities",
+    //     "bpaServiceId": "abc123",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getLanguagePricing
+    // },
     // "sttService": {
     //     "defaultTier" : "Speech To Text",
     //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Speech' }],
@@ -703,125 +718,125 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
-    "generalDocument": {
-        "defaultTier" : "S0 Pre-built Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "generalDocument"
-        ],
-        "image": generaldoc,
-        "label": "Form Recognizer General Document Model",
-        "name": "generalDocument",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecPrebuiltPricing
-    },
-    "prebuiltInvoice": {
-        "defaultTier" : "S0 Pre-built Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "prebuiltInvoice"
-        ],
-        "image": invoice,
-        "label": "Form Recognizer Prebuilt Invoice Model",
-        "name": "prebuiltInvoice",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecPrebuiltPricing
-    },
-    "prebuiltBusinessCard": {
-        "defaultTier" : "S0 Pre-built Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "prebuiltBusinessCard"
-        ],
-        "image": businesscard,
-        "label": "Form Recognizer Prebuilt Business Card Model",
-        "name": "prebuiltBusinessCard",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecPrebuiltPricing
-    },
-    "prebuiltIdentity": {
-        "defaultTier" : "S0 Pre-built Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "prebuiltIdentity"
-        ],
-        "image": idcard,
-        "label": "Form Recognizer Prebuilt ID Model",
-        "name": "prebuiltIdentity",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecPrebuiltPricing
-    },
-    "prebuiltReceipt": {
-        "defaultTier" : "S0 Pre-built Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "prebuiltReceipt"
-        ],
-        "image": receipt,
-        "label": "Form Recognizer Receipt ID Model",
-        "name": "prebuiltReceipt",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecPrebuiltPricing
-    },
-    "prebuiltTaxW2": {
-        "defaultTier" : "S0 Pre-built Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "prebuiltTaxW2"
-        ],
-        "image": taxw2,
-        "label": "Form Recognizer Tax-W2 ID Model",
-        "name": "prebuiltTaxW2",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecPrebuiltPricing
-    },
-    "customFormRec": {
-        "defaultTier" : "S0 Custom Pages",
-        "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "pdf","tiff","tif","gif","jpg","jpeg"
-        ],
-        "outputTypes": [
-            "customFormRec"
-        ],
-        "image": customform,
-        "label": "Form Recognizer Custom Model",
-        "name": "customFormRec",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getFormRecCustomPricing
-    },
+    // "generalDocument": {
+    //     "defaultTier" : "S0 Pre-built Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "generalDocument"
+    //     ],
+    //     "image": generaldoc,
+    //     "label": "Form Recognizer General Document Model",
+    //     "name": "generalDocument",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecPrebuiltPricing
+    // },
+    // "prebuiltInvoice": {
+    //     "defaultTier" : "S0 Pre-built Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "prebuiltInvoice"
+    //     ],
+    //     "image": invoice,
+    //     "label": "Form Recognizer Prebuilt Invoice Model",
+    //     "name": "prebuiltInvoice",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecPrebuiltPricing
+    // },
+    // "prebuiltBusinessCard": {
+    //     "defaultTier" : "S0 Pre-built Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "prebuiltBusinessCard"
+    //     ],
+    //     "image": businesscard,
+    //     "label": "Form Recognizer Prebuilt Business Card Model",
+    //     "name": "prebuiltBusinessCard",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecPrebuiltPricing
+    // },
+    // "prebuiltIdentity": {
+    //     "defaultTier" : "S0 Pre-built Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "prebuiltIdentity"
+    //     ],
+    //     "image": idcard,
+    //     "label": "Form Recognizer Prebuilt ID Model",
+    //     "name": "prebuiltIdentity",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecPrebuiltPricing
+    // },
+    // "prebuiltReceipt": {
+    //     "defaultTier" : "S0 Pre-built Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "prebuiltReceipt"
+    //     ],
+    //     "image": receipt,
+    //     "label": "Form Recognizer Receipt ID Model",
+    //     "name": "prebuiltReceipt",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecPrebuiltPricing
+    // },
+    // "prebuiltTaxW2": {
+    //     "defaultTier" : "S0 Pre-built Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "prebuiltTaxW2"
+    //     ],
+    //     "image": taxw2,
+    //     "label": "Form Recognizer Tax-W2 ID Model",
+    //     "name": "prebuiltTaxW2",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecPrebuiltPricing
+    // },
+    // "customFormRec": {
+    //     "defaultTier" : "S0 Custom Pages",
+    //     "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "pdf","tiff","tif","gif","jpg","jpeg"
+    //     ],
+    //     "outputTypes": [
+    //         "customFormRec"
+    //     ],
+    //     "image": customform,
+    //     "label": "Form Recognizer Custom Model",
+    //     "name": "customFormRec",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getFormRecCustomPricing
+    // },
     "generalDocumentBatch": {
         "defaultTier" : "S0 Pre-built Pages",
         "filters":[{ key: 'serviceName', value: 'Azure Applied AI Services' },{ key: 'productName', value: 'Azure Form Recognizer' }],
@@ -941,125 +956,125 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getFormRecCustomPricing
     },
-    "recognizePiiEntities": {
-        "defaultTier" : "Standard Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "recognizePiiEntities"
-        ],
-        "image": pii,
-        "label": "Language Studio PII Model",
-        "name": "recognizePiiEntities",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getLanguagePricing
-    },
-    "extractKeyPhrases": {
-        "defaultTier" : "Standard Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "extractKeyPhrases"
-        ],
-        "image": keyphrase,
-        "label": "Language Studio Key Phrases Model",
-        "name": "extractKeyPhrases",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getLanguagePricing
-    },
-    "recognizeLinkedEntities": {
-        "defaultTier" : "Standard Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "recognizeLinkedEntities"
-        ],
-        "image": linkedEntities,
-        "label": "Language Studio Linked Entities Model",
-        "name": "recognizeLinkedEntities",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getLanguagePricing
-    },
-    "analyzeSentiment": {
-        "defaultTier" : "Standard Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "analyzeSentiment"
-        ],
-        "image": sentiment,
-        "label": "Language Studio Sentiment Model",
-        "name": "analyzeSentiment",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getLanguagePricing
-    },
-    "recognizeCustomEntities": {
-        "defaultTier" : "Standard Custom Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "recognizeCustomEntities"
-        ],
-        "image": customNER,
-        "label": "Language Studio Custom NER Model",
-        "name": "recognizeCustomEntities",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getCustomLanguagePricing
-    },
-    "singleCategoryClassify": {
-        "defaultTier" : "Standard Custom Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "singleCategoryClassify"
-        ],
-        "image": customNER,
-        "label": "Language Studio Classify Single Class Model",
-        "name": "singleCategoryClassify",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getCustomLanguagePricing
-    },
-    "multiCategoryClassify": {
-        "defaultTier" : "Standard Custom Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "multiCategoryClassify"
-        ],
-        "image": customClassification,
-        "label": "Language Studio Classify Mulitiple Classes Model",
-        "name": "multiCategoryClassify",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getCustomLanguagePricing
-    },
+    // "recognizePiiEntities": {
+    //     "defaultTier" : "Standard Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "recognizePiiEntities"
+    //     ],
+    //     "image": pii,
+    //     "label": "Language Studio PII Model",
+    //     "name": "recognizePiiEntities",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getLanguagePricing
+    // },
+    // "extractKeyPhrases": {
+    //     "defaultTier" : "Standard Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "extractKeyPhrases"
+    //     ],
+    //     "image": keyphrase,
+    //     "label": "Language Studio Key Phrases Model",
+    //     "name": "extractKeyPhrases",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getLanguagePricing
+    // },
+    // "recognizeLinkedEntities": {
+    //     "defaultTier" : "Standard Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "recognizeLinkedEntities"
+    //     ],
+    //     "image": linkedEntities,
+    //     "label": "Language Studio Linked Entities Model",
+    //     "name": "recognizeLinkedEntities",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getLanguagePricing
+    // },
+    // "analyzeSentiment": {
+    //     "defaultTier" : "Standard Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "analyzeSentiment"
+    //     ],
+    //     "image": sentiment,
+    //     "label": "Language Studio Sentiment Model",
+    //     "name": "analyzeSentiment",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getLanguagePricing
+    // },
+    // "recognizeCustomEntities": {
+    //     "defaultTier" : "Standard Custom Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "recognizeCustomEntities"
+    //     ],
+    //     "image": customNER,
+    //     "label": "Language Studio Custom NER Model",
+    //     "name": "recognizeCustomEntities",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getCustomLanguagePricing
+    // },
+    // "singleCategoryClassify": {
+    //     "defaultTier" : "Standard Custom Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "singleCategoryClassify"
+    //     ],
+    //     "image": customNER,
+    //     "label": "Language Studio Classify Single Class Model",
+    //     "name": "singleCategoryClassify",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getCustomLanguagePricing
+    // },
+    // "multiCategoryClassify": {
+    //     "defaultTier" : "Standard Custom Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "multiCategoryClassify"
+    //     ],
+    //     "image": customClassification,
+    //     "label": "Language Studio Classify Mulitiple Classes Model",
+    //     "name": "multiCategoryClassify",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getCustomLanguagePricing
+    // },
     "recognizePiiEntitiesBatch": {
         "defaultTier" : "Standard Text Records",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
@@ -1209,23 +1224,23 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
     },
-    "healthCare": {
-        "defaultTier" : "Standard Health Text Records",
-        "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-            "text"
-        ],
-        "outputTypes": [
-            "healthCareResults"
-        ],
-        "image": customClassification,
-        "label": "Health Care API",
-        "name": "healthCare",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getHealthLanguagePricing
-    },
+    // "healthCare": {
+    //     "defaultTier" : "Standard Health Text Records",
+    //     "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
+    //         "text"
+    //     ],
+    //     "outputTypes": [
+    //         "healthCareResults"
+    //     ],
+    //     "image": customClassification,
+    //     "label": "Health Care API",
+    //     "name": "healthCare",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getHealthLanguagePricing
+    // },
     "healthCareBatch": {
         "defaultTier" : "Standard Health Text Records",
         "filters" : [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
@@ -1260,54 +1275,38 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice : getDocumentTranslatorPricing
     },
-    "blobStorage": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
+    // "blobStorage": {
+    //     "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
             
-        ],
-        "outputTypes": [
+    //     ],
+    //     "outputTypes": [
            
-        ],
-        "image": customClassification,
-        "label": "Blob Storage",
-        "name": "blobStorage",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getDocumentTranslatorPricing
-    },
-    "cogSearch": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
+    //     ],
+    //     "image": customClassification,
+    //     "label": "Blob Storage",
+    //     "name": "blobStorage",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getDocumentTranslatorPricing
+    // },
+    // "staticWebApp": {
+    //     "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
+    //     "bpaServiceId": "abc123",
+    //     "inputTypes": [
            
-        ],
-        "outputTypes": [
+    //     ],
+    //     "outputTypes": [
            
-        ],
-        "image": customClassification,
-        "label": "Cognitive Search",
-        "name": "cogSearch",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getDocumentTranslatorPricing
-    },
-    "staticWebApp": {
-        "filters":[{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Translator Text' }],
-        "bpaServiceId": "abc123",
-        "inputTypes": [
-           
-        ],
-        "outputTypes": [
-           
-        ],
-        "image": customClassification,
-        "label": "Static Web App",
-        "name": "staticWebApp",
-        "serviceSpecificConfig": {},
-        "serviceSpecificConfigDefaults": {},
-        getPrice : getDocumentTranslatorPricing
-    },
+    //     ],
+    //     "image": customClassification,
+    //     "label": "Static Web App",
+    //     "name": "staticWebApp",
+    //     "serviceSpecificConfig": {},
+    //     "serviceSpecificConfigDefaults": {},
+    //     getPrice : getDocumentTranslatorPricing
+    // },
     "changeOutput": {
         "bpaServiceId": "abc123",
         "inputTypes": [

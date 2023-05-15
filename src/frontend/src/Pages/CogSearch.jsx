@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { Text, Dropdown } from '@fluentui/react-northstar';
 import { JSONTree } from 'react-json-tree';
 
-export default function OpenAiViewer(props) {
+export default function CogSearch(props) {
 
     const [pipelines, setPipelines] = useState([])
     const [selectedPipeline, setSelectedPipeline] = useState({ name: "no pipeline selected" })

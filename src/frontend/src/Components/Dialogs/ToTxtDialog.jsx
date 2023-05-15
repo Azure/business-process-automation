@@ -39,7 +39,7 @@ export default function ToTxtDialog(props) {
                     <div style={{
                             display: 'block', marginBottom: "10px"
                         }}>
-                        <Text content="Destination Folder for Output Text" style={{
+                        <Text content="Destination Pipeline for Output" style={{
                             display: 'block', marginBottom: "10px"
                         }} />
                         <TextArea value={folder} onChange={onFolderChange} style={{lineHeight: "8px"}}/>

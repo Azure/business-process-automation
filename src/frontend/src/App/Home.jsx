@@ -16,8 +16,7 @@ export default function Home(props) {
         if (isOAIDeployed) {
             return (
                 <>
-                    |
-                    <Button id="OPENAI_VIEWER" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="OpenAI Viewer" />
+                    
                     |
                     <Button id="VECTOR_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="OpenAI Vector Search Application" />
                 </>
@@ -43,15 +42,19 @@ export default function Home(props) {
 
             <Text weight="semibold" style={{ fontSize: "18px", display: "block", marginBottom: "20px" }}>What would you like to do?</Text>
             {/* <div style={{display:"flex", paddingTop : "50px"}}> */}
-            <Button id="CONFIGURE_PIPELINE" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)", paddingLeft: "0px" }} content="Configure A New Pipeline" />
+            <Button id="CONFIGURE_PIPELINE" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)", paddingLeft: "0px" }} content="Create/Update/Delete Pipelines" />
             |
             <Button id="CURRENT_PIPELINE" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="View The Existing Pipeline " />
             |
             <Button id="UPLOAD_DOCUMENTS" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Ingest Documents" />
             |
+            <Button id="COG_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Cognitive Search" />
+            |
             <Button id="VIEW_INSIGHTS" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Sample Search Application" />
             |
-            <Button id="COG_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Enterprise Search Demo" />
+            <Button id="ENTERPRISE_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Enterprise Search Demo" />
+            |
+            <Button id="OPENAI_VIEWER" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Result Viewer" />
             {renderOAIOptions()}
 
             {/* </div> */}

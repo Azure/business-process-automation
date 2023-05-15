@@ -23,7 +23,7 @@ import axios from 'axios'
 //     ReadDecomposeAsk = "rda"
 // }
 
-const Chat = () => {
+const EnterpriseSearch = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
     const [promptTemplate, setPromptTemplate] = useState("");
     const [retrieveCount, setRetrieveCount] = useState(3);
@@ -48,6 +48,7 @@ const Chat = () => {
     const [indexes, setIndexes] = useState([])
     const [selectedIndex, setSelectedIndex] = useState(null)
     //const [indexSearchDone, setIndexSearchDone] = useState(false)
+    const [pipelines, setPipelines] = useState([])
 
     useEffect(()=>{
         axios.get('/api/indexes').then(_indexes => {
@@ -58,6 +59,18 @@ const Chat = () => {
             }
         }).catch(err => {
             //setIndexSearchDone(true)
+            console.log(err)
+        })
+        axios.get('/api/config?id=pipelines').then(value => {
+            setPipelines(value.data.pipelines.filter(value => {
+                for(const stage of value.stages){
+                    if(stage.name === 'openaiEmbeddings'){
+                        return true
+                    }
+                }
+                return false
+            }))
+        }).catch(err => {
             console.log(err)
         })
     },[])
@@ -167,7 +180,7 @@ const Chat = () => {
     };
 
     const onVectorSearchPipeline = (_ev, newValue) => {
-        setVectorSearchPipeline(newValue)
+        setVectorSearchPipeline(newValue.value)
     }
 
     return (
@@ -176,14 +189,23 @@ const Chat = () => {
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                 <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
-                <div>
+                <div style={{marginRight:"10px"}}>
                     <Dropdown
                         search
-                        placeholder="Select the Index"
+                        placeholder="Select the Cognitive Search Index"
                         label="Output"
                         items={indexes.map(sc => sc.name)}
                         onChange={onIndexChange}
 
+                    />
+                </div>
+                <div>
+                    <Dropdown
+                        search
+                        placeholder="Select the Vector Embedding Index"
+                        label="Output"
+                        items={pipelines.map(sc => sc.name)}
+                        onChange={onVectorSearchPipeline}
                     />
                 </div>
 
@@ -304,11 +326,11 @@ const Chat = () => {
                         label="Suggest follow-up questions"
                         onChange={onUseSuggestFollowupQuestionsChange}
                     />
-                    <TextField className={styles.chatSettingsSeparator} label="Vector Search Index" onChange={onVectorSearchPipeline} />
+                    {/* <TextField className={styles.chatSettingsSeparator} label="Vector Search Index" onChange={onVectorSearchPipeline} /> */}
                 </Panel>
             </div>
         </div>
     );
 };
 
-export default Chat;
+export default EnterpriseSearch;

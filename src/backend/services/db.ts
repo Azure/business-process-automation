@@ -42,6 +42,17 @@ export class BlobDB extends DB {
         //await this._client.connect()
     }
 
+    public createError = async (data: any): Promise<any> => {
+        
+        if(data?.aggregatedResults?.buffer){
+            delete data.aggregatedResults.buffer
+        }
+        
+        await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `error/${data.pipeline}/${data.filename}_${new Date().getTime()}.json`)
+
+        return data
+    }
+
     public create = async (data: any): Promise<any> => {
 
         let id : string
@@ -52,7 +63,9 @@ export class BlobDB extends DB {
             data.id = id
         }
         
-        delete data.aggregatedResults.buffer
+        if(data?.aggregatedResults?.buffer){
+            delete data.aggregatedResults.buffer
+        }
         
         await this._resultsClient.upload(Buffer.from(JSON.stringify(data)), `${data.pipeline}/${id}.json`)
 
