@@ -58,7 +58,7 @@ export const sc = {
     "textSegmentation": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "ocr"
+            "ocr","text"
         ],
         "outputTypes": [
             "textSegmentation"
