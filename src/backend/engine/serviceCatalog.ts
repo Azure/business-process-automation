@@ -62,7 +62,7 @@ const splitPdfService : BpaService = {
 
 const textSegmentationByPageService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["ocr","txt"],
+    inputTypes: ["ocr"],
     outputTypes: ["textSegmentation"],
     name: "textSegmentationByPage",
     process: textSegmentation.processByPage,
@@ -76,7 +76,7 @@ const textSegmentationByPageService : BpaService = {
 
 const textSegmentationService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["ocr"],
+    inputTypes: ["ocr","text"],
     outputTypes: ["textSegmentation"],
     name: "textSegmentation",
     process: textSegmentation.process,
