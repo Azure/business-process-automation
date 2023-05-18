@@ -28,9 +28,10 @@ Each source has a name followed by colon and the actual information, always incl
 Sources:
 {sources}
 
-If the question is about the overall sentiment of the topic, use the Count and Sentiment below to answer the question.  Count represents the total number of results that were returned for the query.  Sentiment represents the overall sentiment of a result.  The JSON gives the Sentiment for all results returned in this query.
+Count represents the total number of results that were returned for the query.  
 Count:
 {count}
+{facet_prompt}
 Facets:
 {facets}
 <|im_end|>
@@ -134,7 +135,8 @@ Facets:
 
         else:
             # STEP 1: Generate an optimized keyword search query based on the chat history and the last question
-            prompt = self.query_prompt_template.format(facet_prompt="",chat_history=self.get_chat_history_as_text(history, include_last_turn=False), question=history[-1]["user"])
+
+            prompt = self.query_prompt_template.format(facet_prompt=overrides.get("facetQueryTermsTemplate") or "",chat_history=self.get_chat_history_as_text(history, include_last_turn=False), question=history[-1]["user"])
             completion = openai.Completion.create(
                 engine=self.gpt_deployment, 
                 prompt=prompt, 
@@ -171,7 +173,7 @@ Facets:
         # Allow client to replace the entire prompt, or to inject into the exiting prompt using >>>
         prompt_override = overrides.get("prompt_template")
         if prompt_override is None:
-            prompt = self.prompt_prefix.format(count=count, facets=facets,injected_prompt="", sources=content, chat_history=self.get_chat_history_as_text(history), follow_up_questions_prompt=follow_up_questions_prompt)
+            prompt = self.prompt_prefix.format(count=count,facet_prompt=overrides.get("facetTemplate") or "", facets=facets,injected_prompt="", sources=content, chat_history=self.get_chat_history_as_text(history), follow_up_questions_prompt=follow_up_questions_prompt)
         elif prompt_override.startswith(">>>"):
             prompt = self.prompt_prefix.format(injected_prompt=prompt_override[3:] + "\n", sources=content, chat_history=self.get_chat_history_as_text(history), follow_up_questions_prompt=follow_up_questions_prompt)
         else:
