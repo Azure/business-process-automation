@@ -7,9 +7,10 @@ import openai
 from azure.identity import DefaultAzureCredential
 from azure.search.documents import SearchClient
 from approaches.retrievethenread import RetrieveThenReadApproach
-from approaches.readretrieveread import ReadRetrieveReadApproach
-from approaches.readdecomposeask import ReadDecomposeAsk
-from approaches.chatreadretrieveread import ChatReadRetrieveReadApproach
+from approaches.chataggregate import ChatAggregateApproach
+#from approaches.readretrieveread import ReadRetrieveReadApproach
+# from approaches.readdecomposeask import ReadDecomposeAsk
+# from approaches.chatreadretrieveread import ChatReadRetrieveReadApproach
 from azure.storage.blob import BlobServiceClient
 from azure.core.credentials import AzureKeyCredential
 
@@ -93,7 +94,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         index_name=index,
         credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
 
-        approach = ChatReadRetrieveReadApproach(blob_client, search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index"), REDIS_URL, REDIS_PW) #"rrr" #req_body.get("approach")
+        approach = ChatAggregateApproach(blob_client, search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index"), REDIS_URL, REDIS_PW) #"rrr" #req_body.get("approach")
         try:
             impl = approach #chat_approaches.get(approach)
             if not impl:
