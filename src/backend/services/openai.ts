@@ -74,7 +74,8 @@ export class OpenAI {
         let openAiInput = JSON.parse(prompt)
         openAiInput.prompt = openAiInput.prompt.replace("${document}", truncatedString)
 
-        const out = await axios.post(url, openAiInput, config)
+        let out = await axios.post(url, openAiInput, config)
+        out.data.sourcePrompt = openAiInput.prompt
         const results = input.aggregatedResults
         if(results?.openaiGeneric){
             results["openaiGeneric"].push(out.data)
