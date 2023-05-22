@@ -123,7 +123,7 @@ export default function OpenAiViewer(props) {
                         {(docData?.aggregatedResults?.ocrToText) ? docData.aggregatedResults.ocrToText.slice(0,700)+"..." : ""}
                         {(docData?.aggregatedResults?.sttToText) ? docData.aggregatedResults.sttToText.slice(0,700)+"..." : ""}
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
-                            {(docData?.aggregatedResults?.openaiGeneric?.choices[0].text) ? docData.aggregatedResults.openaiGeneric.choices[0].text : ""}
+                            {(docData?.aggregatedResults?.openaiGeneric) ? docData.aggregatedResults.openaiGeneric.map(v => v.choices[0].text) : ""}
                         </div>
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
                             {(docData?.aggregatedResults?.openaiSummarize?.choices[0].text) ? docData.aggregatedResults.openaiSummarize.choices[0].text : ""}
