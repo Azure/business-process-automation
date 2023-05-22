@@ -76,7 +76,7 @@ export class OpenAI {
 
         const out = await axios.post(url, openAiInput, config)
         const results = input.aggregatedResults
-        if(results?.openaiEmbeddings){
+        if(results?.openaiGeneric){
             results["openaiGeneric"].push(out.data)
         } else{
             results["openaiGeneric"] = [out.data]
