@@ -76,7 +76,11 @@ export class OpenAI {
 
         const out = await axios.post(url, openAiInput, config)
         const results = input.aggregatedResults
-        results["openaiGeneric"] = out.data
+        if(results?.openaiEmbeddings){
+            results["openaiGeneric"].push(out.data)
+        } else{
+            results["openaiGeneric"] = [out.data]
+        }
         input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiGeneric" })
         const result: BpaServiceObject = {
             data: out.data,
@@ -158,13 +162,8 @@ export class OpenAI {
 
         const out = await axios.post(url, openAiInput, config)
         const results = input.aggregatedResults
-        if(results?.openaiEmbeddings){
-            results["openaiEmbeddings"].push(out.data)
-        } else{
-            results["openaiEmbeddings"] = [out.data]
-        }
+        results["openaiEmbeddings"] = out.data
         input.resultsIndexes.push({ index: index, name: "openaiEmbeddings", type: "openaiEmbeddings" })
-        
         const result: BpaServiceObject = {
             data: out.data,
             type: 'openaiEmbeddings',
@@ -177,5 +176,6 @@ export class OpenAI {
             id: input.id
         }
         return result
+
     }
 }
