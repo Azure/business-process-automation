@@ -9,6 +9,9 @@ import os
 from approaches.retrievers.cogsearchretriever import CogSearchRetriever
 from approaches.retrievers.vectorretriever import VectorRetriever
 
+os.environ["OPENAI_API_TYPE"] = "azure"
+os.environ["OPENAI_API_VERSION"] = "2022-12-01"
+os.environ["OPENAI_API_BASE"] = "https://"+os.environ["AZURE_OPENAI_SERVICE"]+".openai.azure.com"
 
 class CustomApproach(Approach):
     def __init__(self, index: any):
@@ -35,6 +38,7 @@ class CustomApproach(Approach):
             agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True)
 
             out = agent({"input":q})
+            return {"data_points": out["input"], "answer": out["output"], "thoughts": out["intermediate_steps"]}
         else:
 
             retriever = CogSearchRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
@@ -51,4 +55,4 @@ class CustomApproach(Approach):
             agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True)
 
             out = agent({"input":q})
-        return {"data_points": out["input"], "answer": out["output"], "thoughts": out["intermediate_steps"]}
+            return {"data_points": out["input"], "answer": out["output"], "thoughts": out["intermediate_steps"]}
