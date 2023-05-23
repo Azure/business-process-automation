@@ -95,7 +95,8 @@ Facets:
         top = overrides.get("top") or 3
         exclude_category = overrides.get("exclude_category") or None
         filter = "category ne '{}'".format(exclude_category.replace("'", "''")) if exclude_category else None
-
+        facets = ""
+        count = ""
         if len(overrides.get("vector_search_pipeline")) > 2:
             headers = {
                 "api-key" : OPENAI_API_KEY,
@@ -166,8 +167,8 @@ Facets:
             else:
                 results = [self.sourceFile(doc) + ": " + nonewlines(self.getText(self.index.get("searchableFields"), doc)) for doc in r]
             content = "\n".join(results)
-        facets = json.dumps(r.get_facets())
-        count = r.get_count()
+            facets = json.dumps(r.get_facets())
+            count = r.get_count()
         follow_up_questions_prompt = self.follow_up_questions_prompt_content if overrides.get("suggest_followup_questions") else ""
         
         # Allow client to replace the entire prompt, or to inject into the exiting prompt using >>>
