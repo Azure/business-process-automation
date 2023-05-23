@@ -4,6 +4,7 @@ from langchain.agents import AgentType, initialize_agent
 from langchain.chains import RetrievalQA
 from langchain.tools import Tool
 from langchain.llms import OpenAI
+import json
 
 import os
 from approaches.retrievers.cogsearchretriever import CogSearchRetriever
@@ -55,4 +56,4 @@ class CustomApproach(Approach):
             agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True)
 
             out = agent({"input":q})
-            return {"data_points": out["input"], "answer": out["output"], "thoughts": out["intermediate_steps"]}
+            return {"data_points": out["input"], "answer": out["output"], "thoughts": f"Searched for:<br>{q}<br><br><br>" + json.dumps(out["intermediate_steps"]).replace('\n', '<br>')}
