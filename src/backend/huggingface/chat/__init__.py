@@ -3,6 +3,7 @@ import json
 
 import os
 import logging
+from approaches.custom import CustomApproach
 import openai
 from azure.identity import DefaultAzureCredential
 from azure.search.documents import SearchClient
@@ -94,7 +95,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         index_name=index,
         credential=AzureKeyCredential(AZURE_SEARCH_APIKEY))
 
-        approach = ChatAggregateApproach(blob_client, search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index"), REDIS_URL, REDIS_PW) #"rrr" #req_body.get("approach")
+        approach = CustomApproach(req_body.get("index"))
+        #approach = ChatAggregateApproach(blob_client, search_client, AZURE_OPENAI_CHATGPT_DEPLOYMENT, AZURE_OPENAI_GPT_DEPLOYMENT, KB_FIELDS_SOURCEPAGE, KB_FIELDS_CONTENT, req_body.get("index"), REDIS_URL, REDIS_PW) #"rrr" #req_body.get("approach")
         try:
             impl = approach #chat_approaches.get(approach)
             if not impl:
