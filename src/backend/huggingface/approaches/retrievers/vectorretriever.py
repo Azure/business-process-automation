@@ -52,7 +52,7 @@ class VectorRetriever(BaseRetriever):
         r = redis.Redis.from_url(url = os.environ["REDIS_URL"], password=os.environ["REDIS_PW"])
         query = "(@pipeline:"+self.index+")=>[KNN "+self.top+" @v $BLOB AS dist]"
         redisQuery = Query(query).return_field("dist").sort_by("dist").dialect(2)
-        searchOut = r.ft("bpaindexfiltercurie2").search(redisQuery, query_params={"BLOB": np_vector.tobytes() })
+        searchOut = r.ft("bpaindexfilterada").search(redisQuery, query_params={"BLOB": np_vector.tobytes() })
         docs = []
         for doc in searchOut.docs:
             blobOut = blob_client.get_blob_client("results", self.index + "/" + doc.id + ".json")

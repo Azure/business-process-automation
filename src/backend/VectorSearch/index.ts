@@ -17,7 +17,7 @@ const vectorSearchTrigger: AzureFunction = async function (context: Context, req
         const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_TEXT)
         //get embeddings
         const embeddings = await openaiSearchQuery.getEmbeddings(query)
-        results = await redis.query("bpaindexfiltercurie2", embeddings.data[0].embedding, '10', pipeline)
+        results = await redis.query("bpaindexfilterada", embeddings.data[0].embedding, '10', pipeline)
         if (results.documents.length > 0) {
             const topDocument = await db.getByID(results.documents[0].id, pipeline)
             let prompt = "Answer the question using only the text coming after the <TEXT> field.  Keep the answers short and to the point.  If the answer does not exist within the text, say 'I don't know'. \n "

@@ -110,7 +110,7 @@ Search query:
             r = redis.Redis.from_url(url = self.redis_url, password=self.redis_pw)
             query = "(@pipeline:"+overrides.get("vector_search_pipeline")+")=>[KNN "+ str(overrides.get("top")) +" @v $BLOB AS dist]"
             redisQuery = Query(query).return_field("dist").sort_by("dist").dialect(2)
-            searchOut = r.ft("bpaindexfiltercurie2").search(redisQuery, query_params={"BLOB": np_vector.tobytes() })
+            searchOut = r.ft("bpaindexfilterada").search(redisQuery, query_params={"BLOB": np_vector.tobytes() })
 
             docs = []
             for doc in searchOut.docs:
