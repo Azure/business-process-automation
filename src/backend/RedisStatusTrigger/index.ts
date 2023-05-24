@@ -8,7 +8,7 @@ const redisStatusTrigger: AzureFunction = async function (context: Context, req:
         await redis.connect()
         if(req.query.command && req.query.command === 'flush'){
             await redis.flushall()
-            await redis.createIndex("bpaindex", 4096)
+            await redis.createIndex("bpaindex", 1024)
         }
         const results = await redis.getKeys()
         

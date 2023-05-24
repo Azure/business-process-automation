@@ -6,7 +6,7 @@ from typing import List
 import json
 import os
 
-class CogSearchRetriever(BaseRetriever):
+class CogSearchFacetsRetriever(BaseRetriever):
     def __init__(self, index : str, searchables, top : int ):
        self.index = index
        self.searchables = searchables
@@ -17,12 +17,10 @@ class CogSearchRetriever(BaseRetriever):
             index_name=self.index.get("name"),
             credential=AzureKeyCredential(os.environ["AZURE_SEARCH_APIKEY"]))
         
-        r = search_client.search(query, top=self.top)
-        docs = []
-        for doc in r:
-            doc["source"] = doc["filename"]
-            text = self.nonewlines(self.getText(self.searchables, doc))
-            docs.append(Document(page_content=text,metadata=doc))
+        r = search_client.search(query, top=self.top, facets=self.index.get("facetableFields"), include_total_count=True)
+        facets = json.dumps(r.get_facets())
+        count = r.get_count()
+        docs = [Document(page_content="Total number of results returned: "+str(count)+" \n JSON structure that gives the sentiment data." + facets,metadata=r.get_facets())]
     
         return docs
     

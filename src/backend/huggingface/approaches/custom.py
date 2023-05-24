@@ -1,4 +1,5 @@
 from approaches.approach import Approach
+from approaches.retrievers.cogsearchfacetsretriever import CogSearchFacetsRetriever
 
 from langchain.agents import AgentType, initialize_agent
 from langchain.chains import RetrievalQA
@@ -16,7 +17,6 @@ os.environ["OPENAI_API_BASE"] = "https://"+os.environ["AZURE_OPENAI_SERVICE"]+".
 
 class CustomApproach(Approach):
     def __init__(self, index: any):
-
         self.index = index
 
     def run(self, history: list[dict], overrides: dict) -> any:
@@ -24,36 +24,31 @@ class CustomApproach(Approach):
         llm = OpenAI(temperature=0.0,
         deployment_id=os.environ.get("AZURE_OPENAI_GPT_DEPLOYMENT"), batch_size=3)
 
-        if len(overrides.get("vector_search_pipeline")) > 2:
+        tools = []
+        if len(overrides.get("vector_search_pipeline")) > 2: 
             vector_retriever = VectorRetriever(overrides.get("vector_search_pipeline"), str(overrides.get("top")))
             qa_vector = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
-
-            tools = [
-                Tool(
+            tools.append(Tool(
                     name = "Vector Search",
                     func=qa_vector.run,
                     description="useful for when you need to answer questions."
-                ),
-            ]
-
-            agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True)
-
-            out = agent({"input":q})
-            return {"data_points": out["input"], "answer": out["output"], "thoughts": out["intermediate_steps"]}
+                ))
         else:
-
             retriever = CogSearchRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
             qa = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=retriever)
-
-            tools = [
-                Tool(
+            retriever_facets = CogSearchFacetsRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
+            qa_facets = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever_facets)
+            tools.append(Tool(
                     name = "Cognitive Search",
                     func=qa.run,
                     description="useful for when you need to answer questions"
-                ),
-            ]
+                ))
+            tools.append(Tool(
+                    name = "Cognitive Search Facets",
+                    func=qa_facets.run,
+                    description="useful to get sentiment data for the results of a query"
+                ))
 
-            agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True)
-
-            out = agent({"input":q})
-            return {"data_points": out["input"], "answer": out["output"], "thoughts": f"Searched for:<br>{q}<br><br><br>" + json.dumps(out["intermediate_steps"]).replace('\n', '<br>')}
+        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True,max_iterations=3)
+        out = agent({"input":q})
+        return {"data_points": out["input"], "answer": out["output"], "thoughts": f"Searched for:<br>{q}<br><br><br>" + json.dumps(out["intermediate_steps"]).replace('\n', '<br>')}

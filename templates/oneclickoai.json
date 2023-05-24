@@ -557,14 +557,14 @@
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
       "apiVersion": "2022-12-01",
-      "name": "[concat(parameters('openaiName'), '/text-search-curie-doc-001')]",
+      "name": "[concat(parameters('openaiName'), '/text-search-ada-doc-001')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
       ],
       "properties": {
         "model": {
           "format": "OpenAI",
-          "name": "text-search-curie-doc-001",
+          "name": "text-search-ada-doc-001",
           "version": "1"
         },
         "scaleSettings": {
@@ -575,15 +575,15 @@
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
       "apiVersion": "2022-12-01",
-      "name": "[concat(parameters('openaiName'), '/text-search-curie-query-001')]",
+      "name": "[concat(parameters('openaiName'), '/text-search-ada-query-001')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-doc-001')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-ada-doc-001')]"
       ],
       "properties": {
         "model": {
           "format": "OpenAI",
-          "name": "text-search-curie-query-001",
+          "name": "text-search-ada-query-001",
           "version": "1"
         },
         "scaleSettings": {
@@ -597,7 +597,7 @@
       "name": "[concat(parameters('openaiName'), '/text-davinci-002')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-curie-query-001')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-ada-query-001')]"
       ],
       "properties": {
         "model": {
@@ -752,11 +752,11 @@
             },
             {
               "name": "OPENAI_DEPLOYMENT_SEARCH_DOC",
-              "value": "text-search-curie-doc-001"
+              "value": "text-search-ada-doc-001"
             },
             {
               "name": "OPENAI_DEPLOYMENT_SEARCH_QUERY",
-              "value": "text-search-curie-query-001"
+              "value": "text-search-ada-query-001"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -929,8 +929,8 @@
         "OPENAI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]",
         "OPENAI_ENDPOINT": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]",
         "OPENAI_DEPLOYMENT_TEXT": "text-davinci-002",
-        "OPENAI_DEPLOYMENT_SEARCH_DOC": "text-search-curie-doc-001",
-        "OPENAI_DEPLOYMENT_SEARCH_QUERY": "text-search-curie-query-001",
+        "OPENAI_DEPLOYMENT_SEARCH_DOC": "text-search-ada-doc-001",
+        "OPENAI_DEPLOYMENT_SEARCH_QUERY": "text-search-ada-query-001",
         "COSMOS_DB_CONNECTION_STRING": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]",
         "COSMOS_DB_DB": "[parameters('cosmosDbName')]",
         "COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
