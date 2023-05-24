@@ -542,9 +542,9 @@
     },
     {
       "type": "Microsoft.CognitiveServices/accounts",
-      "apiVersion": "2022-12-01",
+      "apiVersion": "2022-03-01",
       "name": "[parameters('openaiName')]",
-      "location": "eastus",
+      "location": "westeurope",
       "sku": {
         "name": "S0"
       },

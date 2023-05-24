@@ -542,9 +542,9 @@
     },
     {
       "type": "Microsoft.CognitiveServices/accounts",
-      "apiVersion": "2022-12-01",
+      "apiVersion": "2022-03-01",
       "name": "[parameters('openaiName')]",
-      "location": "eastus",
+      "location": "westeurope",
       "sku": {
         "name": "S0"
       },
@@ -556,7 +556,7 @@
     },
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
-      "apiVersion": "2022-12-01",
+      "apiVersion": "2022-03-01",
       "name": "[concat(parameters('openaiName'), '/text-search-ada-doc-001')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
@@ -574,7 +574,7 @@
     },
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
-      "apiVersion": "2022-12-01",
+      "apiVersion": "2022-03-01",
       "name": "[concat(parameters('openaiName'), '/text-search-ada-query-001')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
@@ -593,7 +593,7 @@
     },
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
-      "apiVersion": "2022-12-01",
+      "apiVersion": "2022-03-01",
       "name": "[concat(parameters('openaiName'), '/text-davinci-002')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
@@ -602,7 +602,7 @@
       "properties": {
         "model": {
           "format": "OpenAI",
-          "name": "text-davinci-002",
+          "name": "text-davinci-003",
           "version": "1"
         },
         "scaleSettings": {
@@ -612,7 +612,7 @@
     },
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
-      "apiVersion": "2022-12-01",
+      "apiVersion": "2022-03-01",
       "name": "[concat(parameters('openaiName'), '/chatgpt')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
