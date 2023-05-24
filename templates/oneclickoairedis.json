@@ -544,7 +544,7 @@
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2022-12-01",
       "name": "[parameters('openaiName')]",
-      "location": "southcentralus",
+      "location": "eastus",
       "sku": {
         "name": "S0"
       },
