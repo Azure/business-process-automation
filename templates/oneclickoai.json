@@ -594,7 +594,7 @@
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
       "apiVersion": "2022-12-01",
-      "name": "[concat(parameters('openaiName'), '/text-davinci-002')]",
+      "name": "[concat(parameters('openaiName'), '/text-davinci-003')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
         "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-ada-query-001')]"
@@ -602,7 +602,7 @@
       "properties": {
         "model": {
           "format": "OpenAI",
-          "name": "text-davinci-002",
+          "name": "text-davinci-003",
           "version": "1"
         },
         "scaleSettings": {
@@ -616,7 +616,7 @@
       "name": "[concat(parameters('openaiName'), '/chatgpt')]",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-davinci-002')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-davinci-003')]"
       ],
       "properties": {
         "model": {
@@ -677,7 +677,7 @@
             },
             {
               "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
-              "value": "text-davinci-002"
+              "value": "text-davinci-003"
             },
             {
               "name": "AZURE_OPENAI_SERVICE",
@@ -748,7 +748,7 @@
             },
             {
               "name": "OPENAI_DEPLOYMENT_TEXT",
-              "value": "text-davinci-002"
+              "value": "text-davinci-003"
             },
             {
               "name": "OPENAI_DEPLOYMENT_SEARCH_DOC",
@@ -928,7 +928,7 @@
       "properties": {
         "OPENAI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]",
         "OPENAI_ENDPOINT": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]",
-        "OPENAI_DEPLOYMENT_TEXT": "text-davinci-002",
+        "OPENAI_DEPLOYMENT_TEXT": "text-davinci-003",
         "OPENAI_DEPLOYMENT_SEARCH_DOC": "text-search-ada-doc-001",
         "OPENAI_DEPLOYMENT_SEARCH_QUERY": "text-search-ada-query-001",
         "COSMOS_DB_CONNECTION_STRING": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]",

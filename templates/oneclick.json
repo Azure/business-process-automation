@@ -580,11 +580,11 @@
             },
             {
               "name": "AZURE_OPENAI_CHATGPT_DEPLOYMENT",
-              "value": "text-davinci-002"
+              "value": "text-davinci-003"
             },
             {
               "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
-              "value": "text-davinci-002"
+              "value": "text-davinci-003"
             },
             {
               "name": "AZURE_OPENAI_SERVICE",
