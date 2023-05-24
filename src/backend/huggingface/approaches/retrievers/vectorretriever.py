@@ -35,14 +35,13 @@ class VectorRetriever(BaseRetriever):
     
     def get_relevant_documents(self, queryString: str) -> List[Document]:
         blob_client = BlobServiceClient.from_connection_string(os.environ["AzureWebJobsStorage"])
-        blob_container = blob_client.get_container_client("results")
 
         headers = {
             "api-key" : os.environ["OPENAI_API_KEY"],
             "Content-Type" : "application/json"
         }
 
-        url =  "https://" + os.environ["AZURE_OPENAI_SERVICE"]+".openai.azure.com/openai/deployments/"+"text-search-curie-query-001"+"/embeddings?api-version=2022-12-01"
+        url =  "https://" + os.environ["AZURE_OPENAI_SERVICE"]+".openai.azure.com/openai/deployments/"+"text-search-ada-query-001"+"/embeddings?api-version=2022-12-01"
         requestOut = requests.post(url, json = {'input' : queryString}, headers=headers)
         output = json.loads(requestOut.text)
         embeddings = output["data"][0]["embedding"]
