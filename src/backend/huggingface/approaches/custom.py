@@ -72,4 +72,4 @@ class CustomApproach(Approach):
         agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True,max_iterations=3)
         out = agent({"input":q})
         thoughts, data_points = self.get_thought_string(out["intermediate_steps"])
-        return {"data_points": data_points, "answer": out["output"], "thoughts": thoughts}
+        return {"data_points": [], "answer": out["output"], "thoughts": thoughts}
