@@ -19,6 +19,26 @@ class CustomApproach(Approach):
     def __init__(self, index: any):
         self.index = index
 
+    def get_thought_string(self, intermediate_steps):
+        thoughts = ""
+        data_points = []
+        try:
+            
+            for i in intermediate_steps:
+                for j in i:
+                    if isinstance(j, str):
+                        data_points.append("<br> Observation: " +step + "</br>")
+                        thoughts = thoughts + "<br> Observation: " +step + "</br>"
+                    else :
+                        for step in j:
+                            if isinstance(step, str):
+                                data_points.append("<br> " +step + "</br>")
+                                thoughts = thoughts + "<br> " +step + "</br>"
+                  
+        except:
+            thoughts = ""
+        return thoughts, data_points
+
     def run(self, history: list[dict], overrides: dict) -> any:
         q = history[-1]["user"]
         llm = OpenAI(temperature=0.0,
@@ -36,19 +56,20 @@ class CustomApproach(Approach):
         else:
             retriever = CogSearchRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
             qa = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=retriever)
-            retriever_facets = CogSearchFacetsRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
-            qa_facets = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever_facets)
+            # retriever_facets = CogSearchFacetsRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
+            # qa_facets = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever_facets)
             tools.append(Tool(
                     name = "Cognitive Search",
                     func=qa.run,
                     description="useful for when you need to answer questions"
                 ))
-            tools.append(Tool(
-                    name = "Cognitive Search Facets",
-                    func=qa_facets.run,
-                    description="useful to get sentiment data for the results of a query"
-                ))
+            # tools.append(Tool(
+            #         name = "Cognitive Search Facets",
+            #         func=qa_facets.run,
+            #         description="useful to get sentiment data for the results of a query"
+            #     ))
 
         agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True,max_iterations=3)
         out = agent({"input":q})
-        return {"data_points": out["input"], "answer": out["output"], "thoughts": f"Searched for:<br>{q}<br><br><br>" + json.dumps(out["intermediate_steps"]).replace('\n', '<br>')}
+        thoughts, data_points = self.get_thought_string(out["intermediate_steps"])
+        return {"data_points": data_points, "answer": out["output"], "thoughts": thoughts}
