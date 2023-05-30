@@ -118,7 +118,7 @@ class CustomApproach(Approach):
         Current Question:
         {q}
 
-        Generate a detailed question that uses the information in the Chat History to remove any ambiguity.
+        Generate a detailed question that uses the information in the Chat History to remove any ambiguity.   The questions should be in the context of the Ferrari 458.  Add all additional entities to the search that will find the correct page within the user manual.
         """
         prompt = PromptTemplate(
             input_variables=["history","q"],
@@ -130,14 +130,14 @@ class CustomApproach(Approach):
         
        
         tools = []
-        tools.append(Tool( 
-                    name = "Lookup",
-                    func=lookup,
-                    description="useful for when you need to lookup terms",
-                    return_direct=True
-                ))
+        # tools.append(Tool( 
+        #             name = "Lookup",
+        #             func=lookup,
+        #             description="useful for when you need to lookup terms",
+        #             return_direct=True
+        #         ))
         if len(overrides.get("vector_search_pipeline")) > 2: 
-            vector_retriever = VectorRetriever(overrides.get("vector_search_pipeline"), str(overrides.get("top")), history)
+            vector_retriever = VectorRetriever(overrides.get("vector_search_pipeline"), str(overrides.get("top")))
             qa = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
             tools.append(Tool( 
                     name = "Search",
@@ -145,7 +145,7 @@ class CustomApproach(Approach):
                     description="useful for when you need to search for information in documents",
                     return_direct=True
                 ))
-            agent = initialize_agent(tools, llm, agent=AgentType.REACT_DOCSTORE, verbose=True ,return_intermediate_steps=True)
+            #agent = initialize_agent(tools, llm, agent=AgentType.REACT_DOCSTORE, verbose=True ,return_intermediate_steps=True)
             # qa_vector = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
             # tools.append(Tool(
             #         name = "Vector Search",
@@ -171,8 +171,8 @@ class CustomApproach(Approach):
         
         
 
-        #agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True, max_iterations=3, memory=memory, input_variables=["sources", "chat_history", "input"])
-        out = agent({"input" : my_new_prompt})
+        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True, max_iterations=3, input_variables=["sources", "chat_history", "input"])
+        out = agent({"input" : q})
         
 
         thoughts, data_points = self.get_thought_string(out["intermediate_steps"])

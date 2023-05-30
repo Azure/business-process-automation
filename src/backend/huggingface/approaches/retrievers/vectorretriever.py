@@ -9,10 +9,9 @@ from typing import List
 import os
 
 class VectorRetriever(BaseRetriever):
-    def __init__(self, index : str, top : int, history : any ):
+    def __init__(self, index : str, top : int ):
        self.index = index
        self.top = top
-       self.history = history
 
     def nonewlines(self, s: str) -> str:
         return s.replace('\n', ' ').replace('\r', ' ')
