@@ -176,4 +176,4 @@ class CustomApproach(Approach):
         
 
         thoughts, data_points = self.get_thought_string(out["intermediate_steps"])
-        return {"data_points": [], "answer": out, "thoughts": thoughts}
+        return {"data_points": [], "answer": out["output"], "thoughts": thoughts}
