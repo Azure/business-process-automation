@@ -9,9 +9,10 @@ from typing import List
 import os
 
 class VectorRetriever(BaseRetriever):
-    def __init__(self, index : str, top : int ):
+    def __init__(self, index : str, top : int, history : any ):
        self.index = index
        self.top = top
+       self.history = history
 
     def nonewlines(self, s: str) -> str:
         return s.replace('\n', ' ').replace('\r', ' ')
@@ -59,7 +60,7 @@ class VectorRetriever(BaseRetriever):
             blobDocument = json.loads(blobDownload)
             del blobDocument["aggregatedResults"]["openaiEmbeddings"]
             blobDocument["source"] = blobDocument["filename"]
-            docs.append(Document(page_content=self.nonewlines(self.getText(["aggregatedResults/text"], blobDocument)),metadata=blobDocument))
+            docs.append(Document(page_content=self.nonewlines("["+ blobDocument["filename"] +"]"+self.getText(["aggregatedResults/text"], blobDocument)),metadata=blobDocument))
         return docs
         
 
