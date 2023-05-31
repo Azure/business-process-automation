@@ -552,7 +552,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v010.zip?sv=2021-10-04&st=2023-05-15T17%3A03%3A40Z&se=2024-03-21T17%3A03%3A00Z&sr=b&sp=r&sig=Y%2FS4IxUo5%2BexSWvtbF2LgaOCPXyDfN4ZS1t3NfG29Ds%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v012.zip?sv=2021-10-04&st=2023-05-31T17%3A28%3A30Z&se=2024-04-18T17%3A28%3A00Z&sr=b&sp=r&sig=RC7DsOnq6zgmLHy36Ym6UfimmmE9pPMVsxyI04GIGOQ%3D"
             },  
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -580,11 +580,11 @@
             },
             {
               "name": "AZURE_OPENAI_CHATGPT_DEPLOYMENT",
-              "value": "text-davinci-002"
+              "value": "text-davinci-003"
             },
             {
               "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
-              "value": "text-davinci-002"
+              "value": "text-davinci-003"
             },
             {
               "name": "AZURE_OPENAI_SERVICE",
@@ -643,7 +643,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv028.zip?sv=2021-10-04&st=2023-05-15T17%3A02%3A04Z&se=2024-04-25T17%3A02%3A00Z&sr=b&sp=r&sig=FGBIJoEz1X6UhGZrbO0fMc674OvkkB2eUiK0XZCpboA%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv031.zip?sv=2021-10-04&st=2023-05-31T17%3A26%3A22Z&se=2024-03-14T17%3A26%3A00Z&sr=b&sp=r&sig=IBWFAGWvXlGyzTmelH0AjR5bjneERhRL8r%2FIclEYBKQ%3D"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",

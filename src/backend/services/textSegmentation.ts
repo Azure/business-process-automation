@@ -10,6 +10,10 @@ export class TextSegmentation {
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
+        if(!input?.data?.pages){
+            return await this.processText(input, index)
+        }
+
         const maxSegment: number = Number(input.serviceSpecificConfig.maxSegment)
         const container: string = input.serviceSpecificConfig.containerName
         const folder: string = input.serviceSpecificConfig.folderName
@@ -140,4 +144,58 @@ export class TextSegmentation {
             id: input.id
         }
     }
+
+
+    public processText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        const maxSegment: number = Number(input.serviceSpecificConfig.maxSegment)
+        const container: string = input.serviceSpecificConfig.containerName
+        const folder: string = input.serviceSpecificConfig.folderName
+
+        const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
+
+        const words = input.data.split(" ")
+
+        const segments = []
+        let current = ""
+        for(const word of words){
+            current += word + " "
+            if(current.length > maxSegment){
+                segments.push(current)
+                current = ""
+            }
+        }
+        segments.push(current)
+
+        let counter = 0
+        for(const segment of segments){
+            input.aggregatedResults["textSegmentation"] = { pageNumber: "na", text: segment }
+            input.resultsIndexes.push({ index: index, name: "textSegmentation", type: "textSegmentation" })
+            await blob.toTxt({
+                filename: `${folder}/${counter++}_${input.filename}`,
+                pipeline: input.pipeline,
+                type: "textSegmentation",
+                label: "textSegmentation",
+                bpaId: input.bpaId,
+                aggregatedResults: {}, //input.aggregatedResults,
+                data: segment,
+                serviceSpecificConfig: { containerName: "documents" },
+                id: input.id
+            })
+        }
+
+        return {
+            data: "",
+            label: "textSegmentation",
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            type: "textSegmentation",
+            aggregatedResults: {}, //input.aggregatedResults,
+            resultsIndexes: [], //input.resultsIndexes,
+            index: index,
+            id: input.id
+        }
+    }
+
 }

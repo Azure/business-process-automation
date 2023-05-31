@@ -18,10 +18,10 @@
       "autoComplete" : true
     },
     "serviceBus": {
-      "prefetchCount": 10,
+      "prefetchCount": 2,
       "messageHandlerOptions": {
         "autoComplete": true,
-        "maxConcurrentCalls": 10,
+        "maxConcurrentCalls": 2,
         "maxAutoRenewDuration": "00:05:00"
       },
       "batchOptions": {
