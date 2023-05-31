@@ -4,7 +4,7 @@ from approaches.chains.custom import CustomChain
 from approaches.retrievers.cogsearchfacetsretriever import CogSearchFacetsRetriever
 
 from langchain.agents import AgentType, initialize_agent, AgentOutputParser
-from langchain.chains import RetrievalQA
+from langchain.chains import RetrievalQA, RetrievalQAWithSourcesChain
 from langchain.tools import Tool
 from langchain.llms import OpenAI
 from langchain.memory import ConversationBufferMemory
@@ -111,22 +111,22 @@ class CustomApproach(Approach):
             return input
         
         q = history[-1]["user"]
-        template=""" 
-        Chat History:
-        {history}
+        # template=""" 
+        # Chat History:
+        # {history}
 
-        Current Question:
-        {q}
+        # Current Question:
+        # {q}
 
-        Generate a detailed question that uses the information in the Chat History to remove any ambiguity.   The questions should be in the context of the Ferrari 458.  Add all additional entities to the search that will find the correct page within the user manual.
-        """
-        prompt = PromptTemplate(
-            input_variables=["history","q"],
-            template=template,
-        )
-        prompt_string = prompt.format(history=self.get_history_string(history), q=q)
+        # Generate a detailed question that uses the information in the Chat History to remove any ambiguity.   The questions should be in the context of the Ferrari 458.  Add all additional entities to the search that will find the correct page within the user manual.
+        # """
+        # prompt = PromptTemplate(
+        #     input_variables=["history","q"],
+        #     template=template,
+        # )
+        # prompt_string = prompt.format(history=self.get_history_string(history), q=q)
 
-        my_new_prompt = llm(prompt_string)
+        # my_new_prompt = llm(prompt_string)
         
        
         tools = []
@@ -138,7 +138,7 @@ class CustomApproach(Approach):
         #         ))
         if len(overrides.get("vector_search_pipeline")) > 2: 
             vector_retriever = VectorRetriever(overrides.get("vector_search_pipeline"), str(overrides.get("top")))
-            qa = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
+            qa = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
             tools.append(Tool( 
                     name = "Search",
                     func=qa.run,
@@ -154,7 +154,7 @@ class CustomApproach(Approach):
             #     ))
         else:
             retriever = CogSearchRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
-            qa = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=retriever, return_intermediate_steps=True)
+            qa = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, chain_type="refine", retriever=retriever)
             # retriever_facets = CogSearchFacetsRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
             # qa_facets = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever_facets)
             tools.append(Tool(
@@ -169,11 +169,11 @@ class CustomApproach(Approach):
             #     ))
 
         
+        out = qa({"question" : q})
+
+        # agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True, max_iterations=3, input_variables=["sources", "chat_history", "input"])
+        # out = agent({"input" : q})
         
 
-        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_intermediate_steps=True, max_iterations=3, input_variables=["sources", "chat_history", "input"])
-        out = agent({"input" : q})
-        
-
-        thoughts, data_points = self.get_thought_string(out["intermediate_steps"])
-        return {"data_points": [], "answer": out["output"], "thoughts": thoughts}
+        #thoughts, data_points = self.get_thought_string(out["intermediate_steps"])
+        return {"data_points": [], "answer": out["answer"], "thoughts": "Thought logging disabled"}

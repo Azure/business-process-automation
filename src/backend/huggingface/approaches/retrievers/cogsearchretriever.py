@@ -22,7 +22,7 @@ class CogSearchRetriever(BaseRetriever):
         for doc in r:
             doc["source"] = doc["filename"]
             text = self.nonewlines(self.getText(self.searchables, doc))
-            docs.append(Document(page_content=text,metadata=doc))
+            docs.append(Document(page_content=text, metadata={"source":doc["filename"]}))
     
         return docs
     
