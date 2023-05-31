@@ -32,7 +32,7 @@ export class Speech {
         let out = ""
         if(input.data && input.data[0]){
             for(const r of input.data){
-                out += `channel : ${r.channel} speaker : ${r.speaker} text: ${r.nBest[0].display} `
+                out += `speaker : ${r.speaker} text: ${r.nBest[0].display} \n`
             }
         }
 

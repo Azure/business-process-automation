@@ -76,7 +76,7 @@ const textSegmentationByPageService : BpaService = {
 
 const textSegmentationService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["ocr"],
+    inputTypes: ["ocr","text","txt"],
     outputTypes: ["textSegmentation"],
     name: "textSegmentation",
     process: textSegmentation.process,
@@ -118,7 +118,7 @@ const spliceDocumentService : BpaService = {
 
 const openaiEmbeddingsService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["openaiEmbeddings"],
     name: "openaiEmbeddings",
     process: openaiSearchDoc.processEmbeddings,
@@ -132,7 +132,7 @@ const openaiEmbeddingsService : BpaService = {
 
 const openaiGenericService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["openaiGeneric"],
     name: "openaiGeneric",
     process: openaiText.processGeneric,
@@ -146,7 +146,7 @@ const openaiGenericService : BpaService = {
 
 const openaiSummarizeService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["openaiSummarize"],
     name: "openaiSummarize",
     process: openaiText.process,
@@ -255,7 +255,7 @@ const contentModeratorImageService : BpaService = {
 
 const contentModeratorTextService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["contentModeratorText"],
     name: "contentModeratorText",
     process: contentModerator.text,
@@ -269,7 +269,7 @@ const contentModeratorTextService : BpaService = {
 
 const toTxtService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["text"],
     name: "totxt",
     process: blob.toTxt,
@@ -307,7 +307,7 @@ const changeOutputService : BpaService = {
 
 const automlNerService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["automlNer"],
     name: "automlNer",
     process: automlNer.process,
@@ -321,7 +321,7 @@ const automlNerService : BpaService = {
 
 const translateService : BpaService = {
     bpaServiceId : "abc123",
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["text"],
     name: "translate",
     process: translate.translate,
@@ -698,7 +698,7 @@ const summaryToText : BpaService = {
 }
 
 const extractSummaryBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["extractSummary"],
     name: "extractSummaryBatch",
     bpaServiceId: "abc123",
@@ -712,7 +712,7 @@ const extractSummaryBatch : BpaService = {
 }
 
 const analyzeSentimentBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["analyzeSentiment"],
     name: "analyzeSentimentBatch",
     bpaServiceId: "abc123",
@@ -726,7 +726,7 @@ const analyzeSentimentBatch : BpaService = {
 }
 
 const extractKeyPhrasesBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["extractKeyPhrases"],
     name: "extractKeyPhrasesBatch",
     bpaServiceId: "abc123",
@@ -739,7 +739,7 @@ const extractKeyPhrasesBatch : BpaService = {
     }
 }
 const multiCategoryClassifyBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["multiCategoryClassify"],
     name: "multiCategoryClassifyBatch",
     bpaServiceId: "abc123",
@@ -752,7 +752,7 @@ const multiCategoryClassifyBatch : BpaService = {
     }
 }
 const recognizeCustomEntitiesBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizeCustomEntities"],
     name: "recognizeCustomEntitiesBatch",
     bpaServiceId: "abc123",
@@ -765,7 +765,7 @@ const recognizeCustomEntitiesBatch : BpaService = {
     }
 }
 const recognizeEntitiesBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizeEntities"],
     name: "recognizeEntitiesBatch",
     bpaServiceId: "abc123",
@@ -779,7 +779,7 @@ const recognizeEntitiesBatch : BpaService = {
 }
 
 const recognizeLinkedEntitiesBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizeLinkedEntities"],
     name: "recognizeLinkedEntitiesBatch",
     bpaServiceId: "abc123",
@@ -793,7 +793,7 @@ const recognizeLinkedEntitiesBatch : BpaService = {
 }
 
 const recognizePiiEntitiesBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizePiiEntities"],
     name: "recognizePiiEntitiesBatch",
     bpaServiceId: "abc123",
@@ -807,7 +807,7 @@ const recognizePiiEntitiesBatch : BpaService = {
 }
 
 const singleCategoryClassifyBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["singleCategoryClassify"],
     name: "singleCategoryClassifyBatch",
     bpaServiceId: "abc123",
@@ -821,7 +821,7 @@ const singleCategoryClassifyBatch : BpaService = {
 }
 
 const healthCareServiceBatch : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["healthCareResults"],
     name: "healthCareBatch",
     bpaServiceId: "abc123",
@@ -835,7 +835,7 @@ const healthCareServiceBatch : BpaService = {
 }
 
 const extractSummary : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["extractSummary"],
     name: "extractSummary",
     bpaServiceId: "abc123",
@@ -849,7 +849,7 @@ const extractSummary : BpaService = {
 }
 
 const analyzeSentiment : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["analyzeSentiment"],
     name: "analyzeSentiment",
     bpaServiceId: "abc123",
@@ -863,7 +863,7 @@ const analyzeSentiment : BpaService = {
 }
 
 const extractKeyPhrases : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["extractKeyPhrases"],
     name: "extractKeyPhrases",
     bpaServiceId: "abc123",
@@ -876,7 +876,7 @@ const extractKeyPhrases : BpaService = {
     }
 }
 const multiCategoryClassify : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["multiCategoryClassify"],
     name: "multiCategoryClassify",
     bpaServiceId: "abc123",
@@ -889,7 +889,7 @@ const multiCategoryClassify : BpaService = {
     }
 }
 const recognizeCustomEntities : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizeCustomEntities"],
     name: "recognizeCustomEntities",
     bpaServiceId: "abc123",
@@ -902,7 +902,7 @@ const recognizeCustomEntities : BpaService = {
     }
 }
 const recognizeEntities : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizeEntities"],
     name: "recognizeEntities",
     bpaServiceId: "abc123",
@@ -916,7 +916,7 @@ const recognizeEntities : BpaService = {
 }
 
 const recognizeLinkedEntities : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizeLinkedEntities"],
     name: "recognizeLinkedEntities",
     bpaServiceId: "abc123",
@@ -930,7 +930,7 @@ const recognizeLinkedEntities : BpaService = {
 }
 
 const recognizePiiEntities : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["recognizePiiEntities"],
     name: "recognizePiiEntities",
     bpaServiceId: "abc123",
@@ -944,7 +944,7 @@ const recognizePiiEntities : BpaService = {
 }
 
 const singleCategoryClassify : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["singleCategoryClassify"],
     name: "singleCategoryClassify",
     bpaServiceId: "abc123",
@@ -958,7 +958,7 @@ const singleCategoryClassify : BpaService = {
 }
 
 const healthCareService : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["healthCareResults"],
     name: "healthCare",
     bpaServiceId: "abc123",
@@ -972,7 +972,7 @@ const healthCareService : BpaService = {
 }
 
 const preprocessService : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["preprocess"],
     name: "preprocess",
     bpaServiceId: "abc123",
@@ -986,7 +986,7 @@ const preprocessService : BpaService = {
 }
 
 const huggingFaceNER : BpaService = {
-    inputTypes: ["text"],
+    inputTypes: ["text","txt"],
     outputTypes: ["huggingFaceNER"],
     name: "huggingFaceNER",
     bpaServiceId: "abc123",

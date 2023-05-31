@@ -49,7 +49,7 @@ export const sc = {
             "textSegmentation"
         ],
         "image": summarize,
-        "label": "Convert OCR Output To Segmented Chunks (by page)",
+        "label": "Convert Text Output To Segmented Chunks (by page)",
         "name": "textSegmentationByPage",
         "serviceSpecificConfig": { },
         "serviceSpecificConfigDefaults": {},
@@ -58,13 +58,13 @@ export const sc = {
     "textSegmentation": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "ocr"
+            "ocr","text"
         ],
         "outputTypes": [
             "textSegmentation"
         ],
         "image": summarize,
-        "label": "Convert OCR Output To Segmented Chunks",
+        "label": "Convert Text Output To Segmented Chunks",
         "name": "textSegmentation",
         "serviceSpecificConfig": { chunkSize : 1000 },
         "serviceSpecificConfigDefaults": {},
