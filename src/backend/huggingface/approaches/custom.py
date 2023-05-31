@@ -160,7 +160,8 @@ class CustomApproach(Approach):
             tools.append(Tool(
                     name = "Cognitive Search",
                     func=qa.run,
-                    description="useful for when you need to answer questions"
+                    description="useful for when you need to answer questions",
+                    return_direct=True
                 ))
             # tools.append(Tool(
             #         name = "Cognitive Search Facets",
