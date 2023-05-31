@@ -177,4 +177,4 @@ class CustomApproach(Approach):
         
 
         #thoughts, data_points = self.get_thought_string(out["intermediate_steps"])
-        return {"data_points": [], "answer": out["answer"], "thoughts": "Thought logging disabled"}
+        return {"data_points": [], "answer": out["answer"], "thoughts": "Thought logging disabled."}
