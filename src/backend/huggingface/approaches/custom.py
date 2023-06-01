@@ -139,12 +139,12 @@ class CustomApproach(Approach):
         if len(overrides.get("vector_search_pipeline")) > 2: 
             vector_retriever = VectorRetriever(overrides.get("vector_search_pipeline"), str(overrides.get("top")))
             qa = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
-            tools.append(Tool( 
-                    name = "Search",
-                    func=qa.run,
-                    description="useful for when you need to search for information in documents",
-                    return_direct=True
-                ))
+            # tools.append(Tool( 
+            #         name = "Search",
+            #         func=qa.run,
+            #         description="useful for when you need to search for information in documents",
+            #         return_direct=True
+            #     ))
             #agent = initialize_agent(tools, llm, agent=AgentType.REACT_DOCSTORE, verbose=True ,return_intermediate_steps=True)
             # qa_vector = RetrievalQA.from_chain_type(llm=llm, chain_type="refine", retriever=vector_retriever)
             # tools.append(Tool(
@@ -157,12 +157,12 @@ class CustomApproach(Approach):
             qa = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, chain_type="refine", retriever=retriever)
             # retriever_facets = CogSearchFacetsRetriever(self.index,self.index.get("searchableFields"), overrides.get("top"))
             # qa_facets = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever_facets)
-            tools.append(Tool(
-                    name = "Cognitive Search",
-                    func=qa.run,
-                    description="useful for when you need to answer questions",
-                    return_direct=True
-                ))
+            # tools.append(Tool(
+            #         name = "Cognitive Search",
+            #         func=qa.run,
+            #         description="useful for when you need to answer questions",
+            #         return_direct=True
+            #     ))
             # tools.append(Tool(
             #         name = "Cognitive Search Facets",
             #         func=qa_facets.run,
