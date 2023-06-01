@@ -55,6 +55,10 @@
       "type": "string",
       "defaultValue": "[format('https://{0}.search.windows.net', parameters('projectName'))]"
     },
+    "oaiRegion": {
+      "type": "string",
+      "defaultValue": "westeurope"
+    },
     "docTranslatorAccountName": {
       "type": "string",
       "defaultValue": "[format('doctranslator{0}', parameters('projectName'))]"
@@ -544,7 +548,7 @@
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2022-03-01",
       "name": "[parameters('openaiName')]",
-      "location": "westeurope",
+      "location": "[parameters('oaiRegion')]",
       "sku": {
         "name": "S0"
       },
@@ -557,47 +561,9 @@
     {
       "type": "Microsoft.CognitiveServices/accounts/deployments",
       "apiVersion": "2022-12-01",
-      "name": "[concat(parameters('openaiName'), '/text-search-ada-doc-001')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
-      ],
-      "properties": {
-        "model": {
-          "format": "OpenAI",
-          "name": "text-search-ada-doc-001",
-          "version": "1"
-        },
-        "scaleSettings": {
-          "scaleType": "Standard"
-        }
-      }
-    },
-    {
-      "type": "Microsoft.CognitiveServices/accounts/deployments",
-      "apiVersion": "2022-12-01",
-      "name": "[concat(parameters('openaiName'), '/text-search-ada-query-001')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-ada-doc-001')]"
-      ],
-      "properties": {
-        "model": {
-          "format": "OpenAI",
-          "name": "text-search-ada-query-001",
-          "version": "1"
-        },
-        "scaleSettings": {
-          "scaleType": "Standard"
-        }
-      }
-    },
-    {
-      "type": "Microsoft.CognitiveServices/accounts/deployments",
-      "apiVersion": "2022-12-01",
       "name": "[concat(parameters('openaiName'), '/text-davinci-003')]",
       "dependsOn": [
-        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-search-ada-query-001')]"
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
       ],
       "properties": {
         "model": {

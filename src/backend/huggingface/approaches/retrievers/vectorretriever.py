@@ -59,7 +59,7 @@ class VectorRetriever(BaseRetriever):
             blobDocument = json.loads(blobDownload)
             del blobDocument["aggregatedResults"]["openaiEmbeddings"]
             blobDocument["source"] = blobDocument["filename"]
-            docs.append(Document(page_content=self.nonewlines("["+ blobDocument["filename"] +"]"+self.getText(["aggregatedResults/text"], blobDocument)),metadata={"source":blobDocument["filename"]}))
+            docs.append(Document(page_content=self.nonewlines("["+ blobDocument["filename"] +"]"+self.getText(["aggregatedResults/text"], blobDocument)),metadata={"sources":blobDocument["filename"]}))
         return docs
         
 
