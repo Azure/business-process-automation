@@ -52,5 +52,7 @@ jobs:
         with:
           app-name: 'bpaprivatetest39webapp2'
           slot-name: 'Production'
+          app_location: "src/frontend" # App source code path
+          api_location: "src/frontend/api" # Api source code path - optional
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_66507E699A4F4AAD9F4843BCE358F6C9 }}
           package: .
