@@ -20,8 +20,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '18.x'
-      - working-directory: ./src/frontend
+      
       - name: npm install, build, and test
+        working-directory: ./src/frontend
         run: |
           npm install
           yarn run build --if-present
