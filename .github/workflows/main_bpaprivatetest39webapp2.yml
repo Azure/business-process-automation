@@ -24,6 +24,7 @@ jobs:
       - name: npm install, build, and test
         working-directory: ./src/frontend
         run: |
+          ls
           npm install
           yarn run build --if-present
       
