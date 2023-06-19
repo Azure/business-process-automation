@@ -20,14 +20,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '18.x'
-
+      - working-directory: ./src/frontend
       - name: npm install, build, and test
         run: |
-          cd src
-          cd frontend
           npm install
-          npm run build --if-present
-          npm run test --if-present
+          yarn run build --if-present
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
