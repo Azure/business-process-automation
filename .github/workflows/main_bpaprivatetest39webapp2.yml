@@ -45,6 +45,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
+          app_location: "src/frontend" # App source code path
+          api_location: "src/frontend/api" # Api source code path - optional
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
