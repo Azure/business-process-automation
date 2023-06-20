@@ -40,17 +40,17 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         }
 
     }else {
-        try{
+        //try{
             const result = await db.getConfig()
             context.res = {
                 body : result
             }
-        } catch(err){
-            context.log(err)
-            context.res = {
-                body: err
-            }
-        }
+        //} catch(err){
+        //    context.log(err)
+        //    context.res = {
+        //        body: err
+        //    }
+        //}
         
     }
 };
