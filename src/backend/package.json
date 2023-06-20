@@ -10,6 +10,7 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
+    "http-status-enum": "^1.0.2",
     "@azure/ai-form-recognizer": "^4.0.0-alpha.20220825.2",
     "@azure/ai-text-analytics": "^6.0.0-alpha.20220627.1",
     "@azure/cognitiveservices-computervision": "^8.2.0",
