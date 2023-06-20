@@ -41,7 +41,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     }else {
         //try{
-            const result = await db.getConfig()
+            const db2 = new BlobDB(process.env.BLOB_STORAGE_CONNECTION_STRING, "", 'config')
+
+            const result = await db2.getConfig()
             context.res = {
                 body : result
             }
