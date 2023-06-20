@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 */values.yaml
 src/deploy/helm/values.yaml
+templates/privatedeploy.json
