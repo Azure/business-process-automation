@@ -17,7 +17,7 @@ import { VideoIndexer } from "../services/videoIndexer"
 import { TableParser } from "../services/tableParser"
 import { OpenAI } from "../services/openai"
 import { SpliceDocument } from "../services/spliceDocument"
-import { RedactPdf } from "../services/redactPdf"
+//import { RedactPdf } from "../services/redactPdf"
 import { TextSegmentation } from "../services/textSegmentation"
 import { SplitPdf } from "../services/splitPdf"
 
@@ -42,7 +42,7 @@ const openaiText = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KE
 const openaiSearchDoc = new OpenAI(process.env.OPENAI_ENDPOINT, process.env.OPENAI_KEY, process.env.OPENAI_DEPLOYMENT_SEARCH_DOC)
 const splicedDocument = new SpliceDocument(blob)
 const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "translated-documents")
-const redactPdf = new RedactPdf(blob, blobTranslation)
+//const redactPdf = new RedactPdf(blob, blobTranslation)
 const textSegmentation = new TextSegmentation()
 const splitPdf = new SplitPdf()
 
@@ -88,19 +88,19 @@ const textSegmentationService : BpaService = {
     }
 }
 
-const redactPdfService : BpaService = {
-    bpaServiceId : "abc123",
-    inputTypes: ["recognizePiiEntities"],
-    outputTypes: ["redactPdf"],
-    name: "redactPdf",
-    process: redactPdf.process,
-    serviceSpecificConfig: {
+// const redactPdfService : BpaService = {
+//     bpaServiceId : "abc123",
+//     inputTypes: ["recognizePiiEntities"],
+//     outputTypes: ["redactPdf"],
+//     name: "redactPdf",
+//     process: redactPdf.process,
+//     serviceSpecificConfig: {
         
-    },
-    serviceSpecificConfigDefaults: {
+//     },
+//     serviceSpecificConfigDefaults: {
 
-    }
-}
+//     }
+// }
 
 const spliceDocumentService : BpaService = {
     bpaServiceId : "abc123",
@@ -1031,7 +1031,7 @@ const xmlToJsonService : BpaService = {
 
 export const serviceCatalog = {
     // "copy" : copyService,
-    "redactPdf" : redactPdfService,
+    //"redactPdf" : redactPdfService,
     "spliceDocument" : spliceDocumentService,
     "simplifyInvoice" : simplifyInvoiceService,
     "ocrService" : ocrService, 

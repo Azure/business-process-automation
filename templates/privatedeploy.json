@@ -1,0 +1,1458 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "_generator": {
+            "name": "bicep",
+            "version": "0.4.1272.37030",
+            "templateHash": "11981101088601813818"
+        }
+    },
+    "parameters": {
+        "repositoryToken": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "repositoryUrl": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "projectName": {
+            "type": "string",
+            "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
+        },
+        "blobContainerName": {
+            "type": "string",
+            "defaultValue": "documents"
+        },
+        "blobConfigContainerName": {
+            "type": "string",
+            "defaultValue": "config"
+        },
+        "blobResultsContainerName": {
+            "type": "string",
+            "defaultValue": "results"
+        },
+        "blobSplitContainerName": {
+            "type": "string",
+            "defaultValue": "split"
+        },
+        "blobCogSearchContainerName": {
+            "type": "string",
+            "defaultValue": "cogsearch"
+        },
+        "blobTranslatedContainerName": {
+            "type": "string",
+            "defaultValue": "translated-documents"
+        },
+        "cogSearchName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "cogSearchUrl": {
+            "type": "string",
+            "defaultValue": "[format('https://{0}.search.windows.net', parameters('projectName'))]"
+        },
+        "docTranslatorAccountName": {
+            "type": "string",
+            "defaultValue": "[format('doctranslator{0}', parameters('projectName'))]"
+        },
+        "branch": {
+            "type": "string",
+            "defaultValue": "main"
+        },
+        "cosmosDbName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "cosmosContainerName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "cosmosdbAccountName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "hostingPlanName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "functionAppName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "functionAppNamePython": {
+            "type": "string",
+            "defaultValue": "[format('huggingface{0}', parameters('projectName'))]"
+        },
+        "applicationInsightsName": {
+            "type": "string",
+            "defaultValue": "[format('appinsights{0}', parameters('projectName'))]"
+        },
+        "cogServicesName": {
+            "type": "string",
+            "defaultValue": "[format('cogservices{0}', parameters('projectName'))]"
+        },
+        "languageServicesName": {
+            "type": "string",
+            "defaultValue": "[format('language{0}', parameters('projectName'))]"
+        },
+        "webAppName": {
+            "type": "string",
+            "defaultValue": "[toLower(format('webapp{0}', parameters('projectName')))]"
+        },
+        "accountName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]"
+        },
+        "databaseName": {
+            "type": "string",
+            "defaultValue": "[parameters('cosmosDbName')]"
+        },
+        "containerName": {
+            "type": "string",
+            "defaultValue": "[parameters('cosmosContainerName')]"
+        },
+        "primaryRegion": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "languageServicesLocation": {
+            "type": "string",
+            "defaultValue": "westus2"
+        },
+        "environmentType": {
+            "type": "string",
+            "defaultValue": "nonprod",
+            "allowedValues": [
+                "nonprod",
+                "prod"
+            ]
+        },
+        "roleAssignment": {
+            "type": "string",
+            "defaultValue": "[newGuid()]"
+        },
+        "defaultConsistencyLevel": {
+            "type": "string",
+            "defaultValue": "Session",
+            "allowedValues": [
+                "Eventual",
+                "ConsistentPrefix",
+                "Session",
+                "BoundedStaleness",
+                "Strong"
+            ],
+            "metadata": {
+                "description": "The default consistency level of the Cosmos DB account."
+            }
+        },
+        "maxStalenessPrefix": {
+            "type": "int",
+            "defaultValue": 100000,
+            "maxValue": 2147483647,
+            "minValue": 10,
+            "metadata": {
+                "description": "Max stale requests. Required for BoundedStaleness. Valid ranges, Single Region: 10 to 1000000. Multi Region: 100000 to 1000000."
+            }
+        },
+        "maxIntervalInSeconds": {
+            "type": "int",
+            "defaultValue": 300,
+            "maxValue": 86400,
+            "minValue": 5,
+            "metadata": {
+                "description": "Max lag time (minutes). Required for BoundedStaleness. Valid ranges, Single Region: 5 to 84600. Multi Region: 300 to 86400."
+            }
+        },
+        "automaticFailover": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Enable automatic failover for regions"
+            }
+        },
+        "autoscaleMaxThroughput": {
+            "type": "int",
+            "defaultValue": 4000,
+            "maxValue": 1000000,
+            "minValue": 4000,
+            "metadata": {
+                "description": "Maximum throughput for the container"
+            }
+        },
+        "serviceBusQueueName": {
+            "type": "string",
+            "defaultValue": "upload"
+        },
+        "eventSubName": {
+            "type": "string",
+            "defaultValue": "bpa",
+            "metadata": {
+                "description": "Provide a name for the Event Grid subscription."
+            }
+        },
+        "systemTopicName": {
+            "type": "string",
+            "defaultValue": "[parameters('projectName')]",
+            "metadata": {
+                "description": "Provide a name for the system topic."
+            }
+        }
+    },
+    "variables": {
+        "storageAccountSkuName": "[if(equals(parameters('environmentType'), 'prod'), 'Standard_GRS', 'Standard_LRS')]",
+        "accountName_var": "[toLower(parameters('accountName'))]",
+        "consistencyPolicy": {
+            "Eventual": {
+                "defaultConsistencyLevel": "Eventual"
+            },
+            "ConsistentPrefix": {
+                "defaultConsistencyLevel": "ConsistentPrefix"
+            },
+            "Session": {
+                "defaultConsistencyLevel": "Session"
+            },
+            "BoundedStaleness": {
+                "defaultConsistencyLevel": "BoundedStaleness",
+                "maxStalenessPrefix": "[parameters('maxStalenessPrefix')]",
+                "maxIntervalInSeconds": "[parameters('maxIntervalInSeconds')]"
+            },
+            "Strong": {
+                "defaultConsistencyLevel": "Strong"
+            }
+        },
+        "locations": [
+            {
+                "locationName": "[parameters('primaryRegion')]",
+                "failoverPriority": 0,
+                "isZoneRedundant": false
+            }
+        ]
+    },
+    "resources": [
+        /////////////////////////  Virtual Network //////////////////////////////
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2021-08-01",
+            "name": "[parameters('projectName')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[concat('functionapp-',parameters('projectName'))]",
+                        "properties": {
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "addressPrefix": "10.0.1.0/24",
+                            "delegations": [
+                                {
+                                    "name": "webapp",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Web/serverFarms"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "[concat('privateEndpoint-',parameters('projectName'))]",
+                        "properties": {
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "addressPrefix": "10.0.2.0/24",
+                            "delegations": []
+                        }
+                    }
+                ]
+            }
+        },
+        /////////////////////////  Virtual Network //////////////////////////////
+        /////////////////////////  Storage Account //////////////////////////////
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('projectName')]",
+            "location": "[parameters('primaryRegion')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "routingPreference": {
+                    "routingChoice": "MicrosoftRouting",
+                    "publishMicrosoftEndpoints": true,
+                    "publishInternetEndpoints": false
+                },
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "networkAcls": {
+                    "resourceAccessRules": [
+                        {
+                            "tenantId": "[subscription().tenantId]",
+                            "resourceId": "[resourceId('Microsoft.CognitiveServices/accounts',parameters('cogServicesName'))]"
+                        },
+                        {
+                            "tenantId": "[subscription().tenantId]",
+                            "resourceId": "[resourceId('Microsoft.CognitiveServices/accounts',parameters('docTranslatorAccountName'))]"
+                        },
+                        {
+                            "tenantId": "[subscription().tenantId]",
+                            "resourceId": "[resourceId('Microsoft.CognitiveServices/accounts',parameters('languageServicesName'))]"
+                        }
+                    ],
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Deny"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts',parameters('cogServicesName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2020-06-01",
+            "name": "privatelink.blob.core.windows.net",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2020-06-01",
+            "name": "[format('{0}/{1}', 'privatelink.blob.core.windows.net', format('{0}-link', 'privatelink.blob.core.windows.net'))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-storageblob')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]",
+                            "groupIds": [
+                                "blob"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-storageblob'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-storageblob'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2020-06-01",
+            "name": "privatelink.queue.core.windows.net",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2020-06-01",
+            "name": "[format('{0}/{1}', 'privatelink.queue.core.windows.net', format('{0}-link', 'privatelink.queue.core.windows.net'))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.queue.core.windows.net')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-storagequeue')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]",
+                            "groupIds": [
+                                "queue"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-storagequeue'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.queue.core.windows.net')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-storagequeue'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.queue.core.windows.net')]"
+            ]
+        },
+
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2020-06-01",
+            "name": "privatelink.file.core.windows.net",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2020-06-01",
+            "name": "[format('{0}/{1}', 'privatelink.file.core.windows.net', format('{0}-link', 'privatelink.file.core.windows.net'))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.file.core.windows.net')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-storagefile')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]",
+                            "groupIds": [
+                                "file"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-storagefile'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.file.core.windows.net')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-storagefile'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.file.core.windows.net')]"
+            ]
+        },
+
+
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobResultsContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobConfigContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobTranslatedContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-08-01",
+            "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', parameters('blobCogSearchContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+
+        /////////////////////////  Storage Account //////////////////////////////
+        /////////////////////////  Namespace for Queue //////////////////////////////
+        {
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[parameters('projectName')]",
+            "location": "[parameters('primaryRegion')]",
+            "sku": {
+                "name": "Premium",
+                "tier": "Premium"
+            },
+            "properties": {
+                "premiumMessagingPartitions": 1,
+                "minimumTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[format('{0}/{1}', parameters('projectName'), parameters('serviceBusQueueName'))]",
+            "properties": {
+                "lockDuration": "PT5M",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": true,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
+                "deadLetteringOnMessageExpiration": true,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "maxDeliveryCount": 3,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/authorizationrules",
+            "apiVersion": "2022-01-01-preview",
+            "name": "[format('{0}/mypolicy', parameters('projectName'))]",
+            "location": "[parameters('primaryRegion')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            }
+        },
+
+        {
+            "type": "Microsoft.EventGrid/systemTopics",
+            "apiVersion": "2022-06-15",
+            "name": "[parameters('projectName')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "source": "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]",
+                "topicType": "Microsoft.Storage.StorageAccounts"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+            "apiVersion": "2022-06-15",
+            "name": "[format('{0}/{1}', parameters('projectName'), 'bpa')]",
+            "properties": {
+                "destination": {
+                    "properties": {
+                        "resourceId": "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]"
+                    },
+                    "endpointType": "ServiceBusQueue"
+                },
+                "filter": {
+                    "includedEventTypes": [
+                        "Microsoft.Storage.BlobCreated"
+                    ],
+                    "subjectBeginsWith": "/blobServices/default/containers/documents"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventGrid/systemTopics', parameters('projectName'))]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]"
+            ]
+        },
+        ///////////////////////////////////////////////  Namespace //////////////////////////////
+        /////////////////////// Cog Services Private Endpoint ////////////////////////
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-cogservices')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
+                            "groupIds": [
+                                "account"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-cogservices'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-cogservices'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+            ]
+        },
+
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2020-06-01",
+            "name": "privatelink.cognitiveservices.azure.com",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2020-06-01",
+            "name": "[format('{0}/{1}', 'privatelink.cognitiveservices.azure.com', format('{0}-link', 'privatelink.cognitiveservices.azure.com'))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+
+        //////////////////////////  Language Service Private Endpoint ////////////////////////////
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-language')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                            "groupIds": [
+                                "account"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-language'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-language'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-translator')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))]",
+                            "groupIds": [
+                                "account"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-translator'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-translator'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+            ]
+        },
+      
+
+
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2021-01-15",
+            "name": "[variables('accountName_var')]",
+            "kind": "GlobalDocumentDB",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "consistencyPolicy": "[variables('consistencyPolicy')[parameters('defaultConsistencyLevel')]]",
+                "locations": "[variables('locations')]",
+                "databaseAccountOfferType": "Standard",
+                "enableAutomaticFailover": "[parameters('automaticFailover')]"
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2021-01-15",
+            "name": "[format('{0}/{1}', variables('accountName_var'), parameters('databaseName'))]",
+            "properties": {
+                "resource": {
+                    "id": "[parameters('databaseName')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2021-01-15",
+            "name": "[format('{0}/{1}/{2}', variables('accountName_var'), parameters('databaseName'), parameters('containerName'))]",
+            "properties": {
+                "resource": {
+                    "id": "[parameters('containerName')]",
+                    "partitionKey": {
+                        "paths": [
+                            "/records"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/myPathToNotIndex/*"
+                            }
+                        ]
+                    }
+                },
+                "options": {
+                    "autoscaleSettings": {
+                        "maxThroughput": "[parameters('autoscaleMaxThroughput')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('accountName_var'), parameters('databaseName'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-10-01",
+            "name": "[format('{0}-{1}', parameters('projectName'), 'windows')]",
+            "location": "[parameters('primaryRegion')]",
+            "kind": "windows",
+            "sku": {
+                "name": "P2v2",
+                "tier": "PremiumV2"
+            },
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-12-01",
+            "name": "[parameters('cogservicesName')]",
+            "location": "[parameters('primaryRegion')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ],
+            "sku": {
+                "name": "S0"
+            },
+            "kind": "CognitiveServices",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[parameters('projectName')]",
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "virtualNetworkRules": [
+                        // {
+                        //     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp-',parameters('projectName')))]",
+                        //     "ignoreMissingVnetServiceEndpoint": false
+                        // }
+                    ],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(resourceGroup().id)]",
+            "scope": "[concat('Microsoft.Storage/storageAccounts','/', parameters('projectName'))]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
+                "principalId": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogservicesName')), '2022-12-01', 'Full').identity.principalId]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogservicesName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('docTranslatorAccountName'))]",
+            "scope": "[concat('Microsoft.Storage/storageAccounts','/', parameters('projectName'))]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
+                "principalId": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName')), '2022-12-01', 'Full').identity.principalId]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('languageServicesName'))]",
+            "scope": "[concat('Microsoft.Storage/storageAccounts','/', parameters('projectName'))]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
+                "principalId": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName')), '2022-12-01', 'Full').identity.principalId]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+            ]
+        },
+        
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-12-01",
+            "name": "[parameters('languageServicesName')]",
+            "location": "[parameters('primaryRegion')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ],
+            "sku": {
+                "name": "S"
+            },
+            "kind": "TextAnalytics",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[concat(parameters('projectName'),'-textanalytics')]",
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "virtualNetworkRules": [
+                        // {
+                        //     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp-',parameters('projectName')))]",
+                        //     "ignoreMissingVnetServiceEndpoint": false
+                        // }
+                    ],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-12-01",
+            "name": "[parameters('docTranslatorAccountName')]",
+            "location": "[parameters('primaryRegion')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ],
+            "sku": {
+                "name": "S1"
+            },
+            "kind": "TextTranslation",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[parameters('docTranslatorAccountName')]",
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "virtualNetworkRules": [
+                        // {
+                        //     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp-',parameters('projectName')))]",
+                        //     "ignoreMissingVnetServiceEndpoint": false
+                        // }
+                    ],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[parameters('applicationInsightsName')]",
+            "location": "[parameters('primaryRegion')]",
+            "kind": "string",
+            "properties": {
+                "Application_Type": "web",
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "apiVersion": "2021-04-01-Preview",
+            "name": "[parameters('cogSearchName')]",
+            "location": "[parameters('primaryRegion')]",
+            "type": "Microsoft.Search/searchServices",
+            "sku": {
+                "name": "standard"
+            },
+            "properties": {
+                "replicaCount": 1,
+                "partitionCount": 1,
+                "hostingMode": "Default",
+                "semanticSearch": "free"
+            },
+            "tags": {},
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('projectName')]",
+            "location": "[parameters('primaryRegion')]",
+            "kind": "functionapp",
+            "properties": {
+                "httpsOnly": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', format('{0}-{1}', parameters('projectName'), 'windows'))]",
+                "siteConfig": {
+                    "use32BitWorkerProcess": false,
+                    "netFrameworkVersion": "6.0",
+                    "alwaysOn": true,
+                    "appSettings": [
+                        {
+                            "name": "COSMOS_DB_CONNECTION_STRING",
+                            "value": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]"
+                        },
+                        {
+                            "name": "COSMOS_DB_DB",
+                            "value": "[parameters('cosmosDbName')]"
+                        },
+                        {
+                            "name": "COSMOS_DB_CONTAINER",
+                            "value": "[parameters('cosmosContainerName')]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_CONNECTION_STRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
+                        },
+                        //   {
+                        //     "name": "BLOB_STORAGE_SPLIT_CONTAINER",
+                        //     "value": "[parameters('blobSplitContainerName')]"
+                        //   },
+                        {
+                            "name": "SERVICE_BUS_CONNECTION_STRING",
+                            "value": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]"
+                        },
+                        //   {
+                        //     "name": "HUGGINGFACE_ENDPOINT",
+                        //     "value": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+                        //   },
+
+                        // "COSMOS_DB_CONNECTION_STRING": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]",
+                        //"COSMOS_DB_DB": "[parameters('cosmosDbName')]",
+                        //"COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
+                        //"BLOB_STORAGE_CONNECTION_STRING": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]",
+                        //"BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
+                        //"BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]",
+                        //"COGSEARCH_APIKEY": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
+                        //"COGSEARCH_URL": "[parameters('cogSearchUrl')]",
+                        //"SERVICE_BUS_CONNECTION_STRING": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
+                        //"USE_LOCAL_STORAGE": "false",
+                        //"HUGGINGFACE_ENDPOINT": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+                        {
+                            "name": "USE_LOCAL_STORAGE",
+                            "value": "false"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "https://bpasource.blob.core.windows.net/source/bpaprivatetest45.zip?sp=r&st=2023-06-15T19:52:17Z&se=2024-02-23T04:52:17Z&spr=https&sv=2022-11-02&sr=b&sig=f%2FhGTUvAdpnIeHSWJ6ieSvQN8qGPua3TLmVZWVzSiik%3D"
+                        },
+                        {
+                            "name": "WEBSITE_VNET_ROUTE_ALL",
+                            "value": "1"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'),environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "AzureWebJobsServiceBus",
+                            "value": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "~16"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "node"
+                        },
+                        {
+                            "name": "COGSEARCH_URL",
+                            "value": "[parameters('cogSearchUrl')]"
+                        },
+                        {
+                            "name": "COGSEARCH_APIKEY",
+                            "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_ACCOUNT_NAME",
+                            "value": "[parameters('projectName')]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_ACCOUNT_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_CONTAINER",
+                            "value": "[parameters('blobContainerName')]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_SPLIT_CONTAINER",
+                            "value": "[parameters('blobSplitContainerName')]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_COGSEARCH_CONTAINER",
+                            "value": "[parameters('blobCogSearchContainerName')]"
+                        },
+                        {
+                            "name": "DOCUMENT_TRANSLATION_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))).endpoints.DocumentTranslation]"
+                        },
+                        {
+                            "name": "DOCUMENT_TRANSLATION_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "COSMOSDB_CONNECTION_STRING",
+                            "value": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]"
+                        },
+                        {
+                            "name": "COSMOSDB_CONTAINER_NAME",
+                            "value": "[parameters('cosmosContainerName')]"
+                        },
+                        {
+                            "name": "COSMOSDB_DB_NAME",
+                            "value": "[parameters('cosmosDbName')]"
+                        },
+                        {
+                            "name": "OCR_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+                        },
+                        {
+                            "name": "OCR_APIKEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "CONTENT_MODERATOR_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+                        },
+                        {
+                            "name": "CONTENT_MODERATOR_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "LANGUAGE_STUDIO_PREBUILT_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))).endpoint]"
+                        },
+                        {
+                            "name": "LANGUAGE_STUDIO_PREBUILT_APIKEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "FORMREC_APIKEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "FORMREC_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+                        },
+                        {
+                            "name": "SPEECH_SUB_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "SPEECH_SUB_REGION",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01', 'full').location]"
+                        },
+                        {
+                            "name": "SPEECH_SUB_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+                        },
+                        {
+                            "name": "TRANSLATE_APIKEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+                        },
+                        {
+                            "name": "TRANSLATE_REGION",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01', 'full').location]"
+                        },
+                        {
+                            "name": "TRANSLATE_ENDPOINT",
+                            "value": "https://api.cognitive.microsofttranslator.com/"
+                        },
+                        {
+                            "name": "HUGGINGFACE_ENDPOINT",
+                            "value": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/networkConfig",
+            "apiVersion": "2022-03-01",
+            "name": "[format('{0}/{1}', parameters('functionAppName'), 'virtualNetwork')]",
+            "properties": {
+                "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp-',parameters('projectName')))]",
+                "swiftSupported": true
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('projectName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        // {
+        //   "type": "Microsoft.Network/privateDnsZones",
+        //   "apiVersion": "2020-06-01",
+        //   "name": "appfunction-dns.bpa",
+        //   "location": "global"
+        // },
+        // {
+        //   "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+        //   "apiVersion": "2020-06-01",
+        //   "name": "[format('{0}/{1}', 'appfunction-dns.bpa', format('{0}-link', 'appfunction'))]",
+        //   "location": "global",
+        //   "properties": {
+        //     "registrationEnabled": false,
+        //     "virtualNetwork": {
+        //       "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+        //     }
+        //   },
+        //   "dependsOn": [
+        //     "[resourceId('Microsoft.Network/privateDnsZones', 'appfunction-dns.bpa')]",
+        //     "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+        //   ]
+        // },
+        // {
+        //   "type": "Microsoft.Network/privateEndpoints",
+        //   "apiVersion": "2022-05-01",
+        //   "name": "appfunction",
+        //   "location": "[parameters('primaryRegion')]",
+        //   "properties": {
+        //     "subnet": {
+        //       "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+        //     },
+        //     "privateLinkServiceConnections": [
+        //       {
+        //         "name": "MyFunctionAppPrivateLinkConnection",
+        //         "properties": {
+        //           "privateLinkServiceId": "[resourceId('Microsoft.Web/sites', parameters('projectName'))]",
+        //           "groupIds": [
+        //             "sites"
+        //           ]
+        //         }
+        //       }
+        //     ]
+        //   },
+        //   "dependsOn": [
+        //     "[resourceId('Microsoft.Web/sites', parameters('projectName'))]",
+        //     "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+        //   ]
+        // },
+        // {
+        //   "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+        //   "apiVersion": "2022-05-01",
+        //   "name": "[format('{0}/{1}', 'appfunction', 'appfunction')]",
+        //   "properties": {
+        //     "privateDnsZoneConfigs": [
+        //       {
+        //         "name": "config",
+        //         "properties": {
+        //           "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones','appfunction-dns.bpa' )]"
+        //         }
+        //       }
+        //     ]
+        //   },
+        //   "dependsOn": [
+        //     "[resourceId('Microsoft.Network/privateEndpoints', 'appfunction')]",
+        //     "[resourceId('Microsoft.Network/privateDnsZones', 'appfunction-dns.bpa')]"
+        //   ]
+        // },
+        {
+            "type": "Microsoft.Web/staticSites",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('webAppName')]",
+            "location": "eastus2",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard"
+            },
+            "properties": {
+                "provider": "GitHub",
+                "repositoryUrl": "[parameters('repositoryUrl')]",
+                "repositoryToken": "[parameters('repositoryToken')]",
+                "branch": "[parameters('branch')]",
+                "buildProperties": {
+                    "apiLocation": "",
+                    "appLocation": "src/frontend"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/staticSites/linkedBackends",
+            "apiVersion": "2022-09-01",
+            "name": "[format('{0}/{1}',parameters('webAppName'),parameters('projectName'))]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
+                "[resourceId('Microsoft.Web/sites', parameters('projectName'))]"
+            ],
+            "properties": {
+                "backendResourceId": "[resourceId('Microsoft.Web/sites',parameters('projectName'))]",
+                "region": "[parameters('primaryRegion')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/staticSites/userProvidedFunctionApps",
+            "apiVersion": "2022-09-01",
+            "name": "[format('{0}/{1}',parameters('webAppName'),parameters('projectName'))]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
+                "[resourceId('Microsoft.Web/sites', parameters('projectName'))]"
+            ],
+            "properties": {
+                "functionAppResourceId": "[resourceId('Microsoft.Web/sites',parameters('projectName'))]",
+                "functionAppRegion": "[parameters('primaryRegion')]"
+            }
+        }
+        //   {
+        //     "type": "Microsoft.Web/staticSites/config",
+        //     "apiVersion": "2022-09-01",
+        //     "name": "[format('{0}/{1}', parameters('webAppName'), 'appsettings')]",
+        //     "kind": "staticWebAppSettings",
+        //     "properties": {
+        //       "COSMOS_DB_CONNECTION_STRING": "[format('AccountEndpoint=https://{0}.documents.azure.com:443/;AccountKey={1};', parameters('cosmosdbAccountName'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var')), '2021-01-15').primaryMasterKey)]",
+        //       "COSMOS_DB_DB": "[parameters('cosmosDbName')]",
+        //       "COSMOS_DB_CONTAINER": "[parameters('cosmosContainerName')]",
+        //       "BLOB_STORAGE_CONNECTION_STRING": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]",
+        //       "BLOB_STORAGE_CONTAINER": "[parameters('blobContainerName')]",
+        //       "BLOB_STORAGE_SPLIT_CONTAINER": "[parameters('blobSplitContainerName')]",
+        //       //"COGSEARCH_APIKEY": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]",
+        //       //"COGSEARCH_URL": "[parameters('cogSearchUrl')]",
+        //       "SERVICE_BUS_CONNECTION_STRING": "[listKeys(resourceId('Microsoft.ServiceBus/namespaces/authorizationrules', parameters('projectName'),'mypolicy'),'2022-01-01-preview').primaryConnectionString]",
+        //       "USE_LOCAL_STORAGE": "false",
+        //       "HUGGINGFACE_ENDPOINT": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+        //     },
+        //     "dependsOn": [
+        //       "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
+        //       "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
+        //       "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
+        //       "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
+        //       "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+        //       //"[resourceId('Microsoft.Web/sites',  parameters('functionAppNamePython'))]"
+        //     ]
+        //   }
+    ]
+}

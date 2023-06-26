@@ -251,7 +251,7 @@ export class FormRec {
     }
 
     public customFormrec = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-        return this._analyzeDocument(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
+        return this._analyzeDocument(input, {modelId : input.serviceSpecificConfig.modelId}, "customFormRec", index)
     }
 
     public readDocumentAsync = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
@@ -287,7 +287,7 @@ export class FormRec {
     }
 
     public customFormrecAsync = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-        return this._analyzeDocumentAsync(input, input.serviceSpecificConfig.modelId, "customFormRec", index)
+        return this._analyzeDocumentAsync(input, {modelId : input.serviceSpecificConfig.modelId}, "customFormRec", index)
     }
 
     public processAsync = async (mySbMsg: any, db: DB, mq: MessageQueue): Promise<void> => {

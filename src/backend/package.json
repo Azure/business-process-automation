@@ -26,12 +26,12 @@
     "axios": "^0.25.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "http-status-enum": "^1.0.2",
     "lodash": "^4.17.21",
     "microsoft-cognitiveservices-speech-sdk": "^1.27.0",
     "mongodb": "^4.13.0",
     "parse-multipart": "^1.0.4",
     "pdf-lib": "^1.17.1",
-    "pdf-to-png-converter": "^2.2.2",
     "redis": "^4.5.1",
     "uuidv4": "^6.2.13",
     "xml2js": "^0.4.23"
