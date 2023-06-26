@@ -301,6 +301,14 @@
                         {
                             "tenantId": "[subscription().tenantId]",
                             "resourceId": "[resourceId('Microsoft.CognitiveServices/accounts',parameters('cogServicesName'))]"
+                        },
+                        {
+                            "tenantId": "[subscription().tenantId]",
+                            "resourceId": "[resourceId('Microsoft.CognitiveServices/accounts',parameters('docTranslatorAccountName'))]"
+                        },
+                        {
+                            "tenantId": "[subscription().tenantId]",
+                            "resourceId": "[resourceId('Microsoft.CognitiveServices/accounts',parameters('languageServicesName'))]"
                         }
                     ],
                     "bypass": "AzureServices",
@@ -676,7 +684,7 @@
         },
         ///////////////////////////////////////////////  Namespace //////////////////////////////
         /////////////////////// Cog Services Private Endpoint ////////////////////////
-                {
+        {
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2022-05-01",
             "name": "[concat(parameters('projectName'),'-cogservices')]",
@@ -745,6 +753,99 @@
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
             ]
         },
+
+        //////////////////////////  Language Service Private Endpoint ////////////////////////////
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-language')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                            "groupIds": [
+                                "account"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-language'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-language'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-translator')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))]",
+                            "groupIds": [
+                                "account"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-translator'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-translator'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
+            ]
+        },
+      
 
 
         {
@@ -865,9 +966,38 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogservicesName'))]",
-                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
             ]
         },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('docTranslatorAccountName'))]",
+            "scope": "[concat('Microsoft.Storage/storageAccounts','/', parameters('projectName'))]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
+                "principalId": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName')), '2022-12-01', 'Full').identity.principalId]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(parameters('languageServicesName'))]",
+            "scope": "[concat('Microsoft.Storage/storageAccounts','/', parameters('projectName'))]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
+                "principalId": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName')), '2022-12-01', 'Full').identity.principalId]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
+            ]
+        },
+        
         {
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2022-12-01",
@@ -881,8 +1011,9 @@
             },
             "kind": "TextAnalytics",
             "identity": {
-                "type": "None"
+                "type": "SystemAssigned"
             },
+            
             "properties": {
                 "apiProperties": {},
                 "customSubDomainName": "[concat(parameters('projectName'),'-textanalytics')]",
@@ -912,7 +1043,7 @@
             },
             "kind": "TextTranslation",
             "identity": {
-                "type": "None"
+                "type": "SystemAssigned"
             },
             "properties": {
                 "apiProperties": {},
