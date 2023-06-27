@@ -9,6 +9,10 @@
         }
     },
     "parameters": {
+        "projectName": {
+            "type": "string",
+            "defaultValue": ""
+        },
         "repositoryToken": {
             "type": "string",
             "defaultValue": ""
@@ -17,9 +21,13 @@
             "type": "string",
             "defaultValue": ""
         },
-        "projectName": {
+        "openaiName": {
             "type": "string",
-            "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
+            "defaultValue": "[format('oai{0}', parameters('projectName'))]"
+        },
+        "oaiRegion": {
+            "type": "string",
+            "defaultValue": "eastus"
         },
         "blobContainerName": {
             "type": "string",
@@ -845,7 +853,147 @@
                 "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.cognitiveservices.azure.com')]"
             ]
         },
-      
+        ////////////////////////////////////////////  OpenAI //////////////////////////////////////////
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('openaiName')]",
+            "location": "[parameters('oaiRegion')]",
+            "sku": {
+                "name": "S0"
+            },
+            "kind": "OpenAI",
+            "properties": {
+                "customSubDomainName": "[parameters('openaiName')]",
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('openaiName'), '/text-embedding-ada-002')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
+            ],
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "text-embedding-ada-002",
+                    "version": "2"
+                },
+                "scaleSettings": {
+                    "scaleType": "Standard"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('openaiName'), '/text-davinci-003')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-embedding-ada-002')]"
+            ],
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "text-davinci-003",
+                    "version": "1"
+                },
+                "scaleSettings": {
+                    "scaleType": "Standard"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('openaiName'), '/chatgpt')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('openaiName'),  'text-davinci-003')]"
+            ],
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "gpt-35-turbo",
+                    "version": "0301"
+                },
+                "scaleSettings": {
+                    "scaleType": "Standard"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2020-06-01",
+            "name": "privatelink.openai.azure.com",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-oai')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+                            "groupIds": [
+                                "account"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-oai'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.openai.azure.com')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-oai'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.openai.azure.com')]"
+            ]
+        },
+         {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2020-06-01",
+            "name": "[format('{0}/{1}', 'privatelink.openai.azure.com', format('{0}-link', 'privatelink.openai.azure.com'))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.openai.azure.com')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        /////////////////////////////////////////////////////////////
+
 
 
         {
@@ -997,7 +1145,7 @@
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('projectName'))]"
             ]
         },
-        
+
         {
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2022-12-01",
@@ -1013,7 +1161,7 @@
             "identity": {
                 "type": "SystemAssigned"
             },
-            
+
             "properties": {
                 "apiProperties": {},
                 "customSubDomainName": "[concat(parameters('projectName'),'-textanalytics')]",
@@ -1274,20 +1422,45 @@
                         },
                         {
                             "name": "TRANSLATE_APIKEY",
-                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName')), '2021-10-01').key1]"
                         },
                         {
                             "name": "TRANSLATE_REGION",
-                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01', 'full').location]"
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('docTranslatorAccountName')), '2021-10-01', 'full').location]"
                         },
                         {
                             "name": "TRANSLATE_ENDPOINT",
-                            "value": "https://api.cognitive.microsofttranslator.com/"
+                            "value": "[format('https://{0}.cognitiveservices.azure.com/translator/text/v3.0/', parameters('docTranslatorAccountName'))]"
                         },
                         {
                             "name": "HUGGINGFACE_ENDPOINT",
                             "value": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+                        },
+                        {
+                            "name": "OPENAI_API_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
+                        },
+                        {
+                            "name": "OPENAI_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
+                        },
+                        {
+                            "name": "OPENAI_ENDPOINT",
+                            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2021-10-01').endpoint]"
+                        },
+                        {
+                            "name": "OPENAI_DEPLOYMENT_TEXT",
+                            "value": "text-davinci-003"
+                        },
+                        {
+                            "name": "OPENAI_DEPLOYMENT_SEARCH_DOC",
+                            "value": "text-embedding-ada-002"
+                        },
+                        {
+                            "name": "OPENAI_DEPLOYMENT_SEARCH_QUERY",
+                            "value": "text-embedding-ada-002"
                         }
+
                     ]
                 }
             },

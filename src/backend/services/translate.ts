@@ -26,14 +26,13 @@ export class Translate {
     //     return text
     // }
 
-    public translate = async (input: BpaServiceObject, index : number): Promise<BpaServiceObject> => {
+    public translate = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
 
         const headers = {
             'Ocp-Apim-Subscription-Key': this._apikey,
             'Ocp-Apim-Subscription-Region': this._region,
-            'Content-type': 'application/json',
-            'X-ClientTraceId': uuidv4().toString()
+            'Content-type': 'application/json'
         }
 
         const config: AxiosRequestConfig = {
@@ -41,19 +40,19 @@ export class Translate {
         }
 
         let url = `${this._endpoint}translate?api-version=3.0&to=${input.serviceSpecificConfig.to}`
-        if(input?.serviceSpecificConfig?.from){
+        if (input?.serviceSpecificConfig?.from) {
             url = `${this._endpoint}translate?api-version=3.0&to=${input.serviceSpecificConfig.to}&from=${input.serviceSpecificConfig.from}`
         }
-        console.log(url)
+        const data = [{ 'text': input.data.length > 45000 ? input.data.substring(0, 45000) : input.data }]
 
-        const out = await axios.post(url, [{ 'text': input.data.length > 45000 ? input.data.substring(0,45000) : input.data }], config)
+        const out = await axios.post(url, data, config)
         const results = input.aggregatedResults
         out.data.translationText = out.data[0].translations[0].text
-        results["translation"] = { 
-            results : out.data,
-            translationText : out.data[0].translations[0].text
+        results["translation"] = {
+            results: out.data,
+            translationText: out.data[0].translations[0].text
         }
-        input.resultsIndexes.push({index : index, name : "translation", type : "text"})
+        input.resultsIndexes.push({ index: index, name: "translation", type: "text" })
         return {
             data: out.data[0].translations[0].text,
             type: "text",
@@ -62,11 +61,10 @@ export class Translate {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
-            resultsIndexes : input.resultsIndexes,
+            resultsIndexes: input.resultsIndexes,
             id: input.id
         }
-
     }
 
-    
+
 }
