@@ -79,7 +79,7 @@ function Upload(props) {
 
     const getQueuedFiles = () => {
 
-        if (queueStatus && queueStatus.messages.queuedFiles) {
+        if (queueStatus?.messages?.queuedFiles) {
             console.log(JSON.stringify(queueStatus.messages))
             if (queueStatus.messages.queuedFiles.length > 0) {
                 return (
