@@ -32,342 +32,382 @@ export class CognitiveSearch {
     }
 
     private _createIndex = async (indexName : string) => {
-        const index : any = {
-            "name": indexName,
-            "defaultScoringProfile": "",
-            "fields": [
-              {
-                "name": "label",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "pipeline",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "type",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "filename",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "bpaId",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "aggregatedResults",
-                "type": "Edm.ComplexType",
-                "fields": [
-                  {
-                    "name": "text",
-                    "type": "Edm.String",
-                    "searchable": false,
-                    "filterable": false,
-                    "retrievable": true,
-                    "sortable": false,
-                    "facetable": false,
-                    "key": false,
-                    "indexAnalyzer": null,
-                    "searchAnalyzer": null,
-                    "analyzer": null,
-                    "normalizer": null,
-                    "dimensions": null,
-                    "vectorSearchConfiguration": null,
-                    "synonymMaps": []
-                  }
-                ]
-              },
-              {
-                "name": "resultsIndexes",
-                "type": "Collection(Edm.ComplexType)",
-                "fields": [
-                  {
-                    "name": "index",
-                    "type": "Edm.Int64",
-                    "searchable": false,
-                    "filterable": false,
-                    "retrievable": true,
-                    "sortable": false,
-                    "facetable": false,
-                    "key": false,
-                    "indexAnalyzer": null,
-                    "searchAnalyzer": null,
-                    "analyzer": null,
-                    "normalizer": null,
-                    "dimensions": null,
-                    "vectorSearchConfiguration": null,
-                    "synonymMaps": []
-                  },
-                  {
-                    "name": "name",
-                    "type": "Edm.String",
-                    "searchable": false,
-                    "filterable": false,
-                    "retrievable": true,
-                    "sortable": false,
-                    "facetable": false,
-                    "key": false,
-                    "indexAnalyzer": null,
-                    "searchAnalyzer": null,
-                    "analyzer": null,
-                    "normalizer": null,
-                    "dimensions": null,
-                    "vectorSearchConfiguration": null,
-                    "synonymMaps": []
-                  },
-                  {
-                    "name": "type",
-                    "type": "Edm.String",
-                    "searchable": false,
-                    "filterable": false,
-                    "retrievable": true,
-                    "sortable": false,
-                    "facetable": false,
-                    "key": false,
-                    "indexAnalyzer": null,
-                    "searchAnalyzer": null,
-                    "analyzer": null,
-                    "normalizer": null,
-                    "dimensions": null,
-                    "vectorSearchConfiguration": null,
-                    "synonymMaps": []
-                  }
-                ]
-              },
-              {
-                "name": "id",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_content_type",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_size",
-                "type": "Edm.Int64",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_last_modified",
-                "type": "Edm.DateTimeOffset",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_content_md5",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_name",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_path",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": true,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              },
-              {
-                "name": "metadata_storage_file_extension",
-                "type": "Edm.String",
-                "searchable": false,
-                "filterable": false,
-                "retrievable": true,
-                "sortable": false,
-                "facetable": false,
-                "key": false,
-                "indexAnalyzer": null,
-                "searchAnalyzer": null,
-                "analyzer": null,
-                "normalizer": null,
-                "dimensions": null,
-                "vectorSearchConfiguration": null,
-                "synonymMaps": []
-              }
-            ],
-            "scoringProfiles": [],
-            "corsOptions": null,
-            "suggesters": [],
-            "analyzers": [],
-            "normalizers": [],
-            "tokenizers": [],
-            "tokenFilters": [],
-            "charFilters": [],
-            "encryptionKey": null,
-            "semantic": {
-              "defaultConfiguration": null,
-              "configurations": [
+        const index : SearchIndex = 
+        {
+         
+          "name": "test82-index",
+          "defaultScoringProfile": "",
+          "fields": [
+            {
+              "name": "content",
+              "type": "Edm.ComplexType",
+              "fields": [
                 {
-                  "name": "default",
-                  "prioritizedFields": {
-                    "titleField": {
-                      "fieldName": "filename"
+                  "name": "label",
+                  "type": "Edm.String",
+                  "searchable": false,
+                  "filterable": false,
+                  
+                  "sortable": false,
+                  "facetable": false,
+                  "key": false,
+                  
+                 
+                 
+                 
+                  
+                  
+                 
+                },
+                {
+                  "name": "pipeline",
+                  "type": "Edm.String",
+                  "searchable": false,
+                  "filterable": false,
+                  
+                  "sortable": false,
+                  "facetable": false,
+                  "key": false,
+                  
+                 
+                 
+                 
+                  
+                  
+                 
+                },
+                {
+                  "name": "type",
+                  "type": "Edm.String",
+                  "searchable": false,
+                  "filterable": false,
+                  
+                  "sortable": false,
+                  "facetable": false,
+                  "key": false,
+                  
+                 
+                 
+                 
+                  
+                  
+                 
+                },
+                {
+                  "name": "filename",
+                  "type": "Edm.String",
+                  "searchable": false,
+                  "filterable": false,
+                  
+                  "sortable": false,
+                  "facetable": false,
+                  "key": false,
+                  
+                 
+                 
+                 
+                  
+                  
+                 
+                },
+                {
+                  "name": "bpaId",
+                  "type": "Edm.String",
+                  "searchable": false,
+                  "filterable": false,
+                  
+                  "sortable": false,
+                  "facetable": false,
+                  "key": false,
+                  
+                 
+                 
+                 
+                  
+                  
+                 
+                },
+                {
+                  "name": "aggregatedResults",
+                  "type": "Edm.ComplexType",
+                  "fields": [
+                    {
+                      "name": "text",
+                      "type": "Edm.String",
+                      "searchable": true,
+                      "filterable": false,
+                      
+                      "sortable": false,
+                      "facetable": false,
+                      "key": false,
+                      
+                     
+                     
+                     
+                      
+                      
+                     
+                    }
+                  ]
+                },
+                {
+                  "name": "resultsIndexes",
+                  "type": "Collection(Edm.ComplexType)",
+                  "fields": [
+                    {
+                      "name": "index",
+                      "type": "Edm.Int64",
+                      "searchable": false,
+                      "filterable": false,
+                      
+                      "sortable": false,
+                      "facetable": false,
+                      "key": false,
+                      
+                     
+                     
+                     
+                      
+                      
+                     
                     },
-                    "prioritizedContentFields": [
-                      {
-                        "fieldName": "aggregatedResults/text"
-                      }
-                    ],
-                    "prioritizedKeywordsFields": []
-                  }
+                    {
+                      "name": "name",
+                      "type": "Edm.String",
+                      "searchable": false,
+                      "filterable": false,
+                      
+                      "sortable": false,
+                      "facetable": false,
+                      "key": false,
+                      
+                     
+                     
+                     
+                      
+                      
+                     
+                    },
+                    {
+                      "name": "type",
+                      "type": "Edm.String",
+                      "searchable": false,
+                      "filterable": false,
+                      
+                      "sortable": false,
+                      "facetable": false,
+                      "key": false,
+                      
+                     
+                     
+                     
+                      
+                      
+                     
+                    }
+                  ]
+                },
+                {
+                  "name": "id",
+                  "type": "Edm.String",
+                  "searchable": false,
+                  "filterable": false,
+                  
+                  "sortable": false,
+                  "facetable": false,
+                  "key": false,
+                  
+                 
+                 
+                 
+                  
+                  
+                 
                 }
               ]
             },
-            "vectorSearch": null
-          }
+            {
+              "name": "metadata_storage_content_type",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_storage_size",
+              "type": "Edm.Int64",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_storage_last_modified",
+              "type": "Edm.DateTimeOffset",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_storage_content_md5",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_storage_name",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_storage_path",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": true,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_storage_file_extension",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_content_encoding",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_content_type",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            },
+            {
+              "name": "metadata_language",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+              
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+              
+             
+             
+             
+              
+              
+             
+            }
+          ],
+          "scoringProfiles": [],
+          "corsOptions": null,
+          "suggesters": [],
+          "analyzers": [],
+          
+          "tokenizers": [],
+          "tokenFilters": [],
+          "charFilters": [],
+          "encryptionKey": null,
+         
+        }
 
         return this._indexClient.createIndex(index)
     }
