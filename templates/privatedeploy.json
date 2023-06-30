@@ -1298,7 +1298,7 @@
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://bpasource.blob.core.windows.net/source/bpaprivatetest45.zip?sp=r&st=2023-06-15T19:52:17Z&se=2024-02-23T04:52:17Z&spr=https&sv=2022-11-02&sr=b&sig=f%2FhGTUvAdpnIeHSWJ6ieSvQN8qGPua3TLmVZWVzSiik%3D"
+                            "value": "https://bpasource.blob.core.windows.net/source/backendv035.zip?sv=2020-10-02&st=2023-06-30T00%3A23%3A51Z&se=2024-04-26T00%3A23%3A00Z&sr=b&sp=r&sig=6OxOaGBscOTXSN48C%2BH%2FhSk7nEenvBudCVSk3ebEnas%3D"
                         },
                         {
                             "name": "WEBSITE_VNET_ROUTE_ALL",
@@ -1335,6 +1335,10 @@
                         {
                             "name": "COGSEARCH_APIKEY",
                             "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+                        },
+                        {
+                            "name": "BLOB_STORAGE_CONNECTION_STRING",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'),environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
                         },
                         {
                             "name": "BLOB_STORAGE_ACCOUNT_NAME",
