@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FileUploader } from "react-drag-drop-files";
-import { Text, Dropdown } from '@fluentui/react-northstar';
+import { Text, Dropdown, Button } from '@fluentui/react-northstar';
 import axios from 'axios'
 
 const pipelinesLabel = "pipelines"
@@ -14,6 +14,10 @@ function Upload(props) {
     const [pipelineNames, setPipelineNames] = useState([])
     const [selectedPipelineName, setSelectedPipelineName] = useState("")
     const [queueStatus, setQueueStatus] = useState(null)
+    const [indexers, setIndexers] = useState([])
+    const [selectedIndexer, setSelectedIndexer] = useState(null)
+    //const [indexerSearchDone, setIndexerSearchDone] = useState(false)
+    const [documentCount, setDocumentCount] = useState(0)
 
     useEffect(() => {
         try {
@@ -29,6 +33,17 @@ function Upload(props) {
                     }
                 })
             }, 5000)
+
+            axios.get('/api/indexers').then(_indexes => {
+                if (_indexes?.data?.indexers) {
+                    //setIndexerSearchDone(true)
+                    setIndexers(_indexes.data.indexers)
+                    setSelectedIndexer(_indexes.data.indexers[0])
+                }
+            }).catch(err => {
+                //setIndexerSearchDone(true)
+                console.log(err)
+            })
 
 
             axios.get(`/api/config?id=${pipelinesLabel}`).then(value => {
@@ -46,6 +61,23 @@ function Upload(props) {
             console.log(err)
         }
     }, [])
+
+    const onIndexerChange = (_, value) => {
+        if (indexers && indexers.length > 0) {
+            const _indexer = indexers.find(i => i.name === value.value)
+            setSelectedIndexer(_indexer)
+            axios.get('/api/cogsearchdocumentcount?indexName='+_indexer.targetIndexName).then(count => {
+                console.log(count)
+                setDocumentCount(count.data.count)
+            })
+        }
+    }
+
+    const onRunIndexer = () => {
+        axios.post('api/indexers?name='+selectedIndexer.name).then(value => {
+            console.log(value)
+        })
+    }
 
     const onDropDownChange = (event, selected) => {
         setSelectedPipelineName(selected.value)
@@ -134,38 +166,61 @@ function Upload(props) {
 
     }
 
+    const getIndexers = () => {
+        if (indexers && selectedIndexer?.name) {
+            return (
+                <div style={{ display: "flex", flexFlow: "column", fontWeight: "500", margin: "20px" }}>
+                    <Text style={{ marginBottom: "10px" }} content="Choose a Cognitive Search Index" />
+                    <Dropdown
+                        placeholder=""
+                        label="Output"
+                        items={indexers.map(indexer => indexer.name)}
+                        onChange={onIndexerChange}
+                        defaultValue={selectedIndexer.name}
+                        style={{ fontWeight: "400", marginBottom: "20px" }}
+                    />
+                     <Button onClick={onRunIndexer} primary content="Run Indexer"/>
+                     <Text style={{ marginBottom: "10px" }} content={documentCount} />
+                </div>
+            )
+        }
+    }
+
     return (
-        <div style={{ paddingTop: "50px" }}>
-            <Text weight="semibold" content="Upload a document to Blob Storage" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
-            <p style={{ marginBottom: "20px" }} >Before any insights can be viewed by a pattern, one or more documents must be uploaded.  The documents will be copied to Blob Storage which will trigger a Function App to process them.  The processing can take some time and the insights will not appear immediately.</p>
-            <div>
-                <div style={{ marginBottom: "10px" }}>
-                    <Text weight="semibold" content="Select A Pipeline" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
-                </div>
-                <Dropdown
-                    search
-                    placeholder="Select the Pipeline"
-                    label="Output"
-                    items={pipelineNames}
-                    onChange={onDropDownChange}
-                    style={{ paddingBottom: "40px" }}
-                />
-            </div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-
-
-                <div style={{ marginRight: "30px" }}>
+        <>
+            {getIndexers()}
+            <div style={{ paddingTop: "50px" }}>
+                <Text weight="semibold" content="Upload a document to Blob Storage" style={{ fontSize: "18px", display: "block", width: "100%", marginBottom: "20px" }} />
+                <p style={{ marginBottom: "20px" }} >Before any insights can be viewed by a pattern, one or more documents must be uploaded.  The documents will be copied to Blob Storage which will trigger a Function App to process them.  The processing can take some time and the insights will not appear immediately.</p>
+                <div>
                     <div style={{ marginBottom: "10px" }}>
-                        <Text weight="semibold" content="Upload A Single Document" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
+                        <Text weight="semibold" content="Select A Pipeline" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
                     </div>
-                    <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
+                    <Dropdown
+                        search
+                        placeholder="Select the Pipeline"
+                        label="Output"
+                        items={pipelineNames}
+                        onChange={onDropDownChange}
+                        style={{ paddingBottom: "40px" }}
+                    />
                 </div>
-            </div>
-            {/* <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} /> */}
+                <div style={{ display: "flex", flexDirection: "row" }}>
 
-            {getQueueStatus()}
-            {getQueuedFiles()}
-        </div>
+
+                    <div style={{ marginRight: "30px" }}>
+                        <div style={{ marginBottom: "10px" }}>
+                            <Text weight="semibold" content="Upload A Single Document" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
+                        </div>
+                        <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
+                    </div>
+                </div>
+                {/* <Text weight="semibold" content={getContent()} style={{ fontSize: "15px", display: "block", width: "100%", marginBottom: "20px", marginTop: "40px" }} /> */}
+
+                {getQueueStatus()}
+                {getQueuedFiles()}
+            </div>
+        </>
     )
 }
 

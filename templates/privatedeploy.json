@@ -1264,10 +1264,10 @@
                             "name": "COSMOS_DB_CONTAINER",
                             "value": "[parameters('cosmosContainerName')]"
                         },
-                        {
-                            "name": "BLOB_STORAGE_CONNECTION_STRING",
-                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
-                        },
+                        // {
+                        //     "name": "BLOB_STORAGE_CONNECTION_STRING",
+                        //     "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
+                        // },
                         //   {
                         //     "name": "BLOB_STORAGE_SPLIT_CONTAINER",
                         //     "value": "[parameters('blobSplitContainerName')]"
