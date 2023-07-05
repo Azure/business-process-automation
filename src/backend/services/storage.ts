@@ -115,6 +115,14 @@ export class BlobStorage extends Storage {
         return input
     }
 
+    public toJsonDoc = async (input: BpaServiceObject): Promise<BpaServiceObject> => {
+        this._blobContainerClient = this._blobServiceClient.getContainerClient(input.serviceSpecificConfig.containerName);
+        const blobClient: BlockBlobClient = this._blobContainerClient.getBlockBlobClient(`${input.filename}.json`)
+        const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(input.data, input.data.length)
+
+        return input
+    }
+
     public getSasUrl = async (accountName: string, containerName: string, accountSharedSecret: string) => {
 
         //  Creates a client to the BlobService using the connection string.
