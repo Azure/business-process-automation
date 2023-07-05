@@ -220,9 +220,11 @@ export default function SelectPipeline(props) {
 
     const onCreateCogSearchPipeline = async () => {
         console.log(newPipelineName)
-        const currentPipelines = await axios.get(`/api/config?id=${pipelinesLabel}`)
+        let currentPipelines = await axios.get(`/api/config?id=${pipelinesLabel}`)
         if (currentPipelines.data === '') {
-            await axios.post('/api/config', { pipelines: [getStage1(newPipelineName),getStage2(newPipelineName),getCogStage3(newPipelineName)]})
+            const newPipelines = { id: 'pipelines', pipelines: [getStage1(newPipelineName),getStage2(newPipelineName),getCogStage3(newPipelineName)]}
+            currentPipelines.data = newPipelines
+            await axios.post('/api/config', currentPipelines.data)
         } else {
             currentPipelines.data.pipelines.push(getStage1(newPipelineName))
             currentPipelines.data.pipelines.push(getStage2(newPipelineName))
