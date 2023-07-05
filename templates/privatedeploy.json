@@ -976,7 +976,7 @@
                 "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.openai.azure.com')]"
             ]
         },
-         {
+        {
             "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
             "apiVersion": "2020-06-01",
             "name": "[format('{0}/{1}', 'privatelink.openai.azure.com', format('{0}-link', 'privatelink.openai.azure.com'))]",
@@ -1489,73 +1489,6 @@
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
             ]
         },
-        // {
-        //   "type": "Microsoft.Network/privateDnsZones",
-        //   "apiVersion": "2020-06-01",
-        //   "name": "appfunction-dns.bpa",
-        //   "location": "global"
-        // },
-        // {
-        //   "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-        //   "apiVersion": "2020-06-01",
-        //   "name": "[format('{0}/{1}', 'appfunction-dns.bpa', format('{0}-link', 'appfunction'))]",
-        //   "location": "global",
-        //   "properties": {
-        //     "registrationEnabled": false,
-        //     "virtualNetwork": {
-        //       "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
-        //     }
-        //   },
-        //   "dependsOn": [
-        //     "[resourceId('Microsoft.Network/privateDnsZones', 'appfunction-dns.bpa')]",
-        //     "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
-        //   ]
-        // },
-        // {
-        //   "type": "Microsoft.Network/privateEndpoints",
-        //   "apiVersion": "2022-05-01",
-        //   "name": "appfunction",
-        //   "location": "[parameters('primaryRegion')]",
-        //   "properties": {
-        //     "subnet": {
-        //       "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
-        //     },
-        //     "privateLinkServiceConnections": [
-        //       {
-        //         "name": "MyFunctionAppPrivateLinkConnection",
-        //         "properties": {
-        //           "privateLinkServiceId": "[resourceId('Microsoft.Web/sites', parameters('projectName'))]",
-        //           "groupIds": [
-        //             "sites"
-        //           ]
-        //         }
-        //       }
-        //     ]
-        //   },
-        //   "dependsOn": [
-        //     "[resourceId('Microsoft.Web/sites', parameters('projectName'))]",
-        //     "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
-        //   ]
-        // },
-        // {
-        //   "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-        //   "apiVersion": "2022-05-01",
-        //   "name": "[format('{0}/{1}', 'appfunction', 'appfunction')]",
-        //   "properties": {
-        //     "privateDnsZoneConfigs": [
-        //       {
-        //         "name": "config",
-        //         "properties": {
-        //           "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones','appfunction-dns.bpa' )]"
-        //         }
-        //       }
-        //     ]
-        //   },
-        //   "dependsOn": [
-        //     "[resourceId('Microsoft.Network/privateEndpoints', 'appfunction')]",
-        //     "[resourceId('Microsoft.Network/privateDnsZones', 'appfunction-dns.bpa')]"
-        //   ]
-        // },
         {
             "type": "Microsoft.Web/staticSites",
             "apiVersion": "2022-09-01",
@@ -1603,6 +1536,110 @@
                 "functionAppResourceId": "[resourceId('Microsoft.Web/sites',parameters('projectName'))]",
                 "functionAppRegion": "[parameters('primaryRegion')]"
             }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('functionAppNamePython')]",
+            "location": "[parameters('primaryRegion')]",
+            "kind": "functionapp,linux",
+            "properties": {
+                "httpsOnly": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+                "clientAffinityEnabled": true,
+                "siteConfig": {
+                    "linuxFxVersion": "Python|3.9",
+                    "alwaysOn": true,
+                    "appSettings": [
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "https://bpasource.blob.core.windows.net/source/huggingface/hf_backend_v012.zip?sv=2021-10-04&st=2023-05-31T17%3A28%3A30Z&se=2024-04-18T17%3A28%3A00Z&sr=b&sp=r&sig=RC7DsOnq6zgmLHy36Ym6UfimmmE9pPMVsxyI04GIGOQ%3D"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))).InstrumentationKey]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "python"
+                        },
+                        {
+                            "name": "AZURE_BLOB_STORAGE_ACCOUNT",
+                            "value": "[parameters('projectName')]"
+                        },
+                        {
+                            "name": "AZURE_BLOB_STORAGE_CONTAINER",
+                            "value": "[parameters('blobContainerName')]"
+                        },
+                        {
+                            "name": "AZURE_OPENAI_CHATGPT_DEPLOYMENT",
+                            "value": "chatgpt"
+                        },
+                        {
+                            "name": "AZURE_OPENAI_GPT_DEPLOYMENT",
+                            "value": "text-davinci-003"
+                        },
+                        {
+                            "name": "AZURE_OPENAI_SERVICE",
+                            "value": "[parameters('openaiName')]"
+                        },
+                        {
+                            "name": "AZURE_SEARCH_APIKEY",
+                            "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('cogSearchName')), '2021-04-01-Preview').primaryKey]"
+                        },
+                        {
+                            "name": "AZURE_SEARCH_INDEX",
+                            "value": "cosmosdb-index"
+                        },
+                        {
+                            "name": "AZURE_SEARCH_SERVICE",
+                            "value": "[parameters('cogSearchName')]"
+                        },
+                        {
+                            "name": "KB_FIELDS_CATEGORY",
+                            "value": "category"
+                        },
+                        {
+                            "name": "KB_FIELDS_CONTENT",
+                            "value": "aggregatedResults.ocr"
+                        },
+                        {
+                            "name": "KB_FIELDS_SOURCEPAGE",
+                            "value": "filename"
+                        },
+                        {
+                            "name": "OPENAI_API_KEY",
+                            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName')), '2022-12-01').key1]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/networkConfig",
+            "apiVersion": "2022-03-01",
+            "name": "[format('{0}/{1}', parameters('functionAppNamePython'), 'virtualNetwork')]",
+            "properties": {
+                "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp-',parameters('projectName')))]",
+                "swiftSupported": true
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('functionAppNamePython'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
         }
         //   {
         //     "type": "Microsoft.Web/staticSites/config",
