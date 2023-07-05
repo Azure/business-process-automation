@@ -42,21 +42,20 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             return
         }
     } else {
-        try{
-            const axiosOptions : AxiosRequestConfig = {
-                headers : {
-                    "Content-Type" : "application/json",
-                    "api-key" : process.env.COGSEARCH_APIKEY
-                }
-            }
-            const indexerName = req.query.name
-            const axiosResult = await axios.post(`${process.env.COGSEARCH_URL}/indexers/${indexerName}/run?api-version=2021-04-30-Preview`,{}, axiosOptions)
-               
+        try {
+            const indexerClient = new SearchIndexerClient(process.env.COGSEARCH_URL, new AzureKeyCredential(process.env.COGSEARCH_APIKEY));
+            await indexerClient.runIndexer(req.query.name)
+            indexerClient.getIndexerStatus
+        
             context.res = {
-                body : axiosResult
+                body: {"status" : "success"}
             }
-        } catch(err){
+
+        } catch (err) {
             console.log(err)
+            context.res = {
+                body: { "error": err }
+            }
         }
         
     }

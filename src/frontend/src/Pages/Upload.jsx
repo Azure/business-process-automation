@@ -15,9 +15,10 @@ function Upload(props) {
     const [selectedPipelineName, setSelectedPipelineName] = useState("")
     const [queueStatus, setQueueStatus] = useState(null)
     const [indexers, setIndexers] = useState([])
-    const [selectedIndexer, setSelectedIndexer] = useState(null)
+    const [selectedIndexer, setSelectedIndexer] = useState({})
     //const [indexerSearchDone, setIndexerSearchDone] = useState(false)
     const [documentCount, setDocumentCount] = useState(0)
+    const [indexerStatus, setIndexerStatus] = useState("")
 
     useEffect(() => {
         try {
@@ -33,6 +34,7 @@ function Upload(props) {
                     }
                 })
             }, 5000)
+
 
             axios.get('/api/indexers').then(_indexes => {
                 if (_indexes?.data?.indexers) {
@@ -66,15 +68,25 @@ function Upload(props) {
         if (indexers && indexers.length > 0) {
             const _indexer = indexers.find(i => i.name === value.value)
             setSelectedIndexer(_indexer)
-            axios.get('/api/cogsearchdocumentcount?indexName='+_indexer.targetIndexName).then(count => {
+            axios.get('/api/cogsearchdocumentcount?indexName=' + _indexer.targetIndexName).then(count => {
                 console.log(count)
                 setDocumentCount(count.data.count)
             })
         }
     }
 
+    const onRefreshStatus = () => {
+        if (selectedIndexer?.name) {
+            axios.get(`/api/indexerstatus?name=${selectedIndexer.name}`).then(value => {
+                if (value?.data) {
+                    setIndexerStatus(value.data)
+                }
+            })
+        }
+    }
+
     const onRunIndexer = () => {
-        axios.post('api/indexers?name='+selectedIndexer.name).then(value => {
+        axios.post('api/indexers?name=' + selectedIndexer.name).then(value => {
             console.log(value)
         })
     }
@@ -179,8 +191,10 @@ function Upload(props) {
                         defaultValue={selectedIndexer.name}
                         style={{ fontWeight: "400", marginBottom: "20px" }}
                     />
-                     <Button onClick={onRunIndexer} primary content="Run Indexer"/>
-                     <Text style={{ marginBottom: "10px" }} content={documentCount} />
+                    <Button onClick={onRunIndexer} primary content="Run Indexer" />
+                    <Text style={{ marginBottom: "10px" }} content={documentCount} />
+                    <Button onClick={onRefreshStatus} primary content="Refresh Status" />
+                    <Text style={{ marginBottom: "10px" }} content={JSON.stringify(indexerStatus)} />
                 </div>
             )
         }
