@@ -273,6 +273,22 @@
                         }
                     },
                     {
+                        "name": "[concat('functionapp2-',parameters('projectName'))]",
+                        "properties": {
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "addressPrefix": "10.0.3.0/24",
+                            "delegations": [
+                                {
+                                    "name": "webapp",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Web/serverFarms"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
                         "name": "[concat('privateEndpoint-',parameters('projectName'))]",
                         "properties": {
                             "privateEndpointNetworkPolicies": "Disabled",
@@ -599,6 +615,20 @@
             ]
         },
 
+        {
+            "type": "Microsoft.Search/searchServices/sharedPrivateLinkResources",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(parameters('cogSearchName'), '/search-blobstorage')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ],
+            "properties": {
+                "privateLinkResourceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                "groupId": "blob",
+                "requestMessage": "please approve"
+            }
+        },
         /////////////////////////  Storage Account //////////////////////////////
         /////////////////////////  Namespace for Queue //////////////////////////////
         {
@@ -1233,11 +1263,81 @@
                 "replicaCount": 1,
                 "partitionCount": 1,
                 "hostingMode": "Default",
-                "semanticSearch": "free"
+                "semanticSearch": "free",
+                "publicNetworkAccess": "Disabled"
             },
             "tags": {},
             "dependsOn": []
         },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2022-05-01",
+            "name": "[concat(parameters('projectName'),'-cogsearch')]",
+            "location": "[parameters('primaryRegion')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('privateEndpoint-',parameters('projectName')))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "MyBlobPrivateLinkConnection",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]",
+                            "groupIds": [
+                                "searchService"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2022-05-01",
+            "name": "[format('{0}/{1}', concat(parameters('projectName'),'-cogsearch'), 'default')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.search.windows.net')]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('projectName'),'-cogsearch'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.search.windows.net')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2020-06-01",
+            "name": "privatelink.search.windows.net",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2020-06-01",
+            "name": "[format('{0}/{1}', 'privatelink.search.windows.net', format('{0}-link', 'privatelink.search.windows.net'))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.search.windows.net')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('projectName'))]"
+            ]
+        },
+
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-09-01",
@@ -1298,7 +1398,7 @@
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://bpasource.blob.core.windows.net/source/backendv035.zip?sv=2020-10-02&st=2023-06-30T00%3A23%3A51Z&se=2024-04-26T00%3A23%3A00Z&sr=b&sp=r&sig=6OxOaGBscOTXSN48C%2BH%2FhSk7nEenvBudCVSk3ebEnas%3D"
+                            "value": "https://bpasource.blob.core.windows.net/source/backendv038.zip?sv=2020-10-02&st=2023-07-05T13%3A07%3A48Z&se=2024-01-25T14%3A07%3A00Z&sr=b&sp=r&sig=tDduHmdKE2EW6cAuegGMjWEDIhSJ0iZuyIU58n%2BIrRs%3D"
                         },
                         {
                             "name": "WEBSITE_VNET_ROUTE_ALL",
@@ -1538,6 +1638,20 @@
             }
         },
         {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-10-01",
+            "name": "[parameters('hostingPlanName')]",
+            "location": "[parameters('primaryRegion')]",
+            "kind": "linux",
+            "sku": {
+                "name": "P2v2",
+                "tier": "PremiumV2"
+            },
+            "properties": {
+                "reserved": true
+            }
+        },
+        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2020-06-01",
             "name": "[parameters('functionAppNamePython')]",
@@ -1633,7 +1747,7 @@
             "apiVersion": "2022-03-01",
             "name": "[format('{0}/{1}', parameters('functionAppNamePython'), 'virtualNetwork')]",
             "properties": {
-                "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp-',parameters('projectName')))]",
+                "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('projectName'), concat('functionapp2-',parameters('projectName')))]",
                 "swiftSupported": true
             },
             "dependsOn": [
