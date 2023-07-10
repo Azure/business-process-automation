@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { Checkbox, Panel, DefaultButton, TextField, SpinButton } from "@fluentui/react";
+import { Panel, DefaultButton, SpinButton } from "@fluentui/react";
 //import { SparkleFilled } from "@fluentui/react-icons";
 import { Dropdown } from '@fluentui/react-northstar';
 import styles from "./Chat.module.css";
@@ -25,15 +25,15 @@ import axios from 'axios'
 
 const EnterpriseSearch = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-    const [promptTemplate, setPromptTemplate] = useState("");
-    const [facetTemplate, setFacetTemplate] = useState("If the question is asking about 'sentiment' regarding the sources and other documents in the database, use the 'Facets' field to answer the question.");
-    const [facetQueryTermsTemplate, setFacetQueryTermsTemplate] = useState("When generating the Search Query do not use terms related to sentiment.  Example ['sentiment', 'positive', 'negative',etc]");
+    // const [promptTemplate, setPromptTemplate] = useState("");
+    // const [facetTemplate, setFacetTemplate] = useState("If the question is asking about 'sentiment' regarding the sources and other documents in the database, use the 'Facets' field to answer the question.");
+    // const [facetQueryTermsTemplate, setFacetQueryTermsTemplate] = useState("When generating the Search Query do not use terms related to sentiment.  Example ['sentiment', 'positive', 'negative',etc]");
     const [retrieveCount, setRetrieveCount] = useState(3);
-    const [useSemanticRanker, setUseSemanticRanker] = useState(true);
+    //const [useSemanticRanker, setUseSemanticRanker] = useState(true);
     const [vectorSearchPipeline, setVectorSearchPipeline] = useState("");
-    const [useSemanticCaptions, setUseSemanticCaptions] = useState(false);
-    const [excludeCategory, setExcludeCategory] = useState("");
-    const [useSuggestFollowupQuestions, setUseSuggestFollowupQuestions] = useState(false);
+    //const [useSemanticCaptions, setUseSemanticCaptions] = useState(false);
+    //const [excludeCategory, setExcludeCategory] = useState("");
+    //const [useSuggestFollowupQuestions, setUseSuggestFollowupQuestions] = useState(false);
 
     const lastQuestionRef = useRef("");
     const chatMessageStreamEnd = useRef(null);
@@ -100,15 +100,15 @@ const EnterpriseSearch = () => {
                 history: [...history, { user: question, bot: undefined }],
                 approach: "rtr", //Approaches.ReadRetrieveRead,
                 overrides: {
-                    promptTemplate: promptTemplate.length === 0 ? undefined : promptTemplate,
-                    excludeCategory: excludeCategory.length === 0 ? undefined : excludeCategory,
+                    //promptTemplate: promptTemplate.length === 0 ? undefined : promptTemplate,
+                    //excludeCategory: excludeCategory.length === 0 ? undefined : excludeCategory,
                     top: retrieveCount,
-                    semanticRanker: useSemanticRanker,
+                    //semanticRanker: useSemanticRanker,
                     vectorSearchPipeline: vectorSearchPipeline,
-                    semanticCaptions: useSemanticCaptions,
-                    suggestFollowupQuestions: useSuggestFollowupQuestions,
-                    facetQueryTermsTemplate: facetQueryTermsTemplate,
-                    facetTemplate : facetTemplate
+                    //semanticCaptions: useSemanticCaptions,
+                    //suggestFollowupQuestions: useSuggestFollowupQuestions,
+                    //facetQueryTermsTemplate: facetQueryTermsTemplate,
+                    //facetTemplate : facetTemplate
                 },
                 index: selectedIndex
             };
@@ -134,41 +134,9 @@ const EnterpriseSearch = () => {
 
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
 
-    const onPromptTemplateChange = (_ev, newValue) => {
-        setPromptTemplate(newValue || "");
-    };
-
-    const onFacetTemplateChange = (_ev, newValue) => {
-        setFacetTemplate(newValue || "");
-    };
-
-    const onFacetQueryTermsTemplateChange = (_ev, newValue) => {
-        setFacetQueryTermsTemplate(newValue || "");
-    };
-
     const onRetrieveCountChange = (_ev, newValue) => {
         setRetrieveCount(parseInt(newValue || "3"));
     };
-
-    const onUseSemanticRankerChange = (_ev, checked) => {
-        setUseSemanticRanker(!!checked);
-    };
-
-    const onUseSemanticCaptionsChange = (_ev, checked) => {
-        setUseSemanticCaptions(!!checked);
-    };
-
-    const onExcludeCategoryChanged = (_ev, newValue) => {
-        setExcludeCategory(newValue || "");
-    };
-
-    const onUseSuggestFollowupQuestionsChange = (_ev, checked) => {
-        setUseSuggestFollowupQuestions(!!checked);
-    };
-
-    // const onExampleClicked = (example) => {
-    //     makeApiRequest(example);
-    // };
 
     const onShowCitation = (citation, index) => {
         if (activeCitation === citation && activeAnalysisPanelTab === AnalysisPanelTabs.CitationTab && selectedAnswer === index) {
@@ -246,7 +214,7 @@ const EnterpriseSearch = () => {
                                             onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
                                             onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
                                             onFollowupQuestionClicked={q => makeApiRequest(q)}
-                                            showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
+                                            //showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
                                         />
                                     </div>
                                 </div>
