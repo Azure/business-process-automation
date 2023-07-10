@@ -289,6 +289,7 @@ const EnterpriseSearch = () => {
                         citationHeight="810px"
                         answer={answers[selectedAnswer][1]}
                         activeTab={activeAnalysisPanelTab}
+                        selectedIndex={selectedIndex}
                     />
                 )}
 
@@ -301,32 +302,32 @@ const EnterpriseSearch = () => {
                     onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
                     isFooterAtBottom={true}
                 >
-                    <TextField
+                    {/* <TextField
                         className={styles.chatSettingsSeparator}
                         defaultValue={promptTemplate}
                         label="Override prompt template"
                         multiline
                         autoAdjustHeight
                         onChange={onPromptTemplateChange}
-                    />
+                    /> */}
 
-                    <TextField
+                    {/* <TextField
                         className={styles.chatSettingsSeparator}
                         defaultValue={facetTemplate}
                         label="Facet Template"
                         multiline
                         autoAdjustHeight
                         onChange={onFacetTemplateChange}
-                    />
+                    /> */}
 
-                    <TextField
+                    {/* <TextField
                         className={styles.chatSettingsSeparator}
                         defaultValue={facetQueryTermsTemplate}
                         label="Facet Query Terms Template"
                         multiline
                         autoAdjustHeight
                         onChange={onFacetQueryTermsTemplateChange}
-                    />
+                    /> */}
 
                     <SpinButton
                         className={styles.chatSettingsSeparator}
@@ -336,7 +337,7 @@ const EnterpriseSearch = () => {
                         defaultValue={retrieveCount.toString()}
                         onChange={onRetrieveCountChange}
                     />
-                    <TextField className={styles.chatSettingsSeparator} label="Exclude category" onChange={onExcludeCategoryChanged} />
+                    {/* <TextField className={styles.chatSettingsSeparator} label="Exclude category" onChange={onExcludeCategoryChanged} />
                     <Checkbox
                         className={styles.chatSettingsSeparator}
                         checked={useSemanticRanker}
@@ -355,7 +356,7 @@ const EnterpriseSearch = () => {
                         checked={useSuggestFollowupQuestions}
                         label="Suggest follow-up questions"
                         onChange={onUseSuggestFollowupQuestionsChange}
-                    />
+                    /> */}
                     {/* <TextField className={styles.chatSettingsSeparator} label="Vector Search Index" onChange={onVectorSearchPipeline} /> */}
                 </Panel>
             </div>
