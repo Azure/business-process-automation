@@ -27,15 +27,18 @@ export const AnalysisPanel = ({ answer, activeTab, activeCitation, citationHeigh
     const sanitizedThoughts = DOMPurify.sanitize(answer.thoughts);
 
     const parseCitation = (citation) => {
-        const stringsplit = citation.split('/')
-        let result = ''
-        if(stringsplit === 0){
-            result = citation
-        } else{
-            result = stringsplit[stringsplit.length - 1]
+        if(citation){
+            const stringsplit = citation.split('/')
+            let result = ''
+            if(stringsplit === 0){
+                result = citation
+            } else{
+                result = stringsplit[stringsplit.length - 1]
+            }
+            result = result.replace('.txt','')
+            return `${selectedIndex.name}-stage2/${selectedIndex.name}-stage1/${result}`
         }
-        result = result.replace('.txt','')
-        return `${selectedIndex.name}-stage2/${selectedIndex.name}-stage1/${result}`
+
     }
 
     return (

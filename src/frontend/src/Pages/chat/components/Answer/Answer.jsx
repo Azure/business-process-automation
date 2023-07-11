@@ -65,11 +65,13 @@ export const Answer = ({
                     <Stack horizontal wrap tokens={{ childrenGap: 5 }}>
                         <span className={styles.citationLearnMore}>Citations:</span>
                         {parsedAnswer.citations.map((x, i) => {
-                            const path = getCitationFilePath(x);
+                            const docIndex = Number(x.replace('doc',''))
+                            const docPath = answer.data_points[docIndex - 1].filepath
+                            const path = getCitationFilePath(docPath);
                             return (
                                 //eslint-disable-next-line
                                 <a key={i} className={styles.citation} title={x} onClick={() => onCitationClicked(path)}>
-                                    {`${++i}. ${x}`}
+                                    {`${++i}. ${path}`}
                                 </a>
                             );
                         })}

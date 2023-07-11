@@ -95,9 +95,9 @@ const EnterpriseSearch = () => {
         setActiveAnalysisPanelTab(undefined);
 
         try {
-            const history = answers.map(a => ({ user: a[0], bot: a[1].answer }));
+            const history = answers.map(a => ({ user: a[0], assistant: a[1].answer }));
             const request = {
-                history: [...history, { user: question, bot: undefined }],
+                history: [...history, { user: question, assistant: undefined }],
                 approach: "rtr", //Approaches.ReadRetrieveRead,
                 overrides: {
                     //promptTemplate: promptTemplate.length === 0 ? undefined : promptTemplate,

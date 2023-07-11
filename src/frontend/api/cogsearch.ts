@@ -28,6 +28,7 @@ export class CognitiveSearch {
       },
       connectionString: blobConnectionString
     };
+    console.log("creating DataSource")
     return await this._indexerClient.createDataSourceConnection(dataSourceConnection);
   }
 
@@ -59,6 +60,23 @@ export class CognitiveSearch {
           "name": "pipeline",
           "type": "Edm.String",
           "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "text",
+          "type": "Edm.String",
+          "searchable": true,
           "filterable": false,
 
           "sortable": false,
@@ -404,7 +422,7 @@ export class CognitiveSearch {
 
 
     }
-
+    console.log("creating Index")
     return this._indexClient.createIndex(index)
   }
 
@@ -419,7 +437,15 @@ export class CognitiveSearch {
           parsingMode: "json"
         }
       },
+      outputFieldMappings:[
+        {
+          sourceFieldName: "/document/aggregatedResults/text",
+          targetFieldName: "text",
+          mappingFunction: null
+        }
+      ],
       fieldMappings: [
+        
         {
           sourceFieldName: "metadata_storage_path",
           targetFieldName: "metadata_storage_path",
@@ -430,6 +456,7 @@ export class CognitiveSearch {
         }
       ],
     }
+    console.log("creating Indexer")
     return await this._indexerClient.createIndexer(indexer)
   }
 }
