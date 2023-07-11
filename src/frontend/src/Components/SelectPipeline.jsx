@@ -248,6 +248,7 @@ export default function SelectPipeline(props) {
             await axios.post('/api/config', currentPipelines.data)
         }
         setPipelines(currentPipelines.data.pipelines)
+        await axios.get(`/api/cogsearch?pipeline=${newPipelineName}&vector=true`)
         //setSelectedPipeline({ stages: [], name: newPipelineName })
     }
 
