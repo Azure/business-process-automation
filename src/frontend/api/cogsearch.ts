@@ -1,4 +1,5 @@
 import { SearchIndexClient, AzureKeyCredential, SearchIndexerDataSourceConnection, SearchIndexerClient, SearchIndex, SearchIndexer } from "@azure/search-documents"
+import axios from "axios";
 
 export class CognitiveSearch {
 
@@ -17,6 +18,13 @@ export class CognitiveSearch {
     return indexer
   }
 
+  public createVector = async (pipelineName: string): Promise<SearchIndexer> => {
+    const dataSource = await this._createDataSource(pipelineName, process.env.BLOB_STORAGE_CONNECTION_STRING)
+    const index = await this._createVectorIndex(pipelineName)
+    const indexer = await this._createVectorIndexer(pipelineName, dataSource.name, index.name)
+    return indexer
+  }
+
   private _createDataSource = async (dataSourceConnectionName: string, blobConnectionString: string): Promise<SearchIndexerDataSourceConnection> => {
     const dataSourceConnection: SearchIndexerDataSourceConnection = {
       name: dataSourceConnectionName,
@@ -28,11 +36,12 @@ export class CognitiveSearch {
       },
       connectionString: blobConnectionString
     };
+    console.log("creating DataSource")
     return await this._indexerClient.createDataSourceConnection(dataSourceConnection);
   }
 
   private _createIndex = async (indexName: string) => {
-    const index: SearchIndex =
+    const index: any =
     {
       "name": indexName,
       "defaultScoringProfile": "",
@@ -59,6 +68,23 @@ export class CognitiveSearch {
           "name": "pipeline",
           "type": "Edm.String",
           "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "text",
+          "type": "Edm.String",
+          "searchable": true,
           "filterable": false,
 
           "sortable": false,
@@ -392,6 +418,24 @@ export class CognitiveSearch {
 
         }
       ],
+      "semantic": {
+        "configurations": [
+          {
+            "name": "default",
+            "prioritizedFields": {
+              "titleField": {
+                "fieldName": "filename"
+              },
+              "prioritizedContentFields": [
+                {
+                  "fieldName": "text"
+                }
+              ],
+              "prioritizedKeywordsFields": []
+            }
+          }
+        ]
+      },
       "scoringProfiles": [],
       "corsOptions": null,
       "suggesters": [],
@@ -404,8 +448,11 @@ export class CognitiveSearch {
 
 
     }
+    console.log("creating Index")
+    const url = `${process.env.COGSEARCH_URL}/indexes?api-version=2023-07-01-Preview`
+    const out = await axios.post(url, index, {headers : {"content-type":"application/json", "api-key": process.env.COGSEARCH_APIKEY}})
+    return out.data//this._indexClient.createIndex(index)
 
-    return this._indexClient.createIndex(index)
   }
 
   private _createIndexer = async (indexerName: string, dataSourceName: string, indexName: string): Promise<SearchIndexer> => {
@@ -419,7 +466,15 @@ export class CognitiveSearch {
           parsingMode: "json"
         }
       },
+      outputFieldMappings: [
+        {
+          sourceFieldName: "/document/aggregatedResults/text",
+          targetFieldName: "text",
+          mappingFunction: null
+        }
+      ],
       fieldMappings: [
+
         {
           sourceFieldName: "metadata_storage_path",
           targetFieldName: "metadata_storage_path",
@@ -430,6 +485,476 @@ export class CognitiveSearch {
         }
       ],
     }
+    console.log("creating Indexer")
+    return await this._indexerClient.createIndexer(indexer)
+  }
+
+  private _createVectorIndex = async (indexName: string) => {
+    const index: any =
+    {
+      "name": indexName,
+      "defaultScoringProfile": "",
+      "fields": [
+
+        {
+          "name": "label",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "pipeline",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "text",
+          "type": "Edm.String",
+          "searchable": true,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "contentVector",
+          "type": "Collection(Edm.Single)",
+          "searchable": true,
+          "dimensions": 1536,
+          "vectorSearchConfiguration": "vectorConfig"
+        },
+        {
+          "name": "type",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "filename",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "bpaId",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "aggregatedResults",
+          "type": "Edm.ComplexType",
+          "fields": [
+            {
+              "name": "text",
+              "type": "Edm.String",
+              "searchable": true,
+              "filterable": false,
+
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+
+
+
+
+
+
+
+            }
+          ]
+        },
+        {
+          "name": "resultsIndexes",
+          "type": "Collection(Edm.ComplexType)",
+          "fields": [
+            {
+              "name": "index",
+              "type": "Edm.Int64",
+              "searchable": false,
+              "filterable": false,
+
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+
+
+
+
+
+
+
+            },
+            {
+              "name": "name",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+
+
+
+
+
+
+
+            },
+            {
+              "name": "type",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+
+
+
+
+
+
+
+            },
+
+            {
+              "name": "id",
+              "type": "Edm.String",
+              "searchable": false,
+              "filterable": false,
+
+              "sortable": false,
+              "facetable": false,
+              "key": false,
+
+
+
+
+
+
+
+            }
+          ]
+        },
+        {
+          "name": "metadata_storage_content_type",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_storage_size",
+          "type": "Edm.Int64",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_storage_last_modified",
+          "type": "Edm.DateTimeOffset",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_storage_content_md5",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_storage_name",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_storage_path",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": true,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_storage_file_extension",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_content_encoding",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_content_type",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        },
+        {
+          "name": "metadata_language",
+          "type": "Edm.String",
+          "searchable": false,
+          "filterable": false,
+
+          "sortable": false,
+          "facetable": false,
+          "key": false,
+
+
+
+
+
+
+
+        }
+      ],
+      "vectorSearch": {
+        "algorithmConfigurations": [
+          {
+            "name": "vectorConfig",
+            "kind": "hnsw"
+          }
+        ]
+      },
+      "semantic": {
+        "configurations": [
+          {
+            "name": "default",
+            "prioritizedFields": {
+              "titleField": {
+                "fieldName": "filename"
+              },
+              "prioritizedContentFields": [
+                {
+                  "fieldName": "text"
+                }
+              ],
+              "prioritizedKeywordsFields": []
+            }
+          }
+        ]
+      },
+      "scoringProfiles": [],
+      "corsOptions": null,
+      "suggesters": [],
+      "analyzers": [],
+
+      "tokenizers": [],
+      "tokenFilters": [],
+      "charFilters": [],
+      "encryptionKey": null,
+
+
+    }
+    console.log("creating Index")
+    const url = `${process.env.COGSEARCH_URL}/indexes?api-version=2023-07-01-Preview`
+    const out = await axios.post(url, index, {headers : {"content-type":"application/json", "api-key": process.env.COGSEARCH_APIKEY}})
+    return out.data//this._indexClient.createIndex(index)
+
+  }
+
+  private _createVectorIndexer = async (indexerName: string, dataSourceName: string, indexName: string): Promise<SearchIndexer> => {
+    const indexer: SearchIndexer = {
+      name: indexerName,
+      dataSourceName: dataSourceName,
+      targetIndexName: indexName,
+      parameters: {
+        configuration: {
+          dataToExtract: "contentAndMetadata",
+          parsingMode: "json"
+        }
+      },
+      outputFieldMappings: [
+        {
+          sourceFieldName: "/document/aggregatedResults/text",
+          targetFieldName: "text",
+          mappingFunction: null
+        },
+        {
+          sourceFieldName: "/document/aggregatedResults/openaiEmbeddings/data/0/embedding",
+          targetFieldName: "contentVector",
+          mappingFunction: null
+        }
+      ],
+      fieldMappings: [
+
+        {
+          sourceFieldName: "metadata_storage_path",
+          targetFieldName: "metadata_storage_path",
+          mappingFunction: {
+            name: "base64Encode",
+            parameters: null
+          }
+        }
+      ],
+    }
+    console.log("creating Indexer")
     return await this._indexerClient.createIndexer(indexer)
   }
 }

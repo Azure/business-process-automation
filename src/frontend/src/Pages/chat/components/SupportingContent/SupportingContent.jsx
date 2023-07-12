@@ -1,4 +1,4 @@
-import { parseSupportingContentItem } from "./SupportingContentParser";
+//import { parseSupportingContentItem } from "./SupportingContentParser";
 
 import styles from "./SupportingContent.module.css";
 
@@ -10,12 +10,12 @@ export const SupportingContent = ({ supportingContent }: Props) => {
     return (
         <ul className={styles.supportingContentNavList}>
             {supportingContent.map((x, i) => {
-                const parsed = parseSupportingContentItem(x);
+                //const parsed = parseSupportingContentItem(x);
 
                 return (
                     <li className={styles.supportingContentItem}>
-                        <h4 className={styles.supportingContentItemHeader}>{parsed.title}</h4>
-                        <p className={styles.supportingContentItemText}>{parsed.content}</p>
+                        <h4 className={styles.supportingContentItemHeader}>{x.title}</h4>
+                        <p className={styles.supportingContentItemText}>{x.content}</p>
                     </li>
                 );
             })}

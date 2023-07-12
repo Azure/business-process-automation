@@ -19,12 +19,27 @@ import { AnalysisPanelTabs } from "./AnalysisPanelTabs";
 
 const pivotItemDisabledStyle = { disabled: true, style: { color: "grey" } };
 
-export const AnalysisPanel = ({ answer, activeTab, activeCitation, citationHeight, className, onActiveTabChanged }) => {
+export const AnalysisPanel = ({ answer, activeTab, activeCitation, citationHeight, className, onActiveTabChanged, selectedIndex }) => {
     const isDisabledThoughtProcessTab = !answer.thoughts;
     const isDisabledSupportingContentTab = !answer.data_points.length;
     const isDisabledCitationTab = !activeCitation;
 
     const sanitizedThoughts = DOMPurify.sanitize(answer.thoughts);
+
+    const parseCitation = (citation) => {
+        if(citation){
+            const stringsplit = citation.split('/')
+            let result = ''
+            if(stringsplit === 0){
+                result = citation
+            } else{
+                result = stringsplit[stringsplit.length - 1]
+            }
+            result = result.replace('.txt','')
+            return `${selectedIndex.name}-stage2/${selectedIndex.name}-stage1/${result}`
+        }
+
+    }
 
     return (
         <Pivot
@@ -51,7 +66,7 @@ export const AnalysisPanel = ({ answer, activeTab, activeCitation, citationHeigh
                 headerText="Citation"
                 headerButtonProps={isDisabledCitationTab ? pivotItemDisabledStyle : undefined}
             >
-                <iframe title="Citation" src={`/api/viewpdf?container=documents&filename=${activeCitation}`} width="100%" height={citationHeight} />
+                <iframe title="Citation" src={`/api/viewpdf?container=documents&filename=${parseCitation(activeCitation)}`} width="100%" height={citationHeight} />
             </PivotItem>
         </Pivot>
     );

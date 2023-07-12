@@ -643,7 +643,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpasource.blob.core.windows.net/source/backendv034.zip?sv=2020-10-02&st=2023-06-26T15%3A30%3A10Z&se=2024-05-29T15%3A30%3A00Z&sr=b&sp=r&sig=P91EacLnsNxA3CWQHT5N5hQ7QDXY97ygFD6xf1Z7C1U%3D"
+              "value": "https://bpasource.blob.core.windows.net/source/backendv039.zip?sv=2020-10-02&st=2023-07-12T11%3A33%3A04Z&se=2024-03-21T12%3A33%3A00Z&sr=b&sp=r&sig=ITV4DPDPW2ruSzu75YmtgedVvgFhGkzS8Qodw69eQ9Q%3D"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
