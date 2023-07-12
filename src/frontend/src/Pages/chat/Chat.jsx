@@ -179,7 +179,7 @@ const EnterpriseSearch = () => {
 
                     />
                 </div>
-                <div>
+                {/* <div>
                     <Dropdown
                         search
                         placeholder="Select the Vector Embedding Index"
@@ -187,7 +187,7 @@ const EnterpriseSearch = () => {
                         items={pipelines.map(sc => sc.name)}
                         onChange={onVectorSearchPipeline}
                     />
-                </div>
+                </div> */}
 
             </div>
             <div className={styles.chatRoot}>

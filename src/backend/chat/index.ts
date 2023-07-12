@@ -35,7 +35,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                     "endpoint": process.env.COGSEARCH_URL,
                     "key": process.env.COGSEARCH_APIKEY,
                     "indexName": req.body.index.name,
-                    "semanticConfiguration": "",
+                    "semanticConfiguration": "default",
                     "queryType": "simple",
                     "fieldsMapping": {
                         "contentFieldsSeparator": "\n",

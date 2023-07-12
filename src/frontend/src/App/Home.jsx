@@ -53,7 +53,7 @@ export default function Home(props) {
             <Button id="ENTERPRISE_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Enterprise Search Demo" />
             |
             <Button id="OPENAI_VIEWER" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="Result Viewer" />
-            {renderOAIOptions()}
+            {/* {renderOAIOptions()} */}
 
             {/* </div> */}
         </div>
