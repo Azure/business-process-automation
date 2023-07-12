@@ -1398,7 +1398,7 @@
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://bpasource.blob.core.windows.net/source/backendv038.zip?sv=2020-10-02&st=2023-07-05T13%3A07%3A48Z&se=2024-01-25T14%3A07%3A00Z&sr=b&sp=r&sig=tDduHmdKE2EW6cAuegGMjWEDIhSJ0iZuyIU58n%2BIrRs%3D"
+                            "value": "https://bpasource.blob.core.windows.net/source/backendv039.zip?sv=2020-10-02&st=2023-07-12T11%3A33%3A04Z&se=2024-03-21T12%3A33%3A00Z&sr=b&sp=r&sig=ITV4DPDPW2ruSzu75YmtgedVvgFhGkzS8Qodw69eQ9Q%3D"
                         },
                         {
                             "name": "WEBSITE_VNET_ROUTE_ALL",
