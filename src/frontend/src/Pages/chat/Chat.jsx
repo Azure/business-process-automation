@@ -63,18 +63,18 @@ const EnterpriseSearch = () => {
             //setIndexSearchDone(true)
             console.log(err)
         })
-        axios.get('/api/config?id=pipelines').then(value => {
-            setPipelines(value.data.pipelines.filter(value => {
-                for (const stage of value.stages) {
-                    if (stage.name === 'openaiEmbeddings') {
-                        return true
-                    }
-                }
-                return false
-            }))
-        }).catch(err => {
-            console.log(err)
-        })
+        // axios.get('/api/config?id=pipelines').then(value => {
+        //     setPipelines(value.data.pipelines.filter(value => {
+        //         for (const stage of value.stages) {
+        //             if (stage.name === 'openaiEmbeddings') {
+        //                 return true
+        //             }
+        //         }
+        //         return false
+        //     }))
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     }, [])
 
 
