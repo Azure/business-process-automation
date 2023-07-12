@@ -30,7 +30,7 @@ const EnterpriseSearch = () => {
     // const [facetQueryTermsTemplate, setFacetQueryTermsTemplate] = useState("When generating the Search Query do not use terms related to sentiment.  Example ['sentiment', 'positive', 'negative',etc]");
     const [retrieveCount, setRetrieveCount] = useState(3);
     //const [useSemanticRanker, setUseSemanticRanker] = useState(true);
-    const [vectorSearchPipeline, setVectorSearchPipeline] = useState("");
+    // const [vectorSearchPipeline, setVectorSearchPipeline] = useState("");
     //const [useSemanticCaptions, setUseSemanticCaptions] = useState(false);
     //const [excludeCategory, setExcludeCategory] = useState("");
     //const [useSuggestFollowupQuestions, setUseSuggestFollowupQuestions] = useState(false);
@@ -104,7 +104,7 @@ const EnterpriseSearch = () => {
                     //excludeCategory: excludeCategory.length === 0 ? undefined : excludeCategory,
                     top: retrieveCount,
                     //semanticRanker: useSemanticRanker,
-                    vectorSearchPipeline: vectorSearchPipeline,
+                    //vectorSearchPipeline: vectorSearchPipeline,
                     //semanticCaptions: useSemanticCaptions,
                     //suggestFollowupQuestions: useSuggestFollowupQuestions,
                     //facetQueryTermsTemplate: facetQueryTermsTemplate,
