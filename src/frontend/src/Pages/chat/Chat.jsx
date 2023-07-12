@@ -50,7 +50,7 @@ const EnterpriseSearch = () => {
     const [indexes, setIndexes] = useState([])
     const [selectedIndex, setSelectedIndex] = useState(null)
     //const [indexSearchDone, setIndexSearchDone] = useState(false)
-    const [pipelines, setPipelines] = useState([])
+    // const [pipelines, setPipelines] = useState([])
 
     useEffect(() => {
         axios.get('/api/indexes').then(_indexes => {
@@ -159,9 +159,9 @@ const EnterpriseSearch = () => {
         setSelectedAnswer(index);
     };
 
-    const onVectorSearchPipeline = (_ev, newValue) => {
-        setVectorSearchPipeline(newValue.value)
-    }
+    // const onVectorSearchPipeline = (_ev, newValue) => {
+    //     setVectorSearchPipeline(newValue.value)
+    // }
 
     return (
         <div className={styles.container}>

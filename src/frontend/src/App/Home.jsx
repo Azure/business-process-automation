@@ -1,30 +1,30 @@
 import { Text, Button } from '@fluentui/react-northstar';
-import { useEffect, useState } from 'react';
-import axios from 'axios'
+// import { useEffect, useState } from 'react';
+// import axios from 'axios'
 
 export default function Home(props) {
 
-    const [isOAIDeployed, setIsOAIDeployed] = useState(false)
+    // const [isOAIDeployed, setIsOAIDeployed] = useState(false)
 
-    useEffect(() => {
-        axios.get("/api/isdeployed").then(v => {
-            setIsOAIDeployed(v.data.isDeployed)
-        })
-    }, [])
+    // useEffect(() => {
+    //     axios.get("/api/isdeployed").then(v => {
+    //         setIsOAIDeployed(v.data.isDeployed)
+    //     })
+    // }, [])
 
-    const renderOAIOptions = () => {
-        if (isOAIDeployed) {
-            return (
-                <>
+    // const renderOAIOptions = () => {
+    //     if (isOAIDeployed) {
+    //         return (
+    //             <>
                     
-                    |
-                    <Button id="VECTOR_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="OpenAI Vector Search Application" />
-                </>
+    //                 |
+    //                 <Button id="VECTOR_SEARCH" onClick={(e) => props.onClick(e)} text style={{ color: "rgb(0, 120, 212)" }} content="OpenAI Vector Search Application" />
+    //             </>
                 
             
-            )
-        }
-    }
+    //         )
+    //     }
+    // }
 
     return (
         <div style={{ paddingLeft: "0px", paddingTop: "50px" }}>
