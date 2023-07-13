@@ -4,7 +4,7 @@ import { Dialog, TextArea, Text } from '@fluentui/react-northstar';
 
 export default function OpenAiGenericDialog(props) {
 
-    const [prompt, setPrompt] = useState("Generate a summary of the following message : ${document}")
+    const [prompt, setPrompt] = useState(`Generate a summary of the following message : \${document}`)
 
     const onDialogSave = (event) => {
         console.log(event)
@@ -22,7 +22,7 @@ export default function OpenAiGenericDialog(props) {
         setPrompt(newValue.value)
     }
 
-    const instructions = `From the OpenAI Explorer, replace the text that will represent the plain text of your document or media with the string \${document}.  This has been updated to use the \"chat\" interface for 35-turbo and GPT-4`
+    const instructions = `From the OpenAI Explorer, replace the text that will represent the plain text of your document or media with the string \${document}.  This has been updated to use the "chat" interface for 35-turbo and GPT-4`
     return (
         <Dialog
             header="Generic OpenAI Processing"
