@@ -87,7 +87,7 @@ export default function Search(props) {
       skip: skip,
       filters: filters,
       facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
-      index: props.index.name,
+      index: props.index,
       useSemanticSearch: props.useSemanticSearch,
       semanticConfig: props.semanticConfig,
       queryLanguage: "en-US",

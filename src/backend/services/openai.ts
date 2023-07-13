@@ -66,20 +66,16 @@ export class OpenAI {
             headers: headers
         }
 
-        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
+        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
 
-        const truncatedString = input.data.slice(0, 3500)
-
-        const prompt = input.serviceSpecificConfig.replace(/(\r\n|\n|\r|\t)/gm, " ")
-        let openAiInput = JSON.parse(prompt)
-        openAiInput.prompt = openAiInput.prompt.replace("${document}", truncatedString)
-
+        const prompt = input.serviceSpecificConfig.replace(/(\r\n|\n|\r|\t)/gm, " ").replace("${document}", input.data)
+        const openAiInput = {"messages":[{"role":"user", "content":prompt}]}
         let out = await axios.post(url, openAiInput, config)
-        out.data.sourcePrompt = openAiInput.prompt
+       
         const results = input.aggregatedResults
         if(results?.openaiGeneric){
             results["openaiGeneric"].push(out.data)
-        } else{
+        } else{ 
             results["openaiGeneric"] = [out.data]
         }
         input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiGeneric" })
@@ -108,11 +104,10 @@ export class OpenAI {
             headers: headers
         }
 
-        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
+        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-03-15-preview`
 
         const openAiInput = {
-            "prompt": prompt,
-            "max_tokens": maxTokens
+            "messages":{"role":"user", "content":prompt}
         }
 
         const out = await axios.post(url, openAiInput, config)

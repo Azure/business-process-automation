@@ -211,26 +211,32 @@ function Upload(props) {
     const getIndexers = () => {
         if (indexers && selectedIndexer?.name) {
             return (
-                <div style={{ display: "flex", flexFlow: "column", fontWeight: "500" }}>
-                    
-                    <Dropdown
-                        placeholder=""
-                        label="Output"
-                        items={indexers.map(indexer => indexer.name)}
-                        onChange={onIndexerChange}
-                        defaultValue={selectedIndexer.name}
-                        style={{ fontWeight: "400", paddingBottom: "40px" }}
-                    />
-                    <Button onClick={onRunIndexer} style={{ marginBottom: "20px" }} primary content="Run Indexer" />
-                    <Text style={{ marginBottom: "60px" }} content={`Current Index Document Count: ${documentCount}`} />
-                    <Button onClick={onRefreshStatus} primary content="Refresh Status" />
-                    {getIndexerStatusError()}
-                    {getIndexerStatusErrors()}
-                    {getIndexerStatusSuccessCount()}
-                    {getIndexerStatusFailCount()}
+                <>
+
+                    <div style={{ marginBottom: "10px" }}>
+                        <Text weight="semibold" content="Select An Indexer" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
+                    </div>
+                    <div style={{ display: "flex", flexFlow: "column", fontWeight: "500" }}>
+
+                        <Dropdown
+                            placeholder=""
+                            label="Output"
+                            items={indexers.map(indexer => indexer.name)}
+                            onChange={onIndexerChange}
+                            defaultValue={selectedIndexer.name}
+                            style={{ fontWeight: "400", paddingBottom: "40px" }}
+                        />
+                        <Button onClick={onRunIndexer} style={{ marginBottom: "20px" }} primary content="Run Indexer" />
+                        <Text style={{ marginBottom: "60px" }} content={`Current Index Document Count: ${documentCount}`} />
+                        <Button onClick={onRefreshStatus} primary content="Refresh Status" />
+                        {getIndexerStatusError()}
+                        {getIndexerStatusErrors()}
+                        {getIndexerStatusSuccessCount()}
+                        {getIndexerStatusFailCount()}
 
 
-                </div>
+                    </div>
+                </>
             )
         }
     }
@@ -244,7 +250,7 @@ function Upload(props) {
             <div>
 
                 <div style={{ display: "flex" }}>
-                    <div style={{marginRight : "150px"}}>
+                    <div style={{ marginRight: "150px" }}>
                         <div style={{ marginBottom: "10px" }}>
                             <Text weight="semibold" content="Select A Pipeline" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
                         </div>
@@ -272,9 +278,7 @@ function Upload(props) {
                         {getQueuedFiles()}
                     </div>
                     <div>
-                        <div style={{ marginBottom: "10px" }}>
-                            <Text weight="semibold" content="Select An Indexer" style={{ fontSize: "15px", width: "100%", marginBottom: "20px" }} />
-                        </div>
+
                         {getIndexers()}
                     </div>
                 </div>
