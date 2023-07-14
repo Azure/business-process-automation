@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "piiToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "recognizePiiEntities"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": pii,
+        "label": "PII To Text",
+        "name": "piiToText",
+        "serviceSpecificConfig": { },
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "splitPdf": {
         "bpaServiceId": "abc123",
         "inputTypes": [

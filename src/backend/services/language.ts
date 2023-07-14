@@ -155,6 +155,36 @@ export class LanguageStudio {
         return await this._recognize(input, actions, 'recognizePiiEntities', 'recognizePiiEntities', true, index)
     }
 
+    public piiToText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+        let out = ""
+        for(const item of input.data.items){
+            for(const document of item.results.documents){
+                out += " " + document.redactedText
+            }
+        }
+
+        const results = input.aggregatedResults
+        if(results?.piiToText){
+            results["piiToText"].push(out)
+        } else{ 
+            results["piiToText"] = [out]
+        }
+        input.resultsIndexes.push({ index: index, name: "piiToText", type: "piiToText" })
+        const result: BpaServiceObject = {
+            data: out,
+            type: 'piiToText',
+            label: 'piiToText',
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            aggregatedResults: results,
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
+        }
+        return result
+
+    }
+
     public extractKeyPhrases = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
         const actions: AnalyzeBatchAction[] = [
             {
