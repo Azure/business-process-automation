@@ -67,7 +67,7 @@ export class LanguageStudio {
 
     private _recognizeAsync = async (input: BpaServiceObject, actions: AnalyzeBatchAction[], type: string, label: string, analyzeType: boolean, index: number): Promise<BpaServiceObject> => {
         const client = new TextAnalysisClient(this._endpoint, new AzureKeyCredential(this._apikey));
-        let poller : AnalyzeBatchPoller
+        let poller: AnalyzeBatchPoller
         if (input.data.length === 0) {
             input.data = "no data"
         }
@@ -89,7 +89,7 @@ export class LanguageStudio {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id : input.id
+            id: input.id
         }
     }
 
@@ -157,22 +157,18 @@ export class LanguageStudio {
 
     public piiToText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
         let out = ""
-        for(const item of input.data.items){
-            for(const document of item.results.documents){
+        for (const item of input.data.items) {
+            for (const document of item.results.documents) {
                 out += " " + document.redactedText
             }
         }
 
         const results = input.aggregatedResults
-        if(results?.piiToText){
-            results["piiToText"].push(out)
-        } else{ 
-            results["piiToText"] = [out]
-        }
+        input.aggregatedResults.piiToText = out
         input.resultsIndexes.push({ index: index, name: "piiToText", type: "piiToText" })
         const result: BpaServiceObject = {
             data: out,
-            type: 'piiToText',
+            type: 'text',
             label: 'piiToText',
             bpaId: input.bpaId,
             filename: input.filename,
@@ -298,8 +294,8 @@ export class LanguageStudio {
         const actions: AnalyzeBatchAction[] = [
             {
                 kind: "CustomEntityRecognition",
-                deploymentName : input.serviceSpecificConfig.deploymentName,
-                projectName : input.serviceSpecificConfig.projectName
+                deploymentName: input.serviceSpecificConfig.deploymentName,
+                projectName: input.serviceSpecificConfig.projectName
             }]
 
         return await this._recognize(input, actions, 'recognizeCustomEntities', 'recognizeCustomEntities', true, index)
@@ -309,8 +305,8 @@ export class LanguageStudio {
         const actions: AnalyzeBatchAction[] = [
             {
                 kind: "CustomSingleLabelClassification",
-                deploymentName : input.serviceSpecificConfig.deploymentName,
-                projectName : input.serviceSpecificConfig.projectName
+                deploymentName: input.serviceSpecificConfig.deploymentName,
+                projectName: input.serviceSpecificConfig.projectName
             }]
 
         return await this._recognize(input, actions, 'singleCategoryClassify', 'singleCategoryClassify', true, index)
@@ -320,8 +316,8 @@ export class LanguageStudio {
         const actions: AnalyzeBatchAction[] = [
             {
                 kind: "CustomMultiLabelClassification",
-                deploymentName : input.serviceSpecificConfig.deploymentName,
-                projectName : input.serviceSpecificConfig.projectName
+                deploymentName: input.serviceSpecificConfig.deploymentName,
+                projectName: input.serviceSpecificConfig.projectName
             }]
 
         return await this._recognize(input, actions, 'multiCategoryClassify', 'multiCategoryClassify', true, index)
@@ -357,8 +353,8 @@ export class LanguageStudio {
         const actions: AnalyzeBatchAction[] = [
             {
                 kind: "CustomEntityRecognition",
-                deploymentName : input.serviceSpecificConfig.deploymentName,
-                projectName : input.serviceSpecificConfig.projectName
+                deploymentName: input.serviceSpecificConfig.deploymentName,
+                projectName: input.serviceSpecificConfig.projectName
             }]
 
         return await this._recognizeAsync(input, actions, 'recognizeCustomEntities', 'recognizeCustomEntities', true, index)
@@ -368,8 +364,8 @@ export class LanguageStudio {
         const actions: AnalyzeBatchAction[] = [
             {
                 kind: "CustomSingleLabelClassification",
-                deploymentName : input.serviceSpecificConfig.deploymentName,
-                projectName : input.serviceSpecificConfig.projectName
+                deploymentName: input.serviceSpecificConfig.deploymentName,
+                projectName: input.serviceSpecificConfig.projectName
             }]
 
         return await this._recognizeAsync(input, actions, 'singleCategoryClassify', 'singleCategoryClassify', true, index)
@@ -379,8 +375,8 @@ export class LanguageStudio {
         const actions: AnalyzeBatchAction[] = [
             {
                 kind: "CustomMultiLabelClassification",
-                deploymentName : input.serviceSpecificConfig.deploymentName,
-                projectName : input.serviceSpecificConfig.projectName
+                deploymentName: input.serviceSpecificConfig.deploymentName,
+                projectName: input.serviceSpecificConfig.projectName
             }]
 
         return await this._recognizeAsync(input, actions, 'multiCategoryClassify', 'multiCategoryClassify', true, index)

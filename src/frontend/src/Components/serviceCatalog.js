@@ -25,6 +25,21 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+    "formatKMAccelerator": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "any"
+        ],
+        "outputTypes": [
+            "kmAccelerator"
+        ],
+        "image": pii,
+        "label": "Format For KM Accelerator UI",
+        "name": "formatKMAccelerator",
+        "serviceSpecificConfig": { },
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
     "piiToText": {
         "bpaServiceId": "abc123",
         "inputTypes": [
