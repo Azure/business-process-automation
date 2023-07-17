@@ -200,11 +200,11 @@ export class LanguageStudio {
             let out: Message = {
                 Id: "",
                 ReferenceId: "",
-                Value: "",
+                Value: "", 
                 UserId: "",
                 EventType: "",
                 CustomProperties: "",
-                EventTime: ""
+                EventTime: ""  
             }
 
             out.Id = input.data.id
@@ -219,24 +219,28 @@ export class LanguageStudio {
                     durationInTicks: 0
                 })
 
-            messages.push(m)
+            messages.push(out)
 
         }
 
+        const out = { Messages : messages }
+
         const results = input.aggregatedResults
-        input.aggregatedResults.formatKMAccelerator = messages
+        input.aggregatedResults.formatKMAccelerator = out
         input.resultsIndexes.push({ index: index, name: "formatKMAccelerator", type: "formatKMAccelerator" })
-        const result: BpaServiceObject = {
-            data: messages,
+        let result: BpaServiceObject = {
+            data: out,
             type: 'formatKMAccelerator',
             label: 'formatKMAccelerator',
             bpaId: input.bpaId,
             filename: input.filename,
-            pipeline: input.pipeline,
+            pipeline: input.pipeline, 
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
             id: input.id
-        }        
+        }  
+        
+        result["Messages"] = messages
         
         return result
 
