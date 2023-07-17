@@ -28,10 +28,10 @@ export const sc = {
     "formatKMAccelerator": {
         "bpaServiceId": "abc123",
         "inputTypes": [
-            "any"
+            "stt"
         ],
         "outputTypes": [
-            "kmAccelerator"
+            "formatKMAccelerator"
         ],
         "image": pii,
         "label": "Format For KM Accelerator UI",

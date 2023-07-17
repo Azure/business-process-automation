@@ -5,6 +5,16 @@ import { DB } from "./db";
 import MessageQueue from "./messageQueue";
 import { AnalyzeActionNames } from "@azure/ai-text-analytics";
 
+interface Message {
+    Id: string,
+    ReferenceId: string,
+    Value: string,
+    UserId: string,
+    EventType: string,
+    CustomProperties: string,
+    EventTime: string
+}
+
 export class LanguageStudio {
 
     private _endpoint: string
@@ -177,6 +187,57 @@ export class LanguageStudio {
             resultsIndexes: input.resultsIndexes,
             id: input.id
         }
+        return result
+
+    }
+
+
+
+    public formatKMAccelerator = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        const messages: Message[] = []
+        for (const m of input.data) {
+            let out: Message = {
+                Id: "",
+                ReferenceId: "",
+                Value: "",
+                UserId: "",
+                EventType: "",
+                CustomProperties: "",
+                EventTime: ""
+            }
+
+            out.Id = input.data.id
+            out.ReferenceId = null,
+                out.Value = m.nBest[0].display
+            out.UserId = String(input.data.speaker)
+            out.EventType = (input.data.speaker === 0) ? "MessageFromUser" : "MessageFromBotOrAgent",
+                out.CustomProperties = JSON.stringify({
+                    offset: 0,
+                    duration: 0,
+                    offsetInTicks: 0,
+                    durationInTicks: 0
+                })
+
+            messages.push(m)
+
+        }
+
+        const results = input.aggregatedResults
+        input.aggregatedResults.formatKMAccelerator = messages
+        input.resultsIndexes.push({ index: index, name: "formatKMAccelerator", type: "formatKMAccelerator" })
+        const result: BpaServiceObject = {
+            data: messages,
+            type: 'formatKMAccelerator',
+            label: 'formatKMAccelerator',
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            aggregatedResults: results,
+            resultsIndexes: input.resultsIndexes,
+            id: input.id
+        }        
+        
         return result
 
     }
