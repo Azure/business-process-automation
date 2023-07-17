@@ -46,6 +46,34 @@ const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "transl
 const textSegmentation = new TextSegmentation()
 const splitPdf = new SplitPdf()
 
+const formatKMAcceleratorService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["stt"],
+    outputTypes: ["formatKMAccelerator"],
+    name: "formatKMAccelerator",
+    process: language.formatKMAccelerator,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const piiToTextService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["recognizePiiEntities"],
+    outputTypes: ["text"],
+    name: "piiToText",
+    process: language.piiToText,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const splitPdfService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["pdf"],
@@ -1097,6 +1125,8 @@ export const serviceCatalog = {
     "openaiEmbeddings" : openaiEmbeddingsService,
     "textSegmentation" : textSegmentationService,
     "textSegmentationByPage" : textSegmentationByPageService,
-    "splitPdf" : splitPdfService
+    "splitPdf" : splitPdfService,
+    "piiToText" : piiToTextService,
+    "formatKMAccelerator" : formatKMAcceleratorService
 }
 
