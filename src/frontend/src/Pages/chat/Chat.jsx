@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
-import { Panel, DefaultButton, SpinButton } from "@fluentui/react";
+import { Panel, DefaultButton, SpinButton, TextField } from "@fluentui/react";
 //import { SparkleFilled } from "@fluentui/react-icons";
-import { Dropdown } from '@fluentui/react-northstar';
+import { Button, Dropdown } from '@fluentui/react-northstar';
 import styles from "./Chat.module.css";
 
 
@@ -14,8 +14,8 @@ import { UserChatMessage } from "./components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "./components/AnalysisPanel";
 import { SettingsButton } from "./components/SettingsButton";
 import { ClearChatButton } from "./components/ClearChatButton";
-
 import axios from 'axios'
+
 
 // export const enum Approaches {
 //     RetrieveThenRead = "rtr",
@@ -23,9 +23,32 @@ import axios from 'axios'
 //     ReadDecomposeAsk = "rda"
 // }
 
+const chainTypes = [
+    "refine",
+    "stuff",
+    "map_reduce"
+]
+
+const agentTypes = [
+    "plan-and-execute",
+    "chat-zero-shot-react-description"
+]
+
+const processTypes = [
+    {
+        name: "chain",
+        chainTypes: chainTypes
+    },
+    {
+        name: "agent",
+        agentTypes: agentTypes,
+        chainTypes: chainTypes
+    }
+]
+
 const EnterpriseSearch = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-    // const [promptTemplate, setPromptTemplate] = useState("");
+    const [promptTemplate, setPromptTemplate] = useState("");
     // const [facetTemplate, setFacetTemplate] = useState("If the question is asking about 'sentiment' regarding the sources and other documents in the database, use the 'Facets' field to answer the question.");
     // const [facetQueryTermsTemplate, setFacetQueryTermsTemplate] = useState("When generating the Search Query do not use terms related to sentiment.  Example ['sentiment', 'positive', 'negative',etc]");
     const [retrieveCount, setRetrieveCount] = useState(3);
@@ -51,31 +74,72 @@ const EnterpriseSearch = () => {
     const [selectedIndex, setSelectedIndex] = useState(null)
     //const [indexSearchDone, setIndexSearchDone] = useState(false)
     // const [pipelines, setPipelines] = useState([])
+    const [processType, setProcessType] = useState(processTypes[0])
+    const [agentType, setAgentType] = useState(agentTypes[0])
+    const [chainType, setChainType] = useState(chainTypes[0])
+    const [tools, setTools] = useState([])
+    const [toolName, setToolName] = useState("")
+    const [toolDescription, setToolDescription] = useState("")
+    const [agentMessage, setAgentMessage] = useState("I am a virtual assistant that will help you to find answers to questions.  For every reponse, include the filename that should be attributed between square brackets.  For example, \"This is the answer to your question. [directory1/filename1.pdf][directory2/filename2.pdf]\"")
+
+
 
     useEffect(() => {
         axios.get('/api/indexes').then(_indexes => {
             if (_indexes?.data?.indexes) {
-                //setIndexSearchDone(true)
                 setIndexes(_indexes.data.indexes)
                 setSelectedIndex(_indexes.data.indexes[0])
             }
         }).catch(err => {
-            //setIndexSearchDone(true)
             console.log(err)
         })
-        // axios.get('/api/config?id=pipelines').then(value => {
-        //     setPipelines(value.data.pipelines.filter(value => {
-        //         for (const stage of value.stages) {
-        //             if (stage.name === 'openaiEmbeddings') {
-        //                 return true
-        //             }
-        //         }
-        //         return false
-        //     }))
-        // }).catch(err => {
-        //     console.log(err)
-        // })
     }, [])
+
+    const generatePipeline = () => {
+        const llmConfig = {
+            temperature: 0.1,
+            topP: 0,
+            frequencyPenalty: 0.1,
+            presencePenalty: 0,
+            n: 1,
+            streaming: false,
+            modelName: "gpt-3.5-turbo",
+            maxConcurrency: 1
+        }
+
+        let pipeline = {}
+
+
+        if (processType === 'chain') {
+            pipeline = {
+                name: "first",
+                type: "chain",
+                subType: "RetrievalQA",
+                chainParameters: {
+                    type: chainType,
+                    agentMessage: agentMessage,
+                    memorySize: 10,
+                    llmConfig: llmConfig,
+                    retriever: {
+                        type: "cogsearch",
+                        indexConfig: selectedIndex,
+                        numDocs: retrieveCount
+                    }
+                }
+            }
+        } else {
+            pipeline = {
+                name: "agent",
+                type: "agent",
+                subType: agentType,
+                parameters: {
+                    tools: tools,
+                }
+            }
+
+        }
+        return pipeline
+    }
 
 
     const onIndexChange = (_, value) => {
@@ -84,6 +148,65 @@ const EnterpriseSearch = () => {
             setSelectedIndex(_index)
         }
 
+    }
+
+    const onProcessChange = (_, value) => {
+        setProcessType(value.value)
+    }
+
+    const onChainChange = (_, value) => {
+        setChainType(value.value)
+    }
+
+    const onAgentChange = (_, value) => {
+        setAgentType(value.value)
+    }
+
+    const onChangeToolName = (_, value) => {
+        setToolName(value)
+    }
+
+    const onChangeToolDescription = (_, value) => {
+        setToolDescription(value)
+    }
+
+    const onChangeAgentMessage = (_, value) => {
+        setAgentMessage(value)
+    }
+
+    const onAddTool = () => {
+        const llmConfig = {
+            temperature: 0.1,
+            topP: 0,
+            frequencyPenalty: 0.1,
+            presencePenalty: 0,
+            n: 1,
+            streaming: false,
+            modelName: "gpt-3.5-turbo",
+            maxConcurrency: 1
+        }
+
+        const newTool = {
+            name: toolName,
+            description: toolDescription,
+            agentMessage: agentMessage,
+            memorySize: 10,
+            chainParameters: {
+                type: chainType,
+                llmConfig: llmConfig,
+                retriever: {
+                    type: "cogsearch",
+                    indexConfig: selectedIndex,
+                    numDocs: retrieveCount
+                }
+            }
+        }
+        const _tools = []
+        for(const t of tools){
+            _tools.push(t)
+        }
+        _tools.push(newTool)
+        setTools(_tools)
     }
 
     const makeApiRequest = (question => {
@@ -99,6 +222,7 @@ const EnterpriseSearch = () => {
             const request = {
                 history: [...history, { user: question, assistant: undefined }],
                 approach: "rtr", //Approaches.ReadRetrieveRead,
+                pipeline: generatePipeline(),
                 overrides: {
                     //promptTemplate: promptTemplate.length === 0 ? undefined : promptTemplate,
                     //excludeCategory: excludeCategory.length === 0 ? undefined : excludeCategory,
@@ -123,6 +247,10 @@ const EnterpriseSearch = () => {
             //setIsLoading(false);
         }
     });
+
+    const onPromptTemplateChange = () => {
+
+    }
 
     const clearChat = () => {
         lastQuestionRef.current = "";
@@ -170,14 +298,76 @@ const EnterpriseSearch = () => {
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                 <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
                 <div style={{ marginRight: "10px" }}>
+
                     <Dropdown
-                        search
+                        placeholder="Select the Process Type"
+                        label="Process Type"
+                        items={processTypes.map(p => p.name)}
+                        onChange={onProcessChange}
+                        style={{ marginBottom: "20px" }}
+
+                    />
+                    <Dropdown
+                        placeholder="Select the Agent Type"
+                        label="Agent Type"
+                        items={agentTypes}
+                        onChange={onAgentChange}
+                        disabled={processType !== 'agent'}
+                        style={{ marginBottom: "20px" }}
+
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={toolName}
+                        label="Tool Name: "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeToolName}
+                        disabled={processType !== 'agent'}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={toolDescription}
+                        label="Tool Description: "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeToolDescription}
+                        disabled={processType !== 'agent'}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={agentMessage}
+                        label="Agent Message: "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeAgentMessage}
+                        disabled={processType !== 'agent'}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <Dropdown
+                        placeholder="Select the Chain Type"
+                        label="Chain Type"
+                        items={chainTypes}
+                        onChange={onChainChange}
+                        style={{ marginBottom: "20px" }}
+                    />
+
+                    <Dropdown
                         placeholder="Select the Cognitive Search Index"
                         label="Output"
                         items={indexes.map(sc => sc.name)}
                         onChange={onIndexChange}
-
+                        style={{ marginBottom: "20px" }}
                     />
+
+                    <Button primary content="Add Tool"
+                        style={{ marginBottom: "20px" }}
+                        disabled={processType !== 'agent'}
+                        onClick={onAddTool}
+                    />
+
                 </div>
                 {/* <div>
                     <Dropdown
@@ -214,7 +404,7 @@ const EnterpriseSearch = () => {
                                             onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
                                             onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
                                             onFollowupQuestionClicked={q => makeApiRequest(q)}
-                                            //showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
+                                        //showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
                                         />
                                     </div>
                                 </div>

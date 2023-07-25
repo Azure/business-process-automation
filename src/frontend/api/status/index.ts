@@ -1,11 +1,11 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { CosmosDB, MongoDB, DB } from "../db";
+import { CosmosDB, DB } from "../db";
 import { AzureServiceBus } from "../queue";
 
 let db : DB = new CosmosDB(process.env.COSMOS_DB_CONNECTION_STRING, process.env.COSMOS_DB_DB, process.env.COSMOS_DB_CONTAINER )
-if(process.env.USE_LOCAL_STORAGE === 'true'){
-    db = new MongoDB(process.env.MONGO_DB_CONNECTION_STRING, process.env.MONGO_DB_DB, process.env.MONGO_DB_CONTAINER )
-}
+//if(process.env.USE_LOCAL_STORAGE === 'true'){
+   // db = new MongoDB(process.env.MONGO_DB_CONNECTION_STRING, process.env.MONGO_DB_DB, process.env.MONGO_DB_CONTAINER )
+//}
 
 let sb = new AzureServiceBus()
 
