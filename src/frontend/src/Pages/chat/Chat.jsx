@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { Panel, DefaultButton, SpinButton, TextField } from "@fluentui/react";
+import { Panel, DefaultButton, SpinButton, TextField, Text } from "@fluentui/react";
 //import { SparkleFilled } from "@fluentui/react-icons";
 import { Button, Dropdown } from '@fluentui/react-northstar';
 import styles from "./Chat.module.css";
@@ -31,7 +31,8 @@ const chainTypes = [
 
 const agentTypes = [
     "plan-and-execute",
-    "chat-zero-shot-react-description"
+    "chat-zero-shot-react-description",
+    "zero-shot-react-description"
 ]
 
 const processTypes = [
@@ -79,7 +80,7 @@ const EnterpriseSearch = () => {
     const [selectedIndex, setSelectedIndex] = useState(null)
     //const [indexSearchDone, setIndexSearchDone] = useState(false)
     // const [pipelines, setPipelines] = useState([])
-    const [processType, setProcessType] = useState(processTypes[0])
+    const [processType, setProcessType] = useState(processTypes[0].name)
     const [agentType, setAgentType] = useState(agentTypes[0])
     const [chainType, setChainType] = useState(chainTypes[0])
     const [tools, setTools] = useState([])
@@ -181,6 +182,10 @@ const EnterpriseSearch = () => {
 
     const onChangeAgentMessage = (_, value) => {
         setAgentMessage(value)
+    }
+
+    const onResetTools = () => {
+        setTools([])
     }
 
     const onAddTool = () => {
@@ -293,6 +298,16 @@ const EnterpriseSearch = () => {
         setSelectedAnswer(index);
     };
 
+    const renderTools = () => {
+        if (tools) {
+            return (
+                <ul>
+                    {tools.map(t => (<li>{t.name}</li>))}
+
+                </ul>)
+        }
+    }
+
     const renderDefaultComponents = () => {
         return (
             <>
@@ -311,7 +326,7 @@ const EnterpriseSearch = () => {
                     label="Process Type"
                     items={processTypes.map(p => p.name)}
                     onChange={onProcessChange}
-                    value={processType.name}
+                    value={processType}
                     style={{ marginBottom: "20px" }}
                 />
 
@@ -329,7 +344,7 @@ const EnterpriseSearch = () => {
 
     const renderComponents = () => {
         if (processType === 'agent') {
-            return (<>
+            return (<div style={{ display: "flex", flexDirection: "column" }}>
                 {renderDefaultComponents()}
                 <Dropdown
                     placeholder="Select the Agent Type"
@@ -380,7 +395,15 @@ const EnterpriseSearch = () => {
                     disabled={processType !== 'agent'}
                     onClick={onAddTool}
                 />
-            </>
+
+                <Button primary content="Reset Tools"
+                    style={{ marginBottom: "20px" }}
+                    disabled={processType !== 'agent'}
+                    onClick={onResetTools}
+                />
+
+                <Text style={{ marginBottom: "20px" }}> List of Tools : {renderTools()} </Text>
+            </div>
             )
         } else if (processType === 'chain') {
             return (
@@ -400,6 +423,7 @@ const EnterpriseSearch = () => {
                         label="Chain Type"
                         items={chainTypes}
                         onChange={onChainChange}
+                        value={chainType}
                         style={{ marginBottom: "20px", marginTop: "20px" }}
                     />
                 </>
@@ -409,27 +433,12 @@ const EnterpriseSearch = () => {
         }
     }
 
-    // const onVectorSearchPipeline = (_ev, newValue) => {
-    //     setVectorSearchPipeline(newValue.value)
-    // }
-
     return (
         <div className={styles.container}>
 
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                 <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
-
-                {/* <div>
-                    <Dropdown
-                        search
-                        placeholder="Select the Vector Embedding Index"
-                        label="Output"
-                        items={pipelines.map(sc => sc.name)}
-                        onChange={onVectorSearchPipeline}
-                    />
-                </div> */}
-
             </div>
             <div className={styles.chatRoot}>
 

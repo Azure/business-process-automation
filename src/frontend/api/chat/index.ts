@@ -32,7 +32,7 @@ const runChain = async (pipeline, history): Promise<ChainValues> => {
   }
 
   const memory: BufferWindowMemory = new BufferWindowMemory({ k: pipeline.memorySize, memoryKey: "chat_history", outputKey: outputKey, chatHistory: convertToLangChainMessage(history, pipeline.chainParameters.agentMessage) })
-  const query = history[0].user
+  const query = history[history.length - 1].user
   const out = await chain.run(query, memory)
   return out
 }
@@ -63,9 +63,15 @@ const runAgent = async (pipeline, history): Promise<ChainValues> => {
       break;
 
   }
-  const query = history[0].user
+  const query = history[history.length - 1].user
+  const controller = new AbortController();
+
+  // Call `controller.abort()` somewhere to cancel the request.
+  setTimeout(() => {
+    controller.abort();
+  }, 30000);
   const result = await executor.call({
-    input: query
+    input: query, signal: controller.signal
   });
 
   return result
