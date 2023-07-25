@@ -188,7 +188,7 @@ const run = async (pipeline: any, history: any): Promise<ChainValues> => {
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
   try {
-    if (req.body.pipeline.name = 'default') {
+    if (req.body.pipeline.name === 'default') {
       return defaultChat(context, req)
     } else {
       const v = await run(req.body.pipeline, req.body.history)
