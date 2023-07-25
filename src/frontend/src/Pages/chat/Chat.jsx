@@ -43,12 +43,17 @@ const processTypes = [
         name: "agent",
         agentTypes: agentTypes,
         chainTypes: chainTypes
+    },
+    {
+        name: "Use Your Own Data (Azure API)",
+        agentTypes: [],
+        chainTypes: []
     }
 ]
 
 const EnterpriseSearch = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-    const [promptTemplate, setPromptTemplate] = useState("");
+    //const [promptTemplate, setPromptTemplate] = useState("");
     // const [facetTemplate, setFacetTemplate] = useState("If the question is asking about 'sentiment' regarding the sources and other documents in the database, use the 'Facets' field to answer the question.");
     // const [facetQueryTermsTemplate, setFacetQueryTermsTemplate] = useState("When generating the Search Query do not use terms related to sentiment.  Example ['sentiment', 'positive', 'negative',etc]");
     const [retrieveCount, setRetrieveCount] = useState(3);
@@ -127,7 +132,7 @@ const EnterpriseSearch = () => {
                     }
                 }
             }
-        } else {
+        } else if (processType === 'agent') {
             pipeline = {
                 name: "agent",
                 type: "agent",
@@ -137,6 +142,10 @@ const EnterpriseSearch = () => {
                 }
             }
 
+        } else {
+            pipeline = {
+                name: "default"
+            }
         }
         return pipeline
     }
@@ -202,7 +211,7 @@ const EnterpriseSearch = () => {
             }
         }
         const _tools = []
-        for(const t of tools){
+        for (const t of tools) {
             _tools.push(t)
         }
         _tools.push(newTool)
@@ -221,7 +230,7 @@ const EnterpriseSearch = () => {
             const history = answers.map(a => ({ user: a[0], assistant: a[1].answer }));
             const request = {
                 history: [...history, { user: question, assistant: undefined }],
-                approach: "rtr", //Approaches.ReadRetrieveRead,
+                approach: "rtr", //not being used but kept for consistency
                 pipeline: generatePipeline(),
                 overrides: {
                     //promptTemplate: promptTemplate.length === 0 ? undefined : promptTemplate,
@@ -248,9 +257,6 @@ const EnterpriseSearch = () => {
         }
     });
 
-    const onPromptTemplateChange = () => {
-
-    }
 
     const clearChat = () => {
         lastQuestionRef.current = "";
@@ -287,6 +293,122 @@ const EnterpriseSearch = () => {
         setSelectedAnswer(index);
     };
 
+    const renderDefaultComponents = () => {
+        return (
+            <>
+                <SpinButton
+                    className={styles.chatSettingsSeparator}
+                    label="Retrieve this many documents from search:"
+                    min={1}
+                    max={50}
+                    defaultValue={retrieveCount.toString()}
+                    onChange={onRetrieveCountChange}
+                    style={{ marginBottom: "20px" }}
+                />
+
+                <Dropdown
+                    placeholder="Select the Process Type"
+                    label="Process Type"
+                    items={processTypes.map(p => p.name)}
+                    onChange={onProcessChange}
+                    value={processType.name}
+                    style={{ marginBottom: "20px" }}
+                />
+
+                <Dropdown
+                    placeholder="Select the Cognitive Search Index"
+                    label="Output"
+                    items={indexes.map(sc => sc.name)}
+                    value={selectedIndex ? selectedIndex.name : ""}
+                    onChange={onIndexChange}
+                    style={{ marginBottom: "20px" }}
+                />
+            </>
+        )
+    }
+
+    const renderComponents = () => {
+        if (processType === 'agent') {
+            return (<>
+                {renderDefaultComponents()}
+                <Dropdown
+                    placeholder="Select the Agent Type"
+                    label="Agent Type"
+                    items={agentTypes}
+                    onChange={onAgentChange}
+                    style={{ marginBottom: "20px" }}
+                    value={agentType}
+                />
+                <TextField
+                    className={styles.chatSettingsSeparator}
+                    value={toolName}
+                    label="Tool Name: "
+                    multiline
+                    autoAdjustHeight
+                    onChange={onChangeToolName}
+                    style={{ marginBottom: "20px" }}
+                />
+                <TextField
+                    className={styles.chatSettingsSeparator}
+                    value={toolDescription}
+                    label="Tool Description: "
+                    multiline
+                    autoAdjustHeight
+                    onChange={onChangeToolDescription}
+                    style={{ marginBottom: "20px" }}
+                />
+                <TextField
+                    className={styles.chatSettingsSeparator}
+                    value={agentMessage}
+                    label="Prompt Message: "
+                    multiline
+                    autoAdjustHeight
+                    onChange={onChangeAgentMessage}
+                    style={{ marginBottom: "20px" }}
+                />
+                <Dropdown
+                    placeholder="Select the Chain Type"
+                    label="Chain Type"
+                    items={chainTypes}
+                    onChange={onChainChange}
+                    style={{ marginBottom: "20px", marginTop: "20px" }}
+                    value={chainType}
+                />
+
+                <Button primary content="Add Tool"
+                    style={{ marginBottom: "20px" }}
+                    disabled={processType !== 'agent'}
+                    onClick={onAddTool}
+                />
+            </>
+            )
+        } else if (processType === 'chain') {
+            return (
+                <>
+                    {renderDefaultComponents()}
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={agentMessage}
+                        label="Prompt Message: "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeAgentMessage}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <Dropdown
+                        placeholder="Select the Chain Type"
+                        label="Chain Type"
+                        items={chainTypes}
+                        onChange={onChainChange}
+                        style={{ marginBottom: "20px", marginTop: "20px" }}
+                    />
+                </>
+            )
+        } else {
+            return (<>{renderDefaultComponents()}</>)
+        }
+    }
+
     // const onVectorSearchPipeline = (_ev, newValue) => {
     //     setVectorSearchPipeline(newValue.value)
     // }
@@ -297,78 +419,7 @@ const EnterpriseSearch = () => {
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                 <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
-                <div style={{ marginRight: "10px" }}>
 
-                    <Dropdown
-                        placeholder="Select the Process Type"
-                        label="Process Type"
-                        items={processTypes.map(p => p.name)}
-                        onChange={onProcessChange}
-                        style={{ marginBottom: "20px" }}
-
-                    />
-                    <Dropdown
-                        placeholder="Select the Agent Type"
-                        label="Agent Type"
-                        items={agentTypes}
-                        onChange={onAgentChange}
-                        disabled={processType !== 'agent'}
-                        style={{ marginBottom: "20px" }}
-
-                    />
-                    <TextField
-                        className={styles.chatSettingsSeparator}
-                        value={toolName}
-                        label="Tool Name: "
-                        multiline
-                        autoAdjustHeight
-                        onChange={onChangeToolName}
-                        disabled={processType !== 'agent'}
-                        style={{ marginBottom: "20px" }}
-                    />
-                    <TextField
-                        className={styles.chatSettingsSeparator}
-                        value={toolDescription}
-                        label="Tool Description: "
-                        multiline
-                        autoAdjustHeight
-                        onChange={onChangeToolDescription}
-                        disabled={processType !== 'agent'}
-                        style={{ marginBottom: "20px" }}
-                    />
-                    <TextField
-                        className={styles.chatSettingsSeparator}
-                        value={agentMessage}
-                        label="Agent Message: "
-                        multiline
-                        autoAdjustHeight
-                        onChange={onChangeAgentMessage}
-                        disabled={processType !== 'agent'}
-                        style={{ marginBottom: "20px" }}
-                    />
-                    <Dropdown
-                        placeholder="Select the Chain Type"
-                        label="Chain Type"
-                        items={chainTypes}
-                        onChange={onChainChange}
-                        style={{ marginBottom: "20px" }}
-                    />
-
-                    <Dropdown
-                        placeholder="Select the Cognitive Search Index"
-                        label="Output"
-                        items={indexes.map(sc => sc.name)}
-                        onChange={onIndexChange}
-                        style={{ marginBottom: "20px" }}
-                    />
-
-                    <Button primary content="Add Tool"
-                        style={{ marginBottom: "20px" }}
-                        disabled={processType !== 'agent'}
-                        onClick={onAddTool}
-                    />
-
-                </div>
                 {/* <div>
                     <Dropdown
                         search
@@ -460,62 +511,13 @@ const EnterpriseSearch = () => {
                     onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
                     isFooterAtBottom={true}
                 >
-                    {/* <TextField
-                        className={styles.chatSettingsSeparator}
-                        defaultValue={promptTemplate}
-                        label="Override prompt template"
-                        multiline
-                        autoAdjustHeight
-                        onChange={onPromptTemplateChange}
-                    /> */}
+                    <div >
 
-                    {/* <TextField
-                        className={styles.chatSettingsSeparator}
-                        defaultValue={facetTemplate}
-                        label="Facet Template"
-                        multiline
-                        autoAdjustHeight
-                        onChange={onFacetTemplateChange}
-                    /> */}
 
-                    {/* <TextField
-                        className={styles.chatSettingsSeparator}
-                        defaultValue={facetQueryTermsTemplate}
-                        label="Facet Query Terms Template"
-                        multiline
-                        autoAdjustHeight
-                        onChange={onFacetQueryTermsTemplateChange}
-                    /> */}
+                        {renderComponents()}
 
-                    <SpinButton
-                        className={styles.chatSettingsSeparator}
-                        label="Retrieve this many documents from search:"
-                        min={1}
-                        max={50}
-                        defaultValue={retrieveCount.toString()}
-                        onChange={onRetrieveCountChange}
-                    />
-                    {/* <TextField className={styles.chatSettingsSeparator} label="Exclude category" onChange={onExcludeCategoryChanged} />
-                    <Checkbox
-                        className={styles.chatSettingsSeparator}
-                        checked={useSemanticRanker}
-                        label="Use semantic ranker for retrieval"
-                        onChange={onUseSemanticRankerChange}
-                    />
-                    <Checkbox
-                        className={styles.chatSettingsSeparator}
-                        checked={useSemanticCaptions}
-                        label="Use query-contextual summaries instead of whole documents"
-                        onChange={onUseSemanticCaptionsChange}
-                        disabled={!useSemanticRanker}
-                    />
-                    <Checkbox
-                        className={styles.chatSettingsSeparator}
-                        checked={useSuggestFollowupQuestions}
-                        label="Suggest follow-up questions"
-                        onChange={onUseSuggestFollowupQuestionsChange}
-                    /> */}
-                    {/* <TextField className={styles.chatSettingsSeparator} label="Vector Search Index" onChange={onVectorSearchPipeline} /> */}
+
+                    </div>
                 </Panel>
             </div>
         </div>

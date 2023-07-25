@@ -22,7 +22,7 @@ process.env.AZURE_OPENAI_API_BASE = process.env.OPENAI_ENDPOINT
 
 
 
-const runChain = async (pipeline, history) : Promise<ChainValues> => {
+const runChain = async (pipeline, history): Promise<ChainValues> => {
   const chain = new CogSearchRetrievalQAChain(pipeline.chainParameters)
   let outputKey: string
   if (pipeline.chainParameters.type === "refine") {
@@ -31,13 +31,13 @@ const runChain = async (pipeline, history) : Promise<ChainValues> => {
     outputKey = "text"
   }
 
-  const memory: BufferWindowMemory = new BufferWindowMemory({ k: pipeline.memorySize, memoryKey: "chat_history", outputKey: outputKey , chatHistory : convertToLangChainMessage(history, pipeline.chainParameters.agentMessage)})
+  const memory: BufferWindowMemory = new BufferWindowMemory({ k: pipeline.memorySize, memoryKey: "chat_history", outputKey: outputKey, chatHistory: convertToLangChainMessage(history, pipeline.chainParameters.agentMessage) })
   const query = history[0].user
   const out = await chain.run(query, memory)
   return out
 }
 
-const runAgent = async (pipeline, history) : Promise<ChainValues> => {
+const runAgent = async (pipeline, history): Promise<ChainValues> => {
   const tools: Tool[] = []
   for (const t of pipeline.parameters.tools) {
     t.history = convertToLangChainMessage(history, t.agentMessage)
@@ -188,30 +188,32 @@ const run = async (pipeline: any, history: any): Promise<ChainValues> => {
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
   try {
-    
-    //const messages = convertToLangChainMessage(req.body.history, pipeline.chainParameters.agentMessage)
-    const v = await run(req.body.pipeline, req.body.history)
-    let answer = ""
-    if(v?.output){
-      answer = v.output
-    } else if(v?.text){
-      answer = v.text
-    } else if(v?.output_text){
-      answer = v.output_text
-    }
-
-    let data_points = []
-    if(v?.sourceDocuments){
-      for(const d of v.sourceDocuments){
-        data_points.push({
-          title : d.metadata.filename,
-          content : d.pageContent
-        })
+    if (req.body.pipeline.name = 'default') {
+      return defaultChat(context, req)
+    } else {
+      const v = await run(req.body.pipeline, req.body.history)
+      let answer = ""
+      if (v?.output) {
+        answer = v.output
+      } else if (v?.text) {
+        answer = v.text
+      } else if (v?.output_text) {
+        answer = v.output_text
       }
-    }
 
-    context.res = {
-      body: { "data_points": data_points, "answer": answer, "thoughts": "" }
+      let data_points = []
+      if (v?.sourceDocuments) {
+        for (const d of v.sourceDocuments) {
+          data_points.push({
+            title: d.metadata.filename,
+            content: d.pageContent
+          })
+        }
+      }
+
+      context.res = {
+        body: { "data_points": data_points, "answer": answer, "thoughts": "" }
+      }
     }
   } catch (err) {
     context.res = {
