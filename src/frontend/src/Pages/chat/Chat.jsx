@@ -86,7 +86,34 @@ const EnterpriseSearch = () => {
     const [tools, setTools] = useState([])
     const [toolName, setToolName] = useState("")
     const [toolDescription, setToolDescription] = useState("")
-    const [agentMessage, setAgentMessage] = useState("I am a virtual assistant that will help you to find answers to questions.  For every reponse, include the filename that should be attributed between square brackets.  For example, \"This is the answer to your question. [directory1/filename1.pdf][directory2/filename2.pdf]\"")
+    const [refinePrompt, setRefinePrompt] = useState(`Question: {question}
+    Chat History:{chat_history}
+    Document: {context} 
+    Existing Answer: {existing_answer}
+    If the document adds additional information to the answer of the question, refine it.  Otherwise, return the existing answer.`)
+    const [refineQuestionPrompt, setRefineQuestionPrompt] = useState(`Based on the chat history and question, create a new query.
+    Question: {question}
+    Chat History: {chat_history}
+    New Query:`)
+    const [mrCombineMapPrompt, setMrCombineMapPrompt] = useState(`I'm a virtual assistant that answers questions based on documents that are returned.  I will only information that is within the context of the document.
+    Document : {context} 
+    Question : {question}
+    Chat History: {chat_history}
+    Answer:`)
+    const [mrCombinePrompt, setMrCombinePrompt] = useState(`I'm a virtual assistant that answers questions based on documents that are returned.  I will only information that is within the context of the document.
+    Document : {summaries} 
+    Question : {question}
+    Chat History: {chat_history}
+    Answer:`)
+    const [questionGenerationPrompt, setQuestionGenerationPrompt] = useState(`Based on the chat history and question, create a new query.
+    Question: {question}
+    Chat History: {chat_history}
+    New Query:`)
+    const [stuffPrompt, setStuffPrompt] = useState(`I'm a virtual assistant that answers questions based on documents that are returned.  I will only information that is within the context of the document.
+    Document : {context} 
+    Question : {question}
+    Chat History: {chat_history}
+    Answer:`)
 
 
 
@@ -123,14 +150,19 @@ const EnterpriseSearch = () => {
                 subType: "RetrievalQA",
                 chainParameters: {
                     type: chainType,
-                    agentMessage: agentMessage,
                     memorySize: 10,
                     llmConfig: llmConfig,
                     retriever: {
                         type: "cogsearch",
                         indexConfig: selectedIndex,
                         numDocs: retrieveCount
-                    }
+                    },
+                    stuffPrompt: stuffPrompt,
+                    refinePrompt: refinePrompt,
+                    refineQuestionPrompt: refineQuestionPrompt,
+                    mrCombineMapPrompt: mrCombineMapPrompt,
+                    mrCombinePrompt: mrCombinePrompt,
+                    questionGenerationPrompt: questionGenerationPrompt
                 }
             }
         } else if (processType === 'agent') {
@@ -180,8 +212,23 @@ const EnterpriseSearch = () => {
         setToolDescription(value)
     }
 
-    const onChangeAgentMessage = (_, value) => {
-        setAgentMessage(value)
+    const onChangeMrCombineMapPrompt = (_, value) => {
+        setMrCombineMapPrompt(value)
+    }
+    const onChangeMrCombinePrompt = (_, value) => {
+        setMrCombinePrompt(value)
+    }
+    const onChangeQuestionGenerationPrompt = (_, value) => {
+        setQuestionGenerationPrompt(value)
+    }
+    const onChangeRefinePrompt = (_, value) => {
+        setRefinePrompt(value)
+    }
+    const onChangeRefineQuestionPrompt = (_, value) => {
+        setRefineQuestionPrompt(value)
+    }
+    const onChangeStuffPrompt = (_, value) => {
+        setStuffPrompt(value)
     }
 
     const onResetTools = () => {
@@ -203,16 +250,22 @@ const EnterpriseSearch = () => {
         const newTool = {
             name: toolName,
             description: toolDescription,
-            agentMessage: agentMessage,
             memorySize: 10,
             chainParameters: {
                 type: chainType,
+                memorySize: 10,
                 llmConfig: llmConfig,
                 retriever: {
                     type: "cogsearch",
                     indexConfig: selectedIndex,
                     numDocs: retrieveCount
-                }
+                },
+                stuffPrompt: stuffPrompt,
+                refinePrompt: refinePrompt,
+                refineQuestionPrompt: refineQuestionPrompt,
+                mrCombineMapPrompt: mrCombineMapPrompt,
+                mrCombinePrompt: mrCombinePrompt,
+                questionGenerationPrompt: questionGenerationPrompt
             }
         }
         const _tools = []
@@ -303,7 +356,6 @@ const EnterpriseSearch = () => {
             return (
                 <ul>
                     {tools.map(t => (<li>{t.name}</li>))}
-
                 </ul>)
         }
     }
@@ -342,6 +394,104 @@ const EnterpriseSearch = () => {
         )
     }
 
+    const renderPrompts = () => {
+        if (chainType === 'stuff') {
+            return (
+                <>
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={stuffPrompt}
+                        label="Stuff Chain Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeStuffPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={questionGenerationPrompt}
+                        label="Question Generator Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeQuestionGenerationPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                </>
+
+            )
+        }
+
+        if (chainType === 'refine') {
+            return (
+                <>
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={refinePrompt}
+                        label="Refine Chain Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeRefinePrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={refineQuestionPrompt}
+                        label="Refine Chain Question Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeRefineQuestionPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={questionGenerationPrompt}
+                        label="Question Generator Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeQuestionGenerationPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                </>
+
+            )
+        }
+
+        if (chainType === 'map_reduce') {
+            return (
+                <>
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={mrCombineMapPrompt}
+                        label="MapReduce Combine Map Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeMrCombineMapPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={mrCombinePrompt}
+                        label="Map Reduce Combine Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeMrCombinePrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={questionGenerationPrompt}
+                        label="Question Generator Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeQuestionGenerationPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                </>
+
+            )
+        }
+    }
+
     const renderComponents = () => {
         if (processType === 'agent') {
             return (<div style={{ display: "flex", flexDirection: "column" }}>
@@ -372,15 +522,7 @@ const EnterpriseSearch = () => {
                     onChange={onChangeToolDescription}
                     style={{ marginBottom: "20px" }}
                 />
-                <TextField
-                    className={styles.chatSettingsSeparator}
-                    value={agentMessage}
-                    label="Prompt Message: "
-                    multiline
-                    autoAdjustHeight
-                    onChange={onChangeAgentMessage}
-                    style={{ marginBottom: "20px" }}
-                />
+
                 <Dropdown
                     placeholder="Select the Chain Type"
                     label="Chain Type"
@@ -389,6 +531,8 @@ const EnterpriseSearch = () => {
                     style={{ marginBottom: "20px", marginTop: "20px" }}
                     value={chainType}
                 />
+                {renderPrompts()}
+
 
                 <Button primary content="Add Tool"
                     style={{ marginBottom: "20px" }}
@@ -409,15 +553,6 @@ const EnterpriseSearch = () => {
             return (
                 <>
                     {renderDefaultComponents()}
-                    <TextField
-                        className={styles.chatSettingsSeparator}
-                        value={agentMessage}
-                        label="Prompt Message: "
-                        multiline
-                        autoAdjustHeight
-                        onChange={onChangeAgentMessage}
-                        style={{ marginBottom: "20px" }}
-                    />
                     <Dropdown
                         placeholder="Select the Chain Type"
                         label="Chain Type"
@@ -426,6 +561,7 @@ const EnterpriseSearch = () => {
                         value={chainType}
                         style={{ marginBottom: "20px", marginTop: "20px" }}
                     />
+                    {renderPrompts()}
                 </>
             )
         } else {
@@ -521,11 +657,7 @@ const EnterpriseSearch = () => {
                     isFooterAtBottom={true}
                 >
                     <div >
-
-
                         {renderComponents()}
-
-
                     </div>
                 </Panel>
             </div>

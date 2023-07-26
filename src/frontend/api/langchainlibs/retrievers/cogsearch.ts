@@ -172,6 +172,13 @@ export class CogSearchRetriever extends BaseRetriever {
             }
             docs.push(doc)
         }
+        if(docs.length === 0){
+            const doc: Document<Record<string, any>> = {
+                pageContent: "No addtional content.",
+                metadata: {}
+            }
+            docs.push(doc)
+        }
         return docs
     }
 

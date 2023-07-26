@@ -4,7 +4,6 @@ import axios from "axios"
 import { BufferWindowMemory, ChatMessageHistory } from "langchain/memory";
 import { ChainValues } from "langchain/schema";
 import { CogSearchRetrievalQAChain } from "../langchainlibs/chains/cogSearchRetrievalQA";
-import { OpenAIBaseInput } from "langchain/dist/types/openai-types";
 import { CogSearchTool } from "../langchainlibs/tools/cogsearch";
 import { PlanAndExecuteAgentExecutor } from "langchain/experimental/plan_and_execute";
 import { ChatOpenAI } from "langchain/chat_models/openai";
@@ -31,7 +30,7 @@ const runChain = async (pipeline, history): Promise<ChainValues> => {
     outputKey = "text"
   }
 
-  const memory: BufferWindowMemory = new BufferWindowMemory({ k: pipeline.memorySize, memoryKey: "chat_history", outputKey: outputKey, chatHistory: convertToLangChainMessage(history, pipeline.chainParameters.agentMessage) })
+  const memory: BufferWindowMemory = new BufferWindowMemory({ k: pipeline.memorySize, memoryKey: "chat_history", outputKey: outputKey})
   const query = history[history.length - 1].user
   const out = await chain.run(query, memory)
   return out
@@ -40,7 +39,7 @@ const runChain = async (pipeline, history): Promise<ChainValues> => {
 const runAgent = async (pipeline, history): Promise<ChainValues> => {
   const tools: Tool[] = []
   for (const t of pipeline.parameters.tools) {
-    t.history = convertToLangChainMessage(history, t.agentMessage)
+    t.history = convertToLangChainMessage(history)
     const tool = new CogSearchTool(t)
     tools.push(tool)
   }
@@ -69,7 +68,7 @@ const runAgent = async (pipeline, history): Promise<ChainValues> => {
   // Call `controller.abort()` somewhere to cancel the request.
   setTimeout(() => {
     controller.abort();
-  }, 30000);
+  }, 60000);
   const result = await executor.call({
     input: query, signal: controller.signal
   });
@@ -92,9 +91,9 @@ const convertToMessage = (history) => {
   return messages
 }
 
-const convertToLangChainMessage = (history, aiMessage) => {
+const convertToLangChainMessage = (history) => {
   const messages = new ChatMessageHistory();
-  messages.addAIChatMessage(aiMessage)
+  //messages.addAIChatMessage(aiMessage)
   for (let i = 0; i < history.length - 1; i++) {  //ignore most recent user utterance
     //for (const h of history) {
     const h = history[i]
