@@ -1,5 +1,5 @@
 import { CosmosClient } from "@azure/cosmos"
-import { MongoClient } from 'mongodb'
+//import { MongoClient } from 'mongodb'
 import { BlobStorage } from './storage'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,92 +23,92 @@ export abstract class DB {
     public abstract delete(id: string) : Promise<any>;
 }
 
-export class MongoDB extends DB {
-    private _mongoClient : MongoClient
+// export class MongoDB extends DB {
+//     private _mongoClient : MongoClient
 
-    constructor(connectionString : string, dbName : string, containerName : string) {
-        super(connectionString, dbName, containerName)
-        this._mongoClient = new MongoClient(connectionString)
-    }
+//     constructor(connectionString : string, dbName : string, containerName : string) {
+//         super(connectionString, dbName, containerName)
+//         this._mongoClient = new MongoClient(connectionString)
+//     }
 
-    public count = async () : Promise<number> => {
-        try {
-            await this._mongoClient.connect()
-            const db = this._mongoClient.db(this._dbName)
-            const collection = db.collection(this._containerName)
-            return await collection.countDocuments()
-        } catch (err) {
-            console.log(err)
-        } finally{
-            this._mongoClient.close()
-        }
-        return -1
-    }
+//     public count = async () : Promise<number> => {
+//         try {
+//             await this._mongoClient.connect()
+//             const db = this._mongoClient.db(this._dbName)
+//             const collection = db.collection(this._containerName)
+//             return await collection.countDocuments()
+//         } catch (err) {
+//             console.log(err)
+//         } finally{
+//             this._mongoClient.close()
+//         }
+//         return -1
+//     }
 
-    public create = async (data) : Promise<any> => {
-        try {
-            await this._mongoClient.connect()
-            const db = this._mongoClient.db(this._dbName)
-            const collection = db.collection(this._containerName)
-            data._id = data.id
-            const insertResult = await collection.replaceOne({_id : data._id},data)
-            return insertResult
-        } catch (err) {
-            console.log(err)
-        } finally{
-            this._mongoClient.close()
-        }
-        return null
-    }
+//     public create = async (data) : Promise<any> => {
+//         try {
+//             await this._mongoClient.connect()
+//             const db = this._mongoClient.db(this._dbName)
+//             const collection = db.collection(this._containerName)
+//             data._id = data.id
+//             const insertResult = await collection.replaceOne({_id : data._id},data)
+//             return insertResult
+//         } catch (err) {
+//             console.log(err)
+//         } finally{
+//             this._mongoClient.close()
+//         }
+//         return null
+//     }
 
-    public delete = async (id : string) : Promise<any> => {
-        try {
-            await this._mongoClient.connect()
-            const db = this._mongoClient.db(this._dbName)
-            const collection = db.collection(this._containerName)
-            const insertResult = await collection.deleteOne({_id : id})
-            return id
-        } catch (err) {
-            console.log(err)
-        } finally{
-            this._mongoClient.close()
-        }
-        return null
-    }
+//     public delete = async (id : string) : Promise<any> => {
+//         try {
+//             await this._mongoClient.connect()
+//             const db = this._mongoClient.db(this._dbName)
+//             const collection = db.collection(this._containerName)
+//             const insertResult = await collection.deleteOne({_id : id})
+//             return id
+//         } catch (err) {
+//             console.log(err)
+//         } finally{
+//             this._mongoClient.close()
+//         }
+//         return null
+//     }
 
-    public get = async (id : string) : Promise<any> => {
-        try {
-            await this._mongoClient.connect()
-            const db = this._mongoClient.db(this._dbName)
-            const collection = db.collection(this._containerName)
-            const item = await collection.findOne({_id : id})
-            return item as any
-        } catch (err) {
-            console.log(err)
-        } finally{
-            this._mongoClient.close()
-        }
-        return null
-    }
+//     public get = async (id : string) : Promise<any> => {
+//         try {
+//             await this._mongoClient.connect()
+//             const db = this._mongoClient.db(this._dbName)
+//             const collection = db.collection(this._containerName)
+//             const item = await collection.findOne({_id : id})
+//             return item as any
+//         } catch (err) {
+//             console.log(err)
+//         } finally{
+//             this._mongoClient.close()
+//         }
+//         return null
+//     }
 
     
-    public getConfig = async () : Promise<any> => {
-        try {
-            await this._mongoClient.connect()
-            const db = this._mongoClient.db(this._dbName)
-            const collection = db.collection(this._containerName)
-            const item = await collection.findOne({_id : this._pipelinesLabel})
-            return item as any
-        } catch (err) {
-            console.log(err)
-        } finally{
-            this._mongoClient.close()
-        }
-        return null
-    }
+//     public getConfig = async () : Promise<any> => {
+//         try {
+//             await this._mongoClient.connect()
+//             const db = this._mongoClient.db(this._dbName)
+//             const collection = db.collection(this._containerName)
+//             const item = await collection.findOne({_id : this._pipelinesLabel})
+//             return item as any
+//         } catch (err) {
+//             console.log(err)
+//         } finally{
+//             this._mongoClient.close()
+//         }
+//         return null
+//     }
 
 
-}
+// }
 
 export class BlobDB extends DB {
     
