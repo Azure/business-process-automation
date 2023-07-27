@@ -131,9 +131,7 @@ const defaultChat = async (context, req) => {
           "queryType": "semantic",
           "fieldsMapping": {
             "contentFieldsSeparator": "\n",
-            "contentFields": [
-              "text"
-            ],
+            "contentFields": req.body.index.searchableFields,
             "filepathField": "filename",
             "titleField": "filename",
             "urlField": "filename"
