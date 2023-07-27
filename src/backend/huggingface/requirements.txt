@@ -4,7 +4,7 @@
 
 azure-functions
 -f https://download.pytorch.org/whl/torch_stable.html
-torch==1.11+cpu
+torch==1.13.1
 transformers
 nltk
 azure-identity==1.12.0
