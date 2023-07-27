@@ -34,7 +34,7 @@
     "pdf-lib": "^1.17.1",
     "redis": "^4.5.1",
     "uuidv4": "^6.2.13",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.5.0"
   },
   "devDependencies": {
     "@azure/functions": "^3.5.1",
