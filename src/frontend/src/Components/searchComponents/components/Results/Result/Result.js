@@ -60,7 +60,7 @@ export default function Result(props) {
                         currentData = currentData[i]
                     }
                 }
-                out += currentData
+                out += currentData + " | "
             }
             return out
         } catch (err) {
