@@ -25,6 +25,7 @@ import openai from '../images/openai.svg'
 import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTranslatorPricing, getFormRecCustomPricing, getFormRecPrebuiltPricing, getFormRecReadPricing, getHealthLanguagePricing, getLanguagePricing, getOcrPricing, getSpeechPricing, getTranslationPricing, noCharge } from './Prices/price'
 
 export const sc = {
+
     "formatKMAccelerator": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -441,6 +442,22 @@ export const sc = {
         "image": pdf,
         "label": "PDF Document",
         "name": "pdf",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+
+    "blob": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "start"
+        ],
+        "outputTypes": [
+            "text"
+        ],
+        "image": storage,
+        "label": "Blob Files",
+        "name": "blob",
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice : noCharge
