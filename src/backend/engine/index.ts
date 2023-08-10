@@ -37,6 +37,10 @@ export class BpaEngine {
             currentInput.aggregatedResults["text"] = currentInput.data.toString()
         }
 
+        if(this._getFileType(fileName).toLowerCase() === 'json'){
+            console.log("hello")
+        }
+
         let stageIndex = 1
         return this._process(currentInput, config, stageIndex, mq, db)
 
