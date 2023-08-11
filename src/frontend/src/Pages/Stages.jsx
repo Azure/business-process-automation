@@ -171,7 +171,7 @@ export default function Stages(props) {
         }else if (event.name === 'spliceDocument') {
             setCurrentOption(_.cloneDeep(event))
             setHideSpliceDocumentDialog(false)
-        }else if (event.name === 'blob') {
+        }else if (event.name === 'blobToText') {
             setCurrentOption(_.cloneDeep(event))
             setHideBlobDialog(false)
         }else {

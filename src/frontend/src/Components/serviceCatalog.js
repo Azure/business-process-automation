@@ -453,6 +453,21 @@ export const sc = {
             "start"
         ],
         "outputTypes": [
+            "blob"
+        ],
+        "image": storage,
+        "label": "Blob Files",
+        "name": "blob",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice : noCharge
+    },
+    "blobToText": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "blob"
+        ],
+        "outputTypes": [
             "text"
         ],
         "image": storage,
