@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Dialog, Text, TextArea } from '@fluentui/react-northstar';
 
 
-export default function BlobDialog(props) {
+export default function JSONToTextDialog(props) {
 
     const [textFields, setTextFields] = useState("")
 
