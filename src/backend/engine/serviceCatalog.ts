@@ -20,6 +20,7 @@ import { SpliceDocument } from "../services/spliceDocument"
 //import { RedactPdf } from "../services/redactPdf"
 import { TextSegmentation } from "../services/textSegmentation"
 import { SplitPdf } from "../services/splitPdf"
+import { JsonToText } from "../services/jsonToText"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -45,6 +46,7 @@ const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "transl
 //const redactPdf = new RedactPdf(blob, blobTranslation)
 const textSegmentation = new TextSegmentation()
 const splitPdf = new SplitPdf()
+const jsonToText = new JsonToText()
 
 const formatKMAcceleratorService : BpaService = {
     bpaServiceId : "abc123",
@@ -1055,7 +1057,19 @@ const xmlToJsonService : BpaService = {
     }
 }
 
+const jsonToTextService : BpaService = {
+    inputTypes: ["json"],
+    outputTypes: ["text"],
+    name: "jsonToText",
+    bpaServiceId: "abc123",
+    process: jsonToText.process,
+    serviceSpecificConfig: {
 
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 export const serviceCatalog = {
     // "copy" : copyService,
@@ -1127,6 +1141,7 @@ export const serviceCatalog = {
     "textSegmentationByPage" : textSegmentationByPageService,
     "splitPdf" : splitPdfService,
     "piiToText" : piiToTextService,
-    "formatKMAccelerator" : formatKMAcceleratorService
+    "formatKMAccelerator" : formatKMAcceleratorService,
+    "jsonToText" : jsonToTextService
 }
 

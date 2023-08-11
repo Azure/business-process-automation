@@ -88,7 +88,8 @@ export class OpenAI {
             pipeline: input.pipeline,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: out.data.data[0].embedding
         }
         return result
 

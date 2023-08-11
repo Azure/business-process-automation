@@ -38,7 +38,9 @@ export class BpaEngine {
         }
 
         if(this._getFileType(fileName).toLowerCase() === 'json'){
-            console.log("hello")
+            currentInput.data = JSON.parse(fileBuffer.toString())
+            currentInput.type = "json",
+            currentInput.aggregatedResults["json"] = JSON.parse(fileBuffer.toString())
         }
 
         let stageIndex = 1
