@@ -48,7 +48,8 @@ export class OpenAI {
             pipeline: input.pipeline,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector : input.vector
         }
 
         return result
@@ -89,7 +90,7 @@ export class OpenAI {
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
             id: input.id,
-            vector: out.data.data[0].embedding
+            vector : input.vector
         }
         return result
 
@@ -170,7 +171,8 @@ export class OpenAI {
             pipeline: input.pipeline,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: out.data.data[0].embedding
         }
         return result
 

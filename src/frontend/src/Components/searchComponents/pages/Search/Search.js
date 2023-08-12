@@ -60,15 +60,17 @@ export default function Search(props) {
       let out = ""
 
       for (const s of searchables) {
-        let currentData = data
-        for (const i of s.split('/')) {
-          if (Array.isArray(currentData[i])) {
-            currentData = currentData[i][0]
-          } else {
-            currentData = currentData[i]
+        if (!s.includes('vector')) {
+          let currentData = data
+          for (const i of s.split('/')) {
+            if (Array.isArray(currentData[i])) {
+              currentData = currentData[i][0]
+            } else {
+              currentData = currentData[i]
+            }
           }
+          out += currentData
         }
-        out += currentData
       }
       return out
     } catch (err) {
@@ -98,27 +100,38 @@ export default function Search(props) {
       axios.post('/api/search', body)
         .then(response => {
           //console.log(JSON.stringify(response.data))
-          if (response?.data?.results?.value) {
-            if (skip === 0 && props.useOpenAiAnswer && response.data.results.value.length > 0 && q.length > 1) {
-              const searchableText = getText(props.index.searchableFields, response.data.results.value[0])
+          if (response?.data?.results) {
+            if (skip === 0 && props.useOpenAiAnswer && response.data.results.length > 0 && q.length > 1) {
+              let searchableText = ""
+              for(let i=0;i<3;i++){
+                searchableText += " " + getText(props.index.searchableFields, response.data.results[i]) + " "
+              }
+              
+
               if (searchableText) {
                 axios.post(`/api/openaianswer`, {
                   q: q,
                   text: searchableText
                 }).then(r => {
-                  setOpenAiAnswer(r.data.out.text)
+                  setOpenAiAnswer(r.data.out)
                 }).catch(e => {
                   console.log(e)
                 })
               }
             }
-            setResults(response.data.results.value);
-            if (response.data.results.value.length > 0 && response.data.results.value[0]?.type && response.data.results.value[0].type === 'table') {
+            setResults(response.data.results);
+            if (response.data.results.length > 0 && response.data.results?.type && response.data.results.type === 'table') {
               props.onSetTableAvailable(true)
             } else {
               props.onSetTableAvailable(false)
             }
-            setResultCount(response.data.results["@odata.count"]);
+            let count = 0
+            if (response?.data?.results["@odata.count"]) {
+              count = response.data.results["@odata.count"]
+            } else {
+              count = response.data.results.length
+            }
+            setResultCount(count);
             setIsLoading(false);
             if (response.data.results["@search.facets"]) {
               setFacets(response.data.results["@search.facets"]);

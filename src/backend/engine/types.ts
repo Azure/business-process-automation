@@ -41,5 +41,5 @@ export interface BpaServiceObject {
     stages ?: any
     index ?: number
     id ?: string
-    vector ?: []
+    vector : []
 }

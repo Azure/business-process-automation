@@ -18,7 +18,8 @@ export class Xml {
             filename: input.filename,
             pipeline: input.pipeline,
             aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            vector: input.vector
         }
         return result
 

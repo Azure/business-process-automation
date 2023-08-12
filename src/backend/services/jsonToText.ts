@@ -26,7 +26,8 @@ export class JsonToText {
             pipeline: input.pipeline,
             bpaId: input.bpaId,
             aggregatedResults: results,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            vector : input.vector
         }
 
     }
