@@ -8,7 +8,7 @@ import Facets from '../../components/Facets/Facets';
 import SearchBar from '../../components/SearchBar/SearchBar';
 
 import "./Search.css";
-import { toolbarMenuItemBehavior } from '@fluentui/react-northstar';
+//import { toolbarMenuItemBehavior } from '@fluentui/react-northstar';
 
 export default function Search(props) {
 
