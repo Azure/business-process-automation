@@ -88,7 +88,7 @@ const constructFilter = (filters: string[], collections: string[]) => {
     return result
 }
 
-const getEmbedding = async (query: string) : Promise<[]> => {
+const getEmbedding = async (query: string): Promise<[]> => {
 
     try {
         const headers = {
@@ -132,48 +132,63 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 "api-key": process.env.COGSEARCH_APIKEY
             }
         }
-        const embedding = await getEmbedding(req.body.q)
-        const vectorQueryPayload = [
-            {
-                value : embedding,
-                fields : 'vector',
-                k : 10
-            }
-        ]
-        const body = {
-            vectors : vectorQueryPayload
-        }
-        // let body = {
-        //     search: req.body.q,
-        //     count: true,
-        //     facets: req?.body?.facets ? req.body.facets : [],
-        //     filter: req?.body?.facets ? constructFilter(req.body.filters, req.body.filterCollections) : "",
-        //     queryType: req?.body?.useSemanticSearch == true ? "semantic" : "simple",
-        //     skip: req.body.skip,
-        //     top: req.body.top,
-        //     semanticConfiguration: req.body.semanticConfig,
-        //     queryLanguage: req.body.queryLanguage,
-        // }
-        // if (body.queryType === 'semantic') {
-        //     body['answers'] = "extractive|count-3"
-        //     body['captions'] = "extractive|highlight-true"
-        // }
-        if (index) {
-            let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2023-07-01-preview`
-            const axiosResult = await axios.post(url, body, headers)
-            // let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
-            // if(semantic === 'false'){
-            //     url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&facet=label&search=${encodeURIComponent(text)}&queryLanguage=en-US`
-            // }
-            //const axiosResult = await axios.get(url,headers)
 
-            context.res = {
-                body: { "results": axiosResult.data.value }
+        let body = {}
+        let url = ""
+        if (req.body.isVector) {
+            const embedding = await getEmbedding(req.body.q)
+            const vectorQueryPayload = [
+                {
+                    value: embedding,
+                    fields: 'vector',
+                    k: req.body.top
+                }
+            ]
+            body = {
+                vectors: vectorQueryPayload
+            }
+            if (index) {
+                let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2023-07-01-preview`
+                const axiosResult = await axios.post(url, body, headers)
+
+                context.res = {
+                    body: { "results": axiosResult.data }
+                }
+            } else {
+                context.res = {
+                    body: { "results": [] }
+                }
             }
         } else {
-            context.res = {
-                body: { "results": [] }
+            let body = {
+                search: req.body.q,
+                count: true,
+                facets: req?.body?.facets ? req.body.facets : [],
+                filter: req?.body?.facets ? constructFilter(req.body.filters, req.body.filterCollections) : "",
+                queryType: req?.body?.useSemanticSearch == true ? "semantic" : "simple",
+                skip: req.body.skip,
+                top: req.body.top,
+                semanticConfiguration: req.body.semanticConfig,
+                queryLanguage: req.body.queryLanguage,
             }
+            if (body.queryType === 'semantic') {
+                body['answers'] = "extractive|count-3"
+                body['captions'] = "extractive|highlight-true"
+            }
+            if (index) {
+                let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs/search?api-version=2023-07-01-preview`
+                const axiosResult = await axios.post(url, body, headers)
+                // let url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&search=${encodeURIComponent(text)}&queryLanguage=en-US&queryType=semantic&captions=extractive&answers=extractive%7Ccount-3&semanticConfiguration=${semanticConfig}`
+                // if(semantic === 'false'){
+                //     url = `${process.env.COGSEARCH_URL}/indexes/${index}/docs?api-version=2021-04-30-Preview&facet=label&search=${encodeURIComponent(text)}&queryLanguage=en-US`
+                // }
+                //const axiosResult = await axios.get(url,headers)
+
+                context.res = {
+                    body: { "results": axiosResult.data }
+                }
+            }
+
         }
 
     } catch (err) {

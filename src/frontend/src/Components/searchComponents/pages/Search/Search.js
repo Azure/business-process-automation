@@ -8,6 +8,7 @@ import Facets from '../../components/Facets/Facets';
 import SearchBar from '../../components/SearchBar/SearchBar';
 
 import "./Search.css";
+import { toolbarMenuItemBehavior } from '@fluentui/react-northstar';
 
 export default function Search(props) {
 
@@ -79,80 +80,99 @@ export default function Search(props) {
 
   }
 
+  const openaiQuestion = (question, searchableText) => {
+    axios.post(`/api/openaianswer`, {
+      q: question,
+      text: searchableText
+    }).then(r => {
+      setOpenAiAnswer(r.data.out)
+    }).catch(e => {
+      console.log(e)
+    })
+  }
+
+  const isVectorSearch = (index) => { //look for vector field in index
+    let isVector = false
+    for (const s of index.searchableFields) {
+      if (s.includes('vector')) {
+        isVector = true;
+        break;
+      }
+    }
+    return isVector
+  }
+
   useEffect(() => {
 
     setIsLoading(true);
     setSkip((currentPage - 1) * top);
-    const body = {
-      q: q,
-      top: top,
-      skip: skip,
-      filters: filters,
-      facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
-      index: props.index,
-      useSemanticSearch: props.useSemanticSearch,
-      semanticConfig: props.semanticConfig,
-      queryLanguage: "en-US",
-      filterCollections: props.index.collections
-    };
+    let body = {}
+    if (isVectorSearch(props.index)) {
+      body = {
+        isVector: true,
+        q: q,
+        index: props.index,
+        filters: filters,
+        facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
+        filterCollections: props.index.collections
+      }
+
+    } else {
+      body = {
+        isVector: false,
+        q: q,
+        top: top,
+        skip: skip,
+        filters: filters,
+        facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
+        index: props.index,
+        useSemanticSearch: props.useSemanticSearch,
+        semanticConfig: props.semanticConfig,
+        queryLanguage: "en-US",
+        filterCollections: props.index.collections
+      };
+    }
+
 
     if (props.index) {
       axios.post('/api/search', body)
         .then(response => {
-          //console.log(JSON.stringify(response.data))
-          if (response?.data?.results) {
-            if (skip === 0 && props.useOpenAiAnswer && response.data.results.length > 0 && q.length > 1) {
-              let searchableText = ""
-              for(let i=0;i<3;i++){
-                searchableText += " " + getText(props.index.searchableFields, response.data.results[i]) + " "
-              }
-              
-
-              if (searchableText) {
-                axios.post(`/api/openaianswer`, {
-                  q: q,
-                  text: searchableText
-                }).then(r => {
-                  setOpenAiAnswer(r.data.out)
-                }).catch(e => {
-                  console.log(e)
-                })
-              }
-            }
-            setResults(response.data.results);
-            if (response.data.results.length > 0 && response.data.results?.type && response.data.results.type === 'table') {
-              props.onSetTableAvailable(true)
-            } else {
-              props.onSetTableAvailable(false)
-            }
-            let count = 0
-            if (response?.data?.results["@odata.count"]) {
-              count = response.data.results["@odata.count"]
-            } else {
-              count = response.data.results.length
-            }
-            setResultCount(count);
-            setIsLoading(false);
-            if (response.data.results["@search.facets"]) {
+          let results
+          let count = 0
+          if (response?.data?.results["@odata.count"]) {
+            results = response.data.results.value
+            count = response?.data?.results["@odata.count"]
+            if (response?.data?.results["@search.facets"]) {
               setFacets(response.data.results["@search.facets"]);
-            } else {
-              setFacets([])
             }
             if (response.data.results["@search.answers"]) {
               setAnswers(response.data.results["@search.answers"]);
-            } else {
-              setAnswers([])
             }
-            setIsError(false)
-          } else {
-            setResults([]);
-            setResultCount(0);
-            setIsLoading(false);
-            setIsError(true)
-            setFacets([])
+          } else if (response?.data?.results.value) {
+            results = response.data.results.value
+            count = response.data.results.value.length
             setAnswers([])
+            setFacets([])
+          } else {
+            results = []
+            count = 0
+            setAnswers([])
+            setFacets([])
           }
+          setResults(results)
+          setResultCount(count)
+          setIsLoading(false)
+          setIsError(false)
 
+          if (skip === 0 && props.useOpenAiAnswer && results.length > 0 && q.length > 1) {
+            let searchableText = ""
+            for (let i = 0; i < 3; i++) {
+              searchableText += " " + getText(props.index.searchableFields, results[i]) + " "
+            }
+            if (searchableText) {
+              openaiQuestion(q, searchableText)
+            }
+          }
         })
         .catch(error => {
           console.log(error);
