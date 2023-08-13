@@ -23,7 +23,7 @@ export default function Search(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false)
   const [answers, setAnswers] = useState([])
-  const [openAiAnswer, setOpenAiAnswer] = useState("")
+  const [openAiAnswer, setOpenAiAnswer] = useState([])
   //const [openAiSummary, setOpenAiSummary] = useState("")
 
   let resultsPerPage = top;
@@ -80,15 +80,12 @@ export default function Search(props) {
 
   }
 
-  const openaiQuestion = (question, searchableText) => {
-    axios.post(`/api/openaianswer`, {
+  const openaiQuestion = async (question, searchableText) => {
+    const out = await axios.post(`/api/openaianswer`, {
       q: question,
       text: searchableText
-    }).then(r => {
-      setOpenAiAnswer(r.data.out)
-    }).catch(e => {
-      console.log(e)
     })
+    return out.data.out
   }
 
   const isVectorSearch = (index) => { //look for vector field in index
@@ -102,77 +99,88 @@ export default function Search(props) {
     return isVector
   }
 
+  const onSearchResponse = async (response) => {
+    let results
+    let count = 0
+    if (response?.data?.results["@odata.count"]) {
+      results = response.data.results.value
+      count = response?.data?.results["@odata.count"]
+      if (response?.data?.results["@search.facets"]) {
+        setFacets(response.data.results["@search.facets"]);
+      }
+      if (response.data.results["@search.answers"]) {
+        setAnswers(response.data.results["@search.answers"]);
+      }
+    } else if (response?.data?.results.value) {
+      results = response.data.results.value
+      count = response.data.results.value.length
+      setAnswers([])
+      setFacets([])
+    } else {
+      results = []
+      count = 0
+      setAnswers([])
+      setFacets([])
+    }
+    setResults(results)
+    setResultCount(count)
+    setIsLoading(false)
+    setIsError(false)
+
+    if (skip === 0 && props.useOpenAiAnswer && results.length > 0 && q.length > 1) {
+
+      let maxIterations = 10
+      let openAiAnswers = []
+      for (let i = 0; i < maxIterations; i++) {
+        const prompt = `
+        Answer the Question using the Context only.  If the context does not have any relevant information regarding the question, respond "NOT RELEVANT"
+        Question : ${q}
+        Context : ${getText(props.index.searchableFields, results[i])}
+        Answer :`
+
+        const answer = await openaiQuestion(q, prompt)
+        if (answer.includes("NOT RELEVANT")) {
+          break
+        }
+        openAiAnswers.push({
+          filename : results[i].filename,
+          content : answer
+        })
+        
+      }
+      if(openAiAnswers.length === 0){
+        openAiAnswers = [{
+          filename : "", content : "no response"
+        }]
+      } 
+      setOpenAiAnswer(openAiAnswers)
+
+    }
+  }
+
   useEffect(() => {
 
     setIsLoading(true);
     setSkip((currentPage - 1) * top);
-    let body = {}
-    if (isVectorSearch(props.index)) {
-      body = {
-        isVector: true,
-        q: q,
-        index: props.index,
-        filters: filters,
-        facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
-        filterCollections: props.index.collections
-      }
-
-    } else {
-      body = {
-        isVector: false,
-        q: q,
-        top: top,
-        skip: skip,
-        filters: filters,
-        facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
-        index: props.index,
-        useSemanticSearch: props.useSemanticSearch,
-        semanticConfig: props.semanticConfig,
-        queryLanguage: "en-US",
-        filterCollections: props.index.collections
-      };
+    const body = {
+      isVector: isVectorSearch(props.index),
+      q: q,
+      top: top,
+      skip: skip,
+      filters: filters,
+      facets: getFacetSearchConfig(getFacetsString(props.index.facetableFields).split(',')),
+      index: props.index,
+      useSemanticSearch: props.useSemanticSearch,
+      semanticConfig: props.semanticConfig,
+      queryLanguage: "en-US",
+      filterCollections: props.index.collections
     }
 
-
+    setOpenAiAnswer([])
     if (props.index) {
       axios.post('/api/search', body)
         .then(response => {
-          let results
-          let count = 0
-          if (response?.data?.results["@odata.count"]) {
-            results = response.data.results.value
-            count = response?.data?.results["@odata.count"]
-            if (response?.data?.results["@search.facets"]) {
-              setFacets(response.data.results["@search.facets"]);
-            }
-            if (response.data.results["@search.answers"]) {
-              setAnswers(response.data.results["@search.answers"]);
-            }
-          } else if (response?.data?.results.value) {
-            results = response.data.results.value
-            count = response.data.results.value.length
-            setAnswers([])
-            setFacets([])
-          } else {
-            results = []
-            count = 0
-            setAnswers([])
-            setFacets([])
-          }
-          setResults(results)
-          setResultCount(count)
-          setIsLoading(false)
-          setIsError(false)
-
-          if (skip === 0 && props.useOpenAiAnswer && results.length > 0 && q.length > 1) {
-            let searchableText = ""
-            for (let i = 0; i < 3; i++) {
-              searchableText += " " + getText(props.index.searchableFields, results[i]) + " "
-            }
-            if (searchableText) {
-              openaiQuestion(q, searchableText)
-            }
-          }
+          onSearchResponse(response)
         })
         .catch(error => {
           console.log(error);

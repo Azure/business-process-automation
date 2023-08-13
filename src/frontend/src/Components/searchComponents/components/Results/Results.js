@@ -114,7 +114,15 @@ export default function Results(props) {
           <div style={{ fontWeight: 'bold' }}>
             OpenAI Answer:
           </div>
-          {props.openAiAnswer}
+          <div style={{display : "flex", flexDirection : "column"}}>
+            {props.openAiAnswer.map(v => {
+              if (v?.filename) {
+                return (<>
+                  <br></br><b>{v.filename}</b>  {v.content}<br></br>
+                </>)
+              }
+            })}
+          </div>
         </div>
       </div>
       );
