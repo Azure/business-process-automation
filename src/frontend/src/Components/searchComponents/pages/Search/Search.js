@@ -188,6 +188,7 @@ export default function Search(props) {
         });
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, top, skip, filters, currentPage, props.index, props.useSemanticSearch, props.semanticConfig, props]);
 
 

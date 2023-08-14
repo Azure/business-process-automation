@@ -120,6 +120,8 @@ export default function Results(props) {
                 return (<>
                   <br></br><b>{v.filename}</b>  {v.content}<br></br>
                 </>)
+              } else {
+                return (<></>)
               }
             })}
           </div>
