@@ -938,7 +938,7 @@ export class CognitiveSearch {
         },
         {
           sourceFieldName: "/document/aggregatedResults/openaiEmbeddings/data/0/embedding",
-          targetFieldName: "contentVector",
+          targetFieldName: "vector",
           mappingFunction: null
         }
       ],
