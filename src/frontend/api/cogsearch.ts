@@ -548,7 +548,7 @@ export class CognitiveSearch {
 
         },
         {
-          "name": "contentVector",
+          "name": "vector",
           "type": "Collection(Edm.Single)",
           "searchable": true,
           "dimensions": 1536,
