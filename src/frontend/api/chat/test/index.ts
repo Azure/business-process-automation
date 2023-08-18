@@ -510,7 +510,7 @@ const discover = async (payload) => {
   fs.writeFileSync('repoDescription2.json', JSON.stringify(dataDescription))
 }
 
-const summary = () => {
+const summary = async() => {
   const indexes = await getIndexes()
   const searchResults = await search("", indexes[0], 5)
   const newFacetKeys = Object.keys(searchResults["@search.facets"]).map(k => k.split('/')[k.split('/').length - 1])
@@ -522,6 +522,7 @@ const summary = () => {
     newFacets[newKey] = value
     iter++
   }
+  
 }
 
 summary().then(v => {
