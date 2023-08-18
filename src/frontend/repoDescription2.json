@@ -1,0 +1,175 @@
+{
+    "title": {
+        "text": "Titles and sections of the North Carolina General Statutes related to motor vehicles, including regulations for driver's licenses, electronic systems for renewals, special provisions for motorcycles and mopeds, and exceptions to right-of-way rules."
+    },
+    "header": {
+        "text": "Titles and headers of different sections or chapters of the North Carolina General Statutes related to motor vehicles."
+    },
+    "content": {
+        "text": "Sections and content of the North Carolina General Statutes related to motor vehicle laws, including regulations for operating a motorcycle or moped, updating personal information on a driver's license, and yielding the right-of-way to emergency vehicles."
+    },
+    "article": {
+        "text": "A database of North Carolina General Statutes, including regulations related to motorcycle and moped operation, driver's license updates, and right-of-way rules. The data includes content and articles, and may be searchable and filterable."
+    },
+    "section": {
+        "text": "A database of North Carolina General Statutes, including articles and sections related to driving laws, vehicle operation, and driver responsibilities. The data includes specific regulations such as helmet requirements for motorcycle and moped operators, yielding right-of-way to emergency vehicles, and updating driver information with the Division of Motor Vehicles."
+    },
+    "chapter": {
+        "text": "A database of North Carolina General Statutes, organized by articles, sections, and chapters. The content includes regulations related to driving, vehicle operation, and licensing, as well as penalties for violations."
+    },
+    "count": 737,
+    "facets": {
+        "article": [
+            {
+                "count": 308,
+                "value": "article-3"
+            },
+            {
+                "count": 77,
+                "value": "article-2"
+            },
+            {
+                "count": 40,
+                "value": "article-9a"
+            },
+            {
+                "count": 36,
+                "value": "article-12"
+            },
+            {
+                "count": 26,
+                "value": "article-4"
+            },
+            {
+                "count": 24,
+                "value": "article-17"
+            },
+            {
+                "count": 21,
+                "value": "article-3a"
+            },
+            {
+                "count": 19,
+                "value": "article-16"
+            },
+            {
+                "count": 18,
+                "value": "article-2c"
+            },
+            {
+                "count": 12,
+                "value": "article-15"
+            },
+            {
+                "count": 12,
+                "value": "article-15a"
+            },
+            {
+                "count": 11,
+                "value": "article-13"
+            },
+            {
+                "count": 11,
+                "value": "article-1a"
+            },
+            {
+                "count": 10,
+                "value": "article-10a"
+            },
+            {
+                "count": 10,
+                "value": "article-12a"
+            },
+            {
+                "count": 10,
+                "value": "article-14"
+            },
+            {
+                "count": 10,
+                "value": "article-15b"
+            },
+            {
+                "count": 10,
+                "value": "article-1c"
+            },
+            {
+                "count": 9,
+                "value": "article-3c"
+            },
+            {
+                "count": 8,
+                "value": "article-1"
+            },
+            {
+                "count": 8,
+                "value": "article-7"
+            },
+            {
+                "count": 7,
+                "value": "article-2d"
+            },
+            {
+                "count": 6,
+                "value": "article-7a"
+            },
+            {
+                "count": 4,
+                "value": "article-11"
+            },
+            {
+                "count": 4,
+                "value": "article-18"
+            },
+            {
+                "count": 4,
+                "value": "article-3d"
+            },
+            {
+                "count": 4,
+                "value": "article-6a"
+            },
+            {
+                "count": 3,
+                "value": "article-1b"
+            },
+            {
+                "count": 3,
+                "value": "article-2a"
+            },
+            {
+                "count": 3,
+                "value": "article-2b"
+            },
+            {
+                "count": 2,
+                "value": "article-10b"
+            },
+            {
+                "count": 2,
+                "value": "article-13a"
+            },
+            {
+                "count": 2,
+                "value": "article-3b"
+            },
+            {
+                "count": 1,
+                "value": "article-10"
+            },
+            {
+                "count": 1,
+                "value": "article-7b"
+            },
+            {
+                "count": 1,
+                "value": "article-9"
+            }
+        ],
+        "chapter": [
+            {
+                "count": 737,
+                "value": "chapter-20"
+            }
+        ]
+    }
+}
