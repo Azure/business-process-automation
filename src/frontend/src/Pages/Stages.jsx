@@ -23,6 +23,7 @@ import JsonToTextDialog from '../Components/Dialogs/JSONToTextDialog';
 
 import { sc } from '../Components/serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
+import OpenAiRestDialog from '../Components/Dialogs/OpenAiRestDialog';
 
 
 export default function Stages(props) {
@@ -43,6 +44,7 @@ export default function Stages(props) {
     const [hideToTxtByPageDialog, setHideToTxtByPageDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [hideOpenAiDialog, setHideOpenAiDialog] = useState(true)
+    const [hideOpenAiRestDialog, setHideOpenAiRestDialog] = useState(true)
     const [hideVideoIndexerDialog, setHideVideoIndexerDialog] = useState(true)
     const [hideSpliceDocumentDialog, setHideSpliceDocumentDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
@@ -168,6 +170,9 @@ export default function Stages(props) {
         } else if (event.name === 'openaiGeneric') {
             setCurrentOption(_.cloneDeep(event))
             setHideOpenAiDialog(false)
+        }else if (event.name === 'openaiRest') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideOpenAiRestDialog(false)
         }else if (event.name === 'spliceDocument') {
             setCurrentOption(_.cloneDeep(event))
             setHideSpliceDocumentDialog(false)
@@ -217,6 +222,7 @@ export default function Stages(props) {
                 <ToTxtByPageDialog hideDialog={hideToTxtByPageDialog} setHideDialog={setHideToTxtByPageDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <VideoIndexerDialog hideDialog={hideVideoIndexerDialog} setHideDialog={setHideVideoIndexerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <OpenAiGenericDialog hideDialog={hideOpenAiDialog} setHideDialog={setHideOpenAiDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <OpenAiRestDialog hideDialog={hideOpenAiRestDialog} setHideDialog={setHideOpenAiRestDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <SpliceDocument hideDialog={hideSpliceDocumentDialog} setHideDialog={setHideSpliceDocumentDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <JsonToTextDialog hideDialog={hideJsonToTextDialog} setHideDialog={setHideJsonToTextDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}

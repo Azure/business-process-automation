@@ -161,6 +161,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice: noCharge
     },
+    "openaiRest": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "text"
+        ],
+        "outputTypes": [
+            "openaiGeneric"
+        ],
+        "image": openai,
+        "label": "OpenAI (REST) Provide the Body of the REST API Call (Advanced)",
+        "name": "openaiRest",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "openai": {
         "bpaServiceId": "abc123",
         "inputTypes": [

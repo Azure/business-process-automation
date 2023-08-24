@@ -16,6 +16,13 @@ export class CogSearchRetriever extends BaseRetriever {
 
     private _search = async (query: string): Promise<any[]> => {
         try {
+            if(this._indexConfig.searchableFields ){
+                this._indexConfig.searchableFields = this._indexConfig.searchableFields.filter(sf => {
+                  if(!sf.includes('vector')){
+                    return sf
+                  }
+                })
+              }
 
             const headers: AxiosRequestConfig = {
                 headers: {
@@ -28,12 +35,12 @@ export class CogSearchRetriever extends BaseRetriever {
                 count: true,
                 facets: [],
                 filter: "",
-                queryType: "semantic",
                 skip: 0,
                 top: this._numDocs,
-                semanticConfiguration: "default",
-                answers: "extractive|count-3",
-                captions: "extractive|highlight-true",
+                semanticConfiguration: this._indexConfig?.semanticConfiguration && this._indexConfig?.semanticConfiguration.length > 0 ? this._indexConfig?.semanticConfiguration[0] : null,
+                queryType: this._indexConfig?.semanticConfigurations && this._indexConfig?.semanticConfigurations.length > 0 ? "semantic" : "simple",
+                answers: this._indexConfig?.semanticConfigurations && this._indexConfig?.semanticConfigurations.length > 0 ? "extractive|count-3" : null,
+                captions: this._indexConfig?.semanticConfigurations && this._indexConfig?.semanticConfigurations.length > 0 ? "extractive|highlight-true" : null,
                 queryLanguage: "en"
             }
             if (this._indexConfig) {
