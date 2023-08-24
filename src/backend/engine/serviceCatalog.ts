@@ -174,6 +174,20 @@ const openaiGenericService : BpaService = {
     }
 }
 
+const openaiRestService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text","txt"],
+    outputTypes: ["openaiGeneric"],
+    name: "openaiRest",
+    process: openaiText.processRest,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const openaiSummarizeService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["text","txt"],
