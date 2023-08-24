@@ -28,17 +28,17 @@ export class OpenAI {
             headers: headers
         }
 
-        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/completions?api-version=2022-12-01`
+        let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
 
-        const openAiInput = {
-            "prompt": input.data.slice(0, 4000) + "\n\n Tl;dr:",
-            "max_tokens": 256
-        }
+        const prompt = "Content: " + input.data.slice(0, 4000) + "\n\nProvide a brief summary of the above content.\n\nSummary: "
+        const openAiInput = {"messages":[{"role":"user", "content":prompt}]}
+        let out = await axios.post(url, openAiInput, config)
 
-        const out = await axios.post(url, openAiInput, config)
         const results = input.aggregatedResults
         results["openaiSummarize"] = out.data
         input.resultsIndexes.push({ index: index, name: "openaiSummarize", type: "openaiSummarize" })
+
+        
         const result: BpaServiceObject = {
             data: out.data,
             type: 'openaiSummarize',
