@@ -1150,6 +1150,7 @@ export const serviceCatalog = {
     "tableParser" : tableParserService,
     "openaiSummarize" : openaiSummarizeService,
     "openaiGeneric" : openaiGenericService,
+    "openaiRest" : openaiRestService,
     "openaiEmbeddings" : openaiEmbeddingsService,
     "textSegmentation" : textSegmentationService,
     "textSegmentationByPage" : textSegmentationByPageService,

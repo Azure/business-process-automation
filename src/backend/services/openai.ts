@@ -108,20 +108,22 @@ export class OpenAI {
             headers: headers
         }
 
+        const body = JSON.parse(input.serviceSpecificConfig.replace("{document}",input.data))
+
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
-        let out = await axios.post(url, JSON.parse(input.data), config)
+        let out = await axios.post(url, body, config)
        
         const results = input.aggregatedResults
         if(results?.openaiGeneric){
-            results["openaiGeneric"].push(out.data)
+            results["openaiRest"].push(out.data)
         } else{ 
-            results["openaiGeneric"] = [out.data]
+            results["openaiRest"] = [out.data]
         }
-        input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiGeneric" })
+        input.resultsIndexes.push({ index: index, name: "openaiRest", type: "openaiGeneric" })
         const result: BpaServiceObject = {
             data: out.data,
             type: 'openaiGeneric',
-            label: 'openaiGeneric',
+            label: 'openaiRest',
             bpaId: input.bpaId,
             filename: input.filename,
             pipeline: input.pipeline,
