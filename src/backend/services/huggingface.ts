@@ -27,7 +27,8 @@ export class HuggingFace {
             pipeline: input.pipeline,
             type : "huggingFaceNer",
             aggregatedResults : results,
-            resultsIndexes : input.resultsIndexes
+            resultsIndexes : input.resultsIndexes,
+            vector: input.vector
         }
     }
 

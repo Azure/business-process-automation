@@ -126,7 +126,7 @@ export default function OpenAiViewer(props) {
                             {(docData?.aggregatedResults?.openaiGeneric) ? docData.aggregatedResults.openaiGeneric.map(v => v.choices[0].text) : ""}
                         </div>
                         <div style={{marginTop:"20px", fontWeight : "bold"}}>
-                            {(docData?.aggregatedResults?.openaiSummarize?.choices[0].text) ? docData.aggregatedResults.openaiSummarize.choices[0].text : ""}
+                            {(docData?.aggregatedResults?.openaiSummarize[0].choices[0].text) ? docData.aggregatedResults.openaiSummarize[0].choices[0].text : ""}
                         </div>
                         {(docData) ? <JSONTree data={docData} theme={theme} shouldExpandNode={() => false} /> : <></>}
                     </div>

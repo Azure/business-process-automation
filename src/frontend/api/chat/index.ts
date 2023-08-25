@@ -119,6 +119,13 @@ const defaultChat = async (context, req) => {
     "accept": "*/*"
 
   }
+  if(req.body.index?.searchableFields ){
+    req.body.index.searchableFields = req.body.index.searchableFields.filter(sf => {
+      if(!sf.includes('vector')){
+        return sf
+      }
+    })
+  }
   const body = {
     "dataSources": [
       {
@@ -127,13 +134,11 @@ const defaultChat = async (context, req) => {
           "endpoint": process.env.COGSEARCH_URL,
           "key": process.env.COGSEARCH_APIKEY,
           "indexName": req.body.index.name,
-          "semanticConfiguration": "default",
-          "queryType": "semantic",
+          "semanticConfiguration": req.body.index?.semanticConfiguration && req.body.index?.semanticConfiguration.length > 0 ? req.body.index?.semanticConfiguration[0] : null,
+          "queryType": req.body.index?.semanticConfigurations && req.body.index?.semanticConfigurations.length > 0 ? "semantic" : "simple",
           "fieldsMapping": {
             "contentFieldsSeparator": "\n",
-            "contentFields": [
-              "text"
-            ],
+            "contentFields": req.body.index.searchableFields,
             "filepathField": "filename",
             "titleField": "filename",
             "urlField": "filename"
@@ -190,6 +195,15 @@ const run = async (pipeline: any, history: any): Promise<ChainValues> => {
   return null
 }
 
+const toHtml = (thoughts) => {
+  let out = "<div>"
+  for(const t of thoughts){
+    out += `<div>${Object.keys(t)[0]} : ${(Object.values(t)[0] as string).replace('\n','<br>')}</div><br>`
+  }
+  out += "</div>"
+  return out
+}
+
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
   try {
@@ -217,7 +231,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       }
 
       context.res = {
-        body: { "data_points": data_points, "answer": answer, "thoughts": "" }
+        body: { "data_points": data_points, "answer": answer, "thoughts": toHtml(v?.thoughts) }
       }
     }
   } catch (err) {

@@ -30,7 +30,8 @@ export class Ocr {
             pipeline: input.pipeline,
             aggregatedResults : results,
             resultsIndexes : input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
         return result
     }

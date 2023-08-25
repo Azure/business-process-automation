@@ -28,7 +28,8 @@ export class SpliceDocument {
             label: label,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 }

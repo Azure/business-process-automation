@@ -19,9 +19,11 @@ import ToTxtDialog from '../Components/Dialogs/ToTxtDialog';
 import Prices from '../Components/Prices/Prices'
 import OpenAiGenericDialog from '../Components/Dialogs/OpenAiGenericDialog';
 import SpliceDocument from '../Components/Dialogs/SpliceDocument';
+import JsonToTextDialog from '../Components/Dialogs/JSONToTextDialog';
 
 import { sc } from '../Components/serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
+import OpenAiRestDialog from '../Components/Dialogs/OpenAiRestDialog';
 
 
 export default function Stages(props) {
@@ -42,9 +44,11 @@ export default function Stages(props) {
     const [hideToTxtByPageDialog, setHideToTxtByPageDialog] = useState(true)
     const [hideSttDialog, setHideSttDialog] = useState(true)
     const [hideOpenAiDialog, setHideOpenAiDialog] = useState(true)
+    const [hideOpenAiRestDialog, setHideOpenAiRestDialog] = useState(true)
     const [hideVideoIndexerDialog, setHideVideoIndexerDialog] = useState(true)
     const [hideSpliceDocumentDialog, setHideSpliceDocumentDialog] = useState(true)
     const [currentOption, setCurrentOption] = useState(null)
+    const [hideJsonToTextDialog, setHideJsonToTextDialog] = useState(true)
     //const [price, setPrice] = useState(0)
     // const [numDocuments, setNumDocuments] = useState(0)
     // const [minutesPerAudioFile, setMinutesPerAudioFile] = useState(0)
@@ -166,9 +170,15 @@ export default function Stages(props) {
         } else if (event.name === 'openaiGeneric') {
             setCurrentOption(_.cloneDeep(event))
             setHideOpenAiDialog(false)
+        }else if (event.name === 'openaiRest') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideOpenAiRestDialog(false)
         }else if (event.name === 'spliceDocument') {
             setCurrentOption(_.cloneDeep(event))
             setHideSpliceDocumentDialog(false)
+        }else if (event.name === 'jsonToText') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideJsonToTextDialog(false)
         }else {
             addItemToPipeline(event)
         }
@@ -212,7 +222,9 @@ export default function Stages(props) {
                 <ToTxtByPageDialog hideDialog={hideToTxtByPageDialog} setHideDialog={setHideToTxtByPageDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <VideoIndexerDialog hideDialog={hideVideoIndexerDialog} setHideDialog={setHideVideoIndexerDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <OpenAiGenericDialog hideDialog={hideOpenAiDialog} setHideDialog={setHideOpenAiDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <OpenAiRestDialog hideDialog={hideOpenAiRestDialog} setHideDialog={setHideOpenAiRestDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <SpliceDocument hideDialog={hideSpliceDocumentDialog} setHideDialog={setHideSpliceDocumentDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <JsonToTextDialog hideDialog={hideJsonToTextDialog} setHideDialog={setHideJsonToTextDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}
             </>
         )

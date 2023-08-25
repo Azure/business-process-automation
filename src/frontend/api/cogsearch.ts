@@ -548,7 +548,7 @@ export class CognitiveSearch {
 
         },
         {
-          "name": "contentVector",
+          "name": "vector",
           "type": "Collection(Edm.Single)",
           "searchable": true,
           "dimensions": 1536,
@@ -938,7 +938,7 @@ export class CognitiveSearch {
         },
         {
           sourceFieldName: "/document/aggregatedResults/openaiEmbeddings/data/0/embedding",
-          targetFieldName: "contentVector",
+          targetFieldName: "vector",
           mappingFunction: null
         }
       ],

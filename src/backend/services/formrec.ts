@@ -74,7 +74,8 @@ export class FormRec {
             label: label,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
 
 
@@ -104,7 +105,8 @@ export class FormRec {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -161,7 +163,8 @@ export class FormRec {
             label: label,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
 
     }
@@ -188,7 +191,8 @@ export class FormRec {
             label: label,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -214,7 +218,8 @@ export class FormRec {
             label: label,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -344,7 +349,8 @@ export class FormRec {
             label: label,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -382,7 +388,8 @@ export class FormRec {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
 
 
