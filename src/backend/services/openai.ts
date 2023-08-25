@@ -12,13 +12,9 @@ export class OpenAI {
         this._apikey = apikey
         this._endpoint = endpoint
         this._deploymentId = deploymentId
-
-
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-
-
         const headers = {
             'api-key': this._apikey,
             'Content-Type': 'application/json'
@@ -35,13 +31,16 @@ export class OpenAI {
         let out = await axios.post(url, openAiInput, config)
 
         const results = input.aggregatedResults
-        results["openaiSummarize"] = out.data
-        input.resultsIndexes.push({ index: index, name: "openaiSummarize", type: "openaiSummarize" })
+        if(results?.openaiSummarize){
+            results["openaiSummarize"].push(out.data)
+        } else{ 
+            results["openaiSummarize"] = [out.data]
+        }
 
         
         const result: BpaServiceObject = {
             data: out.data,
-            type: 'openaiSummarize',
+            type: 'openaiChatCompletion',
             label: 'openaiSummarize',
             bpaId: input.bpaId,
             filename: input.filename,
@@ -52,6 +51,28 @@ export class OpenAI {
             vector : input.vector
         }
 
+        return result
+    }
+
+    public openaiToText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        const text = input.data.choices[0].message[0].content
+
+        const results = input.aggregatedResults
+        input.aggregatedResults["openaiToText"] = text
+        input.resultsIndexes.push({ index: index, name: "openaiToText", type: "text" })
+        const result: BpaServiceObject = {
+            data: text,
+            type: 'text',
+            label: 'openaiToText',
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            aggregatedResults: results,
+            resultsIndexes: input.resultsIndexes,
+            id: input.id,
+            vector: input.vector
+        }
         return result
     }
 
@@ -79,10 +100,10 @@ export class OpenAI {
         } else{ 
             results["openaiGeneric"] = [out.data]
         }
-        input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiGeneric" })
+        input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiChatCompletion" })
         const result: BpaServiceObject = {
             data: out.data,
-            type: 'openaiGeneric',
+            type: 'openaiChatCompletion',
             label: 'openaiGeneric',
             bpaId: input.bpaId,
             filename: input.filename,
@@ -119,10 +140,10 @@ export class OpenAI {
         } else{ 
             results["openaiRest"] = [out.data]
         }
-        input.resultsIndexes.push({ index: index, name: "openaiRest", type: "openaiGeneric" })
+        input.resultsIndexes.push({ index: index, name: "openaiRest", type: "openaiChatCompletion" })
         const result: BpaServiceObject = {
             data: out.data,
-            type: 'openaiGeneric',
+            type: 'openaiChatCompletion',
             label: 'openaiRest',
             bpaId: input.bpaId,
             filename: input.filename,

@@ -177,7 +177,7 @@ export class LanguageStudio {
 
         const results = input.aggregatedResults
         input.aggregatedResults.piiToText = out
-        input.resultsIndexes.push({ index: index, name: "piiToText", type: "piiToText" })
+        input.resultsIndexes.push({ index: index, name: "piiToText", type: "text" })
         const result: BpaServiceObject = {
             data: out,
             type: 'text',
