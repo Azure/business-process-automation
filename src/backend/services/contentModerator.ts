@@ -43,7 +43,8 @@ export class ContentModerator {
             bpaId: input.bpaId,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
 
     }
@@ -75,7 +76,8 @@ export class ContentModerator {
             bpaId: input.bpaId,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
 
     }

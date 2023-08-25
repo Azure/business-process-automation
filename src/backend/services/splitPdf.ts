@@ -63,7 +63,8 @@ export class SplitPdf {
             aggregatedResults: {}, //input.aggregatedResults,
             resultsIndexes: [], //input.resultsIndexes,
             index: index,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
     

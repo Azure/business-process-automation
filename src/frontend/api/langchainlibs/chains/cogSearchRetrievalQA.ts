@@ -22,6 +22,7 @@ export class CogSearchRetrievalQAChain {
 
     public run = async (query: string, memory: BufferWindowMemory): Promise<ChainValues> => {
 
+        const thoughts = []
         const retriever: BaseRetriever = new CogSearchRetriever(this._parameters.retriever)
         const llmConfig: OpenAIBaseInput = this._parameters.llmConfig
         llmConfig["callbacks"] = [
@@ -29,9 +30,11 @@ export class CogSearchRetrievalQAChain {
                 handleLLMStart: async (llm: Serialized, prompts: string[]) => {
                     console.log(JSON.stringify(llm, null, 2));
                     console.log(JSON.stringify(prompts, null, 2));
+                    thoughts.push({"start": prompts[0]})
                 },
                 handleLLMEnd: async (output: LLMResult) => {
                     console.log(JSON.stringify(output, null, 2));
+                    thoughts.push({"end": output.generations[0][0].text})
                 },
                 handleLLMError: async (err: Error) => {
                     console.error(err);
@@ -80,14 +83,16 @@ export class CogSearchRetrievalQAChain {
                 returnSourceDocuments: true,
                 questionGeneratorChainOptions: {
                     llm,
-                    template: this._parameters.questionGeneratorPrompt && this._parameters.questionGeneratorPrompt.length > 0 ? this._parameters.questionGeneratorPrompt : null
+                    template: this._parameters.questionGenerationPrompt && this._parameters.questionGenerationPrompt.length > 0 ? this._parameters.questionGenerationPrompt : null
                 }
 
             }
         );
         retrievalChain.inputKey = "question"
 
-        const out = await retrievalChain.call({ question: query })
+        let out = await retrievalChain.call({ question: query })
+        out.thoughts = thoughts
+
         return out
     }
 }

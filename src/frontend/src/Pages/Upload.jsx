@@ -6,7 +6,7 @@ import axios from 'axios'
 const pipelinesLabel = "pipelines"
 
 function Upload(props) {
-    const fileTypes = ["PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4", "TIF", "PPT", "TXT", "DOC", "DOCX", "PPTX"];
+    const fileTypes = ["JSON","PNG", "JPG", "PDF", "BMP", "WAV", "MP3", "JPEG", "TIFF", "XML", "MP4", "TIF", "PPT", "TXT", "DOC", "DOCX", "PPTX"];
 
     const [image, setImage] = useState(null);
     const [show, setShow] = useState(false);

@@ -120,7 +120,8 @@ export class VideoIndexer {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
 
 

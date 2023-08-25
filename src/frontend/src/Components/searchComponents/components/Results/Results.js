@@ -41,6 +41,13 @@ export default function Results(props) {
     return false
   }
 
+  const getDocumentName = (result) => {
+    if (result?.filename) {
+      return result.filename.split('/')[result.filename.split('/').length - 1]
+    }
+    return ''
+  }
+
 
   const getDocumentFacets = (document, indexes, collections) => {
     const results = {}
@@ -67,7 +74,7 @@ export default function Results(props) {
         <div key={result.id}>
           <TableResult
             searchables={props.searchables}
-            document={result.filename.split('/')[result.filename.split('/').length - 1]}
+            document={getDocumentName(result)}
             data={result}
             facets={getDocumentFacets(result, Object.keys(props.facets), props.filterCollections)}
           />
@@ -79,7 +86,7 @@ export default function Results(props) {
         <div key={result.id}>
           <Result
             searchables={props.searchables}
-            document={result.filename.split('/')[result.filename.split('/').length - 1]}
+            document={getDocumentName(result)}
             data={result}
             facets={getDocumentFacets(result, Object.keys(props.facets), props.filterCollections)}
           />
@@ -107,7 +114,17 @@ export default function Results(props) {
           <div style={{ fontWeight: 'bold' }}>
             OpenAI Answer:
           </div>
-          {props.openAiAnswer}
+          <div style={{display : "flex", flexDirection : "column"}}>
+            {props.openAiAnswer.map(v => {
+              if (v?.filename) {
+                return (<>
+                  <br></br><b>{v.filename}</b>  {v.content}<br></br>
+                </>)
+              } else {
+                return (<></>)
+              }
+            })}
+          </div>
         </div>
       </div>
       );

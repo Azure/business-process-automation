@@ -10,7 +10,7 @@ import { AnswerIcon } from "./AnswerIcon";
 
 
 const renderButtons = (answer, onThoughtProcessClicked, onSupportingContentClicked) => {
-    if (answer && !answer?.error) {
+    if (answer && answer?.thoughts && answer?.data_points && !answer?.error) {
         return (
             <Stack horizontal horizontalAlign="space-between">
                 <AnswerIcon />

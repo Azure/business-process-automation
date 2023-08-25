@@ -70,7 +70,8 @@ export class LanguageStudio {
             pipeline: input.pipeline,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
         return result
     }
@@ -99,7 +100,8 @@ export class LanguageStudio {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -175,7 +177,7 @@ export class LanguageStudio {
 
         const results = input.aggregatedResults
         input.aggregatedResults.piiToText = out
-        input.resultsIndexes.push({ index: index, name: "piiToText", type: "piiToText" })
+        input.resultsIndexes.push({ index: index, name: "piiToText", type: "text" })
         const result: BpaServiceObject = {
             data: out,
             type: 'text',
@@ -185,7 +187,8 @@ export class LanguageStudio {
             pipeline: input.pipeline,
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
         return result
 
@@ -237,7 +240,8 @@ export class LanguageStudio {
             pipeline: input.pipeline, 
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }  
         
         result["Messages"] = messages
@@ -342,7 +346,8 @@ export class LanguageStudio {
             label: "summaryToText",
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 

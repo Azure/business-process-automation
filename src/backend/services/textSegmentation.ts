@@ -39,7 +39,8 @@ export class TextSegmentation {
                             aggregatedResults: {}, //input.aggregatedResults,
                             data: segment,
                             serviceSpecificConfig: input.serviceSpecificConfig,
-                            id: input.id
+                            id: input.id,
+                            vector: input.vector
                         })
                         segment = lastLine
                     }
@@ -59,7 +60,8 @@ export class TextSegmentation {
                             aggregatedResults: {}, //input.aggregatedResults,
                             data: segment,
                             serviceSpecificConfig: input.serviceSpecificConfig,
-                            id: input.id
+                            id: input.id,
+                            vector: input.vector
                         })
                         segment = lastLine
                     }
@@ -82,7 +84,8 @@ export class TextSegmentation {
             aggregatedResults: {}, //input.aggregatedResults,
             data: segment,
             serviceSpecificConfig: { containerName: "documents" },
-            id: input.id
+            id: input.id,
+            vector: input.vector
         })
         return {
             data: "",
@@ -94,7 +97,8 @@ export class TextSegmentation {
             aggregatedResults: {}, //input.aggregatedResults,
             resultsIndexes: [], //input.resultsIndexes,
             index: index,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -127,7 +131,8 @@ export class TextSegmentation {
                 aggregatedResults: {}, //input.aggregatedResults,
                 data: outText,
                 serviceSpecificConfig: input.serviceSpecificConfig,
-                id: input.id
+                id: input.id,
+                vector: input.vector
             })
         }
 
@@ -141,7 +146,8 @@ export class TextSegmentation {
             aggregatedResults: {}, //input.aggregatedResults,
             resultsIndexes: [], //input.resultsIndexes,
             index: index,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -180,7 +186,8 @@ export class TextSegmentation {
                 aggregatedResults: {}, //input.aggregatedResults,
                 data: segment,
                 serviceSpecificConfig: { containerName: "documents" },
-                id: input.id
+                id: input.id,
+                vector: input.vector
             })
         }
 
@@ -194,7 +201,8 @@ export class TextSegmentation {
             aggregatedResults: {}, //input.aggregatedResults,
             resultsIndexes: [], //input.resultsIndexes,
             index: index,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 

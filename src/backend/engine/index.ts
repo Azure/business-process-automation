@@ -26,7 +26,8 @@ export class BpaEngine {
             data: fileBuffer,
             bpaId: "1",
             aggregatedResults: { "buffer": fileBuffer },
-            resultsIndexes: [{ index: 0, name: "buffer", type: this._getFileType(fileName) }]
+            resultsIndexes: [{ index: 0, name: "buffer", type: this._getFileType(fileName) }],
+            vector: []
         }
 
         console.log(this._getFileType(fileName))
@@ -35,6 +36,12 @@ export class BpaEngine {
             currentInput.data = currentInput.data.toString()
             currentInput.type = "text"
             currentInput.aggregatedResults["text"] = currentInput.data.toString()
+        }
+
+        if(this._getFileType(fileName).toLowerCase() === 'json'){ 
+            currentInput.data = JSON.parse(fileBuffer.toString())
+            currentInput.type = "json",
+            currentInput.aggregatedResults["json"] = JSON.parse(fileBuffer.toString())
         }
 
         let stageIndex = 1

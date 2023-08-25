@@ -33,7 +33,8 @@ export class DocumentTranslation {
             type : input.type,
             aggregatedResults : input.aggregatedResults,
             resultsIndexes : input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 

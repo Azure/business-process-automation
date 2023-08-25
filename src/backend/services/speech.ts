@@ -49,7 +49,8 @@ export class Speech {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector : input.vector
         }
     }
 
@@ -119,7 +120,8 @@ export class Speech {
             bpaId: input.bpaId,
             aggregatedResults: input.aggregatedResults,
             resultsIndexes: input.resultsIndexes,
-            id: input.id
+            id: input.id,
+            vector: input.vector
         }
     }
 
@@ -180,7 +182,8 @@ export class Speech {
                     pipeline: input.pipeline,
                     aggregatedResults: results,
                     resultsIndexes: input.resultsIndexes,
-                    id: input.id
+                    id: input.id,
+                    vector: input.vector
                 })
             };
 

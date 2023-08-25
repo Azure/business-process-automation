@@ -20,6 +20,7 @@ import { SpliceDocument } from "../services/spliceDocument"
 //import { RedactPdf } from "../services/redactPdf"
 import { TextSegmentation } from "../services/textSegmentation"
 import { SplitPdf } from "../services/splitPdf"
+import { JsonToText } from "../services/jsonToText"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -45,6 +46,7 @@ const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "transl
 //const redactPdf = new RedactPdf(blob, blobTranslation)
 const textSegmentation = new TextSegmentation()
 const splitPdf = new SplitPdf()
+const jsonToText = new JsonToText()
 
 const formatKMAcceleratorService : BpaService = {
     bpaServiceId : "abc123",
@@ -164,6 +166,20 @@ const openaiGenericService : BpaService = {
     outputTypes: ["openaiGeneric"],
     name: "openaiGeneric",
     process: openaiText.processGeneric,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const openaiRestService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["text","txt"],
+    outputTypes: ["openaiGeneric"],
+    name: "openaiRest",
+    process: openaiText.processRest,
     serviceSpecificConfig: {
         
     },
@@ -1055,7 +1071,19 @@ const xmlToJsonService : BpaService = {
     }
 }
 
+const jsonToTextService : BpaService = {
+    inputTypes: ["json"],
+    outputTypes: ["text"],
+    name: "jsonToText",
+    bpaServiceId: "abc123",
+    process: jsonToText.process,
+    serviceSpecificConfig: {
 
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 export const serviceCatalog = {
     // "copy" : copyService,
@@ -1122,11 +1150,13 @@ export const serviceCatalog = {
     "tableParser" : tableParserService,
     "openaiSummarize" : openaiSummarizeService,
     "openaiGeneric" : openaiGenericService,
+    "openaiRest" : openaiRestService,
     "openaiEmbeddings" : openaiEmbeddingsService,
     "textSegmentation" : textSegmentationService,
     "textSegmentationByPage" : textSegmentationByPageService,
     "splitPdf" : splitPdfService,
     "piiToText" : piiToTextService,
-    "formatKMAccelerator" : formatKMAcceleratorService
+    "formatKMAccelerator" : formatKMAcceleratorService,
+    "jsonToText" : jsonToTextService
 }
 
