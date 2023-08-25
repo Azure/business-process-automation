@@ -1,5 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { CosmosDB, MongoDB, BlobDB } from "../db";
+import { CosmosDB, BlobDB } from "../db";
 
 
 // let db = null

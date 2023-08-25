@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
-import { Panel, DefaultButton, SpinButton } from "@fluentui/react";
+import { Panel, DefaultButton, SpinButton, TextField, Text } from "@fluentui/react";
 //import { SparkleFilled } from "@fluentui/react-icons";
-import { Dropdown } from '@fluentui/react-northstar';
+import { Button, Dropdown } from '@fluentui/react-northstar';
 import styles from "./Chat.module.css";
 
 
@@ -14,8 +14,8 @@ import { UserChatMessage } from "./components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "./components/AnalysisPanel";
 import { SettingsButton } from "./components/SettingsButton";
 import { ClearChatButton } from "./components/ClearChatButton";
-
 import axios from 'axios'
+
 
 // export const enum Approaches {
 //     RetrieveThenRead = "rtr",
@@ -23,9 +23,38 @@ import axios from 'axios'
 //     ReadDecomposeAsk = "rda"
 // }
 
+const chainTypes = [
+    "refine",
+    "stuff",
+    "map_reduce"
+]
+
+const agentTypes = [
+    "plan-and-execute",
+    "chat-zero-shot-react-description",
+    "zero-shot-react-description"
+]
+
+const processTypes = [
+    {
+        name: "chain",
+        chainTypes: chainTypes
+    },
+    {
+        name: "agent",
+        agentTypes: agentTypes,
+        chainTypes: chainTypes
+    },
+    {
+        name: "Use Your Own Data (Azure API)",
+        agentTypes: [],
+        chainTypes: []
+    }
+]
+
 const EnterpriseSearch = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-    // const [promptTemplate, setPromptTemplate] = useState("");
+    //const [promptTemplate, setPromptTemplate] = useState("");
     // const [facetTemplate, setFacetTemplate] = useState("If the question is asking about 'sentiment' regarding the sources and other documents in the database, use the 'Facets' field to answer the question.");
     // const [facetQueryTermsTemplate, setFacetQueryTermsTemplate] = useState("When generating the Search Query do not use terms related to sentiment.  Example ['sentiment', 'positive', 'negative',etc]");
     const [retrieveCount, setRetrieveCount] = useState(3);
@@ -51,31 +80,108 @@ const EnterpriseSearch = () => {
     const [selectedIndex, setSelectedIndex] = useState(null)
     //const [indexSearchDone, setIndexSearchDone] = useState(false)
     // const [pipelines, setPipelines] = useState([])
+    const [processType, setProcessType] = useState(processTypes[0].name)
+    const [agentType, setAgentType] = useState(agentTypes[0])
+    const [chainType, setChainType] = useState(chainTypes[0])
+    const [tools, setTools] = useState([])
+    const [toolName, setToolName] = useState("")
+    const [toolDescription, setToolDescription] = useState("")
+    const [refinePrompt, setRefinePrompt] = useState(`Question: {question}
+    Chat History:{chat_history}
+    Document: {context} 
+    Existing Answer: {existing_answer}
+    If the document adds additional information to the answer of the question, refine it.  Otherwise, return the existing answer.`)
+    const [refineQuestionPrompt, setRefineQuestionPrompt] = useState(`Based on the chat history and question, create a new query.
+    Question: {question}
+    Chat History: {chat_history}
+    New Query:`)
+    const [mrCombineMapPrompt, setMrCombineMapPrompt] = useState(`I'm a virtual assistant that answers questions based on documents that are returned.  I will only information that is within the context of the document.
+    Document : {context} 
+    Question : {question}
+    Chat History: {chat_history}
+    Answer:`)
+    const [mrCombinePrompt, setMrCombinePrompt] = useState(`I'm a virtual assistant that answers questions based on documents that are returned.  I will only information that is within the context of the document.
+    Document : {summaries} 
+    Question : {question}
+    Chat History: {chat_history}
+    Answer:`)
+    const [questionGenerationPrompt, setQuestionGenerationPrompt] = useState(`Based on the chat history and question, create a new query.
+    Question: {question}
+    Chat History: {chat_history}
+    New Query:`)
+    const [stuffPrompt, setStuffPrompt] = useState(`I'm a virtual assistant that answers questions based on documents that are returned.  I will only information that is within the context of the document.
+    Document : {context} 
+    Question : {question}
+    Chat History: {chat_history}
+    Answer:`)
+
+
 
     useEffect(() => {
         axios.get('/api/indexes').then(_indexes => {
             if (_indexes?.data?.indexes) {
-                //setIndexSearchDone(true)
                 setIndexes(_indexes.data.indexes)
                 setSelectedIndex(_indexes.data.indexes[0])
             }
         }).catch(err => {
-            //setIndexSearchDone(true)
             console.log(err)
         })
-        // axios.get('/api/config?id=pipelines').then(value => {
-        //     setPipelines(value.data.pipelines.filter(value => {
-        //         for (const stage of value.stages) {
-        //             if (stage.name === 'openaiEmbeddings') {
-        //                 return true
-        //             }
-        //         }
-        //         return false
-        //     }))
-        // }).catch(err => {
-        //     console.log(err)
-        // })
     }, [])
+
+    const generatePipeline = () => {
+        const llmConfig = {
+            temperature: 0.1,
+            topP: 0,
+            frequencyPenalty: 0.1,
+            presencePenalty: 0,
+            n: 1,
+            streaming: false,
+            modelName: "gpt-3.5-turbo",
+            maxConcurrency: 1
+        }
+
+        let pipeline = {}
+
+
+        if (processType === 'chain') {
+            pipeline = {
+                name: "first",
+                type: "chain",
+                subType: "RetrievalQA",
+                chainParameters: {
+                    type: chainType,
+                    memorySize: 10,
+                    llmConfig: llmConfig,
+                    retriever: {
+                        type: "cogsearch",
+                        indexConfig: selectedIndex,
+                        numDocs: retrieveCount
+                    },
+                    stuffPrompt: stuffPrompt,
+                    refinePrompt: refinePrompt,
+                    refineQuestionPrompt: refineQuestionPrompt,
+                    mrCombineMapPrompt: mrCombineMapPrompt,
+                    mrCombinePrompt: mrCombinePrompt,
+                    questionGenerationPrompt: questionGenerationPrompt
+                }
+            }
+        } else if (processType === 'agent') {
+            pipeline = {
+                name: "agent",
+                type: "agent",
+                subType: agentType,
+                parameters: {
+                    tools: tools,
+                }
+            }
+
+        } else {
+            pipeline = {
+                name: "default"
+            }
+        }
+        return pipeline
+    }
 
 
     const onIndexChange = (_, value) => {
@@ -84,6 +190,90 @@ const EnterpriseSearch = () => {
             setSelectedIndex(_index)
         }
 
+    }
+
+    const onProcessChange = (_, value) => {
+        setProcessType(value.value)
+    }
+
+    const onChainChange = (_, value) => {
+        setChainType(value.value)
+    }
+
+    const onAgentChange = (_, value) => {
+        setAgentType(value.value)
+    }
+
+    const onChangeToolName = (_, value) => {
+        setToolName(value)
+    }
+
+    const onChangeToolDescription = (_, value) => {
+        setToolDescription(value)
+    }
+
+    const onChangeMrCombineMapPrompt = (_, value) => {
+        setMrCombineMapPrompt(value)
+    }
+    const onChangeMrCombinePrompt = (_, value) => {
+        setMrCombinePrompt(value)
+    }
+    const onChangeQuestionGenerationPrompt = (_, value) => {
+        setQuestionGenerationPrompt(value)
+    }
+    const onChangeRefinePrompt = (_, value) => {
+        setRefinePrompt(value)
+    }
+    const onChangeRefineQuestionPrompt = (_, value) => {
+        setRefineQuestionPrompt(value)
+    }
+    const onChangeStuffPrompt = (_, value) => {
+        setStuffPrompt(value)
+    }
+
+    const onResetTools = () => {
+        setTools([])
+    }
+
+    const onAddTool = () => {
+        const llmConfig = {
+            temperature: 0.1,
+            topP: 0,
+            frequencyPenalty: 0.1,
+            presencePenalty: 0,
+            n: 1,
+            streaming: false,
+            modelName: "gpt-3.5-turbo",
+            maxConcurrency: 1
+        }
+
+        const newTool = {
+            name: toolName,
+            description: toolDescription,
+            memorySize: 10,
+            chainParameters: {
+                type: chainType,
+                memorySize: 10,
+                llmConfig: llmConfig,
+                retriever: {
+                    type: "cogsearch",
+                    indexConfig: selectedIndex,
+                    numDocs: retrieveCount
+                },
+                stuffPrompt: stuffPrompt,
+                refinePrompt: refinePrompt,
+                refineQuestionPrompt: refineQuestionPrompt,
+                mrCombineMapPrompt: mrCombineMapPrompt,
+                mrCombinePrompt: mrCombinePrompt,
+                questionGenerationPrompt: questionGenerationPrompt
+            }
+        }
+        const _tools = []
+        for (const t of tools) {
+            _tools.push(t)
+        }
+        _tools.push(newTool)
+        setTools(_tools)
     }
 
     const makeApiRequest = (question => {
@@ -98,7 +288,8 @@ const EnterpriseSearch = () => {
             const history = answers.map(a => ({ user: a[0], assistant: a[1].answer }));
             const request = {
                 history: [...history, { user: question, assistant: undefined }],
-                approach: "rtr", //Approaches.ReadRetrieveRead,
+                approach: "rtr", //not being used but kept for consistency
+                pipeline: generatePipeline(),
                 overrides: {
                     //promptTemplate: promptTemplate.length === 0 ? undefined : promptTemplate,
                     //excludeCategory: excludeCategory.length === 0 ? undefined : excludeCategory,
@@ -123,6 +314,7 @@ const EnterpriseSearch = () => {
             //setIsLoading(false);
         }
     });
+
 
     const clearChat = () => {
         lastQuestionRef.current = "";
@@ -159,9 +351,223 @@ const EnterpriseSearch = () => {
         setSelectedAnswer(index);
     };
 
-    // const onVectorSearchPipeline = (_ev, newValue) => {
-    //     setVectorSearchPipeline(newValue.value)
-    // }
+    const renderTools = () => {
+        if (tools) {
+            return (
+                <ul>
+                    {tools.map(t => (<li>{t.name}</li>))}
+                </ul>)
+        }
+    }
+
+    const renderDefaultComponents = () => {
+        return (
+            <>
+                <SpinButton
+                    className={styles.chatSettingsSeparator}
+                    label="Retrieve this many documents from search:"
+                    min={1}
+                    max={50}
+                    defaultValue={retrieveCount.toString()}
+                    onChange={onRetrieveCountChange}
+                    style={{ marginBottom: "20px" }}
+                />
+
+                <Dropdown
+                    placeholder="Select the Process Type"
+                    label="Process Type"
+                    items={processTypes.map(p => p.name)}
+                    onChange={onProcessChange}
+                    value={processType}
+                    style={{ marginBottom: "20px" }}
+                />
+
+                <Dropdown
+                    placeholder="Select the Cognitive Search Index"
+                    label="Output"
+                    items={indexes.map(sc => sc.name)}
+                    value={selectedIndex ? selectedIndex.name : ""}
+                    onChange={onIndexChange}
+                    style={{ marginBottom: "20px" }}
+                />
+            </>
+        )
+    }
+
+    const renderPrompts = () => {
+        if (chainType === 'stuff') {
+            return (
+                <>
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={stuffPrompt}
+                        label="Stuff Chain Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeStuffPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={questionGenerationPrompt}
+                        label="Question Generator Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeQuestionGenerationPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                </>
+
+            )
+        }
+
+        if (chainType === 'refine') {
+            return (
+                <>
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={refinePrompt}
+                        label="Refine Chain Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeRefinePrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={refineQuestionPrompt}
+                        label="Refine Chain Question Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeRefineQuestionPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={questionGenerationPrompt}
+                        label="Question Generator Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeQuestionGenerationPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                </>
+
+            )
+        }
+
+        if (chainType === 'map_reduce') {
+            return (
+                <>
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={mrCombineMapPrompt}
+                        label="MapReduce Combine Map Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeMrCombineMapPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={mrCombinePrompt}
+                        label="Map Reduce Combine Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeMrCombinePrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                    <TextField
+                        className={styles.chatSettingsSeparator}
+                        value={questionGenerationPrompt}
+                        label="Question Generator Prompt Template': "
+                        multiline
+                        autoAdjustHeight
+                        onChange={onChangeQuestionGenerationPrompt}
+                        style={{ marginBottom: "20px" }}
+                    />
+                </>
+
+            )
+        }
+    }
+
+    const renderComponents = () => {
+        if (processType === 'agent') {
+            return (<div style={{ display: "flex", flexDirection: "column" }}>
+                {renderDefaultComponents()}
+                <Dropdown
+                    placeholder="Select the Agent Type"
+                    label="Agent Type"
+                    items={agentTypes}
+                    onChange={onAgentChange}
+                    style={{ marginBottom: "20px" }}
+                    value={agentType}
+                />
+                <TextField
+                    className={styles.chatSettingsSeparator}
+                    value={toolName}
+                    label="Tool Name: "
+                    multiline
+                    autoAdjustHeight
+                    onChange={onChangeToolName}
+                    style={{ marginBottom: "20px" }}
+                />
+                <TextField
+                    className={styles.chatSettingsSeparator}
+                    value={toolDescription}
+                    label="Tool Description: "
+                    multiline
+                    autoAdjustHeight
+                    onChange={onChangeToolDescription}
+                    style={{ marginBottom: "20px" }}
+                />
+
+                <Dropdown
+                    placeholder="Select the Chain Type"
+                    label="Chain Type"
+                    items={chainTypes}
+                    onChange={onChainChange}
+                    style={{ marginBottom: "20px", marginTop: "20px" }}
+                    value={chainType}
+                />
+                {renderPrompts()}
+
+
+                <Button primary content="Add Tool"
+                    style={{ marginBottom: "20px" }}
+                    disabled={processType !== 'agent'}
+                    onClick={onAddTool}
+                />
+
+                <Button primary content="Reset Tools"
+                    style={{ marginBottom: "20px" }}
+                    disabled={processType !== 'agent'}
+                    onClick={onResetTools}
+                />
+
+                <Text style={{ marginBottom: "20px" }}> List of Tools : {renderTools()} </Text>
+            </div>
+            )
+        } else if (processType === 'chain') {
+            return (
+                <>
+                    {renderDefaultComponents()}
+                    <Dropdown
+                        placeholder="Select the Chain Type"
+                        label="Chain Type"
+                        items={chainTypes}
+                        onChange={onChainChange}
+                        value={chainType}
+                        style={{ marginBottom: "20px", marginTop: "20px" }}
+                    />
+                    {renderPrompts()}
+                </>
+            )
+        } else {
+            return (<>{renderDefaultComponents()}</>)
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -169,26 +575,6 @@ const EnterpriseSearch = () => {
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                 <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
-                <div style={{ marginRight: "10px" }}>
-                    <Dropdown
-                        search
-                        placeholder="Select the Cognitive Search Index"
-                        label="Output"
-                        items={indexes.map(sc => sc.name)}
-                        onChange={onIndexChange}
-
-                    />
-                </div>
-                {/* <div>
-                    <Dropdown
-                        search
-                        placeholder="Select the Vector Embedding Index"
-                        label="Output"
-                        items={pipelines.map(sc => sc.name)}
-                        onChange={onVectorSearchPipeline}
-                    />
-                </div> */}
-
             </div>
             <div className={styles.chatRoot}>
 
@@ -214,7 +600,7 @@ const EnterpriseSearch = () => {
                                             onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
                                             onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
                                             onFollowupQuestionClicked={q => makeApiRequest(q)}
-                                            //showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
+                                        //showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
                                         />
                                     </div>
                                 </div>
@@ -270,62 +656,9 @@ const EnterpriseSearch = () => {
                     onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
                     isFooterAtBottom={true}
                 >
-                    {/* <TextField
-                        className={styles.chatSettingsSeparator}
-                        defaultValue={promptTemplate}
-                        label="Override prompt template"
-                        multiline
-                        autoAdjustHeight
-                        onChange={onPromptTemplateChange}
-                    /> */}
-
-                    {/* <TextField
-                        className={styles.chatSettingsSeparator}
-                        defaultValue={facetTemplate}
-                        label="Facet Template"
-                        multiline
-                        autoAdjustHeight
-                        onChange={onFacetTemplateChange}
-                    /> */}
-
-                    {/* <TextField
-                        className={styles.chatSettingsSeparator}
-                        defaultValue={facetQueryTermsTemplate}
-                        label="Facet Query Terms Template"
-                        multiline
-                        autoAdjustHeight
-                        onChange={onFacetQueryTermsTemplateChange}
-                    /> */}
-
-                    <SpinButton
-                        className={styles.chatSettingsSeparator}
-                        label="Retrieve this many documents from search:"
-                        min={1}
-                        max={50}
-                        defaultValue={retrieveCount.toString()}
-                        onChange={onRetrieveCountChange}
-                    />
-                    {/* <TextField className={styles.chatSettingsSeparator} label="Exclude category" onChange={onExcludeCategoryChanged} />
-                    <Checkbox
-                        className={styles.chatSettingsSeparator}
-                        checked={useSemanticRanker}
-                        label="Use semantic ranker for retrieval"
-                        onChange={onUseSemanticRankerChange}
-                    />
-                    <Checkbox
-                        className={styles.chatSettingsSeparator}
-                        checked={useSemanticCaptions}
-                        label="Use query-contextual summaries instead of whole documents"
-                        onChange={onUseSemanticCaptionsChange}
-                        disabled={!useSemanticRanker}
-                    />
-                    <Checkbox
-                        className={styles.chatSettingsSeparator}
-                        checked={useSuggestFollowupQuestions}
-                        label="Suggest follow-up questions"
-                        onChange={onUseSuggestFollowupQuestionsChange}
-                    /> */}
-                    {/* <TextField className={styles.chatSettingsSeparator} label="Vector Search Index" onChange={onVectorSearchPipeline} /> */}
+                    <div >
+                        {renderComponents()}
+                    </div>
                 </Panel>
             </div>
         </div>
