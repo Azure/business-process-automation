@@ -129,10 +129,11 @@ export class OpenAI {
             headers: headers
         }
 
-        const body = JSON.parse(input.serviceSpecificConfig.replace("{document}",input.data))
+        const body = input.serviceSpecificConfig.replace(/(\r\n|\n|\r|\t)/gm, " ").replace("${document}", input.data.replace(/(\r\n|\n|\r|\t|}|{|"|')/gm, " "))
+        const parsedBody = JSON.parse(body)
 
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
-        let out = await axios.post(url, body, config)
+        let out = await axios.post(url, parsedBody, config)
        
         const results = input.aggregatedResults
         if(results?.openaiGeneric){
