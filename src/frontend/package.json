@@ -23,7 +23,7 @@
     "i": "^0.3.7",
     "jquery": "^3.6.4",
     "lodash": "^4.17.21",
-    "mongodb": "^5.1.0",
+    "mongodb": "^5.8.0",
     "npm": "^9.6.3",
     "parse-multipart": "^1.0.4",
     "popper.js": "^1.16.1",
