@@ -27,17 +27,17 @@ export class OpenAI {
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
 
         const prompt = "Content: " + input.data.slice(0, 4000) + "\n\nProvide a brief summary of the above content.\n\nSummary: "
-        const openAiInput = {"messages":[{"role":"user", "content":prompt}]}
+        const openAiInput = { "messages": [{ "role": "user", "content": prompt }] }
         let out = await axios.post(url, openAiInput, config)
 
         const results = input.aggregatedResults
-        if(results?.openaiSummarize){
+        if (results?.openaiSummarize) {
             results["openaiSummarize"].push(out.data)
-        } else{ 
+        } else {
             results["openaiSummarize"] = [out.data]
         }
 
-        
+
         const result: BpaServiceObject = {
             data: out.data,
             type: 'openaiChatCompletion',
@@ -48,7 +48,7 @@ export class OpenAI {
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
             id: input.id,
-            vector : input.vector
+            vector: input.vector
         }
 
         return result
@@ -91,13 +91,13 @@ export class OpenAI {
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
 
         const prompt = input.serviceSpecificConfig.replace(/(\r\n|\n|\r|\t)/gm, " ").replace("${document}", input.data)
-        const openAiInput = {"messages":[{"role":"user", "content":prompt}]}
+        const openAiInput = { "messages": [{ "role": "user", "content": prompt }] }
         let out = await axios.post(url, openAiInput, config)
-       
+
         const results = input.aggregatedResults
-        if(results?.openaiGeneric){
+        if (results?.openaiGeneric) {
             results["openaiGeneric"].push(out.data)
-        } else{ 
+        } else {
             results["openaiGeneric"] = [out.data]
         }
         input.resultsIndexes.push({ index: index, name: "openaiGeneric", type: "openaiChatCompletion" })
@@ -111,15 +111,13 @@ export class OpenAI {
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
             id: input.id,
-            vector : input.vector
+            vector: input.vector
         }
         return result
 
     }
 
     public processRest = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
-
-
         const headers = {
             'api-key': this._apikey,
             'Content-Type': 'application/json'
@@ -134,11 +132,11 @@ export class OpenAI {
 
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
         let out = await axios.post(url, parsedBody, config)
-       
+
         const results = input.aggregatedResults
-        if(results?.openaiGeneric){
+        if (results?.openaiGeneric) {
             results["openaiRest"].push(out.data)
-        } else{ 
+        } else {
             results["openaiRest"] = [out.data]
         }
         input.resultsIndexes.push({ index: index, name: "openaiRest", type: "openaiChatCompletion" })
@@ -152,13 +150,68 @@ export class OpenAI {
             aggregatedResults: results,
             resultsIndexes: input.resultsIndexes,
             id: input.id,
-            vector : input.vector
+            vector: input.vector
         }
         return result
 
     }
 
-    public generic = async (prompt : string, maxTokens : number): Promise<any> => {
+    public piiToProcessRest = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+        const headers = {
+            'api-key': this._apikey,
+            'Content-Type': 'application/json'
+        }
+
+        const config: AxiosRequestConfig = {
+            headers: headers
+        }
+
+        const redactedText: string[] = [""]
+        let redactedTextIndex = 0
+        for (const item of input.data.items) {
+            for (const document of item.results.documents) {
+                if (redactedText[redactedTextIndex].length > 5000) {
+                    redactedTextIndex++
+                    redactedText.push("")
+                }
+                redactedText[redactedTextIndex] += document.redactedText
+            }
+        }
+
+        const out = []
+        for(const text of redactedText){
+            const body = input.serviceSpecificConfig.replace(/(\r\n|\n|\r|\t)/gm, " ").replace("${document}", text.replace(/(\r\n|\n|\r|\t|}|{|"|')/gm, " "))
+            const parsedBody = JSON.parse(body)
+    
+            let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
+            out.push((await axios.post(url, parsedBody, config)).data)
+        }
+
+
+        const results = input.aggregatedResults
+        if (results?.openaiGeneric) {
+            results["openaiRest"].push(out)
+        } else {
+            results["openaiRest"] = [out]
+        }
+        input.resultsIndexes.push({ index: index, name: "openaiRest", type: "openaiChatCompletion" })
+        const result: BpaServiceObject = {
+            data: out,
+            type: 'openaiChatCompletionMulti',
+            label: 'piiToOpenaiRest',
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            aggregatedResults: results,
+            resultsIndexes: input.resultsIndexes,
+            id: input.id,
+            vector: input.vector
+        }
+        return result
+
+    }
+
+    public generic = async (prompt: string, maxTokens: number): Promise<any> => {
         const headers = {
             'api-key': this._apikey,
             'Content-Type': 'application/json'
@@ -171,14 +224,14 @@ export class OpenAI {
         let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-03-15-preview`
 
         const openAiInput = {
-            "messages":{"role":"user", "content":prompt}
+            "messages": { "role": "user", "content": prompt }
         }
 
         const out = await axios.post(url, openAiInput, config)
         return out.data
     }
 
-    public getEmbeddings = async (text : string) : Promise<AxiosResponse<any, any>> => {
+    public getEmbeddings = async (text: string): Promise<AxiosResponse<any, any>> => {
         const headers = {
             'api-key': this._apikey,
             'Content-Type': 'application/json'

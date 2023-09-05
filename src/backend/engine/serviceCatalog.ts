@@ -188,6 +188,20 @@ const openaiRestService : BpaService = {
     }
 }
 
+const piiToOpenaiRestService : BpaService = {
+    bpaServiceId : "abc123",
+    inputTypes: ["recognizePiiEntities"],
+    outputTypes: ["openaiGenericMulti"],
+    name: "piiToOpenaiRest",
+    process: openaiText.piiToProcessRest,
+    serviceSpecificConfig: {
+        
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const openaiSummarizeService : BpaService = {
     bpaServiceId : "abc123",
     inputTypes: ["text","txt"],
@@ -1085,6 +1099,20 @@ const jsonToTextService : BpaService = {
     }
 }
 
+const piiSttService : BpaService = {
+    inputTypes: ["stt"],
+    outputTypes: ["stt"],
+    name: "piiStt",
+    bpaServiceId: "abc123",
+    process: language.piiStt,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 export const serviceCatalog = {
     // "copy" : copyService,
     //"redactPdf" : redactPdfService,
@@ -1157,6 +1185,8 @@ export const serviceCatalog = {
     "splitPdf" : splitPdfService,
     "piiToText" : piiToTextService,
     "formatKMAccelerator" : formatKMAcceleratorService,
-    "jsonToText" : jsonToTextService
+    "jsonToText" : jsonToTextService,
+    "piiStt" : piiSttService,
+    "piiToOpenaiRest" : piiToOpenaiRestService
 }
 
