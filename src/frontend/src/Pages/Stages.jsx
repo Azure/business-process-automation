@@ -170,7 +170,7 @@ export default function Stages(props) {
         } else if (event.name === 'openaiGeneric') {
             setCurrentOption(_.cloneDeep(event))
             setHideOpenAiDialog(false)
-        }else if (event.name === 'openaiRest') {
+        }else if (event.name === 'openaiRest' || event.name === 'piiToOpenaiRest') {
             setCurrentOption(_.cloneDeep(event))
             setHideOpenAiRestDialog(false)
         }else if (event.name === 'spliceDocument') {

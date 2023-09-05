@@ -4,7 +4,7 @@ import { Dialog, TextArea, Text } from '@fluentui/react-northstar';
 
 export default function OpenAiRestDialog(props) {
 
-    const [prompt, setPrompt] = useState(`{"temperature" : 0,"n": 1, "messages":[{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Does Azure OpenAI support customer managed keys?"},{"role": "assistant", "content": "Yes, customer managed keys are supported by Azure OpenAI."},{"role": "user", "content": "Document: \${document} Summarize this document."}]}`)
+    const [prompt, setPrompt] = useState(`{"temperature" : 0,"n": 1, "messages":[{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Document: \${document} Summarize this document."}]}`)
 
     const onDialogSave = (event) => {
         console.log(event)
