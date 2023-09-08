@@ -176,6 +176,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice: noCharge
     },
+    "piiToOpenaiRest": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "recognizePiiEntities"
+        ],
+        "outputTypes": [
+            "openaiGenericMulti"
+        ],
+        "image": openai,
+        "label": "PII To OpenAI (REST) Provide the Body of the REST API Call (Advanced)",
+        "name": "piiToOpenaiRest",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "openai": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -776,6 +791,23 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice: getSpeechPricing
+    },
+    "piiSttService": {
+        "defaultTier": "Speech To Text",
+        "filters": [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "stt"
+        ],
+        "outputTypes": [
+            "recognizePiiEntities"
+        ],
+        "image": pii,
+        "label": "Pii Redaction of Speech To Text Service (Batch)",
+        "name": "piiStt",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: getLanguagePricing
     },
     "sttToTextService": {
         "defaultTier": "Speech To Text",
