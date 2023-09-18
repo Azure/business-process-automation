@@ -31,6 +31,36 @@ export class LanguageStudio {
         return await client.beginAnalyzeBatch(actions, documents, this._language)
     }
 
+    private _recognizeMultiNoReturn = async (input: BpaServiceObject, actions: AnalyzeBatchAction[], type: string, label: string, analyzeType: boolean, index: number): Promise<any[]> => {
+        const client = new TextAnalysisClient(this._endpoint, new AzureKeyCredential(this._apikey));
+        let poller: AnalyzeBatchPoller
+        if (input.data.length === 0) {
+            input.data = "no data"
+        }
+
+        poller = await this._analyze(client, input.data, actions);
+
+        poller.onProgress(() => {
+            console.log(
+                `Number of actions still in progress: ${poller.getOperationState().actionInProgressCount}`
+            );
+        });
+
+        console.log(`The analyze actions operation created on ${poller.getOperationState().createdOn}`);
+
+        console.log(
+            `The analyze actions operation results will expire on ${poller.getOperationState().expiresOn}`
+        );
+
+        const resultPages: PagedAnalyzeBatchResult = await poller.pollUntilDone();
+
+        let out = []
+        for await (const page of resultPages) {
+            out.push(page)
+        }
+        return out;
+    }
+
     private _recognize = async (input: BpaServiceObject, actions: AnalyzeBatchAction[], type: string, label: string, analyzeType: boolean, index: number): Promise<BpaServiceObject> => {
         const client = new TextAnalysisClient(this._endpoint, new AzureKeyCredential(this._apikey));
         let poller: AnalyzeBatchPoller
@@ -101,6 +131,60 @@ export class LanguageStudio {
             resultsIndexes: input.resultsIndexes,
             id: input.id,
             vector: input.vector
+        }
+    }
+
+    private _recognizeMulti = async (input: BpaServiceObject, actions: AnalyzeBatchAction[], type: string, label: string, analyzeType: boolean, index: number): Promise<BpaServiceObject> => {
+        try {
+            let count = 0;
+            let inputs = []
+            const outputs = []
+            for (const item of input.data) { //convert input.data to an array of strings //update, maximum is 5 for pii....5??
+                inputs.push(item)
+                if (count === 4) {
+                    input.data = inputs
+                    const piiItems = await this._recognizeMultiNoReturn(input, actions, type, label, analyzeType, index)
+                    for (const piiItem of piiItems) {
+                        for (const r of piiItem.results) {
+                            outputs.push(r)
+                        }
+                    }
+                    inputs = [];
+                    count = 0
+                }
+                count++
+            }
+            if (inputs.length > 0) { //do the remaining if less than 5
+                input.data = inputs
+                const piiItems = await this._recognizeMultiNoReturn(input, actions, type, label, analyzeType, index)
+                for (const piiItem of piiItems) {
+                    for (const r of piiItem.results) {
+                        outputs.push(r)
+                    }
+                }
+                inputs = [];
+                count = 0
+                count++
+            }
+
+            const results = input.aggregatedResults
+            results[type] = outputs
+            input.resultsIndexes.push({ index: index, name: type, type: type })
+            const result: BpaServiceObject = {
+                data: outputs,
+                type: type,
+                label: label,
+                bpaId: input.bpaId,
+                filename: input.filename,
+                pipeline: input.pipeline,
+                aggregatedResults: results,
+                resultsIndexes: input.resultsIndexes,
+                id: input.id,
+                vector: input.vector
+            }
+            return result
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -228,11 +312,12 @@ export class LanguageStudio {
         }]
 
         const listOfStrings = []
-        for (const item of input.data) { //convert input.data to an array of strings
+        for (const item of input.data) { //convert input.data to an array of strings //update, maximum is 5....5??
             listOfStrings.push(item.nBest[0].display)
         }
         input.data = listOfStrings
-        return await this._recognizeMultiAsync(input, actions, 'recognizePiiEntities', 'recognizePiiEntities', true, index)
+        return await this._recognizeMulti(input, actions, 'recognizePiiEntities', 'recognizePiiEntities', true, index)
+        //return await this._recognizeMultiAsync(input, actions, 'recognizePiiEntities', 'recognizePiiEntities', true, index)
     }
 
 

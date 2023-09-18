@@ -166,23 +166,23 @@ export class OpenAI {
             headers: headers
         }
 
-        const redactedText: string[] = [""]
-        let redactedTextIndex = 0
-        for (const item of input.data.items) {
-            for (const document of item.results.documents) {
-                if (redactedText[redactedTextIndex].length > 5000) {
-                    redactedTextIndex++
-                    redactedText.push("")
-                }
-                redactedText[redactedTextIndex] += document.redactedText
-            }
+        const redactedText: string[] = []
+        //let redactedTextIndex = 0
+        for (const item of input.data) {
+            // for (const document of item.results.documents) {
+            //     if (redactedText[redactedTextIndex].length > 5000) {
+            //         redactedTextIndex++
+            //         redactedText.push("")
+            //     }
+            redactedText.push(item.redactedText)
+            //   redactedTextIndex++
         }
 
         const out = []
-        for(const text of redactedText){
+        for (const text of redactedText) {
             const body = input.serviceSpecificConfig.replace(/(\r\n|\n|\r|\t)/gm, " ").replace("${document}", text.replace(/(\r\n|\n|\r|\t|}|{|"|')/gm, " "))
             const parsedBody = JSON.parse(body)
-    
+
             let url = `${this._endpoint}openai/deployments/${this._deploymentId}/chat/completions?api-version=2023-05-15`
             out.push((await axios.post(url, parsedBody, config)).data)
         }
@@ -208,6 +208,32 @@ export class OpenAI {
             vector: input.vector
         }
         return result
+
+    }
+
+    public convertToChatCopilot = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        const out = {
+            data: "",
+            type: 'convertToCopilot',
+            label: 'convertToCopilot',
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            aggregatedResults: input.aggregatedResults,
+            resultsIndexes: input.resultsIndexes,
+            id: input.id,
+            vector: input.vector,
+            Id: input.id,
+            Embedding: input.vector,
+            Text: input.aggregatedResults.text,
+            Description: input.filename,
+            AdditionalMetadata: "",
+            ExternalSourceName: "",
+            IsReference: false
+        }
+
+        return out
 
     }
 
