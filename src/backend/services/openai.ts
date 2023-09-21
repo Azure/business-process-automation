@@ -176,6 +176,7 @@ export class OpenAI {
             //     }
             redactedText.push(item.redactedText)
             //   redactedTextIndex++
+            
         }
 
         const out = []
