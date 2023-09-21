@@ -146,6 +146,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice: noCharge
     },
+    "convertToChatCopilot": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "openaiEmbeddings"
+        ],
+        "outputTypes": [
+            "chatCopilot"
+        ],
+        "image": openai,
+        "label": "Convert To Chat Copilot",
+        "name": "convertToChatCopilot",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "openaiGeneric": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -800,7 +815,7 @@ export const sc = {
             "stt"
         ],
         "outputTypes": [
-            "recognizePiiEntities"
+            "recognizePiiEntitiesMulti"
         ],
         "image": pii,
         "label": "Pii Redaction of Speech To Text Service (Batch)",
