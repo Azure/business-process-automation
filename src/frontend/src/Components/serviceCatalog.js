@@ -815,7 +815,7 @@ export const sc = {
             "stt"
         ],
         "outputTypes": [
-            "recognizePiiEntities"
+            "recognizePiiEntitiesMulti"
         ],
         "image": pii,
         "label": "Pii Redaction of Speech To Text Service (Batch)",
