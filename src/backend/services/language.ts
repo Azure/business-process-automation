@@ -1,4 +1,4 @@
-import { AnalyzeBatchAction, AnalyzeBatchPoller, AzureKeyCredential, BeginAnalyzeBatchOptions, PagedAnalyzeBatchResult, TextAnalysisClient } from "@azure/ai-text-analytics";
+import { AnalyzeBatchAction, AnalyzeBatchPoller, AzureKeyCredential, PagedAnalyzeBatchResult, TextAnalysisClient } from "@azure/ai-text-analytics";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { BpaServiceObject } from "../engine/types";
 import { DB } from "./db";
@@ -168,6 +168,7 @@ export class LanguageStudio {
             }
 
             const results = input.aggregatedResults
+            type = 'piiStt'
             results[type] = outputs
             input.resultsIndexes.push({ index: index, name: type, type: type })
             const result: BpaServiceObject = {
