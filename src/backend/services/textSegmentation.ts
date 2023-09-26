@@ -14,7 +14,7 @@ export class TextSegmentation {
             return ""
         }
 
-        return text.substring(text.length - overlapSize - 1, text.length - 1)
+        return text.substring(text.length - overlapSize, text.length)
     }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
