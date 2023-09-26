@@ -32,18 +32,18 @@ export class SplitPdf {
         
     }
 
-    public split = async (myBlob: Buffer, filename: string, directoryName: string, blobContainerClient : ContainerClient): Promise<void> => {
-        //const pages: Buffer[] = await this._splitPdf(myBlob)
-        // let index = 0
-        // for (const page of pages) {
-        //     const newFilename = `${filename.replace(".pdf", `_${index}`)}.pdf`
-        //     const blobClient: BlockBlobClient = blobContainerClient.getBlockBlobClient(p.join(directoryName, newFilename))
-        //     const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(page, page.length)
-        //     console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
-        //     index++
-        // }
+    // public split = async (myBlob: Buffer, filename: string, directoryName: string, blobContainerClient : ContainerClient): Promise<void> => {
+    //     //const pages: Buffer[] = await this._splitPdf(myBlob)
+    //     // let index = 0
+    //     // for (const page of pages) {
+    //     //     const newFilename = `${filename.replace(".pdf", `_${index}`)}.pdf`
+    //     //     const blobClient: BlockBlobClient = blobContainerClient.getBlockBlobClient(p.join(directoryName, newFilename))
+    //     //     const uploadBlobResponse: BlockBlobUploadResponse = await blobClient.upload(page, page.length)
+    //     //     console.log(`uploadResponse : ${JSON.stringify(uploadBlobResponse)}`)
+    //     //     index++
+    //     // }
 
-    }
+    // }
 
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 

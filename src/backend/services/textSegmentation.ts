@@ -8,6 +8,15 @@ export class TextSegmentation {
 
     }
 
+    private _getOverlapText = (text : string, overlapSize : number) : string => {
+
+        if(overlapSize < text.length){
+            return ""
+        }
+
+        return text.substring(text.length - overlapSize - 1, text.length - 1)
+    }
+
     public process = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
         if(!input?.data?.pages){
@@ -15,15 +24,16 @@ export class TextSegmentation {
         }
 
         const maxSegment: number = Number(input.serviceSpecificConfig.maxSegment)
+        const overlap: number = Number(input.serviceSpecificConfig.maxSegment) || 0
         const container: string = input.serviceSpecificConfig.containerName
         const folder: string = input.serviceSpecificConfig.folderName
-
         const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
 
         let segment = ""
         let pageNumber = 1
         let lastLine = ""
         let counter = 0
+        let overlapText = ""
         for (const page of input.data.pages) {
             pageNumber = page.pageNumber
             if (page.lines) {
@@ -42,7 +52,7 @@ export class TextSegmentation {
                             id: input.id,
                             vector: input.vector
                         })
-                        segment = lastLine
+                        segment = this._getOverlapText(segment, overlap)
                     }
                     segment += " " + line.content
                     lastLine = line.content
@@ -63,14 +73,12 @@ export class TextSegmentation {
                             id: input.id,
                             vector: input.vector
                         })
-                        segment = lastLine
+                        segment = this._getOverlapText(segment, overlap)
                     }
                     segment += " " + word.content
                     lastLine = word.content
                 }
             }
-
-
         }
 
         input.aggregatedResults["textSegmentation"] = { pageNumber: pageNumber, text: segment }
@@ -106,7 +114,7 @@ export class TextSegmentation {
 
         const container: string = input.serviceSpecificConfig.containerName
         const folder: string = input.serviceSpecificConfig.folderName
-
+        const overlap: number = Number(input.serviceSpecificConfig.maxSegment) || 0
         const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
 
         let counter = 0
@@ -155,9 +163,9 @@ export class TextSegmentation {
     public processText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
         const maxSegment: number = Number(input.serviceSpecificConfig.maxSegment)
+        const overlap: number = Number(input.serviceSpecificConfig.maxSegment) || 0
         const container: string = input.serviceSpecificConfig.containerName
         const folder: string = input.serviceSpecificConfig.folderName
-
         const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
 
         const words = input.data.split(" ")
@@ -168,7 +176,7 @@ export class TextSegmentation {
             current += word + " "
             if(current.length > maxSegment){
                 segments.push(current)
-                current = ""
+                current = this._getOverlapText(current, overlap)
             }
         }
         segments.push(current)
