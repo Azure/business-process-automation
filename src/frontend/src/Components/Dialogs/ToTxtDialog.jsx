@@ -13,7 +13,7 @@ export default function ToTxtDialog(props) {
     const onDialogSave = (event) => {
         console.log(event)
         const newOption = props.currentOption
-        newOption.serviceSpecificConfig = { containerName : container, folderName : folder, maxSegment : maxSegment }
+        newOption.serviceSpecificConfig = { containerName : container, folderName : folder, maxSegment : maxSegment, overlap : overlap }
         props.setHideDialog(true)
         props.addItemToPipeline(newOption)
     }

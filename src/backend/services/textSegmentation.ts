@@ -10,7 +10,7 @@ export class TextSegmentation {
 
     private _getOverlapText = (text : string, overlapSize : number) : string => {
 
-        if(overlapSize < text.length){
+        if(overlapSize > text.length){
             return ""
         }
 
@@ -24,7 +24,7 @@ export class TextSegmentation {
         }
 
         const maxSegment: number = Number(input.serviceSpecificConfig.maxSegment)
-        const overlap: number = Number(input.serviceSpecificConfig.maxSegment) || 0
+        const overlap: number = Number(input.serviceSpecificConfig.overlap) || 0
         const container: string = input.serviceSpecificConfig.containerName
         const folder: string = input.serviceSpecificConfig.folderName
         const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
@@ -163,7 +163,7 @@ export class TextSegmentation {
     public processText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
 
         const maxSegment: number = Number(input.serviceSpecificConfig.maxSegment)
-        const overlap: number = Number(input.serviceSpecificConfig.maxSegment) || 0
+        const overlap: number = Number(input.serviceSpecificConfig.overlap) || 0
         const container: string = input.serviceSpecificConfig.containerName
         const folder: string = input.serviceSpecificConfig.folderName
         const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
