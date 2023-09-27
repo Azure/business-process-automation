@@ -807,6 +807,24 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice: getSpeechPricing
     },
+    "whisperService": {
+        "defaultTier": "Whisper Speech",
+        "filters": [],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "wav",
+            "mp3"
+        ],
+        "outputTypes": [
+            "whisper"
+        ],
+        "image": openai,
+        "label": "Whisper Speech",
+        "name": "whisper",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "piiSttService": {
         "defaultTier": "Speech To Text",
         "filters": [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Language' }],
