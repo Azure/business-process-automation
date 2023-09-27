@@ -1398,7 +1398,7 @@
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://bpasource.blob.core.windows.net/source/backendv047.zip?sv=2020-10-02&st=2023-09-21T16%3A37%3A05Z&se=2024-06-20T16%3A37%3A00Z&sr=b&sp=r&sig=goiwXX0TUypD2gxdoVDlEDmpurtM%2BmwErHAIIB3zaGc%3D"
+                            "value": "https://bpasource.blob.core.windows.net/source/backendv048.zip?sv=2020-10-02&st=2023-09-27T15%3A46%3A25Z&se=2024-07-25T15%3A46%3A00Z&sr=b&sp=r&sig=zNKFS9L5g2yzdKOg076mdaLEISPMwNMTq9M5U8XPpAc%3D"
                         },
                         {
                             "name": "WEBSITE_VNET_ROUTE_ALL",
@@ -1418,7 +1418,7 @@
                         },
                         {
                             "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                            "value": "~16"
+                            "value": "~18"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
