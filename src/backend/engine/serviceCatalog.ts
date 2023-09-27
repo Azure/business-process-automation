@@ -1126,6 +1126,20 @@ const convertToChatCopilotService: BpaService = {
     }
 }
 
+const whisperBatchService: BpaService = {
+    bpaServiceId: "abc123",
+    inputTypes: ["wav", "mp3", "mp4"],
+    outputTypes: ["whisper"],
+    name: "whisper",
+    process: speech.processWhisperBatch,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 export const serviceCatalog = {
     // "copy" : copyService,
     //"redactPdf" : redactPdfService,
@@ -1201,6 +1215,7 @@ export const serviceCatalog = {
     "formatKMAccelerator": formatKMAcceleratorService,
     "jsonToText": jsonToTextService,
     "piiStt": piiSttService,
-    "piiToOpenaiRest": piiToOpenaiRestService
+    "piiToOpenaiRest": piiToOpenaiRestService,
+    "whisper" : whisperBatchService
 }
 

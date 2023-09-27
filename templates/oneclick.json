@@ -772,6 +772,10 @@
             {
               "name": "HUGGINGFACE_ENDPOINT",
               "value": "[format('https://{0}.azurewebsites.net', parameters('functionAppNamePython'))]"
+            },
+            {
+              "name": "WHISPER_MODEL",
+              "value": "https://eastus.api.cognitive.microsoft.com/speechtotext/v3.2-preview.1/models/base/71cbd7af-3212-43ab-8695-666fb28ffef7"
             }
           ]
         }
