@@ -1129,7 +1129,7 @@ const convertToChatCopilotService: BpaService = {
 const whisperBatchService: BpaService = {
     bpaServiceId: "abc123",
     inputTypes: ["wav", "mp3", "mp4"],
-    outputTypes: ["whisper"],
+    outputTypes: ["stt"],
     name: "whisper",
     process: speech.processWhisperBatch,
     serviceSpecificConfig: {
