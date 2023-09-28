@@ -1,3 +1,5 @@
+# Whisper Preview Added - Check the env vars in the backend.  WHISPER_MODEL is hardcoded to the eastus region.  For any other region this will need to be manually updated.
+
 # Business Process Automation Accelerator
 
 ## Overview

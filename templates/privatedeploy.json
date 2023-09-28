@@ -1563,8 +1563,11 @@
                         {
                             "name": "OPENAI_DEPLOYMENT_SEARCH_QUERY",
                             "value": "text-embedding-ada-002"
+                        },
+                        {
+                            "name": "WHISPER_MODEL",
+                            "value": "https://eastus.api.cognitive.microsoft.com/speechtotext/v3.2-preview.1/models/base/71cbd7af-3212-43ab-8695-666fb28ffef7"
                         }
-
                     ]
                 }
             },

@@ -1,7 +1,6 @@
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import { BpaServiceObject } from '../engine/types'
 import { BlobServiceClient, ContainerClient, BlockBlobClient, ContainerGenerateSasUrlOptions, ContainerSASPermissions } from "@azure/storage-blob"
-
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { DB } from "./db";
 import MessageQueue from "./messageQueue";
@@ -144,12 +143,12 @@ export class Speech {
                 sasUrl
             ],
             "properties": {
-                "diarizationEnabled": true,
-                "wordLevelTimestampsEnabled": true,
-                "punctuationMode": "DictatedAndAutomatic",
-                "profanityFilterMode": "Masked"
+                "wordLevelTimestampsEnabled": false
             },
             "locale": "en-US",
+            "model": {
+                "self": process.env.WHISPER_MODEL//"https://eastus.api.cognitive.microsoft.com/speechtotext/v3.2-preview.1/models/base/71cbd7af-3212-43ab-8695-666fb28ffef7"
+              },
             "displayName": "Transcription of file using default model for en-US"
         }
         if (input?.serviceSpecificConfig?.to) {
@@ -158,11 +157,11 @@ export class Speech {
                     sasUrl
                 ],
                 "properties": {
-                    "diarizationEnabled": true,
-                    "wordLevelTimestampsEnabled": true,
-                    "punctuationMode": "DictatedAndAutomatic",
-                    "profanityFilterMode": "Masked"
+                    "wordLevelTimestampsEnabled": false
                 },
+                "model": {
+                    "self": process.env.WHISPER_MODEL
+                  },
                 "locale": input.serviceSpecificConfig.to,
                 "displayName": "Transcription of file using default model for en-US"
             }
@@ -173,7 +172,7 @@ export class Speech {
                 "Ocp-Apim-Subscription-Key": process.env.SPEECH_SUB_KEY
             }
         }
-        axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.0/transcriptions', payload, axiosParams)
+        axiosResp = await axios.post(process.env.SPEECH_SUB_ENDPOINT + 'speechtotext/v3.1/transcriptions', payload, axiosParams)
         //httpResult = axiosResp.status
 
         input.aggregatedResults["speechToText"] = {
