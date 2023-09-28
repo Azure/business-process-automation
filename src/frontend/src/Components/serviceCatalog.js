@@ -816,7 +816,7 @@ export const sc = {
             "mp3"
         ],
         "outputTypes": [
-            "whisper"
+            "stt"
         ],
         "image": openai,
         "label": "Whisper Speech",
