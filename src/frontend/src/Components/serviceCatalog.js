@@ -26,6 +26,21 @@ import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTransl
 
 export const sc = {
 
+    "analyzeImage": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "stt"
+        ],
+        "outputTypes": [
+            "formatKMAccelerator"
+        ],
+        "image": pii,
+        "label": "Format For KM Accelerator UI",
+        "name": "formatKMAccelerator",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "formatKMAccelerator": {
         "bpaServiceId": "abc123",
         "inputTypes": [
