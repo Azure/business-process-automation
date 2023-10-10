@@ -48,6 +48,20 @@ const textSegmentation = new TextSegmentation()
 const splitPdf = new SplitPdf()
 const jsonToText = new JsonToText()
 
+const tableToTextService: BpaService = {
+    bpaServiceId: "abc123",
+    inputTypes: ["layout"],
+    outputTypes: ["tableToText"],
+    name: "tableToText",
+    process: textSegmentation.tableToText,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
 const formatKMAcceleratorService: BpaService = {
     bpaServiceId: "abc123",
     inputTypes: ["stt"],
@@ -1216,6 +1230,7 @@ export const serviceCatalog = {
     "jsonToText": jsonToTextService,
     "piiStt": piiSttService,
     "piiToOpenaiRest": piiToOpenaiRestService,
-    "whisper" : whisperBatchService
+    "whisper" : whisperBatchService,
+    "tableToText" : tableToTextService
 }
 

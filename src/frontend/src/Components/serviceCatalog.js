@@ -684,6 +684,23 @@ export const sc = {
     //     "serviceSpecificConfigDefaults": {},
     //     getPrice : getFormRecReadPricing
     // },
+    "tableToText": {
+        "defaultTier": "S0 Read Pages",
+        "filters": [{ key: 'serviceName', value: 'Azure Applied AI Services' }, { key: 'productName', value: 'Azure Form Recognizer' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "layout"
+        ],
+        "outputTypes": [
+            "tableToText"
+        ],
+        "image": layoutLogo,
+        "label": "Convert Tables to Text",
+        "name": "tableToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "layoutBatch": {
         "defaultTier": "S0 Read Pages",
         "filters": [{ key: 'serviceName', value: 'Azure Applied AI Services' }, { key: 'productName', value: 'Azure Form Recognizer' }],
