@@ -49,7 +49,7 @@ export function parseAnswerToHtml(answer, onCitationClicked) {
     }
 
     return {
-        answerHtml: "Search Failed:  Make sure that your index has a 'default' sementic configuration.",
+        answerHtml: "Search Failed:  Make sure that your index has a 'default' semantic configuration.",
         citations,
         followupQuestions
     };
