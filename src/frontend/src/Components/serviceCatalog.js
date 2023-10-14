@@ -1495,4 +1495,21 @@ export const sc = {
         "serviceSpecificConfigDefaults": {},
         getPrice: noCharge
     },
+    "imageAnalysis": {
+        "defaultTier": "Standard Transactions",
+        "filters": [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "bmp", "jpg", "tiff", "tif", "gif"
+        ],
+        "outputTypes": [
+            "imageAnalysis"
+        ],
+        "image": layoutLogo,
+        "label": "Florence Image Analysis",
+        "name": "imageAnalysis",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: getContentModeratorPricing
+    },
 }

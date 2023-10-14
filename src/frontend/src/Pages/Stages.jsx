@@ -24,6 +24,7 @@ import TableToText from '../Components/Dialogs/TableToText';
 import { sc } from '../Components/serviceCatalog'
 import { Button, Text } from '@fluentui/react-northstar'
 import OpenAiRestDialog from '../Components/Dialogs/OpenAiRestDialog';
+import AnalyzeImageDialog from '../Components/Dialogs/AnalyzeImageDialog';
 
 
 export default function Stages(props) {
@@ -50,6 +51,7 @@ export default function Stages(props) {
     const [currentOption, setCurrentOption] = useState(null)
     const [hideJsonToTextDialog, setHideJsonToTextDialog] = useState(true)
     const [hideTableToTextDialog, setHideTableToTextDialog] = useState(true)
+    const [hideAnalyzeImageDialog, setHideAnalyzeImageDialog] = useState(true)
     //const [price, setPrice] = useState(0)
     // const [numDocuments, setNumDocuments] = useState(0)
     // const [minutesPerAudioFile, setMinutesPerAudioFile] = useState(0)
@@ -183,6 +185,9 @@ export default function Stages(props) {
         }else if (event.name === 'tableToText') {
             setCurrentOption(_.cloneDeep(event))
             setHideTableToTextDialog(false)
+        }else if (event.name === 'imageAnalysis') {
+            setCurrentOption(_.cloneDeep(event))
+            setHideAnalyzeImageDialog(false)
         }else {
             addItemToPipeline(event)
         }
@@ -230,6 +235,7 @@ export default function Stages(props) {
                 <SpliceDocument hideDialog={hideSpliceDocumentDialog} setHideDialog={setHideSpliceDocumentDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <JsonToTextDialog hideDialog={hideJsonToTextDialog} setHideDialog={setHideJsonToTextDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 <TableToText hideDialog={hideTableToTextDialog} setHideDialog={setHideTableToTextDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
+                <AnalyzeImageDialog hideDialog={hideAnalyzeImageDialog} setHideDialog={setHideAnalyzeImageDialog} currentOption={currentOption} addItemToPipeline={addItemToPipeline} />
                 {renderOptions(options)}
             </>
         )
