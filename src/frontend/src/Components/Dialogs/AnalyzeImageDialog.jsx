@@ -76,6 +76,7 @@ export default function AnalyzeImageDialog(props) {
   const checkboxStyle = {
     display: "block",
     marginLeft: "20px",
+    marginBottom: "5px",
   };
 
   return (
