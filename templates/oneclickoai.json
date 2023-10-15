@@ -837,6 +837,14 @@
               "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
             },
             {
+              "name": "VISION_SUB_KEY",
+              "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
+            },
+            {
+              "name": "VISION_SUB_ENDPOINT",
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))).endpoint]"
+            },
+            {
               "name": "TRANSLATE_APIKEY",
               "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName')), '2021-10-01').key1]"
             },
