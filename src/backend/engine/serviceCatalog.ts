@@ -21,6 +21,7 @@ import { SpliceDocument } from "../services/spliceDocument"
 import { TextSegmentation } from "../services/textSegmentation"
 import { SplitPdf } from "../services/splitPdf"
 import { JsonToText } from "../services/jsonToText"
+import { Vision } from "../services/vision"
 
 const changeOutput = new ChangeOutput()
 const blob = new BlobStorage(process.env.AzureWebJobsStorage, process.env.BLOB_STORAGE_CONTAINER)
@@ -47,6 +48,36 @@ const blobTranslation = new BlobStorage(process.env.AzureWebJobsStorage, "transl
 const textSegmentation = new TextSegmentation()
 const splitPdf = new SplitPdf()
 const jsonToText = new JsonToText()
+const vision = new Vision(process.env.VISION_SUB_ENDPOINT, process.env.VISION_SUB_KEY, blob)
+
+
+const ImageAnalysisService: BpaService = {
+    bpaServiceId: "abc123",
+    inputTypes: ["bmp", "jpg", "tiff", "gif"],
+    outputTypes: ["imageAnalysis"],
+    name: "imageAnalysis",
+    process: vision.process,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
+
+const tableToTextService: BpaService = {
+    bpaServiceId: "abc123",
+    inputTypes: ["layout"],
+    outputTypes: ["tableToText"],
+    name: "tableToText",
+    process: textSegmentation.tableToText,
+    serviceSpecificConfig: {
+
+    },
+    serviceSpecificConfigDefaults: {
+
+    }
+}
 
 const formatKMAcceleratorService: BpaService = {
     bpaServiceId: "abc123",
@@ -1216,6 +1247,8 @@ export const serviceCatalog = {
     "jsonToText": jsonToTextService,
     "piiStt": piiSttService,
     "piiToOpenaiRest": piiToOpenaiRestService,
-    "whisper" : whisperBatchService
+    "whisper" : whisperBatchService,
+    "tableToText" : tableToTextService,
+    "imageAnalysis" : ImageAnalysisService
 }
 
