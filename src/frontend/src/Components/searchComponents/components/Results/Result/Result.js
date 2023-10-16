@@ -114,7 +114,27 @@ export default function Result(props) {
                 </div>   
                 </>
             )
-        } else {
+        } else if(data?.filename.includes(".txt") && data?.filename.includes("-stage1")){
+           
+            const stringsplit = data?.filename.split('/')
+            let result = ''
+            if(stringsplit === 0){
+                result = data?.filename
+            } else{
+                result = stringsplit[stringsplit.length - 1]
+            }
+            result = result.replace('.txt','')
+            const citation = `newinvoice-stage2/newinvoice-stage1/${result}`
+            //const citation = `${selectedIndex.name}-stage2/${selectedIndex.name}-stage1/${result}`
+            
+            return (
+                <>
+                <div>
+                    Original Document : <span onClick={onOriginalDoc} style={{ color: "blue" }}>{citation}</span>
+                </div>   
+                </>
+            )
+        }else {
             return (
                 <>
                 <div>
@@ -127,7 +147,24 @@ export default function Result(props) {
     }
 
     const originalUrl = () => {
-        return `/api/viewpdf?container=documents&filename=${props.data.filename}`
+        if(props.data.filename.includes(".txt") && props.data.filename.includes("-stage1")){
+           
+            const stringsplit = props.data?.filename.split('/')
+            let result = ''
+            if(stringsplit === 0){
+                result = props.data?.filename
+            } else{
+                result = stringsplit[stringsplit.length - 1]
+            }
+            result = result.replace('.txt','')
+            const citation = `newinvoice-stage2/newinvoice-stage1/${result}`
+            //const citation = `${selectedIndex.name}-stage2/${selectedIndex.name}-stage1/${result}`
+            
+            return `/api/viewpdf?container=documents&filename=${citation}`
+        } else{
+            return `/api/viewpdf?container=documents&filename=${props.data.filename}`
+        }
+        
     }
 
     return (

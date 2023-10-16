@@ -185,6 +185,7 @@ export default function SelectPipeline(props) {
     const [pipelines, setPipelines] = useState(null)
     const [newPipelineName, setNewPipelineName] = useState("")
     const [selectedPipeline, setSelectedPipeline] = useState(null)
+    const [buttonsDisabled, setButtonsDisabled] = useState(true)
     //const [forceUpdate, setForceUpdate] = useState(0)
 
     useEffect(() => {
@@ -204,6 +205,11 @@ export default function SelectPipeline(props) {
 
     const onPipelineNameChange = (event) => {
         setNewPipelineName(event.target.value)
+        if(event.target.value.length > 2){
+            setButtonsDisabled(false)
+        } else{
+            setButtonsDisabled(true)
+        }
     }
 
     const onCreatePipeline = async () => {
@@ -321,15 +327,15 @@ export default function SelectPipeline(props) {
                 <div style={{ paddingBottom: "50px" }}>
                     {renderPipelines()}
                 </div>
-                <Text weight="semibold" content="Create New Pipeline" style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
+                <Text weight="semibold" content="Create New Pipeline"  style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
                 <div style={{ paddingBottom: "50px" }}>
                     <Text content="Enter New Pipeline Name" style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
                     <Input style={{ height: "30px" }} value={newPipelineName} onChange={onPipelineNameChange} />
                 </div>
 
-                <Button content="Create Custom Pipeline" primary onClick={onCreatePipeline} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
-                <Button content="Prebuilt Cognitive Search Pipeline" primary onClick={onCreateCogSearchPipeline} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
-                <Button content="Prebuilt Vector Embedding Search" primary onClick={onCreateVectorPipeline} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
+                <Button content="Create Custom Pipeline" primary disabled={buttonsDisabled} onClick={onCreatePipeline} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
+                <Button content="Prebuilt Cognitive Search Pipeline" primary disabled={buttonsDisabled} onClick={onCreateCogSearchPipeline} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
+                <Button content="Prebuilt Vector Embedding Search" primary disabled={buttonsDisabled} onClick={onCreateVectorPipeline} style={{ fontSize: "14px", display: "block", width: "100%", marginBottom: "20px" }} />
             </div>
         )
     }

@@ -214,4 +214,64 @@ export class TextSegmentation {
         }
     }
 
+    public tableToText = async (input: BpaServiceObject, index: number): Promise<BpaServiceObject> => {
+
+        const container: string = input.serviceSpecificConfig.containerName
+        const folder: string = input.serviceSpecificConfig.folderName
+        const blob: BlobStorage = new BlobStorage(process.env.AzureWebJobsStorage, container)
+
+        //const words = input.data.split(" ")
+
+        const tables = input.data.tables
+        const texts = []
+
+        for(const table of tables){
+            let text = ' '
+            let rowIndex = 0
+            for(const cell of table.cells){
+                if(rowIndex !== cell.rowIndex){
+                    rowIndex = cell.rowIndex
+                    text += `|\n|  ${cell.content}`
+                } else {
+                    text += `|  ${cell.content}  `
+                }
+            }
+            text += '|'
+            texts.push(text)
+        }
+       
+
+        let counter = 0
+        for(const text of texts){
+            input.aggregatedResults["tableToText"] = { text: text }
+            input.resultsIndexes.push({ index: index, name: "tableToText", type: "tableToText" })
+            await blob.toTxt({
+                filename: `${folder}/${counter++}_${input.filename}`,
+                pipeline: input.pipeline,
+                type: "tableToText",
+                label: "tableToText",
+                bpaId: input.bpaId,
+                aggregatedResults: {}, //input.aggregatedResults,
+                data: text,
+                serviceSpecificConfig: { containerName: "documents" },
+                id: input.id,
+                vector: input.vector
+            })
+        }
+
+        return {
+            data: "",
+            label: "tableToText",
+            bpaId: input.bpaId,
+            filename: input.filename,
+            pipeline: input.pipeline,
+            type: "tableToText",
+            aggregatedResults: {}, //input.aggregatedResults,
+            resultsIndexes: [], //input.resultsIndexes,
+            index: index,
+            id: input.id,
+            vector: input.vector
+        }
+    }
+
 }

@@ -26,6 +26,21 @@ import { getContentModeratorPricing, getCustomLanguagePricing, getDocumentTransl
 
 export const sc = {
 
+    "analyzeImage": {
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "stt"
+        ],
+        "outputTypes": [
+            "formatKMAccelerator"
+        ],
+        "image": pii,
+        "label": "Format For KM Accelerator UI",
+        "name": "formatKMAccelerator",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "formatKMAccelerator": {
         "bpaServiceId": "abc123",
         "inputTypes": [
@@ -669,6 +684,23 @@ export const sc = {
     //     "serviceSpecificConfigDefaults": {},
     //     getPrice : getFormRecReadPricing
     // },
+    "tableToText": {
+        "defaultTier": "S0 Read Pages",
+        "filters": [{ key: 'serviceName', value: 'Azure Applied AI Services' }, { key: 'productName', value: 'Azure Form Recognizer' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "layout"
+        ],
+        "outputTypes": [
+            "tableToText"
+        ],
+        "image": layoutLogo,
+        "label": "Convert Tables to Text",
+        "name": "tableToText",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: noCharge
+    },
     "layoutBatch": {
         "defaultTier": "S0 Read Pages",
         "filters": [{ key: 'serviceName', value: 'Azure Applied AI Services' }, { key: 'productName', value: 'Azure Form Recognizer' }],
@@ -1462,5 +1494,22 @@ export const sc = {
         "serviceSpecificConfig": {},
         "serviceSpecificConfigDefaults": {},
         getPrice: noCharge
+    },
+    "imageAnalysis": {
+        "defaultTier": "Standard Transactions",
+        "filters": [{ key: 'serviceName', value: 'Cognitive Services' }, { key: 'productName', value: 'Computer Vision' }],
+        "bpaServiceId": "abc123",
+        "inputTypes": [
+            "bmp", "jpg", "tiff", "tif", "gif"
+        ],
+        "outputTypes": [
+            "imageAnalysis"
+        ],
+        "image": layoutLogo,
+        "label": "Florence Image Analysis",
+        "name": "imageAnalysis",
+        "serviceSpecificConfig": {},
+        "serviceSpecificConfigDefaults": {},
+        getPrice: getContentModeratorPricing
     },
 }

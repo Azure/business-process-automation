@@ -33,7 +33,7 @@ const serviceBusQueue: AzureFunction = async function (context: Context, mySbMsg
         await mqTrigger(context, mySbMsg, mq, db)
     } catch(err){
         const names = getFileDirNames(mySbMsg)
-        db. createError(
+        await db. createError(
             {
                 filename : names.filename,
                 error : err.toString(),
