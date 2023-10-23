@@ -7,10 +7,13 @@
 This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (OpenAI, Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a Azure Blob Storage.
 
 ## Instructional Videos
+
+#### The videos are outdated with regards to result storage.  Results are no longer stored in CosmosDB.  Rather, all data can be found in Blob Storage under the 'results' container.  There you should find folders with the names of your pipelines.  There is also an 'errors' folder.  If a request fails for any reason, the log will be stored there.  There will be three retries before the pipeline gives up and removes the request from the queue.
+
 - [Deployment in Azure](https://bpasource.blob.core.windows.net/source/VideoSeries/Deploy.mp4?sv=2020-04-08&st=2023-03-10T15%3A54%3A39Z&se=2026-06-12T14%3A54%3A00Z&sr=b&sp=r&sig=chMcBfD%2Foc2E05Od8xNkbWprWxHIIc7ApDbVazk2%2BO8%3D)
 - [Create Your First Pipeline](https://bpasource.blob.core.windows.net/source/VideoSeries/first%20pipeline-20230310_122701-Meeting%20Recording.mp4?sv=2020-04-08&st=2023-03-10T17%3A51%3A01Z&se=2025-01-16T17%3A51%3A00Z&sr=b&sp=r&sig=Jz8PdJAWkLXnN3QqxEnXogRHtN55FC8emHZoic9TGEE%3D)
 - [OpenAI Enterprise Search Using Cognitive Search and Semantic Search](https://bpasource.blob.core.windows.net/source/VideoSeries/enterpriseSearch.mp4?sv=2021-10-04&st=2023-05-15T13%3A35%3A46Z&se=2024-06-21T13%3A35%3A00Z&sr=b&sp=r&sig=ChoYuRwynC%2F2e2I6mDTpMWJm3h6OcBKlcmfc1PhHCmw%3D)
-- [OpenAI Enterprise Search Using Vector Search and Redis Enterprise](https://bpasource.blob.core.windows.net/source/VideoSeries/vectorSearch.mp4?sv=2021-10-04&st=2023-05-15T13%3A38%3A16Z&se=2024-10-18T13%3A38%3A00Z&sr=b&sp=r&sig=504UNV7DmTUvUrHAUiaiwggmzET3iM9buc2LOw0N%2F0U%3D)
+
 
 ## Deploy to Azure Instructions
 
