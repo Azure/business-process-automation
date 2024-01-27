@@ -2,6 +2,8 @@
 
 # Business Process Automation Accelerator
 
+# Whisper Preview - Check the env vars in the backend.  WHISPER_MODEL is hardcoded to the eastus region.  For any other region this will need to be manually updated.
+
 ## Overview
 
 This accelerator provides a no code Studio for users to quickly build complex, multi-stage AI pipelines across multiple Azure AI and ML Services.  Users can select, and stack, AI/ML Services from across Azure Cognitive Services (OpenAI, Speech, Language, Form Recognizer, ReadAPI), Azure Machine Learning into a **single**, fully integrated **pipeline**. Integration between services is automated by BPA, and once deployed, a web app is created. This customizable UI&ast; provides and drag-n-drop interface for end users to build multi service pipelines. Finally, the user-created pipeline is triggered as soon as the first input file(s) are uploaded, storing the results in a Azure Blob Storage.
