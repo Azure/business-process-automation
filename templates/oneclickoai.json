@@ -877,6 +877,40 @@
         "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]"
       ]
     },
+        {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "copyBlobDataScript",
+      "location": "[parameters('location')]",
+      "kind": "AzurePowerShell",
+      "properties": {
+        "azPowerShellVersion": "5.0.0",
+        "scriptUri": "https://experienceazure.blob.core.windows.net/templates/business-process-automation/scripts/copyblobs.ps1",
+        "arguments": "[concat('-destinationStorageAccountName ', parameters('storageAccountName'), ' -resourceGroupName ', parameters('resourceGroupName'))]",
+        "timeout": "PT30M",
+        "cleanupPreference": "OnSuccess",
+        "retentionInterval": "P1D",
+        "forceUpdateTag": "[utcNow()]",
+        "environmentVariables": [
+          {
+            "name": "AZURE_BLOB_STORAGE_ACCOUNT",
+            "value": "[parameters('storageAccountName')]"
+          },
+          {
+            "name": "AZURE_BLOB_STORAGE_CONTAINER",
+            "value": "[parameters('blobContainerName')]"
+          }
+        ],
+        "storageAccountSettings": {
+          "storageAccountName": "[parameters('storageAccountName')]",
+          "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value]"
+        }
+      },
+      "dependsOn": [
+             "[resourceId('Microsoft.CognitiveServices/accounts', parameters('languageServicesName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]"     ]
+    },
     {
       "type": "Microsoft.Web/staticSites",
       "apiVersion": "2020-12-01",
