@@ -11,24 +11,24 @@
   "parameters": {
     "repositoryToken": {
       "type": "string"
-    },  "resourceGroupName": {
-      "defaultValue": "[resourceGroup().name]",
-      "type": "String"
-  },
+    },
     "repositoryUrl": {
       "type": "string"
     },
-    
-        "identityName": {
-          "type": "string",
-          "defaultValue": "copyidentity",
-          "metadata": {
-            "description": "Specifies the name of the user-assigned managed identity."
-          }
-        },
     "projectName": {
       "type": "string",
       "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
+    },
+    "resourceGroupName": {
+      "defaultValue": "[resourceGroup().name]",
+      "type": "String"
+  },
+    "identityName": {
+      "type": "string",
+      "defaultValue": "copyidentity",
+      "metadata": {
+        "description": "Specifies the name of the user-assigned managed identity."
+      }
     },
     "openaiName": {
       "type": "string",
@@ -221,7 +221,6 @@
     "storageAccountSkuName": "[if(equals(parameters('environmentType'), 'prod'), 'Standard_GRS', 'Standard_LRS')]",
     "accountName_var": "[toLower(parameters('accountName'))]",
     "bootstrapRoleAssignmentId": "[guid(concat(resourceGroup().id, 'contributor'))]",
-
     "consistencyPolicy": {
       "Eventual": {
         "defaultConsistencyLevel": "Eventual"
@@ -288,8 +287,7 @@
       "name": "[format('{0}/mypolicy', parameters('projectName'))]",
       "location": "[parameters('primaryRegion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]"
       ],
       "properties": {
         "rights": [
@@ -425,8 +423,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.EventGrid/systemTopics', parameters('systemTopicName'))]",
-        "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
+        "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]"
       ]
     },
     {
@@ -490,8 +487,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('accountName_var'), parameters('databaseName'))]",
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]"
       ]
     },
     {
@@ -579,8 +575,7 @@
       "apiVersion": "2022-03-01",
       "name": "[concat(parameters('openaiName'), '/text-embedding-ada-002')]",
       "dependsOn": [
-        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
       ],
       "properties": {
         "model": {
@@ -699,7 +694,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
@@ -887,7 +881,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]",
         "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
@@ -896,7 +889,6 @@
         "[resourceId('Microsoft.Search/searchServices', parameters('cogSearchName'))]"
       ]
     },
-
     {
       "type": "Microsoft.Web/staticSites",
       "apiVersion": "2020-12-01",
@@ -917,6 +909,68 @@
         }
       }
     },
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "name": "[parameters('identityName')]",
+      "location": "[resourceGroup().location]"
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-10-01-preview",
+      "name": "[variables('bootstrapRoleAssignmentId')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('identityName'))]"
+      ],
+      "properties": {
+        "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+        "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('identityName')), '2018-11-30').principalId]",
+        "scope": "[resourceGroup().id]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+        "type": "Microsoft.Resources/deploymentScripts",
+        "apiVersion": "2020-10-01",
+        "name": "copyBlobDataScript",
+        "location": "[parameters('primaryRegion')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+            "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
+            
+        ],
+        "kind": "AzurePowerShell",
+        "identity": {
+          "type": "UserAssigned",
+          "userAssignedIdentities": {
+            "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('identityName'))]": {
+            }
+          }
+        },
+        "properties": {
+            "azPowerShellVersion": "5.0.0",
+            "primaryScriptUri": "https://experienceazure.blob.core.windows.net/templates/business-process-automation/scripts/copyblobs.ps1",
+            "arguments": "[format(' -destinationStorageAccountName {0} -resourceGroupName {1}', parameters('storageAccountName'), parameters('resourceGroupName'))]",
+            "timeout": "PT30M",
+            "cleanupPreference": "OnSuccess",
+            "retentionInterval": "P1D",
+            "environmentVariables": [
+                {
+                    "name": "AZURE_BLOB_STORAGE_ACCOUNT",
+                    "value": "[parameters('storageAccountName')]"
+                },
+                {
+                    "name": "AZURE_BLOB_STORAGE_CONTAINER",
+                    "value": "[parameters('blobContainerName')]"
+                }
+            ],
+            "storageAccountSettings": {
+                "storageAccountName": "[parameters('storageAccountName')]",
+                "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value]"
+            }
+        }
+    },
+
 
     {
       "type": "Microsoft.Web/staticSites/config",
@@ -944,76 +998,12 @@
 
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
-        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
         "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
         "[resourceId('Microsoft.Web/sites',  parameters('functionAppNamePython'))]"
       ]
-    },
-    {
-          "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-          "apiVersion": "2018-11-30",
-          "name": "[parameters('identityName')]",
-          "location": "[resourceGroup().location]"
-        },
-        {
-          "type": "Microsoft.Authorization/roleAssignments",
-          "apiVersion": "2020-10-01-preview",
-          "name": "[variables('bootstrapRoleAssignmentId')]",
-          "dependsOn": [
-            "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('identityName'))]"
-          ],
-          "properties": {
-            "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-            "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('identityName')), '2018-11-30').principalId]",
-            "scope": "[resourceGroup().id]",
-            "principalType": "ServicePrincipal"
-          }
-        },
-        {
-            "type": "Microsoft.Resources/deploymentScripts",
-            "apiVersion": "2020-10-01",
-            "name": "copyBlobDataScript",
-            "location": "[parameters('primaryRegion')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
-                "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
-                
-            ],
-            "kind": "AzurePowerShell",
-            "identity": {
-              "type": "UserAssigned",
-              "userAssignedIdentities": {
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('identityName'))]": {
-                }
-              }
-            },
-            "properties": {
-                "azPowerShellVersion": "5.0.0",
-                "primaryScriptUri": "https://experienceazure.blob.core.windows.net/templates/business-process-automation/scripts/copyblobs.ps1",
-                "arguments": "[format(' -destinationStorageAccountName {0} -resourceGroupName {1}', parameters('storageAccountName'), parameters('resourceGroupName'))]",
-                "timeout": "PT30M",
-                "cleanupPreference": "OnSuccess",
-                "retentionInterval": "P1D",
-                "environmentVariables": [
-                    {
-                        "name": "AZURE_BLOB_STORAGE_ACCOUNT",
-                        "value": "[parameters('storageAccountName')]"
-                    },
-                    {
-                        "name": "AZURE_BLOB_STORAGE_CONTAINER",
-                        "value": "[parameters('blobContainerName')]"
-                    }
-                ],
-                "storageAccountSettings": {
-                    "storageAccountName": "[parameters('storageAccountName')]",
-                    "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2021-08-01').keys[0].value]"
-                }
-            }
-        }
-    ]
-  }
- 
-
+    }
+  ]
+}
