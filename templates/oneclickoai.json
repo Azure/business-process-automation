@@ -18,6 +18,14 @@
     "repositoryUrl": {
       "type": "string"
     },
+    
+        "identityName": {
+          "type": "string",
+          "defaultValue": "copyidentity",
+          "metadata": {
+            "description": "Specifies the name of the user-assigned managed identity."
+          }
+        },
     "projectName": {
       "type": "string",
       "defaultValue": "[format('bpa{0}', toLower(uniqueString(resourceGroup().id)))]"
