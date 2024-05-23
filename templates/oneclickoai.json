@@ -280,7 +280,8 @@
       "name": "[format('{0}/mypolicy', parameters('projectName'))]",
       "location": "[parameters('primaryRegion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]"
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('projectName'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
       ],
       "properties": {
         "rights": [
@@ -416,7 +417,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.EventGrid/systemTopics', parameters('systemTopicName'))]",
-        "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]"
+        "[resourceId('Microsoft.ServiceBus/namespaces/queues/', parameters('projectName'),  parameters('serviceBusQueueName'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
       ]
     },
     {
@@ -480,7 +482,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', variables('accountName_var'), parameters('databaseName'))]",
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]"
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
       ]
     },
     {
@@ -568,7 +571,8 @@
       "apiVersion": "2022-03-01",
       "name": "[concat(parameters('openaiName'), '/text-embedding-ada-002')]",
       "dependsOn": [
-        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]"
+        "[resourceId('Microsoft.CognitiveServices/accounts', parameters('openaiName'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]"
       ],
       "properties": {
         "model": {
@@ -687,6 +691,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
@@ -874,6 +879,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]",
         "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
         "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cogServicesName'))]",
         "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
@@ -930,6 +936,7 @@
 
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('accountName_var'))]",
+        "[resourceId('Microsoft.Authorization/roleAssignments', variables('bootstrapRoleAssignmentId'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobContainerName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageAccountName'), 'default', parameters('blobSplitContainerName'))]",
         "[resourceId('Microsoft.Web/staticSites', parameters('webAppName'))]",
@@ -1000,5 +1007,5 @@
         }
     ]
   }
-  ]
-}
+ 
+
