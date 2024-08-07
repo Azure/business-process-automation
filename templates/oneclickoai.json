@@ -611,7 +611,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpahoststorage.blob.core.windows.net/source/hfbackendv2.zip?sp=r&st=2024-07-17T23:33:05Z&se=2025-07-18T07:33:05Z&spr=https&sv=2022-11-02&sr=b&sig=4LOHp64qPgBjV9%2Bho3ZlZSWhfYs6UamvnoozMIzdKtE%3D"
+              "value": "1"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -702,7 +702,7 @@
           "appSettings": [
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://bpahoststorage.blob.core.windows.net/source/backendv2.zip?sp=r&st=2024-07-18T02:10:04Z&se=2025-07-18T10:10:04Z&spr=https&sv=2022-11-02&sr=b&sig=ZT0OvlYpYtVc4aG0e6oOtx2BVTWr9uTYdzogGgaWt0Y%3D"
+              "value": "1"
             },
             {
               "name": "OPENAI_KEY",

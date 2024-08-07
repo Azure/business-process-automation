@@ -1,68 +1,84 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import axios from 'axios'
+import { serviceCatalog } from "../engine/serviceCatalog"
+import { BpaConfiguration, BpaPipelines, BpaService } from "../engine/types"
+import { BlobDB } from "../services/db"
+const _ = require('lodash')
 
-const callPriceAPi = async (filter) => {
+const priceTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+
+    //const db = new CosmosDB(process.env.COSMOSDB_CONNECTION_STRING, process.env.COSMOSDB_DB_NAME, process.env.COSMOSDB_CONTAINER_NAME)
+    const db = new BlobDB(process.env.AzureWebJobsStorage,"db", process.env.BLOB_STORAGE_CONTAINER)
     try {
-        const mergedItems = []
-        let numResults = 0
-        let skip = 0
-        do {
+        const documents = Number(req.query["documents"])
+        const pagesPerDocument = Number(req.query["pagesPerDocument"])
+        const hoursOfAudioPerDocument = Number(req.query["hoursOfAudioPerDocument"])
+        let pages = 0
 
-            const axiosResult = await axios.get('https://prices.azure.com/api/retail/prices?$filter=' + filter + `&$skip=${skip}`)
-            skip += 100
-            mergedItems.push(...axiosResult.data.Items)
-            numResults = axiosResult.data.Items.length
-        } while (numResults == 100)
-
-        const out = {
-            locations: new Set(),
-            serviceNames: new Set(),
-            productNames: new Set(),
-            meterNames: new Set()
+        if(pagesPerDocument){
+            pages = documents * pagesPerDocument
         }
-        for (const s of mergedItems) {
-            out.locations.add(s.location)
-            out.productNames.add(s.productName)
-            out.serviceNames.add(s.serviceName)
-            out.meterNames.add(s.meterName)
+        if(hoursOfAudioPerDocument){
+            pages = documents * hoursOfAudioPerDocument * 2
         }
-        const result = {
-            locations: Array.from(out.locations),
-            serviceNames: Array.from(out.serviceNames),
-            productNames: Array.from(out.productNames),
-            meterNames: Array.from(out.meterNames),
-            items: mergedItems
+
+        const pipelineName = req.query["pipeline"]
+        
+        context.log(`Name of source doc : ${context.bindingData.priceTrigger}`)
+        
+        const config : BpaPipelines = await db.getConfig()
+        const bpaConfig: BpaConfiguration = {
+            stages: [],
+            name : ""
         }
-        return result
-    } catch (err) {
-        console.log(err)
-    }
-    const mergedItems = []
-    let numResults = 0
-    let skip = 0
 
-}
-
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    if (req.method === "GET") {
-        try {
-            context.log('HTTP trigger function processed a request.');
-            const out = await callPriceAPi(req.query.filter)
-            context.res = {
-                body: out
+        for(const pipeline of config.pipelines){
+            if(pipeline.name === pipelineName){
+                for (const stage of pipeline.stages) {
+                    for(const sc of Object.keys(serviceCatalog)){
+                        if(stage.name === serviceCatalog[sc].name){
+                            context.log(`found ${stage.name}`)
+                            const newStage : BpaService = _.cloneDeep(serviceCatalog[sc])
+                            newStage.serviceSpecificConfig = stage.serviceSpecificConfig
+                            bpaConfig.stages.push({ service : newStage })
+                            bpaConfig.name = pipeline.name
+                        }
+                    }
+                }
             }
-            return
-        } catch (err) {
-            context.log(err)
-            context.res = {
-                body: err
+        }
+
+        if(bpaConfig.stages.length === 0) {
+            throw new Error("No Pipeline Found")
+        }
+
+        let price = 0.0
+        const invoice = []
+        for(const stage of bpaConfig.stages){
+            if(stage.service.name === "documentTranslation"){
+                const tempPrice = stage.service.getPrice(documents)  
+                price += tempPrice
+                invoice.push({name : stage.service.name, price : tempPrice})
+            } else{
+                const tempPrice = stage.service.getPrice(pages)  
+                price += tempPrice
+                invoice.push({name : stage.service.name, price : tempPrice})
             }
-            return
+            
+        }
+
+        context.res = {
+            status : 200,
+            body : {price : price, invoice : invoice}
+        }
+
+    }
+    catch (err) {
+        context.log(err)
+        context.res = {
+            status : 500,
+            body : err.message
         }
     }
-}
+};
 
-
-
-
-export default httpTrigger;
+export default priceTrigger;
