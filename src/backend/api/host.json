@@ -1,7 +1,38 @@
 {
   "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
+      }
+    }
+  },
   "extensionBundle": {
-      "id": "Microsoft.Azure.Functions.ExtensionBundle",
-      "version": "[2.*, 3.0.0)"
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[2.*, 3.0.0)"
+  },
+  "extensions": {
+    "rabbitMQ": {
+      "prefetchCount": 1,
+      "autoComplete" : true
+    },
+    "serviceBus": {
+      "prefetchCount": 2,
+      "messageHandlerOptions": {
+        "autoComplete": true,
+        "maxConcurrentCalls": 2,
+        "maxAutoRenewDuration": "00:05:00"
+      },
+      "batchOptions": {
+        "maxMessageCount": 1,
+        "operationTimeout": "00:01:00",
+        "autoComplete": true 
+      }
+    }
+  },
+  "concurrency": {
+    "dynamicConcurrencyEnabled": false,
+    "snapshotPersistenceEnabled": false
   }
 }
