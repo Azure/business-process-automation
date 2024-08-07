@@ -1,5 +1,3 @@
-# Whisper Preview Added - Check the env vars in the backend.  WHISPER_MODEL is hardcoded to the eastus region.  For any other region this will need to be manually updated.
-
 # Business Process Automation Accelerator
 
 ## Overview
@@ -8,12 +6,13 @@ This accelerator provides a no code Studio for users to quickly build complex, m
 
 ## Instructional Videos
 
+> ### Video links currently are not available. Please submit an issue or reach out to contributors if need support.
+
 #### The videos are outdated with regards to result storage.  Results are no longer stored in CosmosDB.  Rather, all data can be found in Blob Storage under the 'results' container.  There you should find folders with the names of your pipelines.  There is also an 'errors' folder.  If a request fails for any reason, the log will be stored there.  There will be three retries before the pipeline gives up and removes the request from the queue.
 
 - [Deployment in Azure](https://bpasource.blob.core.windows.net/source/VideoSeries/Deploy.mp4?sv=2020-04-08&st=2023-03-10T15%3A54%3A39Z&se=2026-06-12T14%3A54%3A00Z&sr=b&sp=r&sig=chMcBfD%2Foc2E05Od8xNkbWprWxHIIc7ApDbVazk2%2BO8%3D)
 - [Create Your First Pipeline](https://bpasource.blob.core.windows.net/source/VideoSeries/first%20pipeline-20230310_122701-Meeting%20Recording.mp4?sv=2020-04-08&st=2023-03-10T17%3A51%3A01Z&se=2025-01-16T17%3A51%3A00Z&sr=b&sp=r&sig=Jz8PdJAWkLXnN3QqxEnXogRHtN55FC8emHZoic9TGEE%3D)
 - [OpenAI Enterprise Search Using Cognitive Search and Semantic Search](https://bpasource.blob.core.windows.net/source/VideoSeries/enterpriseSearch.mp4?sv=2021-10-04&st=2023-05-15T13%3A35%3A46Z&se=2024-06-21T13%3A35%3A00Z&sr=b&sp=r&sig=ChoYuRwynC%2F2e2I6mDTpMWJm3h6OcBKlcmfc1PhHCmw%3D)
-
 
 ## Deploy to Azure Instructions
 
@@ -35,7 +34,6 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 2. Fork the repository to a git account of which you are the Admin.
 3. Click on the "Deploy to Azure" Button that corresponds to your environment and which patterns you wish to create.  Redis pattern is only required for Vector Search.
 4. Only the Resource Group, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
-5. For a demonstration, please view the first Instructional Video at the top of this Readme.
 
 ### Without OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
@@ -45,6 +43,20 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 
 ### With OpenAI On A Private Network
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Fprivatedeploy.json)
+
+
+### Steps to Manually Deploy Function App
+If your function app does not show any functions after running the scripts above, follow the steps below to deploy manually.
+
+1. Change into src/backend/api subdirectory `cd src/backend/api/`
+2. Run `npm install` and `npm run build` to install dependencies and translate typescript files into javascript
+3. Zip 'api' directory - Use windows explorer or Zip tool on command line to recursively zip all files (including original TS files and compiled JS files) within the 'api' directory (`src/backend/api/`)
+3. Zip 'huggingface' directory - Use windows explorer or Zip tool on command line to recursively zip all files within the 'huggingface' directory (src/backend/huggingface/)
+4. In Azure Portal, navigate to Hugging Face Function App Resource > Settings > Environment Values > `WEBSITE_RUN_FROM_PACKAGE` - update value to 1
+5. Repeat step 4 for the other BPA Function App Resource in the resource group
+5. Login to azure using az login
+6. From the terminal, run the following command, `func azure functionapp publish $JS_FUNCTION_APP_NAME --javascript --force --deployment-source-zip $JS_ZIP_FILE_PATH`, where $JS_FUNCTION_APP_NAME is name of BPA function resource and $JS_ZIP_FILE_PATH is a path to zipped archive from 'api' directory
+7. From the terminal, run the following command, `func azure functionapp publish $HF_FUNCTION_APP_NAME --python --build remote --force --deployment-source-zip $HF_ZIP_FILE_PATH`, where $HF_FUNCTION_APP_NAME is name of Hagging Face function resource and $HF_ZIP_FILE_PATH is a path to zipped archive from 'huggingface' directory
 
 ### With OpenAI and Redis Enterprise (check pricing) for Vector Search
 (Deprecated.  Replaced by Cognitive Search with Vector Search Features)
