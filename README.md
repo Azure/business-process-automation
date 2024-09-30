@@ -17,23 +17,28 @@ This accelerator provides a no code Studio for users to quickly build complex, m
 ## Deploy to Azure Instructions
 
 ### Prerequisities
-1. Github account (Admin)
-2. Azure Resource Group (Owner)
-3. Ensure your subscription has **Microsoft.DocumentDB enabled**  
+1. Software and tools:
+ - Git: [Download Git](https://git-scm.com/downloads)
+ - Node.js 16+ [windows/mac](https://nodejs.dev/en/download/)  [linux/wsl](https://nodejs.dev/en/download/package-manager/)
+ - Python 3.11: [Download Python](https://www.python.org/downloads/release/python-3118/)
+ - Azure Functions Core Tools: [Func Core Tools](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-python#install-the-azure-functions-core-tools) 
+2. Github account (Admin)
+3. Azure Resource Group (Owner)
+4. Ensure your subscription has **Microsoft.DocumentDB enabled**  
 To confirm/enable:  
       - Navigate to your subscription within portal.azure.com  
       - Select Resource Providers at bottom of left navigation pane  
       - Within the Filter by name menu, search for Microsoft.DocumentDB  
       - Once Microsoft.DocumentDB is found, check if the status is marked as "Registered". If marked as "NotRegistered", Select "Register"  
       **Note**: *This process may take several seconds/minutes, be sure to refresh the entire browser periodically*
-4. Ensure that you have **accepted terms and conditions for Responsible AI**:  
+5. Ensure that you have **accepted terms and conditions for Responsible AI**:  
 You must initiate the creation of a "Cognitive services multi-service account" from the Azure portal to review and acknowledge the terms and conditions. You can do so here: [Quickstart: Create a Cognitive Services resource using the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows).  
 Once accepted, you can create subsequent resources using any deployment tool (SDK, CLI, or ARM template, etc) under the same Azure subscription.
 
 1. [Get a Workflow Level Token (Classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 2. Fork the repository to a git account of which you are the Admin.
 3. Click on the "Deploy to Azure" Button that corresponds to your environment and which patterns you wish to create.  Redis pattern is only required for Vector Search.
-4. Only the Resource Group, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
+4. Only the Resource Group, Forked Repo Personal Access Token (Workflow Level), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
 ### Without OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
