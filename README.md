@@ -38,7 +38,7 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 1. [Get a Workflow Level Token (Classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 2. Fork the repository to a git account of which you are the Admin.
 3. Click on the "Deploy to Azure" Button that corresponds to your environment and which patterns you wish to create.  Redis pattern is only required for Vector Search.
-4. Only the Resource Group, Repo Token (from #2), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
+4. Only the Resource Group, Forked Repo Personal Access Token (Workflow Level), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
 ### Without OpenAI
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
