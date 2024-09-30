@@ -419,7 +419,7 @@
       "apiVersion": "2021-01-15",
       "name": "[variables('accountName_var')]",
       "kind": "GlobalDocumentDB",
-      "location": "[parameters('primaryRegion')]",
+      "location": "eastus",
       "properties": {
         "consistencyPolicy": "[variables('consistencyPolicy')[parameters('defaultConsistencyLevel')]]",
         "locations": "[variables('locations')]",

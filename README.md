@@ -41,13 +41,13 @@ Once accepted, you can create subsequent resources using any deployment tool (SD
 4. Only the Resource Group, Forked Repo Personal Access Token (Workflow Level), and Forked Git Repo Url are needed.  The remaining parameters are filled in for you.
 
 ### Without OpenAI
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fvladborys%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclick.json)
 
 ### With OpenAI
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fvladborys%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Foneclickoai.json)
 
 ### With OpenAI On A Private Network
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Fprivatedeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fvladborys%2Fbusiness-process-automation%2Fmain%2Ftemplates%2Fprivatedeploy.json)
 
 
 ### Steps to Manually Deploy Function App
