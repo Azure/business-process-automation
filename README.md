@@ -21,7 +21,7 @@ This accelerator provides a no code Studio for users to quickly build complex, m
  - Git: [Download Git](https://git-scm.com/downloads)
  - Node.js 16+ [windows/mac](https://nodejs.dev/en/download/)  [linux/wsl](https://nodejs.dev/en/download/package-manager/)
  - Python 3.11: [Download Python](https://www.python.org/downloads/release/python-3118/)
- - Azure Functions Core Tools: [Func Core Tools](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-python#install-the-azure-functions-core-tools) 
+ - Azure Functions Core Tools: [Func Core Tools](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-python#install-the-azure-functions-core-tools)
 2. Github account (Admin)
 3. Azure Resource Group (Owner)
 4. Ensure your subscription has **Microsoft.DocumentDB enabled**  
